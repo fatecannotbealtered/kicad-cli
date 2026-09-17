@@ -88,19 +88,22 @@ not a return-path break.
 
 ## D. Writes that cannot be undone by retrying
 
-**KiCad holding the project makes writing pointless.** The editor keeps the
+**KiCad holding the project can overwrite offline board changes.** The editor keeps the
 whole board in memory and writes all of it on save, so anything written
-underneath is overwritten silently — not merged. Every write command refuses
-when it finds `~*.lck` and returns `E_CONFLICT` with `lock_files`. Retrying will
-not help; the user has to close KiCad.
+underneath is overwritten silently — not merged. Layout writes refuse when they find `~*.lck` and return `E_CONFLICT` with
+`lock_files`. Retrying does not remove the lock. Fabrication writes separate
+output files and does not use this layout guard. These checks are not an
+exclusive transaction lock between multiple CLI processes.
 
 **`board route --mode full` clears every existing track first.** That is what
 `full` means. `repair` keeps what is there and only attempts what is
 unconnected, and can be run repeatedly until it stops improving.
 
-**`--no-verify` / `--no-restore` remove the safety net.** These commands run
-DRC after writing and revert whatever introduced a new error. That is the only
-reason they are safe unattended.
+**`--no-verify` / `--no-restore` disable the corresponding checks.** Verification
+and restoration vary by mode; there is no uniform guarantee merely because
+these switches were omitted. Never pass them without explicit authorization.
+The development candidate is unpublishable and must not be used for unattended
+production writes.
 
 **`E_INTEGRITY` means a write was reverted for changing more than it should.**
 `sch relink` once used pcbnew to save, which upgraded a KiCad 9 file to the
@@ -114,11 +117,21 @@ unimplemented: they return success with nothing done. Verify by reading back.
 
 ## Working against a running KiCad
 
-`board live` is the only command that acts on the board in the editor rather
-than on the file. Changes appear on screen and go through KiCad's undo stack, so
-the user can revert them with Ctrl+Z — which makes it the right mode when
-someone is watching. It needs KiCad open with the API enabled
-(Preferences → KiCad API); otherwise it returns `E_CONFIG` with the fix.
+`board live` reads the connection, open-document and board status through IPC.
+It does not create or modify items, and does not create undo entries. It needs
+KiCad open with the API enabled; otherwise it returns `E_CONFIG` with a fix.
+Do not infer an editing capability from what the underlying IPC API may support.
 
-There is no IPC command to create or open a document, to read DRC results, or to
-place a footprint from a library. Do not plan around those.
+## Development release blockers
+
+The current checkout is unpublishable. Closing or merging its PR does not
+resolve the following engineering work:
+
+- Confirmation authentication, expiry, replay protection and complete target binding.
+- Isolated, trustworthy DRC reports and consistent validation/rollback across write modes.
+- Fresh real-KiCad and frozen-binary evidence for the candidate, not a historical release.
+
+The repository's `docs/DEVELOPMENT_STATUS.md` keeps the follow-up acceptance criteria.
+A successful command, a passing CI run or an empty GitHub queue is not proof that
+these blockers are resolved. Before any authorized experiment, use a disposable
+project copy and inspect the actual result independently.

@@ -7,6 +7,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Typed parameter metadata in the command registry: defaults, enums, units,
+  numeric bounds, global options and per-mode constraints. `reference --command`
+  returns one command and only its output schema to reduce Agent response size.
+- Canonical `reference.risk_tier`, `reference.error_codes` and `context.version`.
+- KiCad-free regression tests for parsing, no-dispatch write refusal, discovery
+  and interpreter-probe reuse.
+
+### Fixed
+- Boolean strings such as `false` and `0` no longer enable safety overrides.
+- Reject conflicting dry-run/confirm controls, repeated scalar options, extra
+  positional arguments, empty values and non-finite/non-positive sampling inputs.
+- Accumulate repeated layer selections rather than silently using the last one.
+- Refuse route options in modes that do not implement them: notably `--nets`
+  in repair/full, instead of accepting a selector and routing a broader scope.
+- Reuse interpreter discovery's version probe within a process; a frozen CLI
+  no longer tries to run itself as the KiCad Python interpreter.
+
+### Changed
+- This development candidate is explicitly unpublishable. The historical 1.0.0
+  live evidence is not reused for changed code, and remaining confirm-token,
+  DRC-isolation and verification/rollback gaps stay release blockers.
+
 ## [1.0.0] - 2026-09-17
 
 ### Added

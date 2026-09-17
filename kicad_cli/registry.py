@@ -13,15 +13,65 @@ from __future__ import annotations
 from collections.abc import Callable
 from typing import Any
 
+GLOBAL_OPTIONS: list[dict[str, Any]] = [
+    {"name": "compact", "type": "boolean", "default": False, "required": False, "multiple": False},
+    {"name": "quiet", "type": "boolean", "default": False, "required": False, "multiple": False},
+    {
+        "name": "dry-run",
+        "type": "boolean",
+        "default": False,
+        "description": "Preview a write; never combine with confirm.",
+        "required": False,
+        "multiple": False,
+    },
+    {
+        "name": "json",
+        "type": "boolean",
+        "default": False,
+        "description": "Compatibility alias for JSON output.",
+        "required": False,
+        "multiple": False,
+    },
+    {
+        "name": "format",
+        "type": "string",
+        "default": "json",
+        "enum": ["json", "text", "raw"],
+        "required": False,
+        "multiple": False,
+    },
+    {
+        "name": "fields",
+        "type": "string",
+        "default": None,
+        "separator": ",",
+        "description": "Top-level data keys; output projection, not a compute filter.",
+        "required": False,
+        "multiple": False,
+    },
+    {"name": "confirm", "type": "string", "default": None, "required": False, "multiple": False},
+]
+
+
 SCHEMAS: dict[str, dict[str, Any]] = {
     "reference": {
         "shape": "object",
-        "fields": ["tool", "version", "release_readiness", "commands", "schemas", "exit_codes"],
+        "fields": [
+            "tool",
+            "version",
+            "risk_tier",
+            "release_readiness",
+            "commands",
+            "schemas",
+            "exit_codes",
+            "error_codes",
+            "global_options",
+        ],
         "untrusted_fields": [],
     },
     "context": {
         "shape": "object",
-        "fields": ["env", "account", "config", "credentials"],
+        "fields": ["version", "env", "account", "config", "credentials"],
         "untrusted_fields": [],
     },
     "doctor": {
@@ -260,6 +310,17 @@ SCHEMAS: dict[str, dict[str, Any]] = {
 }
 
 
+for _name, _values in {
+    "sch_link": ["PASS", "FAIL"],
+    "sch_audit": ["PASS", "FAIL"],
+    "board_plane": ["PASS", "FAIL"],
+    "board_parity": ["PASS", "FAIL"],
+    "sch_relink": ["PASS", "PARTIAL", "NOOP"],
+    "sch_sync_preview": ["CLEAN", "DESTRUCTIVE"],
+}.items():
+    SCHEMAS[_name]["field_values"] = {"status": _values}
+
+
 def _cmd(
     path: str,
     kind: str,
@@ -269,7 +330,18 @@ def _cmd(
     examples: list[str],
     handler: Callable[..., Any],
 ) -> dict[str, Any]:
+    if path == "board route":
+        conditions = {
+            "nets": {"when": {"mode": ["rewidth"]}, "conflicts_with": ["classes"]},
+            "classes": {"when": {"mode": ["rewidth"]}},
+            "ripup": {"when": {"mode": ["repair"]}},
+            "no-verify": {"when": {"mode": ["rewidth"]}},
+            "no-restore": {"when": {"mode": ["rewidth"]}, "requires": ["nets"]},
+        }
+        for param in params:
+            param.update(conditions.get(param["name"], {}))
     return {
+        "required_any": [["board", "schematic"]] if path == "sch audit" else [],
         "path": path,
         "type": kind,
         "description": description,
@@ -281,7 +353,7 @@ def _cmd(
 
 
 def _board_param() -> dict[str, Any]:
-    return {"name": "board", "type": "string", "required": True, "multiple": False}
+    return {"name": "board", "type": "string", "required": True, "multiple": False, "default": None}
 
 
 def build() -> list[dict[str, Any]]:
@@ -304,7 +376,16 @@ def build() -> list[dict[str, Any]]:
             "reference",
             "read",
             "Describe every command, parameter, output schema and exit code this tool exposes.",
-            [],
+            [
+                {
+                    "name": "command",
+                    "type": "string",
+                    "required": False,
+                    "multiple": False,
+                    "default": None,
+                    "description": "Return just this exact command and its output schema.",
+                }
+            ],
             "reference",
             ["kicad-cli reference --compact"],
             reference.run,
@@ -332,7 +413,15 @@ def build() -> list[dict[str, Any]]:
             "changelog",
             "read",
             "Report what changed between versions, so an agent can refresh stale assumptions.",
-            [{"name": "since", "type": "string", "required": False, "multiple": False}],
+            [
+                {
+                    "name": "since",
+                    "type": "string",
+                    "required": False,
+                    "multiple": False,
+                    "default": None,
+                }
+            ],
             "changelog",
             ["kicad-cli changelog --compact", "kicad-cli changelog --since 0.1.0 --compact"],
             changelog.run,
@@ -344,8 +433,24 @@ def build() -> list[dict[str, Any]]:
             "RF keepouts and fine-pitch clearance.",
             [
                 _board_param(),
-                {"name": "oz", "type": "number", "required": False, "multiple": False},
-                {"name": "dt", "type": "number", "required": False, "multiple": False},
+                {
+                    "name": "oz",
+                    "type": "number",
+                    "required": False,
+                    "multiple": False,
+                    "default": 1.0,
+                    "unit": "oz",
+                    "exclusive_minimum": 0,
+                },
+                {
+                    "name": "dt",
+                    "type": "number",
+                    "required": False,
+                    "multiple": False,
+                    "default": 10.0,
+                    "unit": "K",
+                    "exclusive_minimum": 0,
+                },
             ],
             "board_audit",
             ["kicad-cli board audit --board board.kicad_pcb --compact"],
@@ -380,7 +485,15 @@ def build() -> list[dict[str, Any]]:
             "Both force the return current to detour, and DRC reports neither.",
             [
                 _board_param(),
-                {"name": "step", "type": "number", "required": False, "multiple": False},
+                {
+                    "name": "step",
+                    "type": "number",
+                    "required": False,
+                    "multiple": False,
+                    "default": 0.5,
+                    "unit": "mm",
+                    "exclusive_minimum": 0,
+                },
             ],
             "board_plane",
             ["kicad-cli board plane --board board.kicad_pcb --compact"],
@@ -418,8 +531,21 @@ def build() -> list[dict[str, Any]]:
             "they would report if they were on. The silenced rules are re-run in a copy "
             "of the project, so the answer is measured rather than inferred.",
             [
-                {"name": "schematic", "type": "string", "required": False, "multiple": False},
-                {"name": "board", "type": "string", "required": False, "multiple": False},
+                {
+                    "name": "schematic",
+                    "type": "string",
+                    "required": False,
+                    "multiple": False,
+                    "default_from": "<board>.kicad_sch",
+                    "default": None,
+                },
+                {
+                    "name": "board",
+                    "type": "string",
+                    "required": False,
+                    "multiple": False,
+                    "default": None,
+                },
             ],
             "sch_audit",
             ["kicad-cli sch audit --schematic design.kicad_sch --compact"],
@@ -433,7 +559,14 @@ def build() -> list[dict[str, Any]]:
             "the reference-based schematic-parity check misses entirely.",
             [
                 _board_param(),
-                {"name": "schematic", "type": "string", "required": False, "multiple": False},
+                {
+                    "name": "schematic",
+                    "type": "string",
+                    "required": False,
+                    "multiple": False,
+                    "default_from": "<board>.kicad_sch",
+                    "default": None,
+                },
             ],
             "sch_sync_preview",
             ["kicad-cli sch sync-preview --board board.kicad_pcb --compact"],
@@ -447,14 +580,68 @@ def build() -> list[dict[str, Any]]:
             "so a connection needing an existing track to move aside will not be found.",
             [
                 _board_param(),
-                {"name": "mode", "type": "string", "required": False, "multiple": False},
-                {"name": "nets", "type": "string", "required": False, "multiple": False},
-                {"name": "classes", "type": "string", "required": False, "multiple": False},
-                {"name": "neck", "type": "number", "required": False, "multiple": False},
-                {"name": "ripup", "type": "boolean", "required": False, "multiple": False},
-                {"name": "no-verify", "type": "boolean", "required": False, "multiple": False},
-                {"name": "no-restore", "type": "boolean", "required": False, "multiple": False},
-                {"name": "ignore-lock", "type": "boolean", "required": False, "multiple": False},
+                {
+                    "name": "mode",
+                    "type": "string",
+                    "required": False,
+                    "multiple": False,
+                    "default": "repair",
+                    "enum": ["repair", "full", "rewidth"],
+                },
+                {
+                    "name": "nets",
+                    "type": "string",
+                    "required": False,
+                    "multiple": False,
+                    "separator": ",",
+                    "default": None,
+                },
+                {
+                    "name": "classes",
+                    "type": "string",
+                    "required": False,
+                    "multiple": False,
+                    "default": "PWR_MAIN,BTL_OUT,SWITCH",
+                    "separator": ",",
+                    "description": "Legacy profile; pass the board's real netclasses explicitly.",
+                },
+                {
+                    "name": "neck",
+                    "type": "number",
+                    "required": False,
+                    "multiple": False,
+                    "default": 0.2,
+                    "unit": "mm",
+                    "exclusive_minimum": 0,
+                },
+                {
+                    "name": "ripup",
+                    "type": "boolean",
+                    "required": False,
+                    "multiple": False,
+                    "default": False,
+                },
+                {
+                    "name": "no-verify",
+                    "type": "boolean",
+                    "required": False,
+                    "multiple": False,
+                    "default": False,
+                },
+                {
+                    "name": "no-restore",
+                    "type": "boolean",
+                    "required": False,
+                    "multiple": False,
+                    "default": False,
+                },
+                {
+                    "name": "ignore-lock",
+                    "type": "boolean",
+                    "required": False,
+                    "multiple": False,
+                    "default": False,
+                },
             ],
             "board_route",
             [
@@ -470,11 +657,43 @@ def build() -> list[dict[str, Any]]:
             "no via is electrically separate, and DRC says nothing about it.",
             [
                 _board_param(),
-                {"name": "net", "type": "string", "required": False, "multiple": False},
-                {"name": "min-area", "type": "number", "required": False, "multiple": False},
-                {"name": "bridge", "type": "boolean", "required": False, "multiple": False},
-                {"name": "no-verify", "type": "boolean", "required": False, "multiple": False},
-                {"name": "ignore-lock", "type": "boolean", "required": False, "multiple": False},
+                {
+                    "name": "net",
+                    "type": "string",
+                    "required": False,
+                    "multiple": False,
+                    "default": "GND",
+                },
+                {
+                    "name": "min-area",
+                    "type": "number",
+                    "required": False,
+                    "multiple": False,
+                    "default": 0.5,
+                    "unit": "mm^2",
+                    "minimum": 0,
+                },
+                {
+                    "name": "bridge",
+                    "type": "boolean",
+                    "required": False,
+                    "multiple": False,
+                    "default": False,
+                },
+                {
+                    "name": "no-verify",
+                    "type": "boolean",
+                    "required": False,
+                    "multiple": False,
+                    "default": False,
+                },
+                {
+                    "name": "ignore-lock",
+                    "type": "boolean",
+                    "required": False,
+                    "multiple": False,
+                    "default": False,
+                },
             ],
             "board_stitch",
             [
@@ -490,9 +709,31 @@ def build() -> list[dict[str, Any]]:
             "achieved rather than the width requested.",
             [
                 _board_param(),
-                {"name": "classes", "type": "string", "required": False, "multiple": False},
-                {"name": "neck", "type": "number", "required": False, "multiple": False},
-                {"name": "ignore-lock", "type": "boolean", "required": False, "multiple": False},
+                {
+                    "name": "classes",
+                    "type": "string",
+                    "required": False,
+                    "multiple": False,
+                    "default": "PWR_MAIN,BTL_OUT,SWITCH",
+                    "separator": ",",
+                    "description": "Legacy profile; pass the board's real netclasses explicitly.",
+                },
+                {
+                    "name": "neck",
+                    "type": "number",
+                    "required": False,
+                    "multiple": False,
+                    "default": 0.2,
+                    "unit": "mm",
+                    "exclusive_minimum": 0,
+                },
+                {
+                    "name": "ignore-lock",
+                    "type": "boolean",
+                    "required": False,
+                    "multiple": False,
+                    "default": False,
+                },
             ],
             "board_rewidth",
             [
@@ -508,9 +749,29 @@ def build() -> list[dict[str, Any]]:
             "than re-routing and often not enough.",
             [
                 _board_param(),
-                {"name": "oz", "type": "number", "required": False, "multiple": False},
-                {"name": "no-verify", "type": "boolean", "required": False, "multiple": False},
-                {"name": "ignore-lock", "type": "boolean", "required": False, "multiple": False},
+                {
+                    "name": "oz",
+                    "type": "number",
+                    "required": False,
+                    "multiple": False,
+                    "default": 1.0,
+                    "unit": "oz",
+                    "exclusive_minimum": 0,
+                },
+                {
+                    "name": "no-verify",
+                    "type": "boolean",
+                    "required": False,
+                    "multiple": False,
+                    "default": False,
+                },
+                {
+                    "name": "ignore-lock",
+                    "type": "boolean",
+                    "required": False,
+                    "multiple": False,
+                    "default": False,
+                },
             ],
             "board_widen",
             [
@@ -525,8 +786,20 @@ def build() -> list[dict[str, Any]]:
             "Move parts to given coordinates, with a courtyard collision check.",
             [
                 _board_param(),
-                {"name": "moves", "type": "string", "required": False, "multiple": False},
-                {"name": "ignore-lock", "type": "boolean", "required": False, "multiple": False},
+                {
+                    "name": "moves",
+                    "type": "string",
+                    "required": True,
+                    "multiple": False,
+                    "default": None,
+                },
+                {
+                    "name": "ignore-lock",
+                    "type": "boolean",
+                    "required": False,
+                    "multiple": False,
+                    "default": False,
+                },
             ],
             "board_move",
             [
@@ -542,8 +815,23 @@ def build() -> list[dict[str, Any]]:
             "existing plot settings unchanged.",
             [
                 _board_param(),
-                {"name": "layers", "type": "string", "required": False, "multiple": True},
-                {"name": "out", "type": "string", "required": False, "multiple": False},
+                {
+                    "name": "layers",
+                    "type": "string",
+                    "required": False,
+                    "multiple": True,
+                    "separator": ",",
+                    "default_from": "project plot settings",
+                    "default": None,
+                },
+                {
+                    "name": "out",
+                    "type": "string",
+                    "required": False,
+                    "multiple": False,
+                    "default_from": "<board directory>/fab",
+                    "default": None,
+                },
             ],
             "fab_plot",
             [
@@ -559,8 +847,23 @@ def build() -> list[dict[str, Any]]:
             "existing plot settings unchanged.",
             [
                 _board_param(),
-                {"name": "layers", "type": "string", "required": False, "multiple": True},
-                {"name": "out", "type": "string", "required": False, "multiple": False},
+                {
+                    "name": "layers",
+                    "type": "string",
+                    "required": False,
+                    "multiple": True,
+                    "separator": ",",
+                    "default_from": "project plot settings",
+                    "default": None,
+                },
+                {
+                    "name": "out",
+                    "type": "string",
+                    "required": False,
+                    "multiple": False,
+                    "default_from": "<board directory>/fab",
+                    "default": None,
+                },
             ],
             "fab_plot",
             [
@@ -576,8 +879,23 @@ def build() -> list[dict[str, Any]]:
             "existing plot settings unchanged.",
             [
                 _board_param(),
-                {"name": "layers", "type": "string", "required": False, "multiple": True},
-                {"name": "out", "type": "string", "required": False, "multiple": False},
+                {
+                    "name": "layers",
+                    "type": "string",
+                    "required": False,
+                    "multiple": True,
+                    "separator": ",",
+                    "default_from": "project plot settings",
+                    "default": None,
+                },
+                {
+                    "name": "out",
+                    "type": "string",
+                    "required": False,
+                    "multiple": False,
+                    "default_from": "<board directory>/fab",
+                    "default": None,
+                },
             ],
             "fab_plot",
             [
@@ -593,8 +911,23 @@ def build() -> list[dict[str, Any]]:
             "existing plot settings unchanged.",
             [
                 _board_param(),
-                {"name": "layers", "type": "string", "required": False, "multiple": True},
-                {"name": "out", "type": "string", "required": False, "multiple": False},
+                {
+                    "name": "layers",
+                    "type": "string",
+                    "required": False,
+                    "multiple": True,
+                    "separator": ",",
+                    "default_from": "project plot settings",
+                    "default": None,
+                },
+                {
+                    "name": "out",
+                    "type": "string",
+                    "required": False,
+                    "multiple": False,
+                    "default_from": "<board directory>/fab",
+                    "default": None,
+                },
             ],
             "fab_plot",
             [
@@ -610,11 +943,43 @@ def build() -> list[dict[str, Any]]:
             "these the Gerber set is not a manufacturable package.",
             [
                 _board_param(),
-                {"name": "out", "type": "string", "required": False, "multiple": False},
-                {"name": "map", "type": "string", "required": False, "multiple": False},
-                {"name": "merge", "type": "boolean", "required": False, "multiple": False},
-                {"name": "inch", "type": "boolean", "required": False, "multiple": False},
-                {"name": "aux-origin", "type": "boolean", "required": False, "multiple": False},
+                {
+                    "name": "out",
+                    "type": "string",
+                    "required": False,
+                    "multiple": False,
+                    "default_from": "<board directory>/fab",
+                    "default": None,
+                },
+                {
+                    "name": "map",
+                    "type": "string",
+                    "required": False,
+                    "multiple": False,
+                    "default": "pdf",
+                    "enum": ["pdf", "gerber", "svg", "none"],
+                },
+                {
+                    "name": "merge",
+                    "type": "boolean",
+                    "required": False,
+                    "multiple": False,
+                    "default": False,
+                },
+                {
+                    "name": "inch",
+                    "type": "boolean",
+                    "required": False,
+                    "multiple": False,
+                    "default": False,
+                },
+                {
+                    "name": "aux-origin",
+                    "type": "boolean",
+                    "required": False,
+                    "multiple": False,
+                    "default": False,
+                },
             ],
             "fab_drill",
             [

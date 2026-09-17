@@ -1,81 +1,36 @@
-# Accepted values and defaults
+# Reading the machine parameter contract
 
-`kicad-cli reference` declares each parameter's **name**, type and whether it is
-required. It does not carry values, defaults or enums, so those live here.
+`kicad-cli reference` is now the source of parameter names **and** values.
+Use `kicad-cli reference --command "board route" --compact` for one command,
+or omit the selector to discover the full tree. Global options are in
+`data.global_options`; each command carries `params` and `required_any`.
 
-**Names come from `reference`. Values and defaults come from this file.** If the
-two ever disagree about a name, `reference` wins — it is generated from the
-dispatch table, this file is written by hand.
+## Interpreting a parameter
 
-An option a command does not declare is refused with `E_USAGE` (exit 2), and
-`error.details.accepted` lists what it does take. That refusal exists because
-`board rewidth --nets VSYS` used to be accepted and silently ignored: `rewidth`
-has no `--nets`, so the tool issued a confirm token for a plan that re-routed
-the default netclasses instead.
+`type`, `required` and `multiple` are enforced at the CLI boundary. `default`
+is the literal fallback; null means no literal fallback. `default_from`
+describes a value resolved from the project rather than guessed by the Agent.
+`enum`, `minimum`, `exclusive_minimum` and `unit` describe accepted values.
+`when`, `conflicts_with` and `requires` declare mode and combination constraints.
+Repeated scalar options, empty values and non-finite numbers are errors.
+Repeated layer selections are combined in order, not overwritten.
 
-## Board writes
+The route network selector currently applies **only to rewidth**. Repair/full
+with an explicit network selector fail before launching KiCad; they never
+silently route every network. A network selector and a class selector cannot
+be supplied together. This is a safety restriction, not a newly implemented
+per-network repair feature.
 
-| Command | Option | Values | Default |
-|---|---|---|---|
-| `board route` | `--mode` | `repair` · `full` · `rewidth` | `repair` |
-| | `--nets` | comma-separated net names | all unconnected |
-| | `--classes` | comma-separated netclass names | `PWR_MAIN,BTL_OUT,SWITCH` |
-| | `--neck` | mm, the narrowest width routing may fall back to | `0.20` |
-| | `--ripup` | flag: tear up and re-route rather than only filling gaps | off |
-| `board stitch` | `--net` | net name of the pour | `GND` |
-| | `--min-area` | mm², islands smaller than this are treated as dead copper | `0.5` |
-| | `--bridge` | flag: also bridge islands across layers | off |
-| `board rewidth` | `--classes` | comma-separated netclass names | `PWR_MAIN,BTL_OUT,SWITCH` |
-| | `--neck` | mm | `0.20` |
-| `board widen` | `--oz` | copper weight, oz | `1.0` |
-| `board move` | `--moves` | `"U1:120.5,60.0; C3:118,62"` — millimetres, board coordinates | required |
+The legacy default netclasses still describe the original development board.
+Read the real classes from the board audit and supply the intended classes.
+Copper weight and temperature rise are assumptions; validate them against the
+design before reporting ampacity. Output field selection saves response bytes,
+not board computation, and currently projects only top-level keys.
 
-`--classes` defaults name the netclasses of the board this tool was built
-against. **On any other board they are almost certainly wrong — pass them
-explicitly.** Read the real ones from `board audit`'s `width_compliance`.
+## Interpreting status
 
-Every board write also takes `--ignore-lock` (see the checkpoint in `SKILL.md`),
-and `board route` / `board stitch` / `board widen` take `--no-verify`
-(and `board route` additionally `--no-restore`) — never pass those unasked.
-
-## Reads
-
-| Command | Option | Values | Default |
-|---|---|---|---|
-| `board audit` | `--oz` | copper weight, oz | `1.0` |
-| | `--dt` | permitted temperature rise, K | `10` |
-| `board plane` | `--step` | mm between samples along a track | `0.5` |
-| `sch audit` | `--schematic` | path | `<board>.kicad_sch` |
-| `sch sync-preview` | `--schematic` | path | `<board>.kicad_sch` |
-
-`--oz` and `--dt` are **assumptions, not measurements**. Every ampacity number
-downstream depends on them. The output echoes `copper_oz` and `delta_t_c` —
-check them against the real stackup before quoting any current figure.
-
-## Fabrication
-
-| Command | Option | Values | Default |
-|---|---|---|---|
-| `fab gerber` / `pdf` / `svg` / `dxf` | `--layers` | comma-separated layer names, one string | project's plot set |
-| | `--out` | directory | `<board dir>/fab` |
-| `fab drill` | `--map` | `pdf` · `gerber` · `svg` · `none` | `pdf` |
-| | `--merge` | flag: one file for PTH and NPTH | off (separate) |
-| | `--inch` | flag | off (metric) |
-| | `--aux-origin` | flag: coordinates from the drill origin | off (absolute) |
-
-Plotting reuses the project's own plot settings unchanged. Drill settings are
-not stored anywhere readable, so the values above are the tool's, and it echoes
-them in `settings` — quote from there, not from here.
-
-## Status values
-
-Also absent from `reference`:
-
-| Schema | `status` |
-|---|---|
-| `sch_link`, `sch_audit`, `board_plane`, `board_parity` | `PASS` · `FAIL` |
-| `sch_relink` | `PASS` · `PARTIAL` · `NOOP` |
-| `sch_sync_preview` | `CLEAN` · `DESTRUCTIVE` |
-
-`board_sync_preview`'s `CLEAN` means no footprint is added or removed. It does
-**not** mean nothing happens — field updates are counted separately.
+Status enums are also exposed by `schemas[...].field_values.status`.
+PASS/FAIL describe the scope actually checked, not all electrical correctness.
+PARTIAL/NOOP distinguish incomplete and unchanged relink results.
+CLEAN/DESTRUCTIVE describe footprint additions/deletions in a sync preview;
+CLEAN does **not** exclude field updates. Read not_checked and the counts.

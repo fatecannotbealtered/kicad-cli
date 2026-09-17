@@ -15,12 +15,11 @@ from __future__ import annotations
 
 import os
 import sys
-from typing import Any
 
-from . import __version__, envelope, registry
+from . import __version__, arguments, envelope, registry
 
-_GLOBAL_FLAGS = {"--compact", "--quiet", "--dry-run", "--json"}
-_GLOBAL_OPTS = {"--format", "--fields", "--confirm"}
+_GLOBAL_FLAGS = {f"--{p['name']}" for p in registry.GLOBAL_OPTIONS if p["type"] == "boolean"}
+_GLOBAL_OPTS = {f"--{p['name']}" for p in registry.GLOBAL_OPTIONS if p["type"] != "boolean"}
 
 _USAGE = f"""kicad-cli {__version__} - AI-native KiCad PCB CLI
 
@@ -33,83 +32,6 @@ _USAGE = f"""kicad-cli {__version__} - AI-native KiCad PCB CLI
 
 Agents: call `kicad-cli reference`. This text is for humans and may change.
 """
-
-
-def _parse(argv: list[str]) -> tuple[list[str], dict[str, Any]]:
-    """Split argv into positional path segments and a flat option map.
-
-    Names are kept exactly as typed. An earlier version normalised hyphens to
-    underscores, which silently broke every hyphenated option the registry
-    declares -- ``--ignore-lock`` landed under ``ignore_lock`` while the guard
-    read ``ignore-lock``, so the lock override never once took effect. Both
-    spellings are stored now, because commands are written against the name in
-    the registry and there is no reason to make that a trap.
-    """
-    positional: list[str] = []
-    opts: dict[str, Any] = {}
-
-    def put(key: str, value: Any) -> None:
-        opts[key] = value
-        opts[key.replace("-", "_")] = value
-
-    i = 0
-    while i < len(argv):
-        tok = argv[i]
-        if tok in _GLOBAL_FLAGS:
-            put(tok.lstrip("-"), True)
-            i += 1
-        elif tok.startswith("--"):
-            key = tok[2:]
-            if "=" in key:
-                key, value = key.split("=", 1)
-                put(key, value)
-                i += 1
-            elif i + 1 < len(argv) and not argv[i + 1].startswith("--"):
-                put(key, argv[i + 1])
-                i += 2
-            else:
-                put(key, True)
-                i += 1
-        else:
-            positional.append(tok)
-            i += 1
-    return positional, opts
-
-
-def _reject_unknown(command: dict[str, Any], argv: list[str]) -> None:
-    """Refuse options this command does not declare.
-
-    Unknown options used to be accepted and ignored. On a read that wastes a
-    call; on a write it is worse than that. ``board rewidth --nets VSYS`` looks
-    like it names a target, and ``rewidth`` has no ``--nets`` -- so the option
-    was dropped, a confirm token was issued, and the preview quietly described
-    re-routing the default netclasses instead. The write gate cannot catch that:
-    the plan it shows is a valid plan, just not the one that was asked for.
-    """
-    declared = {p["name"] for p in command["params"]}
-    declared |= {p["name"].replace("-", "_") for p in command["params"]}
-    allowed = (
-        declared | {f.lstrip("-") for f in _GLOBAL_FLAGS} | {o.lstrip("-") for o in _GLOBAL_OPTS}
-    )
-    unknown = []
-    for tok in argv:
-        if not tok.startswith("--"):
-            continue
-        name = tok[2:].split("=", 1)[0]
-        if name not in allowed and name.replace("_", "-") not in allowed:
-            unknown.append(tok.split("=", 1)[0])
-    if unknown:
-        envelope.fail(
-            "E_USAGE",
-            "unknown option for this command",
-            {
-                "command": command["path"],
-                "unknown": sorted(set(unknown)),
-                "accepted": sorted({p["name"] for p in command["params"]}),
-                "hint": "run `kicad-cli reference` for this command's parameters; "
-                "an option that is not declared here belongs to a different command",
-            },
-        )
 
 
 def _trace(path: str) -> None:
@@ -144,34 +66,20 @@ def main(argv: list[str] | None = None) -> None:
         sys.stdout.write(_USAGE)
         sys.exit(0)
 
-    positional, opts = _parse(argv)
-
-    fmt = opts.get("format") or ("json" if opts.get("json") else "json")
-    if fmt not in ("json", "text", "raw"):
-        envelope.fail("E_USAGE", "--format must be json, text or raw", {"got": fmt})
-    fields = opts.get("fields")
+    # Reset per-invocation state for embedded callers as well as subprocesses.
+    envelope.configure()
     commands = registry.build()
-    command, _rest = registry.lookup(commands, positional)
-    schema = registry.SCHEMAS.get(command["output_schema"], {}) if command else {}
+    command, opts = arguments.parse(argv, commands, registry.GLOBAL_OPTIONS)
+    fields = opts.get("fields")
+    schema = registry.SCHEMAS[command["output_schema"]]
     envelope.configure(
-        fmt=fmt,
-        compact=bool(opts.get("compact")),
-        fields=[f.strip() for f in fields.split(",")] if isinstance(fields, str) else None,
-        quiet=bool(opts.get("quiet")),
-        schema_name=command["output_schema"] if command else None,
+        fmt=opts.get("format", "json"),
+        compact=opts.get("compact", False),
+        fields=fields.split(",") if fields else None,
+        quiet=opts.get("quiet", False),
+        schema_name=command["output_schema"],
         schema_fields=schema.get("fields"),
     )
-    if command is None:
-        envelope.fail(
-            "E_USAGE",
-            "unknown command",
-            {
-                "got": " ".join(positional) or "(none)",
-                "hint": "run `kicad-cli reference` for the machine-readable command list",
-            },
-        )
-
-    _reject_unknown(command, argv)
 
     _trace(command["path"])
 
