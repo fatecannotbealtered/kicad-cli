@@ -1,0 +1,25 @@
+# Temporary source-only bootstrap, removed from the implementation diff.
+name: Agent workspace
+on:
+  push:
+    branches: [work/drc-runner-isolation]
+permissions:
+  contents: read
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Export tracked source only
+        run: |
+          mkdir -p workspace
+          git archive --format=tar.gz --output=workspace/source.tar.gz HEAD
+          git rev-parse HEAD > workspace/commit.txt
+      - uses: actions/upload-artifact@v7
+        with:
+          name: agent-source
+          path: workspace/
+          retention-days: 1
