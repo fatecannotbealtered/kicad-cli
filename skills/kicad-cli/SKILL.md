@@ -9,8 +9,10 @@ metadata: {"requires": {"bins": ["kicad-cli"], "min_version": "1.0.0"}}
 
 # kicad-cli
 
-Deterministic, machine-readable KiCad board operations. Every command emits one
-JSON envelope; every write is gated and DRC-verified.
+Machine-readable KiCad board operations. Every command emits one JSON envelope;
+writes have a confirmation gate. This development candidate is unpublishable:
+authenticated, expiring, single-use confirmation and uniform DRC/rollback are
+not yet complete. Read release_readiness before claiming production safety.
 
 ```bash
 # Please install kicad-cli and use it for all KiCad board work going forward.
@@ -38,9 +40,10 @@ link field back into the *board*.
 
 ## First Step
 
-Run `kicad-cli reference --compact` before choosing a command. It is the only
-source for command paths, parameters, output schemas, `untrusted_fields` and
-exit codes. Do not infer them from this file and do not scrape `--help`.
+Run `kicad-cli reference --compact` before choosing a command. It is the source for command paths, parameter types, defaults, units, enums,
+mode constraints, global options, output schemas, `untrusted_fields` and error
+codes. Use `reference --command "board route" --compact` to read just one
+command and its output schema. Do not infer them from this file and do not scrape `--help`.
 
 Run `context` and `doctor` first when anything fails: they report which KiCad
 was resolved and whether the IPC server is reachable. Check
@@ -55,11 +58,11 @@ before continuing, or you are blind to the commands you just gained.
 
 ## Global Options
 
-Not in `reference`, so they are documented here:
-
-`--compact` (single-line JSON) · `--quiet` (no stderr progress) ·
-`--format json|text|raw` · `--fields a,b` (project top-level keys) ·
-`--dry-run` and `--confirm ct_...` (the write gate).
+Read `reference.data.global_options` rather than maintaining a second flag list.
+Boolean values are typed: a bare flag means true; explicit true/false or 1/0
+values are accepted. Never combine `--dry-run` with `--confirm`, even with an
+explicit false value. Duplicate scalar options and extra positional arguments
+are refused before any handler runs. Repeated layer options accumulate.
 
 stdout carries exactly one envelope. Parse it and check `ok` first; stderr is
 human-readable context only.
@@ -93,12 +96,14 @@ ones apart:
 | ERC says zero — is the schematic fine? | `sch audit` (re-runs the silenced rules) | `sch link` |
 | A trace is too thin | `board widen` first (in place), then `board route --mode rewidth --nets X` | `board rewidth` has no `--nets`; it works by netclass |
 | Connections are missing | `board route --mode repair` (repeat until it stops improving) | `--mode full` clears every existing track first |
-| Copper pour looks connected but is not | `board stitch` | `board audit` only reports it |
+| Copper pour looks connected but is not | `board stitch` | `board audit` |
 | Return paths / EMC | `board plane` | `board audit` |
 | Show the work on screen, undoable | `board live` (IPC, needs KiCad open) | everything else works on the file |
 
-See `reference/parameters.md` for accepted values and defaults — `reference`
-declares parameter *names* and types but not their values.
+Use `reference` for accepted values, defaults and per-mode constraints.
+`reference/parameters.md` explains how to interpret them. In particular,
+`board route --nets` is currently supported only in rewidth mode; repair/full
+with that option are refused rather than silently routing a larger target set.
 
 ## Checkpoints
 

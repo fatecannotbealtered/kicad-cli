@@ -6,7 +6,7 @@ import os
 import sys
 from typing import Any
 
-from .. import envelope, kicad_env
+from .. import __version__, envelope, kicad_env
 
 
 def run(_args: dict[str, Any]) -> None:
@@ -17,6 +17,7 @@ def run(_args: dict[str, Any]) -> None:
     envelope.ok(
         {
             # No server, no tenant: this tool operates on local design files.
+            "version": __version__,
             "env": "local",
             "account": None,
             "config": {

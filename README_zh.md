@@ -61,6 +61,19 @@ kicad-cli reference --compact
 
 README 只做地图，不做完整手册。Agent 在执行任务命令前，应调用 `kicad-cli reference --compact` 获取准确的 flags、schemas、权限、退出码和错误码。
 
+## 开发候选版本
+
+本分支是第一批命令契约加固，不是一次新发布。
+`reference --command "board route" --compact` 返回单条命令和对应 schema；
+参数默认值、单位、枚举、模式约束和全局选项现在都以实时注册表为准。
+布尔参数按类型解析，无效请求在启动 KiCad 前拒绝。
+`--dry-run` 与 `--confirm` 互斥。当前 `board route --nets` 仅支持 rewidth；
+repair/full 模式会拒绝该选项，而不会静默扩大目标范围。
+
+确认令牌生命周期、DRC 结果隔离、各写模式的一致验证／回退及新实机 E2E
+证据尚未完成，发布就绪等级为 **unpublishable**。
+历史 1.0.0 冒烟记录不代表此候选版本已经验证。`board live` 当前只读状态。
+
 ## Agent 工作流
 
 1. 用上面的代码块安装 CLI 和 Skill。

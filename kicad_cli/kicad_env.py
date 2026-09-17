@@ -26,6 +26,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+from functools import lru_cache
 from pathlib import Path
 
 from . import envelope
@@ -83,7 +84,7 @@ def find_python() -> str | None:
     override = os.environ.get(ENV_PYTHON)
     if override and Path(override).exists():
         return override
-    if _can_import_pcbnew(sys.executable):
+    if not getattr(sys, "frozen", False) and _can_import_pcbnew(sys.executable):
         return sys.executable
     for root in _candidate_roots():
         for rel in _PY_HINTS:
@@ -94,18 +95,16 @@ def find_python() -> str | None:
 
 
 def _can_import_pcbnew(python: str) -> bool:
-    try:
-        r = subprocess.run(
-            [python, "-c", "import pcbnew; print(pcbnew.GetBuildVersion())"],
-            capture_output=True,
-            timeout=60,
-        )
-    except (OSError, subprocess.SubprocessError):
-        return False
-    return r.returncode == 0
+    return kicad_version(python) is not None
 
 
+@lru_cache(maxsize=16)
 def kicad_version(python: str) -> str | None:
+    """Probe once per interpreter per invocation; discovery also needs this result.
+
+    Process-local only: a new CLI invocation probes afresh, so installations,
+    environment overrides and versions are not persisted as stale facts.
+    """
     try:
         r = subprocess.run(
             [python, "-c", "import pcbnew; print(pcbnew.GetBuildVersion())"],

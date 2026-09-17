@@ -61,6 +61,21 @@ There is no `update` command. Upgrade with the two install lines above, then rea
 
 The README is intentionally a map, not the full manual. Agents should call `kicad-cli reference --compact` for exact flags, schemas, permissions, exit codes, and error codes before executing task commands.
 
+## Development candidate
+
+This branch is the first command-contract hardening increment, not a new
+release. `reference --command "board route" --compact` returns one command and
+its schema; parameter defaults, units, enums, mode constraints and global
+options now come from the live registry. Booleans are typed and invalid
+requests are refused before KiCad starts. `--dry-run` and `--confirm` are
+mutually exclusive. `board route --nets` is currently rewidth-only; repair/full
+reject it rather than silently broadening the target.
+
+Release readiness is **unpublishable** while confirmation-token lifecycle,
+DRC result isolation, consistent write verification/rollback and fresh live
+E2E evidence remain incomplete. The historical 1.0.0 smoke record is not
+validation of this candidate. `board live` currently reads status only.
+
 ## Agent Workflow
 
 1. Install the CLI and Skill with the block above.
