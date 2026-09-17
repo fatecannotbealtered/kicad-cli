@@ -1,0 +1,48 @@
+{
+  "name": "@fateforge/kicad-cli",
+  "version": "1.0.0",
+  "description": "AI-native KiCad PCB CLI - board audit, schematic parity, grid routing, zone stitching, ampacity-driven trace width, and DRC-verified writes",
+  "license": "MIT",
+  "author": "Sean Guo",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fatecannotbealtered/kicad-cli.git"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "bin": {
+    "kicad-cli": "scripts/run.js"
+  },
+  "scripts": {
+    "version": "node scripts/sync-version.js",
+    "check-version": "node scripts/check-version.js"
+  },
+  "optionalDependencies": {
+    "@fateforge/kicad-cli-darwin-arm64": "1.0.0",
+    "@fateforge/kicad-cli-darwin-x64": "1.0.0",
+    "@fateforge/kicad-cli-linux-arm64": "1.0.0",
+    "@fateforge/kicad-cli-linux-x64": "1.0.0",
+    "@fateforge/kicad-cli-win32-arm64": "1.0.0",
+    "@fateforge/kicad-cli-win32-x64": "1.0.0"
+  },
+  "files": [
+    "scripts/run.js",
+    "skills/",
+    "README.md",
+    "README_zh.md",
+    "*_zh.md",
+    "LICENSE",
+    "NOTICE.md",
+    "CHANGELOG.md",
+    "CONTRIBUTING.md",
+    "SECURITY.md",
+    "CODE_OF_CONDUCT.md",
+    "AGENTS.md",
+    ".agent/",
+    "docs/"
+  ],
+  "engines": {
+    "node": ">=16"
+  }
+}

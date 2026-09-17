@@ -1,0 +1,3 @@
+# The CLI shell has no third-party runtime dependencies on purpose: it must be
+# able to run before anything is installed, and the board work happens inside
+# KiCad's own interpreter where pcbnew and numpy already live.

@@ -1,0 +1,31 @@
+# Python-specific — append to common/.gitignore
+
+# Byte-compiled / cache
+__pycache__/
+*.py[cod]
+
+# Packaging / build artifacts
+*.egg-info/
+*.egg
+build/
+dist/
+
+# Virtual environments
+.venv/
+venv/
+
+# Test / coverage / lint caches
+.pytest_cache/
+.ruff_cache/
+.fcc-trace
+htmlcov/
+.coverage
+coverage.xml
+
+# PyInstaller
+*.spec
+*.manifest
+.vendor/
+
+# Recording rig: real board paths stay off the public repo
+demo/local.json
