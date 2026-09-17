@@ -28,7 +28,7 @@ Include: a description and impact, steps to reproduce (if safe to share), and th
 
 ## Risk Tier
 
-`kicad-cli` is classified as **T1** under [`.agent/SEC-SPEC.md`](.agent/SEC-SPEC.md): writes local PCB design files; no credentials, no account or financial impact. Destructive subcommands — `board route --mode full`, which clears all existing routing — carry a second gate beyond the confirm token.
+`kicad-cli` is classified as **T1** under [`.agent/SEC-SPEC.md`](.agent/SEC-SPEC.md): writes local PCB design files; no credentials, no account or financial impact. Destructive mode `board route --mode full` clears all existing routing. The Skill requires explicit user approval, but the runtime does not yet enforce a separate permission gate beyond confirmation.
 
 The tiers (see SEC-SPEC §1):
 
@@ -38,21 +38,25 @@ The tiers (see SEC-SPEC §1):
 | **T1 medium** | writes external state, holds writable credentials |
 | **T2 high** | can cause irreversible / account-level damage (drop, transfer, account control) |
 
-Worst-case blast radius is one person's design files on one machine. Mutating commands go through the `--dry-run` → `--confirm <token>` write loop (CLI-SPEC §7), and the blast radius of each command class is stated in `reference`.
+The blast radius includes local design files and generated outputs. Confirmation
+currently exists, but authentication, expiry, replay protection and full target
+binding are incomplete. This development candidate is **unpublishable**; see
+[Development status](docs/DEVELOPMENT_STATUS.md). Merging a scoped fix is not
+permission to publish or run unattended production writes.
 
 ## Credential Handling
 
-**There are no credentials.** `kicad-cli` has no host, no account, no token, and no config file. It operates on local design files and on a KiCad running on the same machine. Nothing is stored, so there is nothing to encrypt, redact, or leak.
+**No service credentials are required.** The tool operates on local design files and a local KiCad installation. Confirmation tokens are operation controls, not account credentials. Design contents and local paths can still be sensitive; do not treat the absence of account credentials as the absence of disclosure risk.
 
-The two environment variables it reads — `KICAD_CLI_PYTHON` and `KICAD_CLI_OFFICIAL` — are filesystem paths used to override how KiCad is located. They are not secrets.
+`KICAD_CLI_ROOT`, `KICAD_CLI_PYTHON` and `KICAD_CLI_OFFICIAL` are filesystem paths used to override KiCad discovery, not authentication secrets.
 
 This is stated positively because the absence is load-bearing: if a future version gains a credential, this section and the T1 classification both have to be revisited.
 
 ## What it can damage, and what stops it
 
-- **The project file.** Every write command refuses to run while KiCad has the project open (`~*.lck`) and returns `E_CONFLICT`. The editor holds the whole board in memory and rewrites all of it on save, so a write underneath it is silently discarded — not merged. `--ignore-lock` exists for the user's own judgement; an agent must not reach for it unprompted.
-- **Existing routing.** `board route --mode full` clears every track before routing. This is the one genuinely destructive operation and carries its own checkpoint in the Skill.
-- **Unverified changes.** Commands that modify copper run DRC afterwards and revert whatever introduced a new error. `--no-verify` / `--no-restore` remove that net; they are the second gate, not a convenience.
+- **The project file.** Layout writes check KiCad lock files (`~*.lck`) and return `E_CONFLICT`. Offline edits can be overwritten by the editor. This is not a cross-process transaction lock; fabrication output does not use the layout guard. An agent must not use `--ignore-lock` unprompted.
+- **Existing routing.** `board route --mode full` clears every track before routing. It has a checkpoint in the Skill; other writes can also damage design data or overwrite output files.
+- **Unverified changes.** DRC and rollback are not implemented uniformly across write modes. `--no-verify` / `--no-restore` disable specific checks or restoration where supported; they are not extra authorization gates. Use disposable copies and independently verify results until the release blockers are closed.
 - **Silent file migration.** Writing a KiCad 9 board through a KiCad 10 `pcbnew` upgrades the file format as a side effect. `sch relink` therefore edits the board as text, and an integrity check reverts the write and returns `E_INTEGRITY` if the diff contains anything beyond what was asked for.
 
 ## Untrusted Content
