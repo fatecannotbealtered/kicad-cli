@@ -27,6 +27,13 @@ unpublishable until the applicable blockers are closed with reviewable evidence.
 A CI run with skipped live tests cannot close EVIDENCE or prove FCC = 100%.
 No tag or package publication is authorized by this cleanup.
 
+## DRC boundary increment
+
+A shared runner and fault-injection tests now cover DRC report/config isolation,
+upstream failure and input fingerprint checks. See [DRC_BOUNDARY.md](DRC_BOUNDARY.md).
+DRC remains pending until live validation; transaction backup/snapshot files and
+non-DRC upstream calls still require separate isolation work.
+
 ## Subsequent capability work
 
 After the write/verification foundation: design snapshots, object/region queries,

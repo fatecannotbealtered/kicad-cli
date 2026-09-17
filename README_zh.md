@@ -79,6 +79,9 @@ repair/full 模式会拒绝该选项，而不会静默扩大目标范围。
 剩余工作与验收证据统一记录在[开发状态](docs/DEVELOPMENT_STATUS.md)；
 合并一个开发增量不等于批准发布。
 
+DRC 执行边界现已隔离报告并校验上游结果；这不代表写事务回退或实机验证完成。
+详见 [DRC 边界说明](docs/DRC_BOUNDARY.md)。
+
 ## Agent 工作流
 
 1. 用上面的代码块安装 CLI 和 Skill。

@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### DRC boundary hardening
+- Share one DRC runner between the shell and layout payloads. Isolate each
+  report and temporary KiCad configuration; validate exit status, JSON shape,
+  units, source and input fingerprints instead of accepting stale reports.
+- Honor the configured official executable in all DRC paths, reject automatic
+  shim/self-recursion and recognize macOS application bundles.
+- Fail explicitly when DRC is unavailable; widening no longer silently changes
+  to approximate verification. Payload failures report uncertain write state.
+- Add no-KiCad fault-injection and real-stub-process regression tests. This is
+  not whole-write rollback or fresh live validation; see docs/DRC_BOUNDARY.md.
+
 ### Added
 - Typed parameter metadata in the command registry: defaults, enums, units,
   numeric bounds, global options and per-mode constraints. `reference --command`
