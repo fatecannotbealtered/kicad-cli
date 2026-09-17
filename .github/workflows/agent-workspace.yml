@@ -1,0 +1,30 @@
+# Temporary development bootstrap; removed before the implementation PR is opened.
+# Only tracked source and a formatter wheel are exported; no credentials or build secrets.
+name: Agent workspace
+on:
+  push:
+    branches: [work/agent-contract-foundation]
+permissions:
+  contents: read
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Prepare tracked source and formatter
+        run: |
+          mkdir -p workspace/wheels
+          git archive --format=tar.gz --output=workspace/source.tar.gz HEAD
+          python -m pip download --only-binary=:all: --no-deps ruff -d workspace/wheels
+          git rev-parse HEAD > workspace/commit.txt
+      - uses: actions/upload-artifact@v7
+        with:
+          name: agent-workspace
+          path: workspace/
+          retention-days: 1
