@@ -30,6 +30,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   live evidence is not reused for changed code, and remaining confirm-token,
   DRC-isolation and verification/rollback gaps stay release blockers.
 
+### Security
+- Block the stable publishing workflow before building when runtime readiness,
+  evidence statuses or tag/version identity are invalid; recheck each frozen
+  candidate before packaging. Beta publication is intentionally not enabled.
+- Give build/preflight jobs read-only repository permissions; reserve signing
+  and publication permissions for publication jobs.
+- Derive Python distribution metadata from the runtime version rather than the
+  stale 0.1.0 literal. This does not create a tag or publish a package.
+
 ## [1.0.0] - 2026-09-17
 
 ### Added

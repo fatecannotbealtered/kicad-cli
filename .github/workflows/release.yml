@@ -16,11 +16,34 @@ on:
       - "v*.*.*"
 
 permissions:
-  contents: write
-  id-token: write
+  contents: read
 
 jobs:
+  preflight:
+    name: Admit stable release candidate
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "20"
+      - name: Verify tag and all derived versions before building
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          node scripts/check-version.js
+          python scripts/check_release.py --tag "$RELEASE_TAG"
+
   build:
+    needs: preflight
     strategy:
       fail-fast: false
       matrix:
@@ -92,6 +115,17 @@ jobs:
             python scripts/smoke_binary.py dist/kicad-cli
           fi
 
+      - name: Admit the actual frozen candidate
+        shell: bash
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          if [ "${{ runner.os }}" = "Windows" ]; then
+            python scripts/check_release.py --tag "$RELEASE_TAG" --binary dist/kicad-cli.exe
+          else
+            python scripts/check_release.py --tag "$RELEASE_TAG" --binary dist/kicad-cli
+          fi
+
       - name: Package release archive
         shell: pwsh
         run: |
@@ -126,6 +160,9 @@ jobs:
   release:
     name: Publish release assets
     needs: build
+    permissions:
+      contents: write
+      id-token: write
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v7
