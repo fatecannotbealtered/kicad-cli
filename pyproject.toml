@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "kicad-cli"
-version = "0.1.0"
+dynamic = ["version"]
 description = "AI-native KiCad PCB CLI - board audit, schematic parity, grid routing, zone stitching, ampacity-driven trace width, and DRC-verified writes"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -36,3 +36,6 @@ include = ["kicad_cli*"]
 
 [tool.setuptools.package-data]
 kicad_cli = ["payload/*.py"]
+
+[tool.setuptools.dynamic]
+version = { attr = "kicad_cli.__version__" }
