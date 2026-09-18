@@ -59,7 +59,7 @@ This section states the absence positively because the absence is load-bearing: 
 ## What it can damage, and what stops it
 
 - **The project file.** Layout writes check KiCad lock files (`~*.lck`) and return `E_CONFLICT`. Offline edits can be overwritten by the editor. This is not a cross-process transaction lock; fabrication output does not use the layout guard. An agent must not use `--ignore-lock` unprompted.
-- **Existing routing.** `board route --mode full` clears every track before routing. It has a checkpoint in the Skill; other writes can also damage design data or overwrite output files.
+- **Existing routing.** `board route --mode full` clears every track before routing. It has a checkpoint in the Skill; other writes can also damage design data or overwrite output files. It verifies connectivity only and runs no DRC, so it cannot detect that it made the board worse and will therefore commit. A backup is taken and restored on a detected failure, but a failure nothing detects is not one.
 - **Unverified changes.** DRC and rollback are not implemented uniformly across write modes. `--no-verify` / `--no-restore` disable specific checks or restoration where supported; they are not extra authorization gates. Use disposable copies and independently verify results until the release blockers are closed.
 - **Silent file migration.** Writing a KiCad 9 board through a KiCad 10 `pcbnew` upgrades the file format as a side effect. `sch relink` therefore edits the board as text, and an integrity check reverts the write and returns `E_INTEGRITY` if the diff contains anything beyond what was asked for.
 

@@ -17,10 +17,11 @@ import sys
 import time
 
 if __package__:
-    from . import confirm_store, drc_runner
+    from . import confirm_store, drc_runner, write_txn
 else:
     import confirm_store
     import drc_runner
+    import write_txn
 
 SCHEMA_VERSION = "1.0"
 TOOL_VERSION = "1.0.0"
@@ -64,17 +65,25 @@ def _emit(doc, code=0):
 
 
 def ok(data, **meta):
+    # The single success exit, so it is where an armed write becomes permanent.
+    write_txn.commit()
+    meta["write_state"] = write_txn.state()
     _emit({"ok": True, "data": data, "meta": meta}, 0)
 
 
 def fail(code, message, details=None):
+    # Failing after a save used to leave the board modified and say so only as
+    # "write_state: unknown". The bytes go back first, then we report.
+    write_txn.rollback(code)
+    details = dict(details or {})
+    details["write_state"] = write_txn.state()
     _emit(
         {
             "ok": False,
             "error": {
                 "code": code,
                 "message": message,
-                "details": details or {},
+                "details": details,
                 "retryable": RETRYABLE.get(code, False),
             },
         },
@@ -208,8 +217,24 @@ def all_pads(board):
 
 
 def fill_and_save(pcbnew, board, path):
+    """Every board write in this tool goes through here or save_board."""
+    begin_write(path)
     pcbnew.ZONE_FILLER(board).Fill(board.Zones())
     board.BuildConnectivity()
+    board.Save(path)
+
+
+def begin_write(path):
+    """Arm the write transaction, reporting a refusal in the envelope's terms."""
+    try:
+        write_txn.begin(path)
+    except write_txn.TxnError as exc:
+        fail(exc.code, str(exc), exc.details)
+
+
+def save_board(board, path):
+    """For payloads that save without refilling zones."""
+    begin_write(path)
     board.Save(path)
 
 
@@ -262,10 +287,14 @@ def run_drc(path, timeout=1800):
             exc.code,
             str(exc),
             {
+                # write_state used to be pinned to "unknown" here, because
+                # nothing tracked it and a failed verification proved nothing
+                # about the bytes. fail() now fills it in from the transaction,
+                # so pinning it would replace a fact with a guess.
                 **exc.details,
-                "write_state": "unknown",
-                "next_action": "Inspect the board and backup before retrying the enclosing write; "
-                "a failed verification does not prove the write was rolled back.",
+                "next_action": "Read write_state: on 'rolled_back' the board is as it was "
+                "and the verification failure is the thing to fix; on 'unknown' inspect the "
+                "board against its .kicad-cli.backup before retrying.",
             },
         )
 

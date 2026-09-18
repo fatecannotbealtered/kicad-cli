@@ -50,6 +50,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   encodings and assert the harness is really applying them; every pre-existing
   test sets `PYTHONIOENCODING=utf-8`, which is what kept this invisible.
 
+### Added
+- A write transaction around board saves: a backup before the first write, a
+  cross-process `.kicad-cli.lock` beside the board, whole-write rollback on any
+  failure, unhandled exception or Ctrl+C, and a journal that survives a kill so
+  the next invocation refuses to write over an unfinished write instead of
+  silently retrying on top of it. The envelope now reports `write_state`
+  (`committed` / `rolled_back` / `not_started` / `unknown`) rather than only
+  being able to say `unknown` after a failure.
+
 ### Changed
 - Separate FCC measurement from FCC enforcement. The guard returned early unless
   `fcc_status` already said `verified`, so while the status was `unknown` nothing

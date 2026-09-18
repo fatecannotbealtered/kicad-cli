@@ -18,7 +18,7 @@ The `board live` command is read-only status, not a live editing interface.
 |---|---|---|
 | CONFIRM | Pending (live validation) | Random, expiring, single-use tokens bound to operation, preview and target contents, with replay/expiry/changed-target/forged-token tests, are implemented. Remaining: validation against real KiCad write flows on more than one platform, and the store's behaviour under a shared or hostile state directory. |
 | DRC | Pending | One trusted runner, isolated reports and per-operation temporary files; fresh-report and upstream-failure tests; no acceptance of a previous invocation's report. |
-| TRANSACTION | Pending | Explicit per-mode verification, safe backup/rollback, cancellation and concurrent-write semantics; fault-injection tests plus real KiCad validation. |
+| TRANSACTION | Pending (verification) | Backup, whole-write rollback, a cross-process write lock, an interrupted-write journal and a reported `write_state` are implemented and fault-injection tested. Remaining, and the larger half: explicit per-mode verification. Measured on KiCad 10.0.6 — `board route --mode full` clears all routing, checks connectivity only, and emits no `verify` field at all; it reported success with the DRC oracle deliberately unavailable. |
 | CONTRACT | Pending | Review remaining runtime/schema, untrusted-data and permission-boundary gaps against the pinned spec; complete command/flag/error coverage, not dispatch counts alone. |
 | EVIDENCE | Pending | Fresh full live KiCad suite and frozen-artifact smoke for the actual candidate; record platform, backend version and source identity. Historical 1.0.0 evidence is not reused. |
 
@@ -47,6 +47,21 @@ Most recent measurement: **22/22 leaf commands (100%)**, Windows 11 with KiCad
 asks for every documented behavior — flags, modes, error codes — to have a
 command-level test, and that larger set is what the CONTRACT blocker tracks.
 Dispatch coverage is a floor for FCC, not FCC.
+
+## Write transaction increment
+
+Board writes take a backup and hold a `.kicad-cli.lock` beside the board for the
+duration. Success commits and drops both; any failure, unhandled exception or
+Ctrl+C restores the original bytes; a kill that runs nothing leaves a
+`.kicad-cli.journal`, and the next invocation refuses to write over that board
+and says where the backup is. The envelope reports `write_state` —
+`committed`, `rolled_back`, `not_started` or `unknown` — instead of only being
+able to say `unknown` after a failure.
+
+This is the recovery half of TRANSACTION, not the verification half. A rollback
+is only triggered by a failure something actually detects, and `board route
+--mode full` detects nothing beyond connectivity. Until per-mode verification
+exists, a mode that cannot tell it made the board worse will commit.
 
 ## Subsequent capability work
 
