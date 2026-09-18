@@ -64,6 +64,18 @@ def _traced_codes(pytestconfig) -> set[str]:
 def _why_this_run_cannot_measure(request, pytestconfig) -> str | None:
     if not getattr(pytestconfig, "kicad_cli_full_suite", False):
         return "partial selection; run the whole suite to measure error coverage"
+    # Some codes can only be produced by driving a real KiCad -- E_INTEGRITY
+    # needs a router that actually routes, with only the DRC verdict staged.
+    # On a machine without one those tests skip, and counting their codes as
+    # unreachable would report the absence of KiCad as a gap in the tool. Same
+    # reasoning, and the same answer, as the dispatch guard.
+    from kicad_demos import DEMOS
+
+    if not DEMOS.is_dir():
+        return (
+            "no KiCad on this machine, so the tests that provoke the KiCad-only "
+            "codes skipped; error coverage is measurable only where they can run"
+        )
     if request.session.testsfailed:
         return f"{request.session.testsfailed} earlier failure(s); the trace is incomplete"
     return None
