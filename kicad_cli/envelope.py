@@ -48,6 +48,26 @@ def configure(
     )
 
 
+def reject_undeclared(data: Any, allowed_extra: Any = frozenset()) -> None:
+    """Refuse output carrying a key this command's schema does not declare.
+
+    Shaping relayed output to the declared field list (see
+    ``commands.layout._to_declared_shape``) fills a key a mode does not set --
+    which is right -- but if it also silently dropped a key the schema never
+    declared, the strict check would become a tautology: the output would match
+    the declaration because it was built from it. That is the opposite of the
+    guarantee. Filling is shaping; dropping would be hiding.
+    """
+    expected = _OPTS.get("schema_fields")
+    if not expected or not isinstance(data, dict) or not os.environ.get("KICAD_CLI_STRICT"):
+        return
+    extra = sorted(set(data) - set(expected) - set(allowed_extra))
+    if extra:
+        name = _OPTS.get("schema_name")
+        write_utf8(sys.stderr, f"contract violation in {name}: undeclared {extra}, missing []\n")
+        sys.exit(1)
+
+
 def declared_fields() -> list[str] | None:
     """The field list this command's output_schema promises, if it has one."""
     return _OPTS.get("schema_fields")

@@ -264,16 +264,30 @@ SCHEMAS: dict[str, dict[str, Any]] = {
             "rewidth",
             "rewidth_ok",
             "rewidth_total",
+            # These four are produced by the same rewidth run as the three
+            # above and were simply never declared, so a caller reading
+            # `reference` could not know a reverted net would be reported.
+            "rewidth_reverted",
+            "rewidth_drc_cause",
+            "stripped_segments",
+            "skipped_nets",
+            "verify",
             "tracks",
             "vias",
             "track_len_mm",
             "unconnected_before",
             "unconnected_after",
             "improved",
+            "note",
         ],
         # Reports the width actually achieved per net, which is not always the
-        # width asked for.
-        "untrusted_fields": ["rewidth"],
+        # width asked for. The revert reasons quote DRC, which quotes the board.
+        "untrusted_fields": [
+            "rewidth",
+            "rewidth_reverted",
+            "rewidth_drc_cause",
+            "skipped_nets",
+        ],
     },
     "board_stitch": {
         "shape": "object",

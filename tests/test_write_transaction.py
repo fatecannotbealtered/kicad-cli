@@ -23,14 +23,27 @@ from kicad_cli.payload import write_txn  # noqa: E402
 ORIGINAL = "(kicad_pcb original)"
 
 
-@pytest.fixture
-def board(tmp_path, monkeypatch):
-    path = tmp_path / "demo.kicad_pcb"
-    path.write_text(ORIGINAL, encoding="utf-8")
-    # The module keeps per-process state; each test starts from nothing.
+@pytest.fixture(autouse=True)
+def _isolated_transaction_state(monkeypatch):
+    """Reset the module's per-process state around every test in this file.
+
+    `write_txn` keeps `_active` and `_state` at module scope, and anything that
+    reaches `kicad_lib.fail` in this interpreter moves them -- `test_drc_runner`
+    does, for one. Resetting only on the way in leaves a test that arms a
+    transaction and does not finish it able to reach the next file. Autouse and
+    symmetric, so neither direction can carry.
+    """
     monkeypatch.setattr(write_txn, "_active", {})
     monkeypatch.setattr(write_txn, "_state", "not_started")
     monkeypatch.setattr(write_txn, "_installed", False)
+    yield
+    write_txn._active.clear()
+
+
+@pytest.fixture
+def board(tmp_path):
+    path = tmp_path / "demo.kicad_pcb"
+    path.write_text(ORIGINAL, encoding="utf-8")
     return path
 
 
