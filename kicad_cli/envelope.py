@@ -7,7 +7,6 @@ parsing our output must never meet a key we did not promise.
 
 from __future__ import annotations
 
-import hashlib
 import json
 import os
 import sys
@@ -15,6 +14,7 @@ import time
 from typing import Any
 
 from . import errors
+from .payload import confirm_store
 
 SCHEMA_VERSION = "1.0"
 
@@ -153,18 +153,7 @@ def fail(code: str, message: str, details: dict[str, Any] | None = None) -> None
     )
 
 
-def confirm_token(operation: str, preview: dict[str, Any]) -> str:
-    """Token binds to operation + the previewed state.
-
-    Binding it to the preview is the point: if the board changed between the
-    dry run and the confirm, the token no longer matches and we refuse with
-    E_CONFLICT instead of applying a plan that was computed against stale state.
-    """
-    blob = operation + json.dumps(preview, sort_keys=True, default=str)
-    return "ct_" + hashlib.sha256(blob.encode("utf-8")).hexdigest()[:16]
-
-
-def need_confirm(operation: str, preview: dict[str, Any]) -> None:
+def need_confirm(operation: str, preview: dict[str, Any], target: str | None = None) -> None:
     """Ask for confirmation, and show what is being confirmed.
 
     The preview travels with the token deliberately. A gate that hands back an
@@ -172,7 +161,10 @@ def need_confirm(operation: str, preview: dict[str, Any]) -> None:
     cannot see, which is a worse failure than having no gate at all: it turns a
     deliberate decision into a reflex.
     """
-    token = confirm_token(operation, preview)
+    try:
+        token = confirm_store.issue(operation, preview, target)
+    except confirm_store.ConfirmError as exc:
+        fail(exc.code, str(exc), exc.details)
     _emit(
         {
             "ok": False,
@@ -180,13 +172,15 @@ def need_confirm(operation: str, preview: dict[str, Any]) -> None:
             "error": {
                 "code": "E_CONFIRMATION_REQUIRED",
                 "message": (
-                    "write operation needs confirmation; "
-                    "re-run the same command with --confirm <token>"
+                    "write operation needs confirmation; re-run the same command "
+                    f"with --confirm <token> within {confirm_store.TTL_SECONDS}s"
                 ),
                 "details": {
                     "confirm_token": token,
                     "operation": operation,
                     "preview": preview,
+                    "expires_in_s": confirm_store.TTL_SECONDS,
+                    "single_use": True,
                 },
                 "retryable": False,
             },
@@ -196,18 +190,16 @@ def need_confirm(operation: str, preview: dict[str, Any]) -> None:
     )
 
 
-def check_confirm(given: str | None, operation: str, preview: dict[str, Any]) -> None:
+def check_confirm(
+    given: str | None, operation: str, preview: dict[str, Any], target: str | None = None
+) -> None:
     """Single entry point for the write gate. Returns only when execution may proceed."""
-    token = confirm_token(operation, preview)
     if not given:
-        need_confirm(operation, preview)
-    if given != token:
-        fail(
-            "E_CONFLICT",
-            "confirm token does not match current state; "
-            "re-run with --dry-run to get a fresh token",
-            {"expected": token, "got": given},
-        )
+        need_confirm(operation, preview, target)
+    try:
+        confirm_store.redeem(given, operation, preview, target)
+    except confirm_store.ConfirmError as exc:
+        fail(exc.code, str(exc), exc.details)
 
 
 def progress(message: str) -> None:

@@ -39,8 +39,10 @@ The tiers (see SEC-SPEC §1):
 | **T2 high** | can cause irreversible / account-level damage (drop, transfer, account control) |
 
 The blast radius includes local design files and generated outputs. Confirmation
-currently exists, but authentication, expiry, replay protection and full target
-binding are incomplete. This development candidate is **unpublishable**; see
+tokens are now random, single-use, time-limited and bound to the target file's
+contents; a replayed, banked or stale token is refused. They are still not an
+authentication boundary: anyone who can run the dry run can obtain one, which
+under T1 is the intended scope. This development candidate is **unpublishable**; see
 [Development status](docs/DEVELOPMENT_STATUS.md). Merging a scoped fix is not
 permission to publish or run unattended production writes.
 
@@ -48,9 +50,11 @@ permission to publish or run unattended production writes.
 
 **No service credentials are required.** The tool operates on local design files and a local KiCad installation. Confirmation tokens are operation controls, not account credentials. Design contents and local paths can still be sensitive; do not treat the absence of account credentials as the absence of disclosure risk.
 
-`KICAD_CLI_ROOT`, `KICAD_CLI_PYTHON` and `KICAD_CLI_OFFICIAL` are filesystem paths used to override KiCad discovery, not authentication secrets.
+`KICAD_CLI_ROOT`, `KICAD_CLI_PYTHON`, `KICAD_CLI_OFFICIAL` and `KICAD_CLI_STATE` are filesystem paths, not authentication secrets.
 
-This is stated positively because the absence is load-bearing: if a future version gains a credential, this section and the T1 classification both have to be revisited.
+**One thing is now stored.** A confirmation record is written under `KICAD_CLI_STATE` (default `%LOCALAPPDATA%\kicad-cli\confirm`, or `$XDG_STATE_HOME/kicad-cli/confirm`) when a write is previewed, and removed when the token is redeemed, expires or is swept. It holds the operation name, a digest of the plan and target, and an issue time — not the preview, the board, or any part of the design. Records are created `0700`/`0600` where the platform supports it. Deleting the directory at any time costs at most a re-run of `--dry-run`.
+
+This section states the absence positively because the absence is load-bearing: if a future version gains a credential, this section and the T1 classification both have to be revisited.
 
 ## What it can damage, and what stops it
 

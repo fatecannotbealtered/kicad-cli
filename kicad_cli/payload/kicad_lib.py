@@ -11,15 +11,15 @@
 from __future__ import annotations
 
 import fnmatch
-import hashlib
 import json
 import os
 import sys
 import time
 
 if __package__:
-    from . import drc_runner
+    from . import confirm_store, drc_runner
 else:
+    import confirm_store
     import drc_runner
 
 SCHEMA_VERSION = "1.0"
@@ -82,26 +82,32 @@ def fail(code, message, details=None):
     )
 
 
-def need_confirm(preview, op_desc):
-    """写操作的 dry-run 出口：返回 confirm_token，退出码 5。"""
-    token = (
-        "ct_"
-        + hashlib.sha256(
-            (op_desc + json.dumps(preview, sort_keys=True, default=str)).encode("utf-8")
-        ).hexdigest()[:16]
-    )
+def need_confirm(preview, op_desc, target=None):
+    """写操作的 dry-run 出口：返回 confirm_token，退出码 5。
+
+    token 由 confirm_store 记录后签发：随机、限时、一次性。原先是
+    sha256(op_desc + preview)，是公开输入的纯函数——每次 dry-run 都得到同一个
+    token，永不过期，可以无限重放。那样的闸门只值一次额外调用，不值一个决定。
+    """
+    try:
+        token = confirm_store.issue(op_desc, preview, target)
+    except confirm_store.ConfirmError as exc:
+        fail(exc.code, str(exc), exc.details)
     _emit(
         {
             "ok": False,
             "error": {
                 "code": "E_CONFIRMATION_REQUIRED",
-                "message": "写操作需确认，用 --confirm <token> 重跑同一命令",
+                "message": f"写操作需确认，{confirm_store.TTL_SECONDS}s 内用 "
+                "--confirm <token> 重跑同一命令",
                 # 预览必须跟着 token 一起出去。只给 token 不给预览，等于让调用方
                 # 确认一件它看不见的事——那比没有闸门更糟，把决定变成了反射。
                 "details": {
                     "confirm_token": token,
                     "operation": op_desc,
                     "preview": preview,
+                    "expires_in_s": confirm_store.TTL_SECONDS,
+                    "single_use": True,
                 },
                 "retryable": False,
             },
@@ -111,22 +117,18 @@ def need_confirm(preview, op_desc):
     )
 
 
-def check_confirm(args_confirm, preview, op_desc):
-    """写脚本统一入口：无 token 走 dry-run 出口，token 不符报 E_CONFLICT。"""
-    token = (
-        "ct_"
-        + hashlib.sha256(
-            (op_desc + json.dumps(preview, sort_keys=True, default=str)).encode("utf-8")
-        ).hexdigest()[:16]
-    )
+def check_confirm(args_confirm, preview, op_desc, target=None):
+    """写脚本统一入口：无 token 走 dry-run 出口，token 不可兑付报 E_CONFLICT。
+
+    target 传板文件路径时，token 还绑定该文件的内容哈希——预览只是摘要，
+    两块板可能摘要相同，同一块板也可能被改成摘要不再描述的状态。
+    """
     if not args_confirm:
-        need_confirm(preview, op_desc)
-    if args_confirm != token:
-        fail(
-            "E_CONFLICT",
-            "confirm token 与当前板状态不符，板已变化。重新跑 --dry-run 取新 token",
-            {"expected": token, "got": args_confirm},
-        )
+        need_confirm(preview, op_desc, target)
+    try:
+        confirm_store.redeem(args_confirm, op_desc, preview, target)
+    except confirm_store.ConfirmError as exc:
+        fail(exc.code, str(exc), exc.details)
 
 
 # ---- pcbnew 导入 ------------------------------------------------------------

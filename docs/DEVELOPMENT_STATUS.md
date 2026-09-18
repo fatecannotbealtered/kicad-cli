@@ -16,7 +16,7 @@ The `board live` command is read-only status, not a live editing interface.
 
 | ID | Status | Acceptance evidence required |
 |---|---|---|
-| CONFIRM | Pending | Authenticated, expiring, single-use tokens; complete target/state binding; replay and changed-target rejection tests. |
+| CONFIRM | Pending (live validation) | Random, expiring, single-use tokens bound to operation, preview and target contents, with replay/expiry/changed-target/forged-token tests, are implemented. Remaining: validation against real KiCad write flows on more than one platform, and the store's behaviour under a shared or hostile state directory. |
 | DRC | Pending | One trusted runner, isolated reports and per-operation temporary files; fresh-report and upstream-failure tests; no acceptance of a previous invocation's report. |
 | TRANSACTION | Pending | Explicit per-mode verification, safe backup/rollback, cancellation and concurrent-write semantics; fault-injection tests plus real KiCad validation. |
 | CONTRACT | Pending | Review remaining runtime/schema, untrusted-data and permission-boundary gaps against the pinned spec; complete command/flag/error coverage, not dispatch counts alone. |

@@ -571,7 +571,7 @@ def relink(args: dict[str, Any]) -> None:
         "will": f"write a schematic uuid into the path field of {len(plan)} footprints; "
         "no geometry, net or placement data is touched",
     }
-    envelope.check_confirm(args.get("confirm"), f"sch relink:{board.name}", preview)
+    envelope.check_confirm(args.get("confirm"), f"sch relink:{board.name}", preview, str(board))
 
     before = _read_raw(board)
     backup = board.with_name(f"{board.name}.bak-{time.strftime('%Y%m%d-%H%M%S')}")

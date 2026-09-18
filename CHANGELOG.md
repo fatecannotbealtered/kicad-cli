@@ -51,6 +51,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   test sets `PYTHONIOENCODING=utf-8`, which is what kept this invisible.
 
 ### Changed
+- Confirmation tokens are random, single-use and expire after 15 minutes, and
+  bind to the operation, the preview and the target file's contents. They were
+  `sha256(operation + preview)`: a pure function of public inputs, so the same
+  token came back from every dry run, stayed valid forever and could be
+  replayed without limit. A gate like that costs one extra round trip, not a
+  decision. Tokens issued by an earlier build are refused. Pending records are
+  kept under `KICAD_CLI_STATE`; see SECURITY.md for exactly what is stored.
 - This development candidate is explicitly unpublishable. The historical 1.0.0
   live evidence is not reused for changed code, and remaining confirm-token,
   DRC-isolation and verification/rollback gaps stay release blockers.

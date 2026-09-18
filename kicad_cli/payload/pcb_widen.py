@@ -187,7 +187,7 @@ def main():
         "under_width_by_class": {k: int(v) for k, v in sorted(under.items())},
         "will": "在不与异网铜冲突的前提下逐段加宽",
     }
-    K.check_confirm(args.get("confirm"), preview, "pcb_widen:%s" % os.path.basename(path))
+    K.check_confirm(args.get("confirm"), preview, "pcb_widen:%s" % os.path.basename(path), path)
 
     R = Router(b, lambda s: None)
     for t in vias:

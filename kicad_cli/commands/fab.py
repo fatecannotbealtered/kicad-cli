@@ -48,7 +48,9 @@ def _plot(fmt: str, args: dict[str, Any]) -> None:
         "output_dir": outdir,
         "will": f"plot the selected layers to {fmt} using the project's existing plot settings",
     }
-    envelope.check_confirm(args.get("confirm"), f"fab plot:{fmt}:{Path(board).name}", preview)
+    envelope.check_confirm(
+        args.get("confirm"), f"fab plot:{fmt}:{Path(board).name}", preview, board
+    )
 
     argv = ["--board", board, "--fmt", fmt, "--out", outdir]
     if layers:
@@ -98,7 +100,7 @@ def drill(args: dict[str, Any]) -> None:
         "will": "write Excellon drill files, a drill map and a drill report; "
         "the board itself is not modified",
     }
-    envelope.check_confirm(args.get("confirm"), f"fab drill:{Path(board).name}", preview)
+    envelope.check_confirm(args.get("confirm"), f"fab drill:{Path(board).name}", preview, board)
 
     argv = ["--board", board, "--out", outdir, "--map", map_fmt]
     if merge:
