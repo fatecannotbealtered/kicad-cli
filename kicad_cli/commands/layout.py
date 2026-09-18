@@ -41,7 +41,18 @@ def _relay(payload: str, args: dict[str, Any], extra: list[str], timeout: int = 
 
     result = kicad_env.run_payload(payload, argv, timeout=timeout)
     if result.get("ok"):
-        envelope.ok(result.get("data"))
+        # The payload reports what happened to the bytes on disk in its own
+        # meta, which this relay drops. "committed" is the unremarkable case;
+        # anything else -- most often a write command that found nothing to do
+        # and never saved -- is worth saying out loud rather than leaving the
+        # caller to infer it from the numbers.
+        written = (result.get("meta") or {}).get("write_state")
+        notices = (
+            [{"code": "write_state", "message": written}]
+            if written and written != "committed"
+            else None
+        )
+        envelope.ok(result.get("data"), notices)
     err = result.get("error") or {}
     envelope.fail(
         err.get("code", "E_UNKNOWN"),

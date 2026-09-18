@@ -102,7 +102,7 @@ def main():
                 clash.append([boxes[i][0], boxes[j][0]])
 
     b.BuildConnectivity()
-    b.Save(path)
+    K.save_board(b, path)
     K.ok(
         {
             "moved": len(moves),

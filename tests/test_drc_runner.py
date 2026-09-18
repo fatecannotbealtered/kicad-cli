@@ -327,7 +327,11 @@ def test_both_adapters_preserve_error_semantics(board, monkeypatch, capsys, adap
     assert exc.value.code == 1 and doc["error"]["code"] == "E_IO"
     assert captured.err == ""
     if adapter == "payload":
-        assert doc["error"]["details"]["write_state"] == "unknown"
+        # No write was armed in this test, and that is now distinguishable from
+        # "we have no idea". The pinned "unknown" it used to assert was a
+        # placeholder for the absence of any transaction to ask.
+        assert doc["error"]["details"]["write_state"] == "not_started"
+        assert "write_state" in doc["error"]["details"]["next_action"]
 
 
 @pytest.mark.parametrize("name", ["pcb_route.py", "pcb_widen.py"])
