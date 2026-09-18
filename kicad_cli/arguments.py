@@ -30,8 +30,16 @@ def _scan(argv: list[str], types: dict[str, str]) -> tuple[list[str], dict[str, 
     while i < len(argv):
         token = argv[i]
         if token == "--":
-            positional.extend(argv[i + 1 :])
-            break
+            # There are no positional values in this tool -- every value belongs
+            # to a named option, and the only positionals are command path
+            # segments. So the usual "rest are values" reading of `--` cannot be
+            # honoured: taking it used to push the remaining options into the
+            # command path and report them as an unknown command. Say what the
+            # escape hatch actually is instead of failing three steps later.
+            _usage(
+                "`--` is not supported: this tool takes no positional values",
+                hint="to pass a value that begins with --, write --option=--value",
+            )
         if not token.startswith("--"):
             positional.append(token)
             i += 1

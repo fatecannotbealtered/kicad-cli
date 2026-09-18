@@ -46,8 +46,20 @@ def _emit(doc, code=0):
     doc["schema_version"] = SCHEMA_VERSION
     doc.setdefault("meta", {})["duration_ms"] = int((time.time() - _T0) * 1000)
     doc["meta"]["tool_version"] = TOOL_VERSION
-    sys.stdout.write(json.dumps(doc, ensure_ascii=False, default=str) + "\n")
-    sys.stdout.flush()
+    # The host decodes this stream as UTF-8, so write UTF-8 rather than
+    # whatever locale KiCad's own interpreter happens to start with. Most of
+    # this tool's operator-facing text is Chinese, and a mismatch here does not
+    # fail loudly: the host decodes with errors="replace" and the note arrives
+    # as replacement characters attached to an otherwise successful write.
+    text = json.dumps(doc, ensure_ascii=False, default=str) + "\n"
+    buffer = getattr(sys.stdout, "buffer", None)
+    if buffer is None:
+        sys.stdout.write(text)
+        sys.stdout.flush()
+    else:
+        sys.stdout.flush()
+        buffer.write(text.encode("utf-8"))
+        buffer.flush()
     sys.exit(code)
 
 

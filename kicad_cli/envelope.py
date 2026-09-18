@@ -68,15 +68,37 @@ def _project(data: Any) -> Any:
     return data
 
 
+def write_utf8(stream: Any, text: str) -> None:
+    """Emit UTF-8 regardless of the console the caller happens to have.
+
+    JSON exchanged between systems is UTF-8 (RFC 8259 section 8.1), and an
+    agent decodes ours as UTF-8 because there is nothing else it could
+    reasonably assume. ``sys.stdout`` does not honour that on its own: it
+    encodes with the process locale, so on a zh-CN Windows console every
+    Chinese string in a payload note or error message went out as GBK and the
+    document would not decode at all. The suite never saw it because every
+    test in it sets PYTHONIOENCODING=utf-8 -- the one environment variable
+    that hides this exact defect.
+    """
+    buffer = getattr(stream, "buffer", None)
+    if buffer is None:  # A substituted text stream, e.g. a capture fixture.
+        stream.write(text)
+        stream.flush()
+        return
+    stream.flush()  # Keep ordering if anything text-level is still pending.
+    buffer.write(text.encode("utf-8"))
+    buffer.flush()
+
+
 def _emit(doc: dict[str, Any], code: int) -> None:
     if _OPTS.get("format") == "text":
         # Human-facing only. Never parse this; agents use the default json format.
         payload = doc.get("data") if doc.get("ok") else doc.get("error")
-        sys.stdout.write(json.dumps(payload, ensure_ascii=False, indent=2, default=str) + "\n")
+        text = json.dumps(payload, ensure_ascii=False, indent=2, default=str)
     else:
         sep = (",", ":") if _OPTS.get("compact") else None
-        sys.stdout.write(json.dumps(doc, ensure_ascii=False, default=str, separators=sep) + "\n")
-    sys.stdout.flush()
+        text = json.dumps(doc, ensure_ascii=False, default=str, separators=sep)
+    write_utf8(sys.stdout, text + "\n")
     sys.exit(code)
 
 
@@ -98,11 +120,11 @@ def _check_schema(data: Any) -> None:
     got, want = set(data), set(expected)
     if got != want:
         name = _OPTS.get("schema_name")
-        sys.stderr.write(
+        write_utf8(
+            sys.stderr,
             f"contract violation in {name}: "
-            f"undeclared {sorted(got - want)}, missing {sorted(want - got)}\n"
+            f"undeclared {sorted(got - want)}, missing {sorted(want - got)}\n",
         )
-        sys.stderr.flush()
         sys.exit(1)
 
 
@@ -191,5 +213,4 @@ def check_confirm(given: str | None, operation: str, preview: dict[str, Any]) ->
 def progress(message: str) -> None:
     """Progress goes to stderr so stdout stays a single JSON document."""
     if not _OPTS.get("quiet"):
-        sys.stderr.write(message + "\n")
-        sys.stderr.flush()
+        write_utf8(sys.stderr, message + "\n")
