@@ -11,8 +11,11 @@ name: CI
 on:
   push:
     branches: [main]
+  # Every pull request, not only those targeting main. A stacked PR based on
+  # another work branch got no CI at all, so the only branch in a stack that
+  # was ever checked was the one at the bottom -- and it was checked against a
+  # tree the others had already moved past.
   pull_request:
-    branches: [main]
 
 jobs:
   test:

@@ -48,6 +48,11 @@ def configure(
     )
 
 
+def declared_fields() -> list[str] | None:
+    """The field list this command's output_schema promises, if it has one."""
+    return _OPTS.get("schema_fields")
+
+
 def _duration_ms() -> int:
     return int((time.monotonic() - _T0) * 1000)
 

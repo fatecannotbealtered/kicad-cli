@@ -16,6 +16,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   and interpreter-probe reuse.
 
 ### Fixed
+- `board route` verifies every mode against DRC and reports what it verified.
+  `repair` and `full` ran no DRC at all -- `full`, whose definition is "clear
+  every track and route again", judged itself on connectivity counts alone and
+  reported success with the DRC oracle deliberately unavailable. Both now take
+  an error-count baseline before touching the board, roll the whole write back
+  if the count rises, and refuse before writing when no oracle is available.
+- Declare one shape for `board route`. Its three modes emitted three different
+  key sets behind a single declaration: `full` returned four undeclared fields
+  and omitted two it promised, `rewidth` returned three and omitted twelve. No
+  test had ever run either mode live, so an agent reading `reference` was wrong
+  about two thirds of the command. Both are now covered by live write tests,
+  and the payload refuses to emit a field it has not declared.
+- Run CI on every pull request, not only those targeting `main`. A stacked PR
+  got no CI at all.
 - Share one DRC runner between the shell and layout payloads. Isolate each
   report and temporary KiCad configuration; validate exit status, JSON shape,
   units, source and input fingerprints instead of accepting stale reports.

@@ -117,6 +117,14 @@ def test_read_commands_match_their_contract(command: list[str], tmp_path: Path) 
         (["board", "widen"], []),
         (["board", "move"], ["--moves", "R5:50,50"]),
         (["board", "route"], ["--mode", "repair"]),
+        # full clears every track before routing -- the most destructive mode
+        # this tool has, and until now the only one with no live test at all.
+        # Dispatch coverage counted `board route` as covered either way, which
+        # is exactly the gap between dispatch coverage and FCC.
+        (["board", "route"], ["--mode", "full"]),
+        # rewidth is route's third mode and had no live test either; it exits
+        # through a different K.ok than repair/full, so it is a separate shape.
+        (["board", "route"], ["--mode", "rewidth"]),
         (["board", "rewidth"], []),
         (["sch", "relink"], []),
         (["fab", "drill"], []),

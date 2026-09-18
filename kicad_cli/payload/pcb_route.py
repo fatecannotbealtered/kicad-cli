@@ -56,6 +56,48 @@ def _objcount(b, pcbnew, tracks):
     return {"via": v, "trk": t}
 
 
+# board route 的三个模式产出不同字段，但契约是「精确」的：调用方不该遇到
+# 未声明的键，也不该缺少已声明的键。所以键集在这里统一——不适用的模式给
+# None，而不是让键消失。full 模式六个字段对不上 schema 一直没被发现，因为
+# 从来没有测试真实跑过它。
+ROUTE_FIELDS = (
+    "mode",
+    "targets",
+    "routed",
+    "failed",
+    "unresolved",
+    "tracks",
+    "existing_tracks",
+    "cleared_tracks",
+    "escape",
+    "fanout",
+    "plane_served",
+    "ripup",
+    "vias",
+    "track_len_mm",
+    "unconnected_before",
+    "unconnected_after",
+    "improved",
+    "rewidth",
+    "rewidth_total",
+    "rewidth_ok",
+    "rewidth_reverted",
+    "rewidth_drc_cause",
+    "stripped_segments",
+    "skipped_nets",
+    "verify",
+    "note",
+)
+
+
+def route_envelope(payload):
+    """Exactly the declared keys: absent-for-this-mode is None, not missing."""
+    extra = sorted(set(payload) - set(ROUTE_FIELDS))
+    if extra:  # A new field must be declared before it can be emitted.
+        raise AssertionError("undeclared board route fields: %s" % ", ".join(extra))
+    return {name: payload.get(name) for name in ROUTE_FIELDS}
+
+
 def run_drc(path):
     return K.run_drc(path)
 
@@ -1003,6 +1045,13 @@ def main():
     )
 
     log = {"mode": mode}
+    # repair 和 full 的判据基线：必须在任何改动落盘之前取。
+    # 这两个模式过去完全不跑 DRC，只数连通性——而 full 的定义就是清空全板走线。
+    # 一个察觉不到自己把板子改坏的模式，回滚机制对它毫无意义：没有东西会触发回滚。
+    errors_baseline = None
+    if mode in ("repair", "full"):
+        errors_baseline = K.err_count(run_drc(path))
+
     if mode == "rewidth":
         # 先把当前状态落盘，之后每条网络都从磁盘重新加载一份干净的板子。
         K.fill_and_save(pcbnew, b, path)
@@ -1115,15 +1164,27 @@ def main():
         log["rewidth_ok"] = sum(1 for v in res.values() if v.startswith("重布"))
         st = _child(path, ["--sub", "stats", "--mode", mode])
         K.ok(
-            {
-                **log,
-                "unconnected_before": before_un,
-                "unconnected_after": st["unconnected"],
-                "tracks": st["tracks"],
-                "improved": before_un - st["unconnected"],
-                "track_len_mm": st["len_mm"],
-                "vias": st["vias"],
-            }
+            route_envelope(
+                {
+                    **log,
+                    "unconnected_before": before_un,
+                    "unconnected_after": st["unconnected"],
+                    "tracks": st["tracks"],
+                    "improved": before_un - st["unconnected"],
+                    "track_len_mm": st["len_mm"],
+                    "vias": st["vias"],
+                    # rewidth 的判据是逐网络的 DRC 回退循环（见上），不是整盘
+                    # 基线比较，所以这里如实说明它验的是什么。
+                    "verify": {
+                        "ran": not args.get("no-verify"),
+                        "oracle": "kicad-cli pcb drc",
+                        "scope": "per-net revert loop",
+                        "reverted": log.get("rewidth_reverted") or [],
+                        "note": "引入 DRC error 的网络已逐条还原；未做整盘 error 基线比较",
+                    },
+                    "note": "线宽按目标值重布；仍未达标的段是真的放不下",
+                }
+            )
         )
     elif mode == "repair":
         b.SetFileName(path)
@@ -1144,6 +1205,28 @@ def main():
 
     K.fill_and_save(pcbnew, b, path)
     after_un = K.unconnected(b)
+    # DRC 才是裁判，栅格和连通性都不是。error 数超过动手前的基线就整盘回滚：
+    # K.fail 会让 write_txn 把板子恢复成写之前的字节。
+    errors_final = K.err_count(run_drc(path))
+    if errors_final > errors_baseline:
+        K.fail(
+            "E_INTEGRITY",
+            "布线后 DRC error 数高于动手前，已整盘回滚",
+            {
+                "mode": mode,
+                "errors_baseline": errors_baseline,
+                "errors_final": errors_final,
+                "next_action": "板子已恢复原状。改用 --mode repair 逐步修，或先处理已有的 "
+                "error 再重试",
+            },
+        )
+    log["verify"] = {
+        "ran": True,
+        "oracle": "kicad-cli pcb drc",
+        "errors_baseline": errors_baseline,
+        "errors_final": errors_final,
+        "note": "error 数未超过动手前的基线；这不等于板子没问题，只等于这次没把它改差",
+    }
     all_tr = list(K.tracks_of(b))
     tr = [t for t in all_tr if t.Type() == pcbnew.PCB_TRACE_T]
     total = sum(
@@ -1151,16 +1234,18 @@ def main():
         for t in tr
     )
     K.ok(
-        {
-            **log,
-            "unconnected_before": before_un,
-            "unconnected_after": after_un,
-            "improved": before_un - after_un,
-            "tracks": len(tr),
-            "track_len_mm": round(total, 1),
-            "vias": len(all_tr) - len(tr),
-            "note": "线宽此时是缩颈宽度，跑 pcb_widen.py 加宽；repair 模式可反复跑到不再改善",
-        }
+        route_envelope(
+            {
+                **log,
+                "unconnected_before": before_un,
+                "unconnected_after": after_un,
+                "improved": before_un - after_un,
+                "tracks": len(tr),
+                "track_len_mm": round(total, 1),
+                "vias": len(all_tr) - len(tr),
+                "note": "线宽此时是缩颈宽度，跑 pcb_widen.py 加宽；repair 模式可反复跑到不再改善",
+            }
+        )
     )
 
 

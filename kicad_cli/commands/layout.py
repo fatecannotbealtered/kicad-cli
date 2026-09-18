@@ -26,6 +26,27 @@ from .. import envelope, kicad_env
 from .board import _board_arg
 
 
+def _to_declared_shape(data: Any) -> Any:
+    """Shape a payload's output to the contract *this* command declares.
+
+    One payload can serve two commands with different contracts: `pcb_route`
+    backs both `board route` and `board rewidth`, and their schemas are not the
+    same set. Normalising inside the payload therefore cannot satisfy both --
+    it fixed one command's shape by breaking the other's, which is how three
+    different `board route` shapes ended up behind one declaration.
+
+    So the payload produces, and the command boundary shapes: keep exactly the
+    keys this command advertises, and give a key it declares but this mode does
+    not fill the value None rather than omitting it. Drift is still caught, one
+    layer down: `pcb_route.route_envelope` refuses to emit a field that is not
+    in its own list.
+    """
+    fields = envelope.declared_fields()
+    if not fields or not isinstance(data, dict):
+        return data
+    return {name: data.get(name) for name in fields}
+
+
 def _relay(payload: str, args: dict[str, Any], extra: list[str], timeout: int = 3600) -> None:
     """Run a write payload and pass its verdict through unchanged.
 
@@ -52,7 +73,7 @@ def _relay(payload: str, args: dict[str, Any], extra: list[str], timeout: int = 
             if written and written != "committed"
             else None
         )
-        envelope.ok(result.get("data"), notices)
+        envelope.ok(_to_declared_shape(result.get("data")), notices)
     err = result.get("error") or {}
     envelope.fail(
         err.get("code", "E_UNKNOWN"),
