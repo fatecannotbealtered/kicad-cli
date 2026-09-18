@@ -33,6 +33,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   in repair/full, instead of accepting a selector and routing a broader scope.
 - Reuse interpreter discovery's version probe within a process; a frozen CLI
   no longer tries to run itself as the KiCad Python interpreter.
+- `board live` no longer advertises an editing capability it does not have. Its
+  `capabilities` field described drawing into the open editor and the undo
+  entries that would leave; the command only ever read status. The READMEs and
+  the Skill were corrected without it, so the claim an Agent actually reads
+  outlived the claim a person reads.
+- Reject `--` instead of silently pushing the options after it into the command
+  path and reporting an unknown command. The tool takes no positional values;
+  the error now names `--option=--value` as the way to pass one starting with
+  `--`.
+- Write the envelope as UTF-8 regardless of the console encoding. On a non-UTF-8
+  console — zh-CN Windows being the common case — every response carrying a
+  non-ASCII character went out in the process locale, so an Agent decoding the
+  document as UTF-8 got a decode error rather than a result. Payload stdout and
+  stderr progress share the fix. Regression tests run the CLI under hostile
+  encodings and assert the harness is really applying them; every pre-existing
+  test sets `PYTHONIOENCODING=utf-8`, which is what kept this invisible.
 
 ### Changed
 - This development candidate is explicitly unpublishable. The historical 1.0.0

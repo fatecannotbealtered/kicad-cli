@@ -100,6 +100,8 @@ def test_repeated_layers_accumulate_instead_of_silently_replacing(monkeypatch, c
         ["reference", "--format", "xml"],
         ["reference", "--fields="],
         ["fab", "gerber", "--board", "b", "--layers", "F.Cu,,B.Cu"],
+        ["board", "widen", "--", "--board", "b"],
+        ["board", "widen", "--board", "b", "--"],
         ["board", "route", "--board", "b", "--mode", "unknown"],
         ["board", "route", "--board", "b", "--nets", "GND"],
         ["board", "route", "--board", "b", "--mode", "full", "--nets", "GND"],
@@ -182,3 +184,26 @@ def test_actual_process_rejects_dry_run_plus_confirm_without_dispatch_or_file_ch
     assert doc["error"]["code"] == "E_USAGE"
     assert not trace.exists()
     assert board.read_text(encoding="utf-8") == "sentinel: do not modify"
+
+
+def test_double_dash_names_the_escape_hatch_it_is_not(monkeypatch, capsys):
+    """`--` reads as "the rest are values" everywhere else, and cannot here.
+
+    There are no positional values to hand it: the only positionals are command
+    path segments, so taking `--` pushed the remaining options into the command
+    path and reported them as an unknown command -- an error about the wrong
+    thing, three steps from the cause.
+    """
+    doc, code, reached = invoke(["board", "widen", "--", "--board", "b"], monkeypatch, capsys)
+    assert reached == [] and code == 2
+    assert doc["error"]["code"] == "E_USAGE"
+    assert "--option=--value" in doc["error"]["details"]["hint"]
+
+
+def test_the_named_escape_hatch_actually_works(monkeypatch, capsys):
+    """A hint that does not work is worse than no hint."""
+    _, code, reached = invoke(
+        ["board", "widen", "--board=--odd-name.kicad_pcb"], monkeypatch, capsys
+    )
+    assert code == 0
+    assert reached[0]["board"] == "--odd-name.kicad_pcb"

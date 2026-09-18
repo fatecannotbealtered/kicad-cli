@@ -1,18 +1,16 @@
-"""``kicad-cli board live`` -- talk to the KiCad that is open on the screen.
+"""``kicad-cli board live`` -- ask the KiCad that is open on the screen what it has.
 
 Every other command in this tool works on a file: it loads a ``.kicad_pcb``,
-changes it, saves it. That is the right default -- it needs nobody watching and
-nothing running. But it also means the person who owns the board finds out what
-happened afterwards, by opening the file.
+changes it, saves it. It needs nobody watching and nothing running, but it also
+means the person who owns the board finds out what happened afterwards, by
+opening the file.
 
-KiCad's IPC API is the other mode. The editor is already open, holding the
-board; this connects to it and works on *that* board. Changes appear on screen
-as they are made, and because they go through the editor's own commit stack,
-Ctrl+Z undoes them exactly like something drawn by hand.
-
-That is the real difference, and it is not about the visuals: a change you can
-watch and undo is a change you can supervise. The file-based commands ask for
-trust up front; this one lets it be withdrawn at any point.
+KiCad's IPC API is the other way in. The editor is already open, holding the
+board; this connects to it and reports what is there. That is all it does. The
+API can also create and modify items, and this command deliberately does not:
+an editing path through the IPC API would need the same confirmation gate,
+verification and rollback the file-based writes are still missing, and none of
+that exists here. Do not read the API's potential as this command's capability.
 
 The API ships disabled, so the first run will fail until it is turned on. That
 is deliberate on KiCad's part -- it lets any local program edit your board --
@@ -146,17 +144,24 @@ def status(args: dict[str, Any]) -> None:
             "kicad_version": str(version),
             "open_documents": docs,
             "board": board,
+            # What this command does, not what the IPC API could be made to do.
+            # These two were the other way round: they described drawing into
+            # the open editor and the undo entries it would leave, which this
+            # command has never done. An agent reads this field to decide what
+            # it may ask for next, so an aspirational answer here is worse than
+            # no answer -- the READMEs were corrected and this was not.
             "capabilities": {
-                "edits_are_undoable": "changes go through the editor's commit stack, so "
-                "Ctrl+Z reverts them and the undo entry carries the message we set",
-                "visible": "items appear in the editor as they are created; there is no "
-                "cursor to watch, because nothing is being clicked",
+                "reads": ["connection", "open_documents", "board_summary"],
+                "writes": [],
+                "note": "this command does not create, modify or delete board items and "
+                "adds no entry to KiCad's undo stack. No command in this tool edits "
+                "through the IPC API; the file-based writes are the only write path, "
+                "and they do not go through the open editor.",
             },
             "not_checked": [
                 "whether the interactive router can be driven this way: run_action can "
                 "trigger pcbnew.InteractiveRouter.* by name, but those actions are built "
                 "around a mouse position and may not be usable unattended",
-                "nothing was written; this command only reads",
             ],
         }
     )

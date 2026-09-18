@@ -148,8 +148,13 @@ def run_payload(payload: str, args: list[str], timeout: int = 1800) -> dict:
         )
     here = Path(__file__).resolve().parent
     cmd = [python, "-B", "-u", str(here / "payload" / f"{payload}.py"), *args]
+    # We decode this pipe as UTF-8 below, so say so rather than inheriting
+    # whatever locale KiCad's interpreter starts with. The payload writes UTF-8
+    # itself; this covers the bytes it does not write, such as an interpreter
+    # traceback, which would otherwise arrive mangled in the E_IO details.
+    env = dict(os.environ, PYTHONIOENCODING="utf-8")
     try:
-        r = subprocess.run(cmd, capture_output=True, timeout=timeout)
+        r = subprocess.run(cmd, capture_output=True, timeout=timeout, env=env)
     except subprocess.TimeoutExpired:
         envelope.fail("E_TIMEOUT", f"payload {payload} timed out after {timeout}s")
     except OSError as exc:

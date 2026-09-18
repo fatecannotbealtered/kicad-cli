@@ -2,6 +2,9 @@
 
 from __future__ import annotations
 
+import json
+import sys
+import types
 from pathlib import Path
 
 import pytest
@@ -59,3 +62,79 @@ def test_development_skill_discovers_before_using_unreleased_selector():
     assert "after plain `reference`" in text
     assert "an npm install does not" in text
     assert "Matching version strings alone are insufficient" in text
+
+
+class _FakeBoard:
+    name = "fake.kicad_pcb"
+
+    def get_footprints(self):
+        return []
+
+    get_tracks = get_vias = get_zones = get_nets = get_selection = get_footprints
+
+    def get_copper_layer_count(self):
+        return 2
+
+    def get_active_layer(self):
+        return 0
+
+    def get_layer_name(self, _layer):
+        return "F.Cu"
+
+
+class _FakeKiCad:
+    def get_version(self):
+        return "10.0.6"
+
+    def get_open_documents(self, _kind):
+        return []
+
+    def get_board(self):
+        return _FakeBoard()
+
+
+@pytest.fixture
+def _substituted_ipc(monkeypatch):
+    """Stand in for KiCad's IPC client, so the success path runs with no KiCad.
+
+    The only existing coverage of this path asserts nothing unless KiCad happens
+    to be open on the machine running the suite, which is how an editing claim
+    survived in the payload after the documentation retracted it.
+    """
+    kipy = types.ModuleType("kipy")
+    kipy.KiCad = _FakeKiCad
+    doc_types = types.ModuleType("kipy.proto.common.types")
+    doc_types.DocumentType = types.SimpleNamespace(
+        DOCTYPE_PCB=1, DOCTYPE_SCHEMATIC=2, DOCTYPE_PROJECT=3
+    )
+    for name, module in {
+        "kipy": kipy,
+        "kipy.proto": types.ModuleType("kipy.proto"),
+        "kipy.proto.common": types.ModuleType("kipy.proto.common"),
+        "kipy.proto.common.types": doc_types,
+    }.items():
+        monkeypatch.setitem(sys.modules, name, module)
+
+
+def test_live_status_payload_does_not_advertise_editing(_substituted_ipc, capsys):
+    """The machine contract has to retract the claim the READMEs retracted.
+
+    An agent decides what to ask for next from `capabilities`, not from a
+    README, so this is the copy that matters.
+    """
+    from kicad_cli import envelope
+    from kicad_cli.commands import live
+
+    envelope.configure()
+    with pytest.raises(SystemExit):
+        live.status({})
+    data = json.loads(capsys.readouterr().out)["data"]
+
+    capabilities = data["capabilities"]
+    assert capabilities["writes"] == []
+    assert capabilities["reads"]
+    # The retracted claim was keyed, not prose: asserting on the keys keeps this
+    # from tripping over the sentence that now denies it ("adds no entry to
+    # KiCad's undo stack" contains every word the claim did).
+    assert "edits_are_undoable" not in capabilities
+    assert "visible" not in capabilities
