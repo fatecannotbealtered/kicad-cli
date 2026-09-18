@@ -16,12 +16,19 @@ RELEASE_READINESS: dict[str, Any] = {
     "mock_upstream_required": True,
     "mock_upstream_status": "verified",
     "live_smoke_required_for_stable": True,
-    "live_smoke_status": "missing",
-    "reason": "Contract-hardening work in progress. The recorded 1.0.0 smoke run is "
-    "historical, not evidence for this candidate. Fresh live coverage is required. "
-    "Confirm tokens are now random, expiring, single-use and bound to target contents; "
-    "live validation of that and of DRC isolation, plus consistent verification/rollback "
-    "across write modes, remain release blockers.",
+    # A live run for this candidate is now recorded, with its source commit, on
+    # one platform and one KiCad version. That is what the spec asks for and it
+    # is not the same as broad coverage -- the reason says which.
+    "live_smoke_status": "verified",
+    "reason": "Contract-hardening work in progress. A live run for this candidate is "
+    "recorded in docs/evidence/live-smoke-1.0.0+029cac55bc56.md: the full suite and the "
+    "frozen binary, against KiCad 10.0.6 on Windows 11, with the source commit named. "
+    "One platform and one KiCad version, with no second machine behind it. Functional "
+    "contract coverage is still unknown: command dispatch and declared error codes are "
+    "measured and complete, global options and error-details shape are not. Nothing "
+    "checks at release time that the recorded evidence describes the tree being tagged. "
+    "Confirm-token and DRC-isolation live validation and consistent verification and "
+    "rollback across write modes remain release blockers.",
     "required_evidence": [
         "functional_contract_coverage_100",
         "mock_upstream_contract_tests",
@@ -31,7 +38,13 @@ RELEASE_READINESS: dict[str, Any] = {
         "tests/test_agent_arguments.py: typed parser and no-dispatch rejection tests",
         "tests/test_agent_reference.py: machine discovery and command scoping tests",
         "tests/test_mock_upstream.py: substituted KiCad success and failure paths",
-        "docs/evidence/live-smoke-1.0.0.md: historical baseline only",
+        "tests/test_contract_flag_coverage.py: 31 flag combinations under strict mode",
+        "tests/test_untrusted_fields.py: untrusted_fields measured by injection",
+        "tests/test_error_coverage.py: 9/9 applicable error codes produced, 7 declared "
+        "not applicable with a reason",
+        "docs/evidence/live-smoke-1.0.0+029cac55bc56.md: full suite and frozen binary "
+        "against KiCad 10.0.6, Windows 11, source commit recorded",
+        "docs/evidence/live-smoke-1.0.0.md: historical baseline, not this candidate",
     ],
 }
 

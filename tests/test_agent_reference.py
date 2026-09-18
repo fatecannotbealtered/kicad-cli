@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import subprocess
 import sys
 from pathlib import Path
@@ -80,11 +81,30 @@ def test_parameter_semantics_and_constraints_are_discoverable():
 
 
 def test_current_candidate_does_not_claim_historical_live_evidence():
+    """A live claim must point at a record for *this* candidate.
+
+    This used to assert `live_smoke_status == "missing"`, which made recording
+    real evidence fail the suite -- a test that fires on progress rather than
+    on regression. What must not happen is the claim being made on the strength
+    of the 1.0.0 record, which describes a different tree.
+    """
     doc, _ = run("reference")
     readiness = doc["data"]["release_readiness"]
     assert readiness["level"] == "unpublishable"
-    assert readiness["live_smoke_status"] == "missing"
     assert readiness["fcc_status"] == "unknown"
+
+    if readiness["live_smoke_status"] == "verified":
+        held = " ".join(readiness["evidence_held"]) + " " + readiness["reason"]
+        # `live-smoke-1.0.0.md` on its own is the historical baseline. A claim
+        # has to name a record carrying a source commit, which is what
+        # distinguishes this candidate from the one that shipped.
+        records = set(re.findall(r"live-smoke-[0-9.]+\+[0-9a-f]{7,}\.md", held))
+        assert records, "a verified live claim names no record for this candidate"
+        for name in records:
+            assert (REPO / "docs" / "evidence" / name).is_file(), f"{name} does not exist"
+    else:
+        assert readiness["live_smoke_status"] in ("missing", "unknown")
+
     doctor, _ = run("doctor")
     check = next(c for c in doctor["data"]["checks"] if c["check"] == "release_readiness")
     assert check["status"] == "fail" and check["fix"]
