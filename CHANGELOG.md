@@ -73,6 +73,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   DRC-isolation and verification/rollback gaps stay release blockers.
 
 ### Fixed
+- `board route` reports the width DRC cannot see. On KiCad's `ecc83` demo,
+  `--mode full` left DRC errors, unconnected count and `ok` all unchanged while
+  taking the board from 100% netclass width compliance to 0% and its minimum
+  ampacity from 2.03 A to 0.74 A. That is by design -- `full` routes at the
+  router's neck width and expects `board widen` after -- but the only thing
+  that said so was a sentence of prose telling the caller to run another
+  command. `verify.width_before`, `verify.width_after` and
+  `verify.width_regressed` put it in the machine contract, where a caller that
+  branches on fields can see it.
+- `doctor` probes the IPC API instead of reading the preference file. It
+  reported `ipc_api_server: pass` with no fix at the same moment `board live`
+  returned `E_CONFIG: connection refused`, because the file answers "is the API
+  switched on", not "is it reachable" -- and those differ whenever KiCad is not
+  running, which is the normal state. A preflight check that says a command
+  will work when it will not is worse than no check, because it is believed.
+  The probe is now the same call `board live` makes, so the two cannot disagree.
 - Retry the rollback's file replacement instead of giving up on the first
   refusal. On Windows `os.replace` fails while anything still holds the
   destination open -- a scanner, the indexer, a child process whose handles are

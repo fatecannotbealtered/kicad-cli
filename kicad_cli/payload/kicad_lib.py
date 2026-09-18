@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import fnmatch
 import json
+import math
 import os
 import sys
 import time
@@ -278,6 +279,42 @@ def official_cli():
     if not executable:
         fail("E_CONFIG", "KiCad official binary not found; set KICAD_CLI_OFFICIAL")
     return executable
+
+
+def width_summary(board, pcbnew, nc):
+    """Track width against each net's netclass target, weighted by length.
+
+    DRC does not check this: a board can be routed entirely at the router's
+    neck width, pass every clearance rule, and carry a third of the current it
+    was designed for. `board audit` reports it; the write commands did not, so
+    a caller reading a successful envelope had no way to see it happen.
+    """
+    total = ok = 0.0
+    smallest = None
+    targets = []
+    for track in tracks_of(board):
+        if track.Type() != pcbnew.PCB_TRACE_T:
+            continue
+        width = track.GetWidth() / 1e6
+        start, end = track.GetStart(), track.GetEnd()
+        length = math.hypot(end.x - start.x, end.y - start.y) / 1e6
+        if length <= 0:
+            continue
+        net = board.GetNetInfo().GetNetItem(track.GetNetCode()).GetNetname()
+        target = nc.params(net)[0]
+        targets.append(target)
+        total += length
+        if width + 1e-6 >= target:
+            ok += length
+        smallest = width if smallest is None else min(smallest, width)
+    if total <= 0:
+        return {"len_mm": 0.0, "min_mm": None, "target_mm": None, "compliant_pct": None}
+    return {
+        "len_mm": round(total, 1),
+        "min_mm": round(smallest, 3),
+        "target_mm": round(max(targets), 3),
+        "compliant_pct": round(100.0 * ok / total, 1),
+    }
 
 
 def err_count(drc):

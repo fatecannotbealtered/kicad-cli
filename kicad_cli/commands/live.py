@@ -39,12 +39,44 @@ _FROZEN = getattr(sys, "frozen", False)
 _VENDOR = None if _FROZEN else Path(__file__).resolve().parents[2] / ".vendor"
 
 
-def _client():
+NOTE = (
+    "this command needs the board open in KiCad. Every other command in this "
+    "tool works on the file and needs nothing running."
+)
+FIX = (
+    "open the board in KiCad; if it is already open, enable "
+    "Preferences -> KiCad API -> 'Enable KiCad API' and restart KiCad"
+)
+
+
+def connect() -> tuple[Any, str, str]:
+    """Try to reach the running KiCad. Returns (client, kind, reason).
+
+    Never exits, because `doctor` has to ask this question without answering
+    it for the whole process. `_client` turns a failure into the envelope;
+    this returns it. One code path, so the two cannot drift -- `doctor` used
+    to answer from the preference file instead and reported `pass` while this
+    command could not connect at all, which is the one thing a preflight check
+    must never do.
+    """
     if _VENDOR is not None and str(_VENDOR) not in sys.path:
         sys.path.insert(0, str(_VENDOR))
     try:
         from kipy import KiCad
     except ImportError as exc:
+        return None, "client_missing", str(exc)
+    try:
+        kicad = KiCad()
+        kicad.get_version()
+    except Exception as exc:  # noqa: BLE001 - the client raises several types
+        return None, "unreachable", str(exc)[:200]
+    return kicad, "ok", ""
+
+
+def _client():
+    """The command's entry point: connect or leave through the envelope."""
+    kicad, kind, reason = connect()
+    if kind == "client_missing":
         # The reason used to be swallowed, which made a packaging problem
         # indistinguishable from a missing directory: the frozen binary carried
         # .vendor correctly and still failed here, and the message said only
@@ -56,49 +88,34 @@ def _client():
                 "frozen": _FROZEN,
                 "expected": "bundled in the binary" if _FROZEN else str(_VENDOR),
                 "expected_exists": None if _FROZEN else _VENDOR.is_dir(),
-                "import_error": str(exc),
+                "import_error": reason,
                 "fix": "this build is missing its IPC client; report it"
                 if _FROZEN
                 else "pip install --target .vendor kicad-python",
-                # The same note as the unreachable-KiCad path below. A fresh
-                # checkout has no .vendor -- it is gitignored and fetched at
-                # build time -- so this is the first failure a new clone meets,
-                # and it is the one most likely to be read as "the tool is
-                # broken" rather than "one command needs one more thing".
-                "note": "this command needs the board open in KiCad. Every other command "
-                "in this tool works on the file and needs nothing running.",
+                # A fresh checkout has no .vendor -- it is gitignored and fetched
+                # at build time -- so this is the first failure a new clone meets,
+                # and the one most likely to be read as "the tool is broken"
+                # rather than "one command needs one more thing".
+                "note": NOTE,
             },
         )
-    try:
-        kicad = KiCad()
-        # Construct *and* probe. `KiCad()` is lazy: with nothing listening it
-        # returns a perfectly good object and the socket error only surfaces on
-        # the first real call -- by then far outside this handler, where the
-        # catch-all in main turns it into E_UNKNOWN with exit 1. So the most
-        # ordinary failure this command has, KiCad simply not running, reported
-        # as an internal error instead of a configuration one, with no fix
-        # attached. The test that was supposed to cover this passed only
-        # because KiCad happened to be open on the machine it ran on.
-        kicad.get_version()
-        return kicad
-    except Exception as exc:  # noqa: BLE001 - the client raises several types
+    if kind != "ok":
         envelope.fail(
             "E_CONFIG",
             "could not reach the running KiCad",
             {
-                "reason": str(exc)[:200],
+                "reason": reason,
                 # Two causes, and the likelier one goes first: nothing is
                 # listening either because KiCad is closed or because the API
                 # is off. "Connection refused" cannot tell them apart, so the
                 # fix names both rather than guessing.
-                "fix": "open the board in KiCad; if it is already open, enable "
-                "Preferences -> KiCad API -> 'Enable KiCad API' and restart KiCad",
+                "fix": FIX,
                 "why_off_by_default": "the API lets any local program edit the open board, "
                 "so KiCad ships it disabled; turning it on is the owner's decision",
-                "note": "this command needs the board open in KiCad. Every other command "
-                "in this tool works on the file and needs nothing running.",
+                "note": NOTE,
             },
         )
+    return kicad
 
 
 def status(args: dict[str, Any]) -> None:

@@ -180,3 +180,48 @@ def test_a_write_refuses_while_the_project_is_open_in_kicad(tmp_path: Path) -> N
     assert doc["ok"] is False
     assert doc["error"]["code"] == "E_CONFLICT"
     assert doc["error"]["details"]["lock_files"]
+
+
+@pytest.mark.skipif(not DEMOS.exists(), reason=SKIP_REASON)
+@pytest.mark.parametrize(
+    ("mode", "expect_regression"),
+    [("full", True), ("repair", False)],
+)
+def test_route_reports_the_width_drc_cannot_see(mode, expect_regression, tmp_path):
+    """A clean DRC verdict is not a claim about current-carrying capacity.
+
+    `--mode full` routes at the router's neck width by design and expects
+    `board widen` after. On KiCad's ecc83 demo that takes the board from 100%
+    width compliance to 0% and its minimum ampacity from 2.03 A to 0.74 A --
+    while DRC error count, unconnected count and the envelope's `ok` all stay
+    exactly as they were. The only thing that said so was a sentence of prose
+    telling the caller to run another command, which a machine does not act on.
+
+    `repair` leaves existing copper alone, so it is the negative case: without
+    one, a flag that is always true would pass this test too.
+    """
+    board = demo("ecc83", tmp_path / mode)
+    plan = check(["board", "route", "--board", str(board), "--mode", mode, "--dry-run"])
+    done = check(
+        [
+            "board",
+            "route",
+            "--board",
+            str(board),
+            "--mode",
+            mode,
+            "--confirm",
+            plan["error"]["details"]["confirm_token"],
+        ]
+    )
+    assert done["ok"] is True, done
+    verify = done["data"]["verify"]
+    assert verify["ran"] is True
+    assert verify["errors_final"] <= verify["errors_baseline"], "DRC would have failed the write"
+    assert verify["width_regressed"] is expect_regression, verify
+
+    if expect_regression:
+        before, after = verify["width_before"], verify["width_after"]
+        assert after["compliant_pct"] < before["compliant_pct"]
+        assert after["min_mm"] < before["min_mm"]
+        assert "board widen" in verify["note"]
