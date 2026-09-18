@@ -36,6 +36,7 @@ def _isolated_transaction_state(monkeypatch):
     monkeypatch.setattr(write_txn, "_active", {})
     monkeypatch.setattr(write_txn, "_state", "not_started")
     monkeypatch.setattr(write_txn, "_installed", False)
+    monkeypatch.setattr(write_txn, "_failure", None)
     yield
     write_txn._active.clear()
 
@@ -228,3 +229,51 @@ def test_the_payload_envelope_reports_a_commit_on_success(tmp_path):
     assert doc["ok"] is True
     assert doc["meta"]["write_state"] == "committed"
     assert target.read_text(encoding="utf-8") == "(kicad_pcb widened)"
+
+
+def test_a_transient_refusal_to_restore_is_retried(board, monkeypatch):
+    """Windows refuses os.replace while anything still holds the destination.
+
+    Those clear in milliseconds, and the rollback is the safety mechanism -- it
+    should not lose to the most ordinary condition on the platform this tool is
+    mostly used on.
+    """
+    write_txn.begin(board)
+    board.write_text("(kicad_pcb half written", encoding="utf-8")
+    real = os.replace
+    calls = []
+
+    def flaky(src, dst):
+        calls.append(1)
+        if len(calls) < 3:
+            raise PermissionError(32, "being used by another process")
+        return real(src, dst)
+
+    monkeypatch.setattr(write_txn.os, "replace", flaky)
+    monkeypatch.setattr(write_txn, "RESTORE_BACKOFF_S", 0.001)
+
+    write_txn.rollback("E_IO")
+    assert len(calls) == 3
+    assert board.read_text(encoding="utf-8") == ORIGINAL
+    assert write_txn.state() == "rolled_back"
+    assert write_txn.failure() is None
+
+
+def test_a_persistent_refusal_says_why_and_keeps_the_journal(board, monkeypatch):
+    """`unknown` with no cause attached is the hardest state to act on."""
+    write_txn.begin(board)
+    board.write_text("(kicad_pcb half written", encoding="utf-8")
+    _lock, _backup, journal = write_txn._paths(board.resolve())
+
+    def always_refuse(_src, _dst):
+        raise PermissionError(32, "being used by another process")
+
+    monkeypatch.setattr(write_txn.os, "replace", always_refuse)
+    monkeypatch.setattr(write_txn, "RESTORE_BACKOFF_S", 0.001)
+
+    write_txn.rollback("E_IO")
+    assert write_txn.state() == "unknown"
+    assert "PermissionError" in write_txn.failure()
+    # The journal survives, so the next invocation refuses to write over a
+    # board nobody could put back.
+    assert journal.exists()

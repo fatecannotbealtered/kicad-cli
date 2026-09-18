@@ -40,9 +40,48 @@ def envelope(argv: list[str]) -> dict:
     raise SystemExit(f"no envelope from {' '.join(argv)}:\n{out[:400]}")
 
 
+def source_identity() -> str:
+    """The commit this evidence is about, refusing to guess.
+
+    The filename used to be the version alone, and the version does not move
+    between candidates here -- so a second run would have overwritten the
+    recorded 1.0.0 evidence with a different tree's result under the same name.
+    CLI-SPEC asks for source identity for exactly this reason: a record that
+    cannot say which tree it describes is not evidence of anything.
+    """
+
+    def git(*args: str) -> str:
+        return subprocess.run(  # noqa: S603
+            ["git", *args], capture_output=True, text=True, cwd=ROOT, check=True
+        ).stdout.strip()
+
+    try:
+        head = git("rev-parse", "--short=12", "HEAD")
+        dirty = git("status", "--porcelain")
+    except (OSError, subprocess.CalledProcessError) as exc:
+        raise SystemExit("cannot determine the commit this evidence is for") from exc
+    if dirty:
+        raise SystemExit(
+            "the working tree has uncommitted changes, so this run cannot be tied to a "
+            "commit. Evidence that cannot say which tree it describes is not evidence; "
+            "commit first, then record."
+        )
+    return head
+
+
+def coverage(name: str) -> dict:
+    """The measured coverage the suite just wrote, if it was able to measure."""
+    path = ROOT / name
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return {}
+
+
 def main() -> int:
     cfg = envelope(["context"])["data"]["config"]
     version = envelope(["reference", "--fields", "version"])["data"]["version"]
+    commit = source_identity()
 
     binary = ROOT / "dist" / ("kicad-cli.exe" if sys.platform == "win32" else "kicad-cli")
     if not binary.exists():
@@ -80,6 +119,18 @@ def main() -> int:
                 text = text.replace(spelling, token)
         return text
 
+    fcc = coverage(".fcc-coverage.json")
+    errs = coverage(".error-coverage.json")
+    dispatch = (
+        f"{fcc['covered']}/{fcc['leaves']} leaf commands" if fcc else "not measured in this run"
+    )
+    error_codes = (
+        f"{len(errs['produced'])} produced, {len(errs['missing'])} applicable and unreached, "
+        f"{len(errs['not_applicable'])} declared not applicable"
+        if errs
+        else "not measured in this run"
+    )
+
     ok = suite.returncode == 0 and smoke.returncode == 0
     verdict = "PASS" if ok else "FAIL"
     body = f"""# Live smoke evidence — kicad-cli {version}
@@ -99,6 +150,7 @@ so this records a result rather than one machine's filesystem.
 | | |
 |---|---|
 | Tool version | `{version}` |
+| Source | `{commit}` (clean tree) |
 | Recorded | {datetime.date.today().isoformat()} |
 | Platform | {platform.system()} {platform.release()} ({platform.machine()}) |
 | KiCad | {cfg["kicad_version"]} |
@@ -106,6 +158,19 @@ so this records a result rather than one machine's filesystem.
 | Suite | **{"PASS" if suite.returncode == 0 else "FAIL"}** (exit {suite.returncode}) |
 | Frozen binary | **{"PASS" if smoke.returncode == 0 else "FAIL"}** (exit {smoke.returncode}) |
 | Overall | **{verdict}** |
+
+Measured coverage from this same run, where the suite was able to measure it:
+
+| | |
+|---|---|
+| Command dispatch | {dispatch} |
+| Declared error codes | {error_codes} |
+
+Both are floors for Functional Contract Coverage, not FCC. CLI-SPEC asks for
+every documented behavior to have a command-level test; these count leaf
+commands dispatched and declared `E_*` produced. `fcc_status` stays `unknown`
+until the remaining dimensions -- global options, error-details shape -- are
+measured too.
 
 What "live" means here: nothing is stubbed. Each test launches the real
 `kicad-cli` process, which launches KiCad's own interpreter and binary, against
@@ -133,7 +198,7 @@ Reproduce with `pytest tests/ -v --tb=short`, then `python build.py` and
 {scrub(suite.stdout.rstrip())}
 ```
 """
-    out = ROOT / "docs" / "evidence" / f"live-smoke-{version}.md"
+    out = ROOT / "docs" / "evidence" / f"live-smoke-{version}+{commit}.md"
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(body, encoding="utf-8")
     print(f"wrote {out.relative_to(ROOT)} — {verdict}")

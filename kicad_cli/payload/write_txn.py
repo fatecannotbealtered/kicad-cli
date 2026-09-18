@@ -40,6 +40,7 @@ STALE_LOCK_SECONDS = 3600
 _active: dict[str, dict] = {}
 _installed = False
 _state = "not_started"
+_failure: str | None = None
 
 
 class TxnError(Exception):
@@ -160,20 +161,55 @@ def commit() -> None:
     _state = "committed"
 
 
+RESTORE_ATTEMPTS = 5
+RESTORE_BACKOFF_S = 0.1
+
+
+def _restore(backup: Path, board: Path) -> OSError | None:
+    """Replace the board with its backup, retrying a transient refusal.
+
+    On Windows ``os.replace`` raises PermissionError while anything still holds
+    the destination open -- a virus scanner, the search indexer, a child process
+    whose handles have not been reaped yet. Those clear in milliseconds. Giving
+    up on the first one means the rollback, which is the safety mechanism,
+    loses to the most ordinary condition on the platform this tool is mostly
+    used on, and the caller is told ``write_state: unknown`` about a board that
+    could have been put back by waiting.
+    """
+    last: OSError | None = None
+    for attempt in range(RESTORE_ATTEMPTS):
+        try:
+            os.replace(backup, board)
+        except OSError as exc:
+            last = exc
+            if attempt + 1 < RESTORE_ATTEMPTS:
+                time.sleep(RESTORE_BACKOFF_S * (attempt + 1))
+            continue
+        return None
+    return last
+
+
+def failure() -> str | None:
+    """Why the last rollback could not finish, if it could not."""
+    return _failure
+
+
 def rollback(reason: str = "") -> list[str]:
     """Put the board back as it was. Safe to call twice."""
-    global _state
+    global _state, _failure
     restored = []
     for key, entry in list(_active.items()):
-        try:
-            if entry["backup"].exists():
-                os.replace(entry["backup"], entry["board"])
-                restored.append(key)
-        except OSError:
-            # The journal stays, so the next invocation refuses rather than
-            # writing over a board we could not put back.
-            _state = "unknown"
-            continue
+        if entry["backup"].exists():
+            error = _restore(entry["backup"], entry["board"])
+            if error is not None:
+                # The journal stays, so the next invocation refuses rather than
+                # writing over a board we could not put back. The reason travels
+                # with it: "unknown" with no cause attached is the hardest state
+                # to act on, and the hardest to diagnose after the fact.
+                _failure = f"{type(error).__name__}: {error}"
+                _state = "unknown"
+                continue
+            restored.append(key)
         entry["journal"].unlink(missing_ok=True)
         entry["lock"].unlink(missing_ok=True)
         _active.pop(key, None)
