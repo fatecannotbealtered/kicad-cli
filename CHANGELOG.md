@@ -8,6 +8,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- `docs/evidence/live-smoke-1.0.0+029cac55bc56.md`: a live run recorded for this
+  candidate rather than inherited from the 1.0.0 artifact — full suite and frozen
+  binary against KiCad 10.0.6 on Windows 11, with the source commit named and the
+  measured dispatch and error-code coverage from the same run. `live_smoke_status`
+  moves from `missing` to `verified` on the strength of it; `level` stays
+  `unpublishable` and `fcc_status` stays `unknown`, and the release gate still
+  refuses, which is the point of having a gate that reads the declaration.
 - Typed parameter metadata in the command registry: defaults, enums, units,
   numeric bounds, global options and per-mode constraints. `reference --command`
   returns one command and only its output schema to reduce Agent response size.
