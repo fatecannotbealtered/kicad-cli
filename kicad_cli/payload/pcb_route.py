@@ -999,7 +999,7 @@ def main():
         }[mode],
     }
     K.check_confirm(
-        args.get("confirm"), preview, "pcb_route:%s:%s" % (mode, os.path.basename(path))
+        args.get("confirm"), preview, "pcb_route:%s:%s" % (mode, os.path.basename(path)), path
     )
 
     log = {"mode": mode}

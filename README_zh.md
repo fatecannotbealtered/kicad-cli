@@ -88,7 +88,7 @@ DRC 执行边界现已隔离报告并校验上游结果；这不代表写事务�
 2. 运行 `kicad-cli context --compact` 和 `kicad-cli doctor --compact`，确认解析到的是哪份 KiCad、能不能用。
 3. 运行 `kicad-cli reference --compact`，按实时契约选择命令，不从 `--help` 抓取参数。
 4. JSON 输出优先使用 `--compact` 和 `--fields` 降低 token 消耗。
-5. 写命令先跑 `--dry-run`，从 `error.details` 里取 preview 和 `confirm_token`，把 preview 给用户看过，再用同一条命令加 `--confirm <confirm_token>` 执行。
+5. 写命令先跑 `--dry-run`，从 `error.details` 里取 preview 和 `confirm_token`，把 preview 给用户看过，再用同一条命令加 `--confirm <confirm_token>` 执行。token 是随机、一次性、限时的（见 `error.details.expires_in_s`）：推导不出、存不住、重放不了，目标文件在预览后被改动也会被拒。不要缓存 token，重新取一份预览。
 6. 修改板文件前先关闭 KiCad。布局写命令会检查锁文件并返回 `E_CONFLICT`，但这不是跨进程事务锁；生产输出写的是输出文件，不使用该布局锁检查。发布阻断项关闭前，使用工程的可丢弃副本，并独立复核结果。
 7. 任何 `PASS` 都要连着 `not_checked` 一起读。旁边跟着一长串 `not_checked` 的干净结果，是一个窄结论，不是一块干净的板。
 
@@ -111,6 +111,7 @@ DRC 执行边界现已隔离报告并校验上游结果；这不代表写事务�
 | `KICAD_CLI_ROOT` | KiCad 的安装目录。KiCad 装在非标准位置时设这一个就够，下面两个就不必了 |
 | `KICAD_CLI_PYTHON` | 能 `import pcbnew` 的 Python 解释器路径——KiCad 自带那个，不是系统的 |
 | `KICAD_CLI_OFFICIAL` | KiCad 官方 `kicad-cli` 二进制的路径，用作 DRC 与 ERC 的裁判 |
+| `KICAD_CLI_STATE` | 待确认记录的存放目录。默认取平台状态目录；删掉它的代价最多是重跑一次 `--dry-run` |
 
 `kicad-cli context` 会报告解析到了什么、以及这几个变量当前设了哪些，设之前先看一眼。
 

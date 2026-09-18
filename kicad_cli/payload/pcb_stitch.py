@@ -335,7 +335,7 @@ def main():
         ),
     }
     K.check_confirm(
-        args.get("confirm"), preview, "pcb_stitch:%s:%s" % (net, os.path.basename(path))
+        args.get("confirm"), preview, "pcb_stitch:%s:%s" % (net, os.path.basename(path)), path
     )
 
     # ---- 搭桥：放不下过孔的细条岛，改为用一小段走线并进旁边已接通的铜 ----

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import re
 import sys
 import types
 from pathlib import Path
@@ -50,9 +51,18 @@ def test_development_limits_are_visible_on_current_entry_points(path):
 
 
 def test_pending_release_work_survives_queue_cleanup():
+    """Guard against a blocker being deleted, not against it being described better.
+
+    This used to require the exact string `| CONFIRM | Pending |`, so narrowing a
+    blocker to what actually remains failed the suite -- a test that fires on
+    progress rather than on regression. What must not happen is a row quietly
+    vanishing, or one being marked done while its work is outstanding.
+    """
     text = (ROOT / "docs/DEVELOPMENT_STATUS.md").read_text(encoding="utf-8")
     for item in ("CONFIRM", "DRC", "TRANSACTION", "CONTRACT", "EVIDENCE"):
-        assert f"| {item} | Pending |" in text
+        row = re.search(rf"^\| {item} \| ([^|]+)\|", text, re.MULTILINE)
+        assert row, f"release blocker {item} is no longer listed"
+        assert row.group(1).strip().startswith("Pending"), item
     for path in ("README.md", "README_zh.md", "SECURITY.md", "SECURITY_zh.md"):
         assert "docs/DEVELOPMENT_STATUS.md" in (ROOT / path).read_text(encoding="utf-8")
 

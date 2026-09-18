@@ -82,6 +82,7 @@ def main():
         args.get("confirm"),
         preview,
         "pcb_place:%s:%s" % (",".join(sorted(moves)), os.path.basename(path)),
+        path,
     )
 
     for ref, (x, y) in moves.items():

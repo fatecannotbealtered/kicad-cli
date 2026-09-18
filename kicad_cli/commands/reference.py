@@ -19,8 +19,9 @@ RELEASE_READINESS: dict[str, Any] = {
     "live_smoke_status": "missing",
     "reason": "Contract-hardening work in progress. The recorded 1.0.0 smoke run is "
     "historical, not evidence for this candidate. Fresh live coverage is required. "
-    "Confirm-token authentication/expiry/replay protection, live validation of DRC isolation, and "
-    "consistent verification/rollback across write modes remain release blockers.",
+    "Confirm tokens are now random, expiring, single-use and bound to target contents; "
+    "live validation of that and of DRC isolation, plus consistent verification/rollback "
+    "across write modes, remain release blockers.",
     "required_evidence": [
         "functional_contract_coverage_100",
         "mock_upstream_contract_tests",

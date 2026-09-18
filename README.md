@@ -91,7 +91,7 @@ not complete write rollback or live validation. See [DRC boundary](docs/DRC_BOUN
 2. Run `kicad-cli context --compact` and `kicad-cli doctor --compact` to confirm which KiCad was resolved and whether it is usable.
 3. Run `kicad-cli reference --compact` and select commands from the live contract, not from `--help` scraping.
 4. Prefer `--compact` and `--fields` on JSON outputs to reduce token use.
-5. For write commands, run `--dry-run`, read the preview and `confirm_token` from `error.details`, show the preview to the user, then repeat the same command with `--confirm <confirm_token>`.
+5. For write commands, run `--dry-run`, read the preview and `confirm_token` from `error.details`, show the preview to the user, then repeat the same command with `--confirm <confirm_token>`. The token is random, single-use and expires (`error.details.expires_in_s`); it cannot be derived, banked or replayed, and it is refused if the target file changed after the preview. Do not cache one — get a fresh preview instead.
 6. Close KiCad before changing board files. Layout writes check lock files and return `E_CONFLICT`; this is not a cross-process transaction lock. Fabrication writes output files and does not use that layout guard. Until the release blockers are closed, use disposable project copies and independently verify results.
 7. Read `not_checked` alongside any `PASS`. A clean result next to a long `not_checked` is a narrow result, not a clean board.
 
@@ -114,6 +114,7 @@ There is no configuration file and nothing to authenticate. `kicad-cli` finds Ki
 | `KICAD_CLI_ROOT` | The KiCad installation directory. Set this one if KiCad is somewhere non-standard; the two below are then unnecessary |
 | `KICAD_CLI_PYTHON` | Path to the Python interpreter that can `import pcbnew` — KiCad's own, not the system one |
 | `KICAD_CLI_OFFICIAL` | Path to KiCad's `kicad-cli` binary, used as the DRC and ERC oracle |
+| `KICAD_CLI_STATE` | Where pending confirmation records are kept. Defaults to the platform state directory; deleting it costs at most one re-run of `--dry-run` |
 
 `kicad-cli context` reports what it resolved and which of these are set, so check that before setting any of them.
 
