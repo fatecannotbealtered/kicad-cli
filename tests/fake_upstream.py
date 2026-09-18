@@ -74,6 +74,11 @@ def env(tmp: Path, behaviour: str = "ok") -> dict:
     # coverage: dropping the trace means a command cannot be declared covered on
     # the strength of a stub alone. Coverage has to come from the real thing.
     out.pop("KICAD_CLI_TRACE", None)
+    # KICAD_CLI_ERROR_TRACE is kept, and the difference is the point. "This
+    # command works" must come from a real KiCad. "This error code is reachable
+    # and correctly shaped" is the opposite: the failure paths that carry
+    # E_TIMEOUT and E_IO are precisely the ones a real KiCad will not produce on
+    # demand, which is why these stubs exist at all. Two questions, two traces.
     return out
 
 

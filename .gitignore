@@ -19,6 +19,7 @@ venv/
 .ruff_cache/
 .fcc-trace
 .fcc-coverage.json
+.error-coverage.json
 htmlcov/
 .coverage
 coverage.xml
@@ -30,3 +31,4 @@ coverage.xml
 
 # Recording rig: real board paths stay off the public repo
 demo/local.json
+.error-trace

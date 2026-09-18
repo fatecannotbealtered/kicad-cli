@@ -16,6 +16,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   and interpreter-probe reuse.
 
 ### Added
+- Error-code coverage, measured and enforced. `reference` publishes a table an
+  agent branches on, and nothing checked that a command could actually produce
+  each row. `envelope.fail` now records the code it emitted to its own trace,
+  and the guard fails when an applicable code is never reached: 9/9 now, with
+  seven declared not-applicable and a reason each. Finding this required fixing
+  the measurement first -- the guard sorted before the tests it counted and
+  reported four codes unreachable that the suite already produced.
+- `tests/test_error_paths.py` stages the one code nothing else reached: a
+  substituted DRC oracle that reports the board getting worse, with the routing
+  itself running against a real KiCad. `board route --mode full` returns
+  `E_INTEGRITY`, the whole write rolls back, and the board is byte-identical.
 - Contract coverage by flag combination, not by command. `test_contract.py` ran
   each command once, which cannot catch a command whose output matches for the
   flags a test happens to pass and not for the others -- it did not catch
