@@ -19,7 +19,7 @@ The `board live` command is read-only status, not a live editing interface.
 | CONFIRM | Pending (live validation) | Random, expiring, single-use tokens bound to operation, preview and target contents, with replay/expiry/changed-target/forged-token tests, are implemented. Remaining: validation against real KiCad write flows on more than one platform, and the store's behaviour under a shared or hostile state directory. |
 | DRC | Pending | One trusted runner, isolated reports and per-operation temporary files; fresh-report and upstream-failure tests; no acceptance of a previous invocation's report. |
 | TRANSACTION | Pending (live breadth) | Backup, whole-write rollback, a cross-process write lock, an interrupted-write journal and a reported `write_state` are implemented and fault-injection tested. All three `board route` modes now verify against DRC and report `verify`; repair/full compare the post-write error count to a baseline taken before any change and roll the whole write back if it rose, and refuse before writing when the oracle is unavailable. Remaining: cancellation semantics beyond signal handling, concurrent-write behaviour under KiCad's own lock, and validation on more than one platform and KiCad version. |
-| CONTRACT | Pending | Review remaining runtime/schema, untrusted-data and permission-boundary gaps against the pinned spec; complete command/flag/error coverage, not dispatch counts alone. |
+| CONTRACT | Pending (error paths) | Flag-combination coverage exists: 31 combinations across all 22 commands run under strict mode, which found and fixed three `board route` shapes and six undeclared `board rewidth` fields. `untrusted_fields` is measured by injection rather than asserted, and holds for all six reporting commands. Remaining: error-path coverage per declared `E_*` code, and permission-boundary review against the pinned spec. |
 | EVIDENCE | Pending | Fresh full live KiCad suite and frozen-artifact smoke for the actual candidate; record platform, backend version and source identity. Historical 1.0.0 evidence is not reused. |
 
 These are requirements, not claims of implementation. Keep release readiness
@@ -62,6 +62,27 @@ This is the recovery half of TRANSACTION, not the verification half. A rollback
 is only triggered by a failure something actually detects, and `board route
 --mode full` detects nothing beyond connectivity. Until per-mode verification
 exists, a mode that cannot tell it made the board worse will commit.
+
+## Measured contract coverage
+
+Two things that were claimed and unchecked are now measured on every capable run.
+
+`tests/test_contract_flag_coverage.py` exercises 31 flag combinations under
+`KICAD_CLI_STRICT`, because running each command once cannot catch a command
+whose output matches for the flags a test happens to pass. That is exactly how
+`board route` kept three shapes behind one declaration. The other 21 commands
+came back clean; recording that is the point, so nobody has to re-derive it.
+
+`tests/test_untrusted_fields.py` injects a marker into net names and reference
+designators and requires every field that carries it to be declared untrusted.
+All six reporting commands hold. The declaration is a security claim -- an
+agent is told it may read undeclared fields as the tool's own words -- and it
+had never been checked against a design that fought back.
+
+Neither covers error paths. An `E_*` envelope's `details` shape is not declared
+anywhere, and the `_untrusted` key the fleet contract defines is used in exactly
+one place. No unmarked design-derived text was found in the error paths probed,
+but "probed" is not "covered", and that is what CONTRACT still tracks.
 
 ## Subsequent capability work
 

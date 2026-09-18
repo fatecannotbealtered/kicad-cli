@@ -25,6 +25,26 @@ from typing import Any
 from .. import envelope, kicad_env
 from .board import _board_arg
 
+# `pcb_route` backs two commands with different contracts, so some of what it
+# computes is genuinely not part of `board rewidth`'s. These are the keys that
+# describe routing work rewidth never does, and dropping them is a decision
+# recorded here rather than a side effect of shaping. Anything else the payload
+# emits that a schema does not declare is drift and fails in strict mode.
+_ROUTE_ONLY = frozenset(
+    {
+        "targets",
+        "routed",
+        "failed",
+        "unresolved",
+        "existing_tracks",
+        "cleared_tracks",
+        "escape",
+        "fanout",
+        "plane_served",
+        "ripup",
+    }
+)
+
 
 def _to_declared_shape(data: Any) -> Any:
     """Shape a payload's output to the contract *this* command declares.
@@ -35,15 +55,18 @@ def _to_declared_shape(data: Any) -> Any:
     it fixed one command's shape by breaking the other's, which is how three
     different `board route` shapes ended up behind one declaration.
 
-    So the payload produces, and the command boundary shapes: keep exactly the
-    keys this command advertises, and give a key it declares but this mode does
-    not fill the value None rather than omitting it. Drift is still caught, one
-    layer down: `pcb_route.route_envelope` refuses to emit a field that is not
-    in its own list.
+    So the payload produces and the command boundary shapes: fill a key this
+    command declares but this mode does not set with None, and drop only the
+    keys named in ``_ROUTE_ONLY``. An earlier version of this dropped anything
+    undeclared, which made the strict check agree with itself instead of with
+    the payload -- removing a field from a schema then silently changed the
+    output to match, and the guard that exists to catch exactly that stopped
+    firing. Filling is shaping; dropping without saying so is hiding.
     """
     fields = envelope.declared_fields()
     if not fields or not isinstance(data, dict):
         return data
+    envelope.reject_undeclared(data, allowed_extra=_ROUTE_ONLY)
     return {name: data.get(name) for name in fields}
 
 

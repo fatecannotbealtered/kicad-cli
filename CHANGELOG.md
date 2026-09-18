@@ -15,7 +15,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - KiCad-free regression tests for parsing, no-dispatch write refusal, discovery
   and interpreter-probe reuse.
 
+### Added
+- Contract coverage by flag combination, not by command. `test_contract.py` ran
+  each command once, which cannot catch a command whose output matches for the
+  flags a test happens to pass and not for the others -- it did not catch
+  `board route`. `tests/test_contract_flag_coverage.py` runs 31 combinations
+  under strict mode; the other 21 commands came back clean, which is now a
+  recorded fact rather than an assumption.
+- `tests/test_untrusted_fields.py` measures the `untrusted_fields` declarations
+  instead of trusting them: the design is poisoned with a marker and anything
+  that comes back carrying it must be declared. All six reporting commands hold.
+  SECURITY.md tells an agent it may read undeclared fields as the tool's own
+  words, and nothing checked that claim.
+
 ### Fixed
+- Declare the six fields `board rewidth` produces and never advertised:
+  `rewidth_reverted`, `rewidth_drc_cause`, `stripped_segments`, `skipped_nets`,
+  `verify` and `note`. A caller reading `reference` could not know a reverted
+  net would be reported.
+- Stop the relay's output shaping from swallowing an undeclared key. Filling a
+  field a mode does not set is shaping; dropping one the schema never declared
+  made the strict check agree with itself instead of with the payload, so
+  removing a field from a schema silently changed the output to match it. The
+  keys `board rewidth` deliberately does not surface are now named in one place.
 - `board route` verifies every mode against DRC and reports what it verified.
   `repair` and `full` ran no DRC at all -- `full`, whose definition is "clear
   every track and route again", judged itself on connectivity counts alone and
