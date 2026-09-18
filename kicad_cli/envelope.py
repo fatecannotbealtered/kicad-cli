@@ -161,7 +161,32 @@ def ok(data: Any, notices: list[dict[str, Any]] | None = None) -> None:
     _emit({"ok": True, "schema_version": SCHEMA_VERSION, "data": _project(data), "meta": meta}, 0)
 
 
+def _trace_error(code: str) -> None:
+    """Record which E_* actually left the process, for the coverage guard.
+
+    Same mechanism as ``main._trace`` and deliberately not the same file. That
+    one means "a command was dispatched", and two tests read it that way -- one
+    asserts it does not exist at all when a request is rejected before dispatch.
+    Writing error codes into it made the file exist and the assertion wrong, so
+    the two facts get two files rather than a shared format nobody agreed to.
+
+    Searching test sources for an error name would repeat the mistake the
+    dispatch trace was built to fix: a code named in a docstring is not a code a
+    command produced. Best effort -- a coverage aid must never fail a real
+    command.
+    """
+    target = os.environ.get("KICAD_CLI_ERROR_TRACE")
+    if not target:
+        return
+    try:
+        with open(target, "a", encoding="utf-8") as handle:
+            handle.write(f"error:{code}\n")
+    except OSError:
+        pass
+
+
 def fail(code: str, message: str, details: dict[str, Any] | None = None) -> None:
+    _trace_error(code)
     _emit(
         {
             "ok": False,
@@ -186,6 +211,7 @@ def need_confirm(operation: str, preview: dict[str, Any], target: str | None = N
     cannot see, which is a worse failure than having no gate at all: it turns a
     deliberate decision into a reflex.
     """
+    _trace_error("E_CONFIRMATION_REQUIRED")
     try:
         token = confirm_store.issue(operation, preview, target)
     except confirm_store.ConfirmError as exc:
