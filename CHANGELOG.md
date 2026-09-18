@@ -51,6 +51,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   test sets `PYTHONIOENCODING=utf-8`, which is what kept this invisible.
 
 ### Changed
+- Separate FCC measurement from FCC enforcement. The guard returned early unless
+  `fcc_status` already said `verified`, so while the status was `unknown` nothing
+  was counted -- and the status cannot honestly become `verified` without the
+  count. Coverage was not failing; it was unmeasured, which looks identical in a
+  green run. Every capable full run now counts leaf-command dispatch, writes
+  `.fcc-coverage.json` and reports the number as a warning; enforcement still
+  fires only against a `verified` claim. First measurement: 22/22 (100%) on
+  Windows with KiCad 10.0.6. That is dispatch coverage, not flag/error coverage,
+  so `fcc_status` stays `unknown`.
 - Confirmation tokens are random, single-use and expire after 15 minutes, and
   bind to the operation, the preview and the target file's contents. They were
   `sha256(operation + preview)`: a pure function of public inputs, so the same
