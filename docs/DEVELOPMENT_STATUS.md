@@ -34,6 +34,20 @@ upstream failure and input fingerprint checks. See [DRC_BOUNDARY.md](DRC_BOUNDAR
 DRC remains pending until live validation; transaction backup/snapshot files and
 non-DRC upstream calls still require separate isolation work.
 
+## Measured command coverage
+
+Command dispatch coverage is now counted on every full run that can count it —
+a complete selection, on a machine with KiCad, with no earlier failure — and
+written to `.fcc-coverage.json` with a warning carrying the number. It is not
+gated on `fcc_status`, because gating measurement on the claim it exists to
+justify is how the number stayed unknown.
+
+Most recent measurement: **22/22 leaf commands (100%)**, Windows 11 with KiCad
+10.0.6. That is dispatch coverage. `fcc_status` stays `unknown` because CLI-SPEC
+asks for every documented behavior — flags, modes, error codes — to have a
+command-level test, and that larger set is what the CONTRACT blocker tracks.
+Dispatch coverage is a floor for FCC, not FCC.
+
 ## Subsequent capability work
 
 After the write/verification foundation: design snapshots, object/region queries,
