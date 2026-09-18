@@ -276,6 +276,11 @@ def official_cli():
     return executable
 
 
+def err_count(drc):
+    """DRC 报告里 severity=error 的条数。判据统一在这里，别在各脚本里重写。"""
+    return sum(1 for v in (drc or {}).get("violations", []) if v["severity"] == "error")
+
+
 def run_drc(path, timeout=1800):
     """Shared fail-closed report boundary; this does not roll back the caller."""
     try:

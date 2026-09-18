@@ -42,7 +42,7 @@ def run_drc(path):
 
 
 def err_count(drc):
-    return sum(1 for v in (drc or {}).get("violations", []) if v["severity"] == "error")
+    return K.err_count(drc)
 
 
 def revert_offenders(pcbnew, path, drc, orig, mm, MM):
