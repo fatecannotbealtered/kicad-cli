@@ -77,6 +77,10 @@ def fail(code, message, details=None):
     write_txn.rollback(code)
     details = dict(details or {})
     details["write_state"] = write_txn.state()
+    if write_txn.failure():
+        # Only present when the board could not be put back, and then it is the
+        # first thing worth reading: it says whether to retry or to go look.
+        details["rollback_error"] = write_txn.failure()
     _emit(
         {
             "ok": False,

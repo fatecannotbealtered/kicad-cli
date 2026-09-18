@@ -14,8 +14,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Canonical `reference.risk_tier`, `reference.error_codes` and `context.version`.
 - KiCad-free regression tests for parsing, no-dispatch write refusal, discovery
   and interpreter-probe reuse.
-
-### Added
 - Error-code coverage, measured and enforced. `reference` publishes a table an
   agent branches on, and nothing checked that a command could actually produce
   each row. `envelope.fail` now records the code it emitted to its own trace,
@@ -38,8 +36,49 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   that comes back carrying it must be declared. All six reporting commands hold.
   SECURITY.md tells an agent it may read undeclared fields as the tool's own
   words, and nothing checked that claim.
+- A write transaction around board saves: a backup before the first write, a
+  cross-process `.kicad-cli.lock` beside the board, whole-write rollback on any
+  failure, unhandled exception or Ctrl+C, and a journal that survives a kill so
+  the next invocation refuses to write over an unfinished write instead of
+  silently retrying on top of it. The envelope now reports `write_state`
+  (`committed` / `rolled_back` / `not_started` / `unknown`) rather than only
+  being able to say `unknown` after a failure.
+
+### Changed
+- Separate FCC measurement from FCC enforcement. The guard returned early unless
+  `fcc_status` already said `verified`, so while the status was `unknown` nothing
+  was counted -- and the status cannot honestly become `verified` without the
+  count. Coverage was not failing; it was unmeasured, which looks identical in a
+  green run. Every capable full run now counts leaf-command dispatch, writes
+  `.fcc-coverage.json` and reports the number as a warning; enforcement still
+  fires only against a `verified` claim. First measurement: 22/22 (100%) on
+  Windows with KiCad 10.0.6. That is dispatch coverage, not flag/error coverage,
+  so `fcc_status` stays `unknown`.
+- Confirmation tokens are random, single-use and expire after 15 minutes, and
+  bind to the operation, the preview and the target file's contents. They were
+  `sha256(operation + preview)`: a pure function of public inputs, so the same
+  token came back from every dry run, stayed valid forever and could be
+  replayed without limit. A gate like that costs one extra round trip, not a
+  decision. Tokens issued by an earlier build are refused. Pending records are
+  kept under `KICAD_CLI_STATE`; see SECURITY.md for exactly what is stored.
+- This development candidate is explicitly unpublishable. The historical 1.0.0
+  live evidence is not reused for changed code, and remaining confirm-token,
+  DRC-isolation and verification/rollback gaps stay release blockers.
 
 ### Fixed
+- Retry the rollback's file replacement instead of giving up on the first
+  refusal. On Windows `os.replace` fails while anything still holds the
+  destination open -- a scanner, the indexer, a child process whose handles are
+  not yet reaped -- and those clear in milliseconds. The rollback is the safety
+  mechanism, and it was losing to the most ordinary condition on the platform
+  this tool is mostly used on. When it still cannot finish, the envelope now
+  carries `rollback_error`: `write_state: unknown` with no cause attached is
+  the hardest state to act on and the hardest to diagnose afterwards.
+- Record evidence against a commit, not just a version. The filename was
+  `live-smoke-<version>.md` and the version does not move between candidates
+  here, so a second run would have overwritten the recorded 1.0.0 evidence with
+  a different tree's result under its name. The record now carries the source
+  commit, and generating it from a dirty tree is refused.
 - Declare the six fields `board rewidth` produces and never advertised:
   `rewidth_reverted`, `rewidth_drc_cause`, `stripped_segments`, `skipped_nets`,
   `verify` and `note`. A caller reading `reference` could not know a reverted
@@ -96,36 +135,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   stderr progress share the fix. Regression tests run the CLI under hostile
   encodings and assert the harness is really applying them; every pre-existing
   test sets `PYTHONIOENCODING=utf-8`, which is what kept this invisible.
-
-### Added
-- A write transaction around board saves: a backup before the first write, a
-  cross-process `.kicad-cli.lock` beside the board, whole-write rollback on any
-  failure, unhandled exception or Ctrl+C, and a journal that survives a kill so
-  the next invocation refuses to write over an unfinished write instead of
-  silently retrying on top of it. The envelope now reports `write_state`
-  (`committed` / `rolled_back` / `not_started` / `unknown`) rather than only
-  being able to say `unknown` after a failure.
-
-### Changed
-- Separate FCC measurement from FCC enforcement. The guard returned early unless
-  `fcc_status` already said `verified`, so while the status was `unknown` nothing
-  was counted -- and the status cannot honestly become `verified` without the
-  count. Coverage was not failing; it was unmeasured, which looks identical in a
-  green run. Every capable full run now counts leaf-command dispatch, writes
-  `.fcc-coverage.json` and reports the number as a warning; enforcement still
-  fires only against a `verified` claim. First measurement: 22/22 (100%) on
-  Windows with KiCad 10.0.6. That is dispatch coverage, not flag/error coverage,
-  so `fcc_status` stays `unknown`.
-- Confirmation tokens are random, single-use and expire after 15 minutes, and
-  bind to the operation, the preview and the target file's contents. They were
-  `sha256(operation + preview)`: a pure function of public inputs, so the same
-  token came back from every dry run, stayed valid forever and could be
-  replayed without limit. A gate like that costs one extra round trip, not a
-  decision. Tokens issued by an earlier build are refused. Pending records are
-  kept under `KICAD_CLI_STATE`; see SECURITY.md for exactly what is stored.
-- This development candidate is explicitly unpublishable. The historical 1.0.0
-  live evidence is not reused for changed code, and remaining confirm-token,
-  DRC-isolation and verification/rollback gaps stay release blockers.
 
 ### Security
 - Block the stable publishing workflow before building when runtime readiness,
