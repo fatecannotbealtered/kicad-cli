@@ -82,6 +82,9 @@ validation of this candidate. `board live` currently reads status only.
 The remaining work and evidence requirements are tracked in
 [Development status](docs/DEVELOPMENT_STATUS.md). Merging an increment is not release approval.
 
+The DRC boundary now isolates reports and validates upstream results; this does
+not complete write rollback or live validation. See [DRC boundary](docs/DRC_BOUNDARY.md).
+
 ## Agent Workflow
 
 1. Install the CLI and Skill with the block above.

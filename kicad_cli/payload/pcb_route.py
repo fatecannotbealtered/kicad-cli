@@ -57,33 +57,7 @@ def _objcount(b, pcbnew, tracks):
 
 
 def run_drc(path):
-    out = os.path.join(tempfile.gettempdir(), "kicad_layout_route_drc.json")
-    try:
-        subprocess.run(
-            [
-                "kicad-cli",
-                "pcb",
-                "drc",
-                "--format",
-                "json",
-                "--severity-all",
-                "--units",
-                "mm",
-                "-o",
-                out,
-                path,
-            ],
-            capture_output=True,
-            timeout=1800,
-        )
-    except FileNotFoundError:
-        K.fail("E_CONFIG", "找不到 kicad-cli，repair 模式需要它来列出未连接项")
-    except subprocess.TimeoutExpired:
-        K.fail("E_TIMEOUT", "DRC 超时")
-    if not os.path.exists(out):
-        K.fail("E_IO", "DRC 报告未生成")
-    with open(out, encoding="utf-8") as f:
-        return json.load(f)
+    return K.run_drc(path)
 
 
 def paint_existing(R, board, pcbnew, tracks=None):

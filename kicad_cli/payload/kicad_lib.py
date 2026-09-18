@@ -15,8 +15,12 @@ import hashlib
 import json
 import os
 import sys
-import tempfile
 import time
+
+if __package__:
+    from . import drc_runner
+else:
+    import drc_runner
 
 SCHEMA_VERSION = "1.0"
 TOOL_VERSION = "1.0.0"
@@ -226,55 +230,30 @@ def via_drill(track):
 
 # ---- 项目文件与网络类 -------------------------------------------------------
 def official_cli():
-    """KiCad 自己的 kicad-cli，按绝对路径拿，不走 PATH。
-
-    我们这套工具**也叫 kicad-cli**（同名是刻意的），所以 PATH 上那个未必是
-    KiCad 的。载荷跑在 KiCad 自带的解释器里，官方二进制就在同一个 bin 目录，
-    没有猜的必要。
-    """
-    here = os.path.dirname(sys.executable)
-    for name in ("kicad-cli.exe", "kicad-cli"):
-        cand = os.path.join(here, name)
-        if os.path.exists(cand):
-            return cand
-    return "kicad-cli"  # 退回 PATH，聊胜于无
+    """Resolve the configured KiCad executable; never fall back to our own shim."""
+    executable = drc_runner.find_official_cli(interpreter=sys.executable)
+    if not executable:
+        fail("E_CONFIG", "KiCad official binary not found; set KICAD_CLI_OFFICIAL")
+    return executable
 
 
 def run_drc(path, timeout=1800):
-    """跑一次 DRC 并返回解析后的报告。
-
-    写脚本的自验回退都依赖它：栅格与几何检查再细也是近似的，
-    最终裁判只能是 DRC。必须在工程目录下跑，否则规则来自别处（第 12 条）。
-    """
-    import subprocess
-
-    out = os.path.join(tempfile.gettempdir(), "kicad_layout_drc.json")
+    """Shared fail-closed report boundary; this does not roll back the caller."""
     try:
-        subprocess.run(
-            [
-                official_cli(),
-                "pcb",
-                "drc",
-                "--format",
-                "json",
-                "--severity-all",
-                "--units",
-                "mm",
-                "-o",
-                out,
-                path,
-            ],
-            capture_output=True,
-            timeout=timeout,
+        return drc_runner.run(
+            path, drc_runner.find_official_cli(interpreter=sys.executable), timeout
+        ).report
+    except drc_runner.DrcError as exc:
+        fail(
+            exc.code,
+            str(exc),
+            {
+                **exc.details,
+                "write_state": "unknown",
+                "next_action": "Inspect the board and backup before retrying the enclosing write; "
+                "a failed verification does not prove the write was rolled back.",
+            },
         )
-    except FileNotFoundError:
-        fail("E_CONFIG", "找不到 kicad-cli，自验需要它")
-    except subprocess.TimeoutExpired:
-        fail("E_TIMEOUT", "DRC 超时")
-    if not os.path.exists(out):
-        fail("E_IO", "DRC 报告未生成")
-    with open(out, encoding="utf-8") as f:
-        return json.load(f)
 
 
 def project_path(pcb_path):

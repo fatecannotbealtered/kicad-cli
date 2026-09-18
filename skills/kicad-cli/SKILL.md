@@ -165,6 +165,10 @@ routing mode has a user checkpoint, not an additional runtime permission gate.
 Do not bypass protections, infer rollback from an error, or treat success as
 proof that the design is valid.
 
+DRC execution failures are not clean reports. Inspect any reported write-state
+uncertainty before retrying a write; the verification runner cannot promise that
+the enclosing operation was rolled back. See `reference/cautions.md`.
+
 ## Reading Results Honestly
 
 Findings carry `evidence` and `confidence`; most read commands carry

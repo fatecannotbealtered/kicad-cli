@@ -13,7 +13,7 @@ DRC 只做事后兜底。问题是那个近似过度保守三层：全板统一�
 是判据自己把它们挡掉了。
 
 新策略：整组按档位试宽 → 重填铺铜 → 跑 DRC → 把闯祸的退回、留到下一轮更窄的档。
-每轮一次 DRC，最多八轮，代价可控而判据精确。栅格判断保留为 DRC 不可用时的退路。
+每轮一次 DRC，最多八轮，代价可控而判据精确。DRC 不可用时明确失败，不把栅格近似冒充验证成功。
 
 写门禁：先不带 --confirm 跑一次拿 token。
 
@@ -21,13 +21,10 @@ DRC 只做事后兜底。问题是那个近似过度保守三层：全板统一�
     <kicad-python> pcb_widen.py --board b.kicad_pcb [--confirm ct_xxx]
 """
 
-import json
 import math
 import os
 import re
-import subprocess
 import sys
-import tempfile
 from collections import defaultdict
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -41,31 +38,7 @@ STEPS = (1.0, 0.85, 0.70, 0.60, 0.50, 0.42, 0.35, 0.28)
 
 
 def run_drc(path):
-    out = os.path.join(tempfile.gettempdir(), "kicad_layout_widen_drc.json")
-    try:
-        subprocess.run(
-            [
-                K.official_cli(),
-                "pcb",
-                "drc",
-                "--format",
-                "json",
-                "--severity-all",
-                "--units",
-                "mm",
-                "-o",
-                out,
-                path,
-            ],
-            capture_output=True,
-            timeout=1800,
-        )
-    except (FileNotFoundError, subprocess.TimeoutExpired):
-        return None
-    if not os.path.exists(out):
-        return None
-    with open(out, encoding="utf-8") as f:
-        return json.load(f)
+    return K.run_drc(path)
 
 
 def err_count(drc):
@@ -340,7 +313,7 @@ def main():
                 )
                 pending = {k for k in trial if k not in kept}
     else:
-        # DRC 不可用时退回栅格判断：保守，但不会把板子弄坏。
+        # 只有用户明确指定 --no-verify 才走栅格近似；DRC 故障不再降级。
         bb = K.load_board(pcbnew, path)
         for t in K.tracks_of(bb):
             if t.Type() != pcbnew.PCB_TRACE_T:
@@ -393,7 +366,7 @@ def main():
             ),
         )
     else:
-        verify["note"] = "DRC 不可用，退回保守的栅格判断；结果会明显偏窄"
+        verify["note"] = "用户明确跳过 DRC，仅使用栅格近似；结果未经 DRC 验证"
 
     rows = []
     for cls, s in sorted(stat.items()):
