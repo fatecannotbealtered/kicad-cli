@@ -1049,8 +1049,13 @@ def main():
     # 这两个模式过去完全不跑 DRC，只数连通性——而 full 的定义就是清空全板走线。
     # 一个察觉不到自己把板子改坏的模式，回滚机制对它毫无意义：没有东西会触发回滚。
     errors_baseline = None
+    width_before = None
     if mode in ("repair", "full"):
         errors_baseline = K.err_count(run_drc(path))
+        # Widths are the thing DRC cannot see. full routes at neck width by
+        # design and expects `board widen` after, which the note has always
+        # said -- in prose, to a caller that acts on fields.
+        width_before = K.width_summary(b, pcbnew, nc)
 
     if mode == "rewidth":
         # 先把当前状态落盘，之后每条网络都从磁盘重新加载一份干净的板子。
@@ -1220,12 +1225,24 @@ def main():
                 "error 再重试",
             },
         )
+    width_after = K.width_summary(b, pcbnew, nc)
     log["verify"] = {
         "ran": True,
         "oracle": "kicad-cli pcb drc",
         "errors_baseline": errors_baseline,
         "errors_final": errors_final,
-        "note": "error 数未超过动手前的基线；这不等于板子没问题，只等于这次没把它改差",
+        "width_before": width_before,
+        "width_after": width_after,
+        "width_regressed": bool(
+            width_before
+            and width_after
+            and width_before.get("compliant_pct") is not None
+            and width_after.get("compliant_pct") is not None
+            and width_after["compliant_pct"] < width_before["compliant_pct"]
+        ),
+        "note": "error 数未超过动手前的基线；这不等于板子没问题，只等于 DRC 没变差。"
+        "线宽是 DRC 看不见的那部分：width_regressed 为真时走线已按缩颈宽度重布，"
+        "载流能力随之下降，必须再跑 board widen 或 board rewidth 才算完成",
     }
     all_tr = list(K.tracks_of(b))
     tr = [t for t in all_tr if t.Type() == pcbnew.PCB_TRACE_T]

@@ -12,7 +12,7 @@ from pathlib import Path
 from typing import Any
 
 from .. import envelope, kicad_env
-from . import reference
+from . import live, reference
 
 
 def _check(name: str, status: str, fix: str | None, **extra: Any) -> dict[str, Any]:
@@ -21,11 +21,10 @@ def _check(name: str, status: str, fix: str | None, **extra: Any) -> dict[str, A
     return out
 
 
-def _ipc_server_state() -> tuple[str, str | None]:
+def _ipc_preference() -> tuple[bool | None, str]:
     """Whether KiCad's IPC API server is enabled in user preferences.
 
-    Off by default. It is the only supported way to reach the interactive
-    router, so an agent that wants push-and-shove needs this on.
+    Off by default. Returns (enabled, where) -- None when no config was found.
     """
     roots = []
     appdata = os.environ.get("APPDATA")
@@ -42,14 +41,48 @@ def _ipc_server_state() -> tuple[str, str | None]:
             except (OSError, ValueError):
                 continue
             api = data.get("api") or {}
-            if api.get("enable_server"):
-                return "pass", None
-            return "warn", (
-                "IPC API server is disabled; enable it in KiCad under "
-                "Preferences > Plugins > Enable IPC API server if you need "
-                f"interactive-router access ({cfg})"
-            )
-    return "warn", "could not find kicad_common.json; IPC API server state unknown"
+            return bool(api.get("enable_server")), str(cfg)
+    return None, ""
+
+
+def _ipc_server_state() -> tuple[str, str | None]:
+    """Whether `board live` can actually reach KiCad right now.
+
+    This used to read `enable_server` out of the preference file and report
+    `pass` on the strength of it. That answers "is the API switched on", not
+    "is it reachable", and the two differ whenever KiCad is not running --
+    which is the normal state. So `doctor` said pass while `board live`
+    returned E_CONFIG at the same moment, on the same machine. A preflight
+    check that says a command will work when it will not is worse than not
+    having the check, because it is believed.
+
+    The probe is the same call `board live` makes, so they cannot disagree.
+    """
+    enabled, where = _ipc_preference()
+    _client, kind, reason = live.connect()
+    if kind == "ok":
+        return "pass", None
+    if kind == "client_missing":
+        return "warn", (
+            "the bundled IPC client could not be imported, so `board live` cannot run "
+            f"({reason[:120]})"
+        )
+    if enabled is False:
+        return "warn", (
+            "IPC API server is disabled in preferences; enable it in KiCad under "
+            f"Preferences > KiCad API > Enable KiCad API, then restart KiCad ({where})"
+        )
+    if enabled is None:
+        return "warn", (
+            "no kicad_common.json found and nothing is listening; `board live` needs "
+            "KiCad open with its API enabled"
+        )
+    # Enabled in preferences and still unreachable: KiCad is not running. That
+    # is not a fault, and the fix is one sentence rather than a settings hunt.
+    return "warn", (
+        "the API is enabled in preferences but nothing is listening; open the board "
+        f"in KiCad and `board live` will connect ({reason[:120]})"
+    )
 
 
 def run(_args: dict[str, Any]) -> None:

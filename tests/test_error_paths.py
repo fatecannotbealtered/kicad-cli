@@ -84,3 +84,41 @@ def test_a_worsened_board_is_put_back_and_reported_as_e_integrity(tmp_path):
     assert details["write_state"] == "rolled_back"
     assert board.read_bytes() == original, "the board was not put back"
     assert not list(tmp_path.glob("*.kicad-cli.*")), "transaction artefacts were left behind"
+
+
+def test_a_missing_kicad_interpreter_is_e_config_whatever_else_is_running(tmp_path):
+    """E_CONFIG was only ever produced by `board live` failing to connect.
+
+    That made its coverage depend on KiCad *not* running: open the editor and
+    the suite silently stopped exercising the code entirely, which is how a
+    machine's ambient state ends up deciding what a test run proves. This
+    produces it from configuration instead, so the answer does not move.
+    """
+    board = tmp_path / "demo.kicad_pcb"
+    board.write_text("(kicad_pcb)", encoding="utf-8")
+    env = dict(
+        os.environ,
+        PYTHONIOENCODING="utf-8",
+        KICAD_CLI_PYTHON=str(tmp_path / "no-such-python.exe"),
+        KICAD_CLI_ROOT=str(tmp_path / "no-such-kicad"),
+    )
+    proc = subprocess.run(
+        [
+            sys.executable,
+            "-m",
+            "kicad_cli.main",
+            "board",
+            "audit",
+            "--board",
+            str(board),
+            "--compact",
+        ],
+        capture_output=True,
+        cwd=REPO,
+        env=env,
+        timeout=300,
+    )
+    doc = json.loads(proc.stdout.decode("utf-8").splitlines()[0])
+    assert doc["ok"] is False
+    assert doc["error"]["code"] == "E_CONFIG", doc
+    assert doc["error"]["details"].get("hint"), "a config failure must say what to set"
