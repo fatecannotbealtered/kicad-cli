@@ -1,7 +1,7 @@
 ---
 name: kicad-cli
 version: "1.0.0"
-description: "KiCad PCB CLI for AI agents: board audit, reference-plane and schematic-link checks, grid autorouting, zone stitching, ampacity trace widening, fabrication output, and read-only IPC status for a running KiCad. Use when a task mentions KiCad, .kicad_pcb, PCB layout, routing, DRC, ERC, copper zones, trace width, netclasses, drill or Gerber files, or keeping a board in sync with its schematic. Not for schematic capture, symbol or footprint authoring, component sourcing, or SPICE."
+description: "KiCad CLI for AI agents, covering the whole chain from a circuit description to fabrication data: generate a schematic and netlist from a JSON specification, build a board from that netlist, place parts by connectivity, autoroute, stitch zones, widen traces for ampacity, audit, and plot Gerber/drill. Also reference-plane and schematic-link checks and read-only IPC status for a running KiCad. Use when a task mentions KiCad, designing or drawing a circuit or PCB, .kicad_sch or .kicad_pcb, schematic capture from a requirement, netlists, placement, layout, routing, DRC, ERC, copper zones, trace width, netclasses, drill or Gerber files, or keeping a board in sync with its schematic. Not for authoring symbols or footprints, component sourcing, or SPICE."
 license: MIT
 user-invocable: true
 metadata: {"requires": {"bins": ["kicad-cli"], "min_version": "1.0.0"}}
@@ -36,10 +36,16 @@ output, fabrication packages.
 Board-to-schematic consistency: whether a board still matches its `.kicad_sch`,
 what "Update PCB from Schematic" would do, ERC that reports nothing.
 
-**Do not use this Skill for**: drawing or editing schematics, authoring symbols
-or footprints, choosing parts, BOM sourcing, or SPICE. Nothing here writes a
-`.kicad_sch` — the `sch *` commands read schematics and, in one case, write a
-link field back into the *board*.
+Schematic *creation*: `sch create` turns a JSON circuit specification into a
+`.kicad_sch` and the netlist that `board from-netlist` consumes. That makes
+"design a board for this requirement" a task this Skill covers end to end — see
+"Building a board from nothing".
+
+**Do not use this Skill for**: authoring symbols or footprints, choosing parts,
+BOM sourcing, or SPICE. It also cannot *edit* an existing schematic: `sch create`
+writes a new one from a specification, and the other `sch *` commands read
+schematics or write a link field back into the *board*. To change a schematic
+that already exists, edit the specification and regenerate, or open KiCad.
 
 ## First Step
 
@@ -103,12 +109,13 @@ ones apart:
 | Task | Command | Not this |
 |---|---|---|
 | Does the board still match the schematic? | `board parity` (components and nets) | — |
-| Make a board from a requirement (no design exists yet) | `sch create` → `board from-netlist` → `board route` → `board widen` → `fab *` | see "Building a board from nothing" below; do not hand-write a `.kicad_sch` |
+| Make a board from a requirement (no design exists yet) | `sch create` → `board from-netlist` → `board place` → `board route` → `board widen` → `fab *` | see "Building a board from nothing" below; do not hand-write a `.kicad_sch` |
 | Turn an existing schematic into a board | KiCad's own `sch export netlist`, then `board from-netlist` | this creates a *new* board; it does not update one that already has a layout |
 | Will "Update PCB from Schematic" destroy my layout? | `sch link`, then `sch sync-preview` | never `pcb drc --schematic-parity`; it matches by reference designator and is blind to broken links |
 | ERC says zero — is the schematic fine? | `sch audit` (re-runs the silenced rules) | `sch link` |
 | A trace is too thin | `board widen` first (in place), then `board route --mode rewidth --nets X` | `board rewidth` has no `--nets`; it works by netclass |
 | Connections are missing | `board route --mode repair` (repeat until it stops improving) | `--mode full` clears every existing track first |
+| Traces are long, or the router cannot get through | `board place` before routing | it moves parts, so any existing tracks must be re-routed after |
 | Copper pour looks connected but is not | `board stitch` | `board audit` |
 | Return paths / EMC | `board plane` | `board audit` |
 | Inspect the open editor | `board live` (read-only IPC status) | it does not edit the board or create undo entries |
@@ -134,20 +141,34 @@ kicad-cli sch create --spec circuit.json --out build --confirm ct_xxx --compact
 kicad-cli board from-netlist --netlist build/circuit.net --out build/circuit.kicad_pcb --dry-run
 kicad-cli board from-netlist --netlist build/circuit.net --out build/circuit.kicad_pcb --confirm ct_xxx
 
-# 3. Route, then read verify.width_regressed and widen if it is true.
+# 3. Rearrange by connectivity BEFORE routing. Skipping this routes the grid.
+kicad-cli board place --board build/circuit.kicad_pcb --dry-run --compact
+kicad-cli board place --board build/circuit.kicad_pcb --confirm ct_xxx --compact
+
+# 4. Route, then read verify.width_regressed and widen if it is true.
 kicad-cli board route --board build/circuit.kicad_pcb --mode repair --confirm ct_xxx --compact
 
-# 4. Manufacturing output.
+# 5. Manufacturing output.
 kicad-cli fab gerber --board build/circuit.kicad_pcb --out build/fab --confirm ct_xxx --compact
 kicad-cli fab drill  --board build/circuit.kicad_pcb --out build/fab --confirm ct_xxx --compact
 ```
 
 Three things about this path that the envelope will not tell you twice:
 
-**Placement is a grid ordered by reference designator.** It is not a layout.
-Nothing in this tool knows which parts belong together, so decoupling caps land
-wherever the alphabet puts them. Use `board move` to place what matters before
-routing, or expect longer traces than a person would accept.
+**Step 3 is not optional, and its order matters.** `board from-netlist` lays out
+a grid ordered by reference designator, which is a position for every part and a
+layout for none of them — decoupling caps land wherever the alphabet puts them.
+`board place` reads the netlist as a placement instruction. On the two test
+boards it roughly halved routed copper (115.5 mm → 53.2 mm on one). Run it
+*before* routing: moving a part after routing leaves its traces dangling, which
+is why `board place` warns when the board already has tracks.
+
+It reports `hpwl_before_mm`/`hpwl_after_mm` and refuses to write when it found
+nothing shorter, so `improved: false` means the board is untouched, not that it
+failed. Lock a part, or pass `--keep REF`, to state a position it must not
+overturn — a board-edge connector, say. Expect `verify.warnings_added` to be
+positive: packing parts closer collides silkscreen text. Those are warnings, not
+errors, and the command rolls the whole board back if DRC *errors* increase.
 
 **The schematic is for machines.** Symbol placement comes from the generator
 and is not laid out for reading. The netlist is the part step 2 consumes; treat
@@ -161,7 +182,8 @@ built without it. Name footprints when you write the spec.
 
 STOP CHECKPOINT: Ask the user before confirming any write. All of `sch create`,
 `board from-netlist`, `board route`, `board stitch`, `board rewidth`,
-`board widen`, `board move`, `sch relink` and `fab *` modify files on disk.
+`board widen`, `board move`, `board place`, `sch relink` and `fab *` modify
+files on disk.
 `sch create` and `board from-netlist` replace a file of that name if one exists.
 
 STOP CHECKPOINT: `board route --mode full` **deletes every existing track**

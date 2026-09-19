@@ -148,8 +148,9 @@ def main():
             "unmatched_nodes": missing,
             "board_mm": size,
             "placement": plan.get("placement", "grid"),
-            "note": "布局是按参考编号排的网格，不是按电路关系摆的。"
-            "走线还没有——跑 board route，之后按 verify.width_regressed 决定要不要再 widen",
+            "note": "布局是按参考编号排的网格，不是按电路关系摆的——先跑 board place "
+            "按连接关系重排（实测走线铜长可减一半），再跑 board route 布线，"
+            "之后按 verify.width_regressed 决定要不要再 widen",
         }
     )
 
