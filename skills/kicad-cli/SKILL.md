@@ -116,6 +116,7 @@ ones apart:
 | ERC says zero — is the schematic fine? | `sch audit` (re-runs the silenced rules) | `sch link` |
 | A trace is too thin | `board widen` first (in place), then `board route --mode rewidth --nets X` | `board rewidth` has no `--nets`; it works by netclass |
 | Connections are missing | `board route --mode repair` (repeat until it stops improving) | `--mode full` clears every existing track first |
+| `repair` stopped improving with connections still open | `board route --mode full` — ask the user first, it deletes every existing track | repeating `repair` again; it only finds paths through gaps in existing copper, and that copper is what is blocking it |
 | Traces are long, or the router cannot get through | `board place` before routing | it moves parts, so any existing tracks must be re-routed after |
 | Copper pour looks connected but is not | `board stitch` | `board audit` |
 | Return paths / EMC | `board plane` | `board audit` |
@@ -193,6 +194,15 @@ files on disk.
 
 STOP CHECKPOINT: `board route --mode full` **deletes every existing track**
 before routing. Use `--mode repair` unless the user has asked to start over.
+
+STOP CHECKPOINT: **`repair` stalling is not the end of the road.** When
+`unconnected_after` is above zero and equal to `unconnected_before`, running
+`repair` again changes nothing — it searches the gaps in existing copper and
+that copper is the obstacle. `--mode full` clears the board and routes in a
+different order, which often completes it: on a 15-part ATmega328P here,
+`repair` sat at 1 unconnected across three passes and `full` routed all 35.
+The envelope's `note` says this when it happens. Ask the user before running
+it, because it deletes hand-drawn tracks too.
 
 STOP CHECKPOINT: **routing is not finished when it returns `ok`.** `board route`
 lays track at the router's neck width, so a board that met its netclass widths

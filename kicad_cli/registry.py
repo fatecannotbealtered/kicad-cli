@@ -136,7 +136,10 @@ SCHEMAS: dict[str, dict[str, Any]] = {
     },
     "sch_create": {
         "shape": "object",
-        "fields": ["title", "parts", "nets", "unconnected_parts", "written", "note"],
+        # `drawing.status` is "drawn" or "failed"; on "failed" written.schematic
+        # is null and the netlist is still complete. They are separate outputs
+        # of the same generator and only the netlist is load-bearing.
+        "fields": ["title", "parts", "nets", "unconnected_parts", "written", "drawing", "note"],
         # Everything here is the caller's own specification coming back, but it
         # has been through the KiCad libraries: a symbol name that resolved is
         # a name KiCad has, and a value is whatever the spec said.

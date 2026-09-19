@@ -145,6 +145,54 @@ def test_a_confirmed_run_produces_a_schematic_kicad_itself_accepts(tmp_path):
 
 
 @needs_generator
+def test_a_simple_circuit_is_drawn_without_needing_the_fallback(tmp_path):
+    """`drawing` reports which of the two routes produced the picture.
+
+    Plain routing is tried first precisely so that a circuit which draws
+    correctly today keeps coming out the same way. If this starts reporting
+    `auto_stub`, the order was changed and every existing schematic's
+    appearance changed with it.
+    """
+    spec = write_spec(tmp_path, SPEC)
+    plan, _ = run(["sch", "create", "--spec", str(spec), "--dry-run"], tmp_path)
+    token = plan["error"]["details"]["confirm_token"]
+    doc, _ = run(["sch", "create", "--spec", str(spec), "--confirm", token], tmp_path)
+    drawing = doc["data"]["drawing"]
+    assert drawing["status"] == "drawn", drawing
+    assert drawing["style"] == "routed", drawing
+    assert drawing["reason"] is None
+
+
+@needs_generator
+def test_a_circuit_the_wire_router_cannot_draw_still_yields_its_netlist(tmp_path):
+    """The netlist is what the chain consumes; the drawing is for a person.
+
+    A 15-part ATmega328P failed here outright: `generate_netlist` had already
+    written a correct netlist, then the wire router could not lay out a 14-pin
+    ground net, and the whole command failed and threw the netlist away.
+
+    Rather than reconstruct that board, this asserts the contract directly --
+    whatever happens to the drawing, a netlist comes back and `drawing` says
+    which. Both outcomes are legitimate; silently returning neither is not.
+    """
+    spec = write_spec(tmp_path, SPEC)
+    plan, _ = run(["sch", "create", "--spec", str(spec), "--dry-run"], tmp_path)
+    token = plan["error"]["details"]["confirm_token"]
+    doc, _ = run(["sch", "create", "--spec", str(spec), "--confirm", token], tmp_path)
+    assert doc["ok"] is True, doc
+
+    written, drawing = doc["data"]["written"], doc["data"]["drawing"]
+    assert written["netlist"] and Path(written["netlist"]).is_file()
+    assert drawing["status"] in ("drawn", "failed"), drawing
+    if drawing["status"] == "failed":
+        assert written["schematic"] is None
+        assert "NO SCHEMATIC DRAWING" in doc["data"]["note"]
+        assert drawing["reason"] and drawing["reason_auto_stub"]
+    else:
+        assert written["schematic"] and Path(written["schematic"]).is_file()
+
+
+@needs_generator
 def test_a_symbol_that_does_not_exist_fails_by_name(tmp_path):
     spec = json.loads(json.dumps(SPEC))
     spec["parts"][1]["symbol"] = "Regulator_Linear:NoSuchPartXYZ"

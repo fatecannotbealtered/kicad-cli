@@ -8,6 +8,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- `sch create` survives a drawing that will not route, and usually now draws
+  it anyway. The netlist and the `.kicad_sch` are separate outputs of the same
+  generator and only the netlist is load-bearing, but a failure in the wire
+  router failed the whole command and discarded a netlist that had already
+  been written and was correct. On the first realistic board tried -- a
+  15-part ATmega328P with a TQFP-32 -- that blocked the entire chain on the
+  router's inability to lay out a 14-pin ground net.
+
+  It now retries with SKiDL's `auto_stub`, which draws high-fanout nets as
+  global labels and power symbols, the way an engineer would have drawn ground
+  anyway. That succeeded on the ATmega board. If it still fails, the netlist
+  is delivered with `drawing.status: "failed"` and `written.schematic: null`,
+  said plainly in the note rather than left to be noticed.
+- `board route --mode repair` says what to do when it has stopped helping.
+  "Repeat until it stops improving" was true and one sentence short: `repair`
+  only finds paths through the gaps in existing copper, and that copper is
+  what blocks it, so a stalled `repair` stays stalled. Measured on the same
+  ATmega board: `repair` sat at 1 unconnected across three passes; `--mode
+  full` routed all 35 with none failed. The note now names `--mode full` when
+  `unconnected_after` is above zero and no better than before. Advice, not an
+  automatic switch -- `full` deletes hand-drawn tracks too.
 - `board drc` — run KiCad's design rule check and read the result. Every write
   command here already ran DRC: it is the referee for `board route` and
   `board place` and the thing they roll back against. There was no way to
