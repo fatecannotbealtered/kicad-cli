@@ -11,7 +11,7 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any
 
-from .. import envelope, kicad_env
+from .. import boardgen, envelope, kicad_env
 
 
 def _board_arg(args: dict[str, Any]) -> str:
@@ -69,5 +69,54 @@ def plane(args: dict[str, Any]) -> None:
     envelope.fail(
         err.get("code", "E_UNKNOWN"),
         err.get("message", "plane payload reported an error"),
+        err.get("details") or {},
+    )
+
+
+def from_netlist(args: dict[str, Any]) -> None:
+    """Build a board from a netlist: place every footprint, join every net.
+
+    The step KiCad's own "Update PCB from Schematic" performs and does not
+    expose headlessly. Everything checkable without pcbnew is checked first --
+    a footprint is a file, and a netlist naming one that is not installed fails
+    here rather than inside KiCad's interpreter.
+    """
+    import json  # noqa: PLC0415
+    import tempfile  # noqa: PLC0415
+
+    netlist = args.get("netlist")
+    out = args.get("out")
+    if not out:
+        envelope.fail(
+            "E_USAGE",
+            "--out is required: this command creates a board rather than changing one",
+            {"param": "out"},
+        )
+    plan = boardgen.plan(
+        str(netlist), float(args.get("pitch", 10.0)), float(args.get("margin", 10.0))
+    )
+
+    # The plan goes to the payload as a file. It is larger than an argument
+    # list should carry, and a temporary file keeps the netlist parsing on this
+    # side -- testable without KiCad -- while the payload only executes.
+    with tempfile.NamedTemporaryFile(
+        "w", suffix=".json", prefix="kicadcli-plan-", delete=False, encoding="utf-8"
+    ) as handle:
+        json.dump(plan, handle)
+        plan_path = handle.name
+    argv = ["--plan", plan_path, "--out", str(out), "--netlist", str(netlist)]
+    if args.get("confirm"):
+        argv += ["--confirm", str(args["confirm"])]
+    try:
+        result = kicad_env.run_payload("board_build", argv)
+    finally:
+        Path(plan_path).unlink(missing_ok=True)
+
+    if result.get("ok"):
+        envelope.ok(result.get("data"))
+    err = result.get("error") or {}
+    envelope.fail(
+        err.get("code", "E_UNKNOWN"),
+        err.get("message", "board_build reported an error"),
         err.get("details") or {},
     )

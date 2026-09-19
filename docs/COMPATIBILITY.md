@@ -46,7 +46,11 @@ Recorded here because each one looks like a bug in this tool and is not:
 - **"Update PCB from Schematic" has no headless entry point.** KiCad implements
   it, SWIG does not bind it, and the official CLI has no subcommand for it.
   Predicting its outcome is pure computation, which is what `sch sync-preview`
-  does; performing it still needs the GUI.
+  does; performing it on an *existing* board still needs the GUI. Building a
+  board from a netlist does not: `board from-netlist` loads footprints, places
+  them and joins pads into nets through pcbnew directly. What remains missing
+  is the incremental case -- reconciling a board that already has placement and
+  routing against a changed schematic, which is what the dialog is really for.
 - **`pcb drc --schematic-parity` matches by reference designator**, while the
   update dialog matches by uuid path. A board whose links are all broken but
   whose designators are all correct reads as perfectly in sync.

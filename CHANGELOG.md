@@ -8,6 +8,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- `board from-netlist` — the step between a schematic and a board. Loads each
+  component's footprint, places it, joins the pads into nets and draws an edge
+  cut. `docs/COMPATIBILITY.md` has always said "Update PCB from Schematic has
+  no headless entry point", which is true of the dialog and not of the work:
+  pcbnew exposes every part of it. With `sch create` this closes the chain —
+  a JSON specification now runs all the way to Gerbers without KiCad's GUI,
+  and a test asserts exactly that rather than the pieces separately.
+  Placement is a grid ordered by reference, not a layout.
+- The write transaction understands creation. A target that does not exist is
+  a write whose undo is removal, not a missing backup; `board from-netlist`
+  met the old behaviour as "cannot take a backup before writing", a true
+  statement about a file that was never there.
 - `sch create` — the first command that starts from a description instead of a
   design. It takes a JSON circuit specification (parts named by KiCad library
   symbol, nets named by the pins they join) and writes a `.kicad_sch` and a

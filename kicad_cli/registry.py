@@ -226,6 +226,22 @@ SCHEMAS: dict[str, dict[str, Any]] = {
         ],
         "untrusted_fields": ["open_documents", "board"],
     },
+    "board_from_netlist": {
+        "shape": "object",
+        "fields": [
+            "board",
+            "footprints",
+            "nets",
+            "pads_connected",
+            "unmatched_nodes",
+            "board_mm",
+            "placement",
+            "note",
+        ],
+        # Reference designators, net names and pin numbers all come from the
+        # netlist, which came from a schematic, which came from somewhere.
+        "untrusted_fields": ["unmatched_nodes"],
+    },
     "board_route": {
         "shape": "object",
         "fields": [
@@ -645,6 +661,55 @@ def build() -> list[dict[str, Any]]:
             "sch_sync_preview",
             ["kicad-cli sch sync-preview --board board.kicad_pcb --compact"],
             sync.preview,
+        ),
+        _cmd(
+            "board from-netlist",
+            "write",
+            "Create a board from a netlist: load each component's footprint, place it, and "
+            "join the pads into nets. This is what 'Update PCB from Schematic' does and does "
+            "not expose headlessly. Placement is a grid ordered by reference, not a layout.",
+            [
+                {
+                    "name": "netlist",
+                    "type": "string",
+                    "required": True,
+                    "multiple": False,
+                    "default": None,
+                    "description": "Path to a KiCad netlist, from `sch create` or KiCad itself.",
+                },
+                {
+                    "name": "out",
+                    "type": "string",
+                    "required": True,
+                    "multiple": False,
+                    "default": None,
+                    "description": "Path of the board to create.",
+                },
+                {
+                    "name": "pitch",
+                    "type": "number",
+                    "required": False,
+                    "multiple": False,
+                    "default": 10.0,
+                    "unit": "mm",
+                    "exclusive_minimum": 0,
+                },
+                {
+                    "name": "margin",
+                    "type": "number",
+                    "required": False,
+                    "multiple": False,
+                    "default": 10.0,
+                    "unit": "mm",
+                    "minimum": 0,
+                },
+            ],
+            "board_from_netlist",
+            [
+                "kicad-cli board from-netlist --netlist c.net --out c.kicad_pcb --dry-run",
+                "kicad-cli board from-netlist --netlist c.net --out c.kicad_pcb --confirm ct_xxx",
+            ],
+            board.from_netlist,
         ),
         _cmd(
             "board route",
