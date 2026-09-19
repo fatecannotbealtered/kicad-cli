@@ -208,3 +208,52 @@ def test_a_missing_specification_is_not_found_rather_than_a_traceback(tmp_path):
     )
     assert doc["error"]["code"] == "E_NOT_FOUND", doc
     assert code == 3
+
+
+@pytest.mark.parametrize(
+    ("spec", "expect"),
+    [
+        (
+            {
+                "parts": [{"ref": "R1", "symbol": "NoColon"}],
+                "nets": [{"name": "N", "connect": ["R1.1", "R1.2"]}],
+            },
+            "Library:Name",
+        ),
+        (
+            {
+                "parts": [{"ref": "R1", "symbol": "Device:R"}, {"ref": "R1", "symbol": "Device:R"}],
+                "nets": [{"name": "N", "connect": ["R1.1", "R1.2"]}],
+            },
+            "duplicate ref",
+        ),
+        (
+            {
+                "parts": [{"ref": "R1", "symbol": "Device:R"}],
+                "nets": [{"name": "N", "connect": ["R1.1", "R9.1"]}],
+            },
+            "no such part",
+        ),
+        (
+            {
+                "parts": [{"ref": "R1", "symbol": "Device:R"}],
+                "nets": [{"name": "N", "connect": ["R1.1", "justtext"]}],
+            },
+            "REF.PIN",
+        ),
+    ],
+)
+def test_structure_is_judged_without_needing_kicad(spec, expect, tmp_path, monkeypatch):
+    """A missing field is not a question for the symbol libraries.
+
+    CI has no KiCad, and answering "install KiCad" when the real problem is a
+    part with no symbol is the wrong answer to the wrong question. Pointing the
+    installation lookup at nothing proves the judgement did not consult it.
+    """
+    monkeypatch.setenv("KICAD_CLI_ROOT", str(tmp_path / "no-kicad-here"))
+    doc, code = run(
+        ["sch", "create", "--spec", str(write_spec(tmp_path, spec)), "--dry-run"], tmp_path
+    )
+    assert doc is not None and doc["error"]["code"] == "E_VALIDATION", doc
+    assert expect in json.dumps(doc["error"], ensure_ascii=False), doc
+    assert code == 2
