@@ -388,6 +388,41 @@ def plan(spec_path: str) -> dict[str, Any]:
     }
 
 
+def _draw(skidl: Any, title: str) -> dict[str, Any]:
+    """Draw the schematic, and treat failing to draw it as survivable.
+
+    The netlist and the drawing are separate outputs of the same generator, and
+    only one of them is load-bearing. `board from-netlist` reads the netlist;
+    the `.kicad_sch` is for a person who opens it. Until now a drawing failure
+    failed the whole command and discarded a netlist that had already been
+    written and was perfectly good -- which on the first realistic board tried
+    here, a 15-part ATmega328P, blocked the entire chain on the wire router's
+    inability to lay out a 14-pin ground net.
+
+    So: draw it; on failure draw it again with auto-stubbing, which turns
+    high-fanout nets into global labels and power symbols -- how an engineer
+    would have drawn a ground net anyway; and if that also fails, say so and
+    let the caller have the netlist. The order matters: plain first, so no
+    circuit that draws correctly today starts coming out differently.
+    """
+    try:
+        skidl.generate_schematic(title=title)
+        return {"status": "drawn", "style": "routed", "reason": None}
+    except Exception as exc:  # noqa: BLE001 - the router raises several types
+        first = f"{type(exc).__name__}: {str(exc)[:160] or '(no message)'}"
+
+    try:
+        skidl.generate_schematic(title=title, auto_stub=True)
+        return {"status": "drawn", "style": "auto_stub", "reason": first}
+    except Exception as exc:  # noqa: BLE001 - the router raises several types
+        return {
+            "status": "failed",
+            "style": None,
+            "reason": first,
+            "reason_auto_stub": f"{type(exc).__name__}: {str(exc)[:160] or '(no message)'}",
+        }
+
+
 def generate(spec_path: str, out_dir: str) -> dict[str, Any]:
     """Write the schematic and its netlist. Call only after `plan` succeeded.
 
@@ -422,7 +457,7 @@ def generate(spec_path: str, out_dir: str) -> dict[str, Any]:
                 # imported from. That relpath raises outright when the two are
                 # on different Windows drives, which is the ordinary case here.
                 skidl.generate_netlist(file_="circuit.net", track_abs_path=True)
-                skidl.generate_schematic(title=summary["title"])
+                drawing = _draw(skidl, summary["title"])
         except Exception as exc:  # noqa: BLE001 - the generator raises several types
             # The type and the traceback tail, not just str(exc): it raises some
             # exceptions with an empty message, and "failed" with an empty
@@ -438,17 +473,23 @@ def generate(spec_path: str, out_dir: str) -> dict[str, Any]:
                 },
             )
 
-        produced = {}
+        produced = {"schematic": None, "netlist": None}
         for pattern, name in (("*.kicad_sch", "schematic"), ("circuit.net", "netlist")):
             found = sorted(scratch.glob(pattern))
             if not found:
-                envelope.fail(
-                    "E_IO",
-                    f"the generator produced no {name}",
-                    {"expected": pattern, "generator_output": noise.getvalue()[-900:]},
-                )
+                # The netlist is the deliverable: it is what `board from-netlist`
+                # reads and what the rest of the chain is built on. A missing
+                # drawing is reported by `drawing` and survivable; a missing
+                # netlist is not.
+                if name == "netlist":
+                    envelope.fail(
+                        "E_IO",
+                        "the generator produced no netlist",
+                        {"expected": pattern, "generator_output": noise.getvalue()[-900:]},
+                    )
+                continue
             target = destination / (Path(spec_path).stem + found[0].suffix)
             shutil.copy2(found[0], target)
             produced[name] = str(target)
 
-    return {**summary, "written": produced}
+    return {**summary, "written": produced, "drawing": drawing}

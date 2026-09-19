@@ -322,6 +322,28 @@ def err_count(drc):
     return sum(1 for v in (drc or {}).get("violations", []) if v["severity"] == "error")
 
 
+def progress_note(mode, before_un, after_un):
+    """收尾时说下一步做什么，尤其是 repair 已经推不动的时候。
+
+    repair 只能在现有铜的缝隙里找路，而拦住它的正是那些铜，所以它卡住之后
+    再跑多少次都一样。「反复跑到不再改善」这句话对，却没说不再改善之后该
+    干什么——照着做的人会跑三遍然后拿着一块不通的板停在那儿。
+
+    下一步是 --mode full：清掉全部走线重来，换一个布线顺序。实测有效：
+    15 器件的 ATmega328P 板上 repair 卡在 1 条不通、连跑三次纹丝不动，
+    full 一次 35 条全通。这里只给建议不自动切换——full 会删掉板上现有的
+    全部走线，包括手工画的，那得由人点头。
+    """
+    if mode == "repair" and after_un > 0 and after_un >= before_un:
+        return (
+            "repair 这一轮一条都没修掉，再跑也不会变（它只能在现有铜的缝隙里找路）。"
+            f"还剩 {after_un} 条不通，见 unresolved。下一步：board route --mode full "
+            "——它会清掉板上全部现有走线重新布线，换一个顺序常常能全通；"
+            "手工画过的走线会一起没掉，所以这一步要人点头。"
+        )
+    return "线宽此时是缩颈宽度，跑 board widen 加宽；repair 模式可反复跑到不再改善"
+
+
 def run_drc(path, timeout=1800):
     """Shared fail-closed report boundary; this does not roll back the caller."""
     try:

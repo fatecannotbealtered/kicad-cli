@@ -695,6 +695,28 @@ def create(args: dict[str, Any]) -> None:
         args.get("confirm"), f"sch create:{Path(str(spec)).name}", preview, str(spec)
     )
     result = schematic.generate(str(spec), out)
+    drawing = result["drawing"]
+    note = (
+        "symbol placement comes from the generator and is not laid out for reading; "
+        "the netlist is the part downstream commands consume. Run `sch audit` or KiCad's "
+        "own ERC before trusting the circuit."
+    )
+    if drawing["status"] == "failed":
+        # Said plainly rather than left for whoever notices written.schematic is
+        # null. The netlist is complete and the board chain can run on it; what
+        # is missing is the picture.
+        note = (
+            "NO SCHEMATIC DRAWING WAS PRODUCED -- written.schematic is null. The netlist "
+            "is complete and correct, so `board from-netlist` and the rest of the chain "
+            "run normally; what is missing is the human-readable picture. See "
+            "drawing.reason. " + note
+        )
+    elif drawing["style"] == "auto_stub":
+        note = (
+            "the drawing needed auto-stubbing: high-fanout nets such as ground are drawn "
+            "as global labels and power symbols rather than as wires, which is how they "
+            "would normally be drawn anyway. The netlist is unaffected. " + note
+        )
     envelope.ok(
         {
             "title": result["title"],
@@ -702,8 +724,7 @@ def create(args: dict[str, Any]) -> None:
             "nets": result["nets"],
             "unconnected_parts": result["unconnected_parts"],
             "written": result["written"],
-            "note": "symbol placement comes from the generator and is not laid out for reading; "
-            "the netlist is the part downstream commands consume. Run `sch audit` or KiCad's "
-            "own ERC before trusting the circuit.",
+            "drawing": drawing,
+            "note": note,
         }
     )

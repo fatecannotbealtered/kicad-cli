@@ -124,6 +124,34 @@ under-rated board. Each of those is a capability gap rather than a contract gap,
 and they are what stands between "the chain runs" and "the result is what an
 engineer would have drawn".
 
+## What a realistic board showed
+
+The chain had only ever been run on boards of two to seven parts. A 15-part
+ATmega328P -- TQFP-32, regulator, crystal, ICSP header, five decoupling caps,
+46 pads across 11 nets -- found three things that the small boards could not.
+
+`sch create` failed outright. `generate_netlist` had already written a correct
+netlist and then the wire router could not lay out the 14-pin ground net, so
+the command failed and discarded it. The netlist and the drawing are separate
+outputs and only one of them is load-bearing; the drawing is now best-effort,
+retried with auto-stubbing, which drew this board successfully.
+
+`board place` was worth more than on the small boards and in a way the metric
+did not predict: HPWL 404.5 -> 176.3 mm, and DRC errors 4 -> 0. The grid had
+put parts where the board edge clearance was violated; connectivity-driven
+placement pulled them inward.
+
+`board route --mode repair` stalled at 1 unconnected and stayed there across
+three passes, on a connection whose two pads were 2.28 mm apart -- so the
+geometry was never the problem. `--mode full` routed all 35 with none failed.
+The ceiling here was not push-and-shove but the incremental mode's inability
+to escape a corner it had routed itself into, and nothing said so. The
+envelope now names `--mode full` when `repair` stops making progress.
+
+The router's real ceiling is still that it does not push and shove, and
+Specctra DSN export / SES import are available for handing the board to an
+external router. That remains the largest open routing gap.
+
 ## Subsequent capability work
 
 After the write/verification foundation: design snapshots, object/region queries,

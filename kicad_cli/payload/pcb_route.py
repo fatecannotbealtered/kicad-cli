@@ -1250,6 +1250,7 @@ def main():
         math.hypot(mm(t.GetEnd().x) - mm(t.GetStart().x), mm(t.GetEnd().y) - mm(t.GetStart().y))
         for t in tr
     )
+    note = K.progress_note(mode, before_un, after_un)
     K.ok(
         route_envelope(
             {
@@ -1260,7 +1261,7 @@ def main():
                 "tracks": len(tr),
                 "track_len_mm": round(total, 1),
                 "vias": len(all_tr) - len(tr),
-                "note": "线宽此时是缩颈宽度，跑 pcb_widen.py 加宽；repair 模式可反复跑到不再改善",
+                "note": note,
             }
         )
     )
