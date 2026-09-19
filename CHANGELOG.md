@@ -8,6 +8,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- `sch create` — the first command that starts from a description instead of a
+  design. It takes a JSON circuit specification (parts named by KiCad library
+  symbol, nets named by the pins they join) and writes a `.kicad_sch` and a
+  netlist. Every symbol and every pin is resolved against the installed
+  libraries during the dry run, so a wrong pin fails as `E_VALIDATION` naming
+  it and listing the pins that exist, rather than as a schematic quietly
+  missing a connection. The generator is an implementation detail and not part
+  of the contract; symbol placement is not laid out for reading, and the
+  netlist is what downstream commands consume.
 - `docs/evidence/live-smoke-1.0.0+029cac55bc56.md`: a live run recorded for this
   candidate rather than inherited from the 1.0.0 artifact — full suite and frozen
   binary against KiCad 10.0.6 on Windows 11, with the source commit named and the

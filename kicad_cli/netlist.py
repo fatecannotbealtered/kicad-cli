@@ -24,6 +24,18 @@ from . import envelope, kicad_env, sexpr
 _CONFIG_HOME: str | None = None
 
 
+def isolated_config_home() -> str:
+    """The throwaway KiCad configuration directory, for callers that need the path.
+
+    `sch create` runs a generator that shells out to KiCad itself, so it needs
+    the same isolation this module already arranges -- but it sets the variable
+    on its own environment rather than building one for a subprocess.
+    """
+    _isolated_env()
+    assert _CONFIG_HOME is not None  # noqa: S101 - set by the call above
+    return _CONFIG_HOME
+
+
 def _isolated_env() -> dict[str, str]:
     """Run KiCad's CLI against a throwaway config directory.
 
