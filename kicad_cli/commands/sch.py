@@ -12,7 +12,7 @@ import time
 from pathlib import Path
 from typing import Any
 
-from .. import envelope, kicad_env, netlist, sexpr
+from .. import envelope, kicad_env, netlist, schematic, sexpr
 
 
 def _find_schematics(board: Path) -> tuple[list[Path], str | None]:
@@ -667,5 +667,43 @@ def relink(args: dict[str, Any]) -> None:
                 "the sheetname and sheetfile display fields were not written; KiCad "
                 "fills those in itself the next time it saves the board",
             ],
+        }
+    )
+
+
+def create(args: dict[str, Any]) -> None:
+    """Build a schematic and its netlist from a JSON circuit specification.
+
+    The only command in this tool that starts from a description rather than a
+    design. Everything is resolved against the real KiCad libraries during the
+    dry run, so the preview is a statement about this machine's libraries and
+    not a restatement of the input.
+    """
+    spec = args.get("spec")
+    out = args.get("out") or str(Path(str(spec)).parent)
+    plan = schematic.plan(str(spec))
+    preview = {
+        "spec": str(spec),
+        "out": out,
+        "title": plan["title"],
+        "parts": len(plan["parts"]),
+        "nets": len(plan["nets"]),
+        "unconnected_parts": plan["unconnected_parts"],
+        "will": "write a .kicad_sch and a .net; existing files with those names are replaced",
+    }
+    envelope.check_confirm(
+        args.get("confirm"), f"sch create:{Path(str(spec)).name}", preview, str(spec)
+    )
+    result = schematic.generate(str(spec), out)
+    envelope.ok(
+        {
+            "title": result["title"],
+            "parts": result["parts"],
+            "nets": result["nets"],
+            "unconnected_parts": result["unconnected_parts"],
+            "written": result["written"],
+            "note": "symbol placement comes from the generator and is not laid out for reading; "
+            "the netlist is the part downstream commands consume. Run `sch audit` or KiCad's "
+            "own ERC before trusting the circuit.",
         }
     )

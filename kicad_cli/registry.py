@@ -131,6 +131,14 @@ SCHEMAS: dict[str, dict[str, Any]] = {
         # Reference designators and library ids come from the design files.
         "untrusted_fields": ["findings", "details"],
     },
+    "sch_create": {
+        "shape": "object",
+        "fields": ["title", "parts", "nets", "unconnected_parts", "written", "note"],
+        # Everything here is the caller's own specification coming back, but it
+        # has been through the KiCad libraries: a symbol name that resolved is
+        # a name KiCad has, and a value is whatever the spec said.
+        "untrusted_fields": ["title", "parts", "nets", "unconnected_parts"],
+    },
     "sch_relink": {
         "shape": "object",
         "fields": [
@@ -543,6 +551,38 @@ def build() -> list[dict[str, Any]]:
             "sch_link",
             ["kicad-cli sch link --board board.kicad_pcb --compact"],
             sch.link,
+        ),
+        _cmd(
+            "sch create",
+            "write",
+            "Build a schematic and its netlist from a JSON circuit specification: parts "
+            "named by KiCad library symbol, nets named by the pins they join. Every "
+            "symbol and pin is resolved against the installed libraries during the dry "
+            "run, so a wrong pin name fails before anything is written.",
+            [
+                {
+                    "name": "spec",
+                    "type": "string",
+                    "required": True,
+                    "multiple": False,
+                    "default": None,
+                    "description": "Path to the JSON circuit specification.",
+                },
+                {
+                    "name": "out",
+                    "type": "string",
+                    "required": False,
+                    "multiple": False,
+                    "default": None,
+                    "default_from": "the specification's own directory",
+                },
+            ],
+            "sch_create",
+            [
+                "kicad-cli sch create --spec circuit.json --dry-run --compact",
+                "kicad-cli sch create --spec circuit.json --out build --confirm ct_xxx --compact",
+            ],
+            sch.create,
         ),
         _cmd(
             "sch relink",

@@ -43,6 +43,10 @@ WRITE_COMMANDS = {
 }
 NEEDS_OUT = {"fab gerber", "fab pdf", "fab svg", "fab dxf", "fab drill"}
 NO_BOARD = {"reference", "context", "doctor", "changelog"}
+# `sch create` takes a specification rather than a board, so it needs a fixture
+# this sweep does not have. Its combinations live in test_sch_create.py; naming
+# it here keeps the omission deliberate rather than accidental.
+COVERED_ELSEWHERE = {"sch create"}
 
 # Combinations that can change the emitted key set. Numeric-only options are
 # represented once: a number cannot add or remove a key, and pretending

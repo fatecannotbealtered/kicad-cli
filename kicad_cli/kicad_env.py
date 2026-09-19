@@ -78,6 +78,20 @@ def _candidate_roots() -> list[Path]:
     return roots
 
 
+def find_kicad_root() -> str | None:
+    """The installation directory, for the parts of KiCad that are just files.
+
+    Symbol and footprint libraries are read, not imported, so a command that
+    only needs those needs neither pcbnew nor the official binary -- only where
+    KiCad put its `share/kicad` tree. Resolved the same way as everything else
+    here, so one KICAD_CLI_ROOT still answers for all of it.
+    """
+    for root in _candidate_roots():
+        if (root / "share" / "kicad" / "symbols").is_dir():
+            return str(root)
+    return None
+
+
 def find_python() -> str | None:
     """Absolute path of the Python interpreter that can ``import pcbnew``."""
     override = os.environ.get(ENV_PYTHON)
