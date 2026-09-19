@@ -109,6 +109,24 @@ def plan(netlist_path: str, pitch: float, margin: float) -> dict[str, Any]:
     all of them at once rather than one per attempt.
     """
     parsed = read(netlist_path)
+
+    # Structure first, and without KiCad. Whether a component was assigned a
+    # footprint at all is a question about the netlist; whether that footprint
+    # is installed is a question about this machine. Answering the first one
+    # only after finding KiCad tells someone without an installation to go and
+    # install one, when the real problem is a netlist that named nothing.
+    unassigned = [
+        {"ref": component["ref"], "problem": "the netlist assigns no footprint"}
+        for component in parsed["components"]
+        if not component["footprint"]
+    ]
+    if unassigned:
+        envelope.fail(
+            "E_VALIDATION",
+            "the netlist cannot be turned into a board as it stands",
+            {"problems": unassigned[:40], "problem_count": len(unassigned)},
+        )
+
     directories = _footprint_dirs()
     if not directories:
         envelope.fail(
@@ -121,11 +139,6 @@ def plan(netlist_path: str, pitch: float, margin: float) -> dict[str, Any]:
     placed = []
     for component in parsed["components"]:
         identifier = component["footprint"]
-        if not identifier:
-            problems.append(
-                {"ref": component["ref"], "problem": "the netlist assigns no footprint"}
-            )
-            continue
         found = resolve_footprint(identifier, directories)
         if found is None:
             problems.append(

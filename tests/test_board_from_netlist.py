@@ -121,7 +121,9 @@ def test_a_node_the_footprint_has_no_pad_for_is_reported_rather_than_dropped(tmp
     assert doc["data"]["unmatched_nodes"] == [{"net": "GND", "node": "R2.9"}], doc["data"]
 
 
+@needs_kicad
 def test_a_footprint_that_is_not_installed_fails_by_name(tmp_path):
+    """This one does need KiCad: without it there are no libraries to be absent from."""
     text = NETLIST.replace("Resistor_SMD:R_0805_2012Metric", "Nope_SMD:NoSuchFootprint", 1)
     netlist = write_netlist(tmp_path, text)
     doc, code = run(
@@ -140,7 +142,14 @@ def test_a_footprint_that_is_not_installed_fails_by_name(tmp_path):
     assert code == 2
 
 
-def test_a_component_with_no_footprint_is_named(tmp_path):
+def test_a_component_with_no_footprint_is_named(tmp_path, monkeypatch):
+    """And this one does not: the netlist named nothing, which is not a KiCad question.
+
+    Pointing the installation lookup at nothing proves the judgement did not
+    consult it -- otherwise a machine without KiCad is told to install one when
+    the real problem is in the file it was handed.
+    """
+    monkeypatch.setenv("KICAD_CLI_ROOT", str(tmp_path / "no-kicad-here"))
     text = NETLIST.replace(' (footprint "Resistor_SMD:R_0805_2012Metric")', "", 1)
     doc, _ = run(
         [
