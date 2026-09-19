@@ -147,11 +147,39 @@ def test_a_fresh_lock_is_not_treated_as_stale(board):
     assert write_txn.state() == "not_started"
 
 
-def test_an_unreadable_target_fails_before_it_locks_anything(board):
-    missing = board.parent / "absent.kicad_pcb"
+def test_a_target_that_does_not_exist_yet_is_a_creation_not_a_failure(board):
+    """Creating a board and changing one are both writes.
+
+    This used to raise "cannot take a backup before writing" -- a true
+    statement about a file that was never there, and the wrong answer for
+    `board from-netlist`, which makes boards rather than editing them.
+    """
+    fresh = board.parent / "new.kicad_pcb"
+    write_txn.begin(fresh)
+    assert write_txn.state() == "armed"
+    fresh.write_text("(kicad_pcb built)", encoding="utf-8")
+    write_txn.commit()
+    assert fresh.read_text(encoding="utf-8") == "(kicad_pcb built)"
+    assert leftovers(fresh) == []
+
+
+def test_undoing_a_creation_removes_what_was_created(board):
+    """There is nothing to restore, so putting it back means taking it away."""
+    fresh = board.parent / "new.kicad_pcb"
+    write_txn.begin(fresh)
+    fresh.write_text("(kicad_pcb half built", encoding="utf-8")
+    write_txn.rollback("E_IO")
+    assert not fresh.exists()
+    assert write_txn.state() == "rolled_back"
+    assert leftovers(board) == []
+
+
+def test_a_write_into_a_directory_that_does_not_exist_fails_before_locking(board):
+    """A missing *parent* is still a real failure; only a missing file is not."""
+    nowhere = board.parent / "no-such-dir" / "board.kicad_pcb"
     with pytest.raises(write_txn.TxnError) as exc:
-        write_txn.begin(missing)
-    assert exc.value.code == "E_IO"
+        write_txn.begin(nowhere)
+    assert exc.value.code in ("E_IO", "E_CONFLICT"), exc.value.details
     assert leftovers(board) == []
 
 

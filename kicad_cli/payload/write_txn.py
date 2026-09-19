@@ -129,11 +129,24 @@ def begin(path) -> None:
             },
         )
     _acquire(lock, target)
+    # Creating a file and changing one are both writes, and the difference is
+    # what "undo" means. There is nothing to back up when the target does not
+    # exist yet, and restoring it means removing what we made rather than
+    # putting something back. `board from-netlist` is the first command that
+    # creates a board, and it met this as "cannot take a backup before writing"
+    # -- a true statement about a file that was never there.
+    creating = not target.exists()
     try:
-        shutil.copy2(target, backup)
+        if not creating:
+            shutil.copy2(target, backup)
         journal.write_text(
             json.dumps(
-                {"board": str(target), "backup": str(backup), "pid": os.getpid()},
+                {
+                    "board": str(target),
+                    "backup": None if creating else str(backup),
+                    "creating": creating,
+                    "pid": os.getpid(),
+                },
                 ensure_ascii=False,
             ),
             encoding="utf-8",
@@ -141,9 +154,17 @@ def begin(path) -> None:
     except OSError as exc:
         lock.unlink(missing_ok=True)
         raise TxnError(
-            "E_IO", "cannot take a backup before writing", {"board": str(target)}
+            "E_IO",
+            "cannot prepare the write" if creating else "cannot take a backup before writing",
+            {"board": str(target)},
         ) from exc
-    _active[key] = {"lock": lock, "backup": backup, "journal": journal, "board": target}
+    _active[key] = {
+        "lock": lock,
+        "backup": backup,
+        "journal": journal,
+        "board": target,
+        "creating": creating,
+    }
     _state = "armed"
     _install_handlers()
 
@@ -199,7 +220,19 @@ def rollback(reason: str = "") -> list[str]:
     global _state, _failure
     restored = []
     for key, entry in list(_active.items()):
-        if entry["backup"].exists():
+        if entry.get("creating"):
+            # Undoing a creation is removing what was created. A target that is
+            # not there means the write never got far enough to make it, which
+            # is `not_started` rather than a rollback.
+            try:
+                if entry["board"].exists():
+                    entry["board"].unlink()
+                    restored.append(key)
+            except OSError as error:
+                _failure = f"{type(error).__name__}: {error}"
+                _state = "unknown"
+                continue
+        elif entry["backup"].exists():
             error = _restore(entry["backup"], entry["board"])
             if error is not None:
                 # The journal stays, so the next invocation refuses rather than
