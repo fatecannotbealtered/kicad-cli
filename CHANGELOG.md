@@ -8,6 +8,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- The Skill and both READMEs document the chain. `sch create` and
+  `board from-netlist` existed for an hour without the Skill mentioning them,
+  which for an agent is the same as not existing: it reads the routing table,
+  not the registry. The table now answers "make a board from a requirement",
+  and a worked section names the three things the envelope will not repeat --
+  placement is a grid and not a layout, the schematic is for machines, and a
+  part with no footprint fails at the board step rather than the schematic one.
 - `board from-netlist` — the step between a schematic and a board. Loads each
   component's footprint, places it, joins the pads into nets and draws an edge
   cut. `docs/COMPATIBILITY.md` has always said "Update PCB from Schematic has

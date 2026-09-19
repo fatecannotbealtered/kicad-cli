@@ -94,6 +94,21 @@ covered. Global options (`--fields`, `--quiet`, `--format text/raw`, `--json`)
 are exercised incidentally rather than enumerated. Both are why `fcc_status`
 stays `unknown`: three measured dimensions are a floor for FCC, not FCC.
 
+## The chain, and where it stops
+
+A JSON circuit specification now runs to Gerbers without KiCad's GUI:
+`sch create` -> `board from-netlist` -> `board route` -> `fab *`, asserted end
+to end by `test_the_whole_chain_runs_from_a_specification_to_gerbers`.
+
+What that does not mean. Placement is a grid ordered by reference designator --
+"somewhere definite", not a layout, and nothing in this tool knows which parts
+belong together. The router does not push and shove, so a connection needing
+existing copper to move aside will not be found. Routing leaves the board at
+neck width and `verify.width_regressed` says so, but nothing prevents handing
+back an under-rated board. Each of those is a capability gap rather than a
+contract gap, and they are what stands between "the chain runs" and "the result
+is what an engineer would have drawn".
+
 ## Subsequent capability work
 
 After the write/verification foundation: design snapshots, object/region queries,

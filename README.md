@@ -55,6 +55,7 @@ Worst-case risk tier: **T1** - writes local PCB design files; no credentials, no
 | Area | Commands | Agent use |
 |------|----------|-----------|
 | Board analysis | `board audit`, `board plane`, `board parity` | Ampacity and width compliance, copper under every track and plane-split crossings, board-vs-schematic component and net comparison. |
+| Build from nothing | `sch create`, `board from-netlist` | A JSON circuit specification becomes a schematic and a netlist, and the netlist becomes a board with footprints placed and pads joined. Placement is a grid ordered by reference, not a layout. |
 | Schematic link | `sch link`, `sch relink`, `sch sync-preview`, `sch audit` | Whether footprints still carry their symbol uuid, restoring it, what "Update PCB from Schematic" would do, and what a silenced ERC rule is hiding. |
 | Board writes | `board route`, `board rewidth`, `board widen`, `board stitch`, `board move` | Routing, trace widening, stitching and movement behind a confirmation gate. Verification and rollback vary by operation and mode; they are not a uniform safety guarantee. |
 | Fabrication | `fab gerber`, `fab drill`, `fab pdf`, `fab svg`, `fab dxf` | Plot and drill output; drill counts are reconciled against the KiCad report. Output generation is not a complete manufacturing sign-off. |

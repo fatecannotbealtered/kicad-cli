@@ -103,6 +103,8 @@ ones apart:
 | Task | Command | Not this |
 |---|---|---|
 | Does the board still match the schematic? | `board parity` (components and nets) | — |
+| Make a board from a requirement (no design exists yet) | `sch create` → `board from-netlist` → `board route` → `board widen` → `fab *` | see "Building a board from nothing" below; do not hand-write a `.kicad_sch` |
+| Turn an existing schematic into a board | KiCad's own `sch export netlist`, then `board from-netlist` | this creates a *new* board; it does not update one that already has a layout |
 | Will "Update PCB from Schematic" destroy my layout? | `sch link`, then `sch sync-preview` | never `pcb drc --schematic-parity`; it matches by reference designator and is blind to broken links |
 | ERC says zero — is the schematic fine? | `sch audit` (re-runs the silenced rules) | `sch link` |
 | A trace is too thin | `board widen` first (in place), then `board route --mode rewidth --nets X` | `board rewidth` has no `--nets`; it works by netclass |
@@ -116,11 +118,51 @@ Use `reference` for accepted values, defaults and per-mode constraints.
 `board route --nets` is currently supported only in rewidth mode; repair/full
 with that option are refused rather than silently routing a larger target set.
 
+## Building a board from nothing
+
+The only path in this tool that starts from a requirement rather than a design.
+Each step is a write: dry run, show the preview, then confirm.
+
+```bash
+# 1. Describe the circuit as JSON: parts by KiCad library symbol, nets by the
+#    pins they join. `reference --command "sch create"` has the shape.
+kicad-cli sch create --spec circuit.json --out build --dry-run --compact
+kicad-cli sch create --spec circuit.json --out build --confirm ct_xxx --compact
+#    Writes build/circuit.kicad_sch and build/circuit.net.
+
+# 2. The netlist becomes a board: footprints loaded, placed, pads joined.
+kicad-cli board from-netlist --netlist build/circuit.net --out build/circuit.kicad_pcb --dry-run
+kicad-cli board from-netlist --netlist build/circuit.net --out build/circuit.kicad_pcb --confirm ct_xxx
+
+# 3. Route, then read verify.width_regressed and widen if it is true.
+kicad-cli board route --board build/circuit.kicad_pcb --mode repair --confirm ct_xxx --compact
+
+# 4. Manufacturing output.
+kicad-cli fab gerber --board build/circuit.kicad_pcb --out build/fab --confirm ct_xxx --compact
+kicad-cli fab drill  --board build/circuit.kicad_pcb --out build/fab --confirm ct_xxx --compact
+```
+
+Three things about this path that the envelope will not tell you twice:
+
+**Placement is a grid ordered by reference designator.** It is not a layout.
+Nothing in this tool knows which parts belong together, so decoupling caps land
+wherever the alphabet puts them. Use `board move` to place what matters before
+routing, or expect longer traces than a person would accept.
+
+**The schematic is for machines.** Symbol placement comes from the generator
+and is not laid out for reading. The netlist is the part step 2 consumes; treat
+the `.kicad_sch` as a by-product until someone opens it on purpose.
+
+**Every footprint must be named in the specification.** A part without one
+fails step 2, not step 1 — the schematic does not care and the board cannot be
+built without it. Name footprints when you write the spec.
+
 ## Checkpoints
 
-STOP CHECKPOINT: Ask the user before confirming any write. All of `board route`,
-`board stitch`, `board rewidth`, `board widen`, `board move`, `sch relink` and
-`fab *` modify files on disk.
+STOP CHECKPOINT: Ask the user before confirming any write. All of `sch create`,
+`board from-netlist`, `board route`, `board stitch`, `board rewidth`,
+`board widen`, `board move`, `sch relink` and `fab *` modify files on disk.
+`sch create` and `board from-netlist` replace a file of that name if one exists.
 
 STOP CHECKPOINT: `board route --mode full` **deletes every existing track**
 before routing. Use `--mode repair` unless the user has asked to start over.

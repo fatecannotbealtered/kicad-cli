@@ -54,6 +54,7 @@ kicad-cli reference --compact
 | 领域 | 命令 | Agent 用法 |
 |------|------|------------|
 | 板级分析 | `board audit`、`board plane`、`board parity` | 载流与线宽达标度；每段走线下方的铜与跨越平面分割的位置；板与原理图的器件、网络比对。 |
+| 从零构建 | `sch create`、`board from-netlist` | 一份 JSON 电路规格变成原理图和网表，网表再变成摆好封装、连好焊盘的板子。布局是按位号排的网格，不是真正的布局。 |
 | 原理图链接 | `sch link`、`sch relink`、`sch sync-preview`、`sch audit` | 封装是否还带着符号 uuid、如何修回去、「Update PCB from Schematic」会做什么，以及被静默的 ERC 规则藏了什么。 |
 | 板级写入 | `board route`、`board rewidth`、`board widen`、`board stitch`、`board move` | 布线、加宽、铺铜缝合与器件移动，均有确认入口；验证与回退因操作和模式而异，尚不是统一安全保证。 |
 | 生产输出 | `fab gerber`、`fab drill`、`fab pdf`、`fab svg`、`fab dxf` | 光绘与钻孔输出；钻孔计数与 KiCad 报告对账。生成文件不等于完成制造签核。 |
