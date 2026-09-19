@@ -125,6 +125,17 @@ STOP CHECKPOINT: Ask the user before confirming any write. All of `board route`,
 STOP CHECKPOINT: `board route --mode full` **deletes every existing track**
 before routing. Use `--mode repair` unless the user has asked to start over.
 
+STOP CHECKPOINT: **routing is not finished when it returns `ok`.** `board route`
+lays track at the router's neck width, so a board that met its netclass widths
+before may not after -- on KiCad's `ecc83` demo, `--mode full` returns `ok` with
+DRC errors and unconnected count both unchanged while width compliance goes from
+100% to 0% and minimum ampacity from 2.03 A to 0.74 A. Read
+`data.verify.width_regressed`: when it is `true`, the board carries less current
+than its design asks for until you run `board widen` (in place, cheap) and then
+`board route --mode rewidth --nets X` for whatever widen could not fix. Confirm
+with `board audit --fields width_compliance`. Reporting the route as done on the
+strength of `ok: true` hands back an under-rated board.
+
 STOP CHECKPOINT: `--no-verify` and `--no-restore` switch off the DRC
 checks or restoration on the modes that implement them. Their absence does
 not prove uniform verification or rollback. Never pass them on your own initiative.

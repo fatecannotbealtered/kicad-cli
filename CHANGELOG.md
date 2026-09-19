@@ -73,6 +73,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   DRC-isolation and verification/rollback gaps stay release blockers.
 
 ### Fixed
+- The Skill warns that routing is not finished when it returns `ok`. It had a
+  checkpoint for `--mode full` deleting every track and none for what the board
+  is like afterwards, which is the trap an agent actually falls into: `ok: true`
+  with width compliance at 0%. Names `verify.width_regressed` and the two
+  commands that fix it.
 - `board route` reports the width DRC cannot see. On KiCad's `ecc83` demo,
   `--mode full` left DRC errors, unconnected count and `ok` all unchanged while
   taking the board from 100% netclass width compliance to 0% and its minimum
