@@ -8,6 +8,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- `board drc` — run KiCad's design rule check and read the result. Every write
+  command here already ran DRC: it is the referee for `board route` and
+  `board place` and the thing they roll back against. There was no way to
+  simply ask, so "is this board manufacturable?" -- the question at the end of
+  the chain -- could only be answered by performing a write. The host-side
+  entry point existed in `kicad_env.run_drc` and nothing called it.
+
+  Exit is 0 whatever DRC finds: the command succeeded at checking, and a
+  violation is a fact about the board rather than a failure of the command.
+  Read `ok_to_fabricate`. `--severity` and `--limit` trim the list and never
+  the counts -- a count that shrank to fit would report a board with warnings
+  as clean.
 - `board place` — automatic placement by connectivity, the last hole in the
   middle of the chain. `board from-netlist` lays out a grid ordered by
   reference designator, which is a position for every part and a layout for

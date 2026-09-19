@@ -127,7 +127,7 @@ engineer would have drawn".
 ## Subsequent capability work
 
 After the write/verification foundation: design snapshots, object/region queries,
-an independent DRC entry, change inspection and recovery, then measured
+change inspection and recovery, then measured
 end-to-end latency, output size, progress and memory improvements. Do not add
 roadmap items to `reference` until their implementations and tests exist.
 

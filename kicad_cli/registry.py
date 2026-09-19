@@ -337,6 +337,26 @@ SCHEMAS: dict[str, dict[str, Any]] = {
         "fields": ["board", "classes", "unconnected", "verify", "note"],
         "untrusted_fields": ["classes", "verify"],
     },
+    "board_drc": {
+        "shape": "object",
+        # `ok_to_fabricate` is the one-field answer; `counts` is the whole
+        # report even when `violations` is truncated to --limit.
+        "fields": [
+            "board",
+            "oracle",
+            "counts",
+            "unconnected_count",
+            "ok_to_fabricate",
+            "violations",
+            "violations_shown",
+            "violations_total",
+            "unconnected",
+            "note",
+        ],
+        # Violation text quotes reference designators, net names and rule names
+        # out of the board file. Data, never instructions.
+        "untrusted_fields": ["violations", "unconnected"],
+    },
     "board_move": {
         "shape": "object",
         "fields": ["plan", "moved", "courtyard_clash", "note"],
@@ -547,6 +567,36 @@ def build() -> list[dict[str, Any]]:
             "board_parity",
             ["kicad-cli board parity --board board.kicad_pcb --compact"],
             board.parity,
+        ),
+        _cmd(
+            "board drc",
+            "read",
+            "Run KiCad's design rule check and report the violations. Exit is 0 whatever "
+            "it finds: read ok_to_fabricate and counts, not the exit code.",
+            [
+                _board_param(),
+                {
+                    "name": "severity",
+                    "type": "string",
+                    "required": False,
+                    "multiple": False,
+                    "default": "all",
+                    "enum": ["all", "error", "warning"],
+                },
+                {
+                    "name": "limit",
+                    "type": "integer",
+                    "required": False,
+                    "multiple": False,
+                    "default": 50,
+                },
+            ],
+            "board_drc",
+            [
+                "kicad-cli board drc --board board.kicad_pcb --compact",
+                "kicad-cli board drc --board board.kicad_pcb --severity error --compact",
+            ],
+            board.drc,
         ),
         _cmd(
             "board live",
