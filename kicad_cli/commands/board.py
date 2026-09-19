@@ -51,6 +51,79 @@ def parity(args: dict[str, Any]) -> None:
     _relay("parity", ["--board", _board_arg(args)])
 
 
+# A board with more violations than this returns the first `limit` of them and
+# the true totals. Some boards have thousands, and an envelope nobody can read
+# is not better than a short one -- but a *count* that shrank to fit would be a
+# lie, so `counts` is always of the whole report.
+DRC_LIMIT = 50
+
+
+def drc(args: dict[str, Any]) -> None:
+    """Run KiCad's design rule check and report what it found.
+
+    Every write command in this tool already runs DRC -- it is the referee for
+    `board route`, `board place` and the rest, and the thing they roll back
+    against. There was no way to simply *ask*. "Is this board manufacturable?"
+    is the question at the end of the chain, and answering it required
+    performing a write, which is the wrong shape for a question.
+
+    This runs host-side: KiCad's own `pcb drc` is a separate binary, so unlike
+    the other board commands there is no payload and no guest interpreter.
+
+    Exit is 0 whatever DRC found. The command succeeded at checking; whether
+    the board passed is `counts` and `ok_to_fabricate`, not the exit code.
+    A violation is a fact about the board, not a failure of this command.
+    """
+    board = _board_arg(args)
+    # The accepted values live in this command's registry entry, which rejects
+    # anything else before this runs. Re-listing them here would be a second
+    # copy to keep in step with the first.
+    severity = str(args.get("severity") or "all").lower()
+    limit = int(args.get("limit") or DRC_LIMIT)
+
+    report = kicad_env.run_drc(board)
+    violations = report.get("violations") or []
+    unconnected = report.get("unconnected_items") or []
+
+    counts: dict[str, int] = {}
+    for violation in violations:
+        key = str(violation.get("severity", "unknown"))
+        counts[key] = counts.get(key, 0) + 1
+
+    def flatten(entry: dict[str, Any]) -> dict[str, Any]:
+        # The top-level description names the rule; the items name the things
+        # that broke it. Keeping only the first gives every missing connection
+        # the text "Missing connection between items", which identifies nothing.
+        return {
+            "severity": entry.get("severity"),
+            "type": entry.get("type"),
+            "description": entry.get("description"),
+            "items": [i.get("description") for i in (entry.get("items") or [])][:4],
+        }
+
+    shown = [v for v in violations if severity in ("all", str(v.get("severity")))]
+    trimmed = [flatten(v) for v in shown[:limit]]
+
+    errors = counts.get("error", 0)
+    envelope.ok(
+        {
+            "board": board,
+            "oracle": "kicad-cli pcb drc",
+            "counts": counts,
+            "unconnected_count": len(unconnected),
+            "ok_to_fabricate": errors == 0 and not unconnected,
+            "violations": trimmed,
+            "violations_shown": len(trimmed),
+            "violations_total": len(violations),
+            "unconnected": [flatten(i) for i in unconnected[:limit]],
+            "note": "counts and *_total describe the whole report; violations may be "
+            "truncated to --limit. Warnings do not stop fabrication, errors do. "
+            "Schematic parity is not checked here -- that is `board parity`, which "
+            "matches by link rather than by reference designator.",
+        }
+    )
+
+
 def plane(args: dict[str, Any]) -> None:
     """Check that the copper under each track is actually there.
 
