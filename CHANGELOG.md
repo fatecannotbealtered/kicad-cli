@@ -8,6 +8,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- `board place` — automatic placement by connectivity, the last hole in the
+  middle of the chain. `board from-netlist` lays out a grid ordered by
+  reference designator, which is a position for every part and a layout for
+  none of them: the netlist says which parts belong together and nothing read
+  it. This does, force-directed, holding courtyards apart and staying inside
+  the board's own `m_CopperEdgeClearance`.
+
+  It is judged on half-perimeter wirelength, the standard placement metric,
+  reported before and after; it leaves the board untouched when it finds
+  nothing shorter, and rolls back if DRC errors increase. The test that earns
+  it builds two boards from one netlist, places one, routes both with the same
+  router and compares the copper. Measured by hand on two boards: 115.5 mm ->
+  53.2 mm and HPWL 111.3 -> 48.0 on one, HPWL 50.0 -> 15.4 on the other.
+
+  Two defects it found on the way, both fixed here: the collision report folded
+  `--clearance` into the overlap test, so every pair the legaliser had
+  separated *correctly* -- to exactly the margin asked for -- came back as a
+  courtyard clash; and clamping courtyards to Edge.Cuts put pads 0.25 mm from
+  the board edge where the rule said 0.5 mm, which the rollback guard caught as
+  two DRC errors before the board was written.
+- `board audit` reports `copper_mm`, `track_count` and `via_count`. Total
+  routed length is the headline cost of a layout and the tool could not read
+  it, which meant `board place` could not prove its own improvement without an
+  external script.
 - The Skill and both READMEs document the chain. `sch create` and
   `board from-netlist` existed for an hour without the Skill mentioning them,
   which for an agent is the same as not existing: it reads the routing table,

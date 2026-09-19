@@ -433,12 +433,27 @@ def main():
     for f in findings:
         sev[f["severity"]] += 1
 
+    # 铜的总长度。布局好不好最终就落在这个数上：同一张网表、同一个布线器，
+    # 线短的那块板走线阻抗低、串扰小、板子还能做得更小。board place 拿它
+    # 做前后对比，所以它必须是本工具能读出来的事实，而不是外部脚本算的。
+    track_mm = 0.0
+    tracks = vias = 0
+    for t in K.tracks_of(b):
+        if t.GetClass() == "PCB_VIA":
+            vias += 1
+        else:
+            tracks += 1
+            track_mm += mm(t.GetLength())
+
     K.ok(
         {
             "board": path,
             "board_mm": [round(mm(bb.GetWidth()), 1), round(mm(bb.GetHeight()), 1)],
             "copper_layers": cu_layers,
             "copper_oz": oz,
+            "copper_mm": round(track_mm, 1),
+            "track_count": tracks,
+            "via_count": vias,
             "delta_t_c": dT,
             "summary": {"error": sev["error"], "warn": sev["warn"], "info": sev["info"]},
             "width_compliance": width_rows,

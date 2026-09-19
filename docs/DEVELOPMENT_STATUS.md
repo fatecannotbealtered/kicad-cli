@@ -97,17 +97,32 @@ stays `unknown`: three measured dimensions are a floor for FCC, not FCC.
 ## The chain, and where it stops
 
 A JSON circuit specification now runs to Gerbers without KiCad's GUI:
-`sch create` -> `board from-netlist` -> `board route` -> `fab *`, asserted end
-to end by `test_the_whole_chain_runs_from_a_specification_to_gerbers`.
+`sch create` -> `board from-netlist` -> `board place` -> `board route` ->
+`fab *`, asserted end to end by
+`test_the_whole_chain_runs_from_a_specification_to_gerbers`.
 
-What that does not mean. Placement is a grid ordered by reference designator --
-"somewhere definite", not a layout, and nothing in this tool knows which parts
-belong together. The router does not push and shove, so a connection needing
-existing copper to move aside will not be found. Routing leaves the board at
-neck width and `verify.width_regressed` says so, but nothing prevents handing
-back an under-rated board. Each of those is a capability gap rather than a
-contract gap, and they are what stands between "the chain runs" and "the result
-is what an engineer would have drawn".
+Placement is no longer only a grid. `board from-netlist` still lays one out --
+it has to put parts somewhere before anything knows better -- but `board place`
+then reads the netlist as a placement instruction and rearranges by
+connectivity, force-directed, with courtyard separation and the board's own
+`m_CopperEdgeClearance` as constraints. It reports half-perimeter wirelength
+before and after, declines to write when it found nothing shorter, and rolls the
+board back if DRC errors increase.
+`test_an_auto_placed_board_routes_with_less_copper_than_the_grid` is the claim
+that matters: same netlist, same router, and the placed board routes with less
+copper. On the two boards measured by hand it was roughly half (115.5 mm ->
+53.2 mm on one, HPWL 111.3 -> 48.0).
+
+What that still does not mean. The placer does not rotate, mirror, or group by
+function, and it treats every part as a box -- a human layout engineer does none
+of those things that way. Packing parts closer collides silkscreen text, which
+shows up as `verify.warnings_added` rather than being solved. The router does
+not push and shove, so a connection needing existing copper to move aside will
+not be found. Routing leaves the board at neck width and
+`verify.width_regressed` says so, but nothing prevents handing back an
+under-rated board. Each of those is a capability gap rather than a contract gap,
+and they are what stands between "the chain runs" and "the result is what an
+engineer would have drawn".
 
 ## Subsequent capability work
 

@@ -94,6 +94,9 @@ SCHEMAS: dict[str, dict[str, Any]] = {
             "board_mm",
             "copper_layers",
             "copper_oz",
+            "copper_mm",
+            "track_count",
+            "via_count",
             "delta_t_c",
             "summary",
             "findings",
@@ -338,6 +341,27 @@ SCHEMAS: dict[str, dict[str, Any]] = {
         "shape": "object",
         "fields": ["plan", "moved", "courtyard_clash", "note"],
         "untrusted_fields": ["plan", "moved", "courtyard_clash"],
+    },
+    "board_place": {
+        "shape": "object",
+        # `improved` is the field to read first: false means the board was left
+        # exactly as it was, and every other field describes that same board.
+        "fields": [
+            "board",
+            "improved",
+            "moved",
+            "moves",
+            "hpwl_before_mm",
+            "hpwl_after_mm",
+            "hpwl_reduction_pct",
+            "courtyard_clash",
+            "min_courtyard_gap_mm",
+            "outside_outline",
+            "existing_tracks",
+            "verify",
+            "note",
+        ],
+        "untrusted_fields": ["moves", "courtyard_clash", "outside_outline", "verify"],
     },
     "fab_plot": {
         "shape": "object",
@@ -946,6 +970,50 @@ def build() -> list[dict[str, Any]]:
                 "kicad-cli board move --board board.kicad_pcb --confirm ct_xxx --compact",
             ],
             layout.move,
+        ),
+        _cmd(
+            "board place",
+            "write",
+            "Rearrange parts by connectivity to shorten total wirelength, "
+            "reporting half-perimeter wirelength before and after.",
+            [
+                _board_param(),
+                {
+                    "name": "iterations",
+                    "type": "integer",
+                    "required": False,
+                    "multiple": False,
+                    "default": 200,
+                },
+                {
+                    "name": "clearance",
+                    "type": "number",
+                    "required": False,
+                    "multiple": False,
+                    "default": 0.5,
+                },
+                {
+                    "name": "keep",
+                    "type": "string",
+                    "required": False,
+                    "multiple": True,
+                    "separator": ",",
+                    "default": None,
+                },
+                {
+                    "name": "ignore-lock",
+                    "type": "boolean",
+                    "required": False,
+                    "multiple": False,
+                    "default": False,
+                },
+            ],
+            "board_place",
+            [
+                "kicad-cli board place --board board.kicad_pcb --dry-run --compact",
+                "kicad-cli board place --board board.kicad_pcb --confirm ct_xxx --compact",
+            ],
+            layout.place,
         ),
         _cmd(
             "fab gerber",

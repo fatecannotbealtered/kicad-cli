@@ -201,6 +201,30 @@ def move(args: dict[str, Any]) -> None:
     _relay("pcb_place", args, ["--moves", str(moves)])
 
 
+def place(args: dict[str, Any]) -> None:
+    """Rearrange parts so connected ones sit together, measured in wirelength.
+
+    `board move` is how a person says where something goes. This is the other
+    half: the netlist already states which parts belong together, and until now
+    nothing in this tool read that as a placement instruction -- `board
+    from-netlist` laid out a grid ordered by reference designator, which puts a
+    decoupling capacitor wherever the alphabet happens to put it.
+
+    The payload reports half-perimeter wirelength before and after and declines
+    to write when it did not improve, so "the placement got better" is a number
+    in the envelope rather than a claim about the algorithm.
+    """
+    extra: list[str] = []
+    for name in ("iterations", "clearance"):
+        if args.get(name) is not None:
+            extra += [f"--{name}", str(args[name])]
+    keep = args.get("keep")
+    if keep:
+        refs = keep if isinstance(keep, list) else [keep]
+        extra += ["--keep", ",".join(str(r) for r in refs)]
+    _relay("pcb_autoplace", args, extra)
+
+
 def _guard(board: str, args: dict[str, Any]) -> None:
     """Refuse to write to a board another KiCad has open.
 
