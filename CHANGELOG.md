@@ -8,6 +8,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- `board pour` — fill a copper layer with a zone for one net, usually ground.
+  `board stitch` joins the islands of a pour and `board plane` audits what
+  sits under each track; both assumed a pour existed and neither could make
+  one. A board out of this chain had zero zones, so `board plane` returned
+  FAIL with `backed_fraction: 0.0` -- all 170 track segments with no copper
+  beneath them, on a board DRC was perfectly happy with.
 - `board netclass` — create a netclass and assign nets to it. The chain had
   no way to say "this net carries current". `board from-netlist` makes a board
   whose only class is Default at 0.20 mm, roughly 0.74 A on 1 oz copper at a

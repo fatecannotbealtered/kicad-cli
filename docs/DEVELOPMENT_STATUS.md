@@ -148,7 +148,35 @@ The ceiling here was not push-and-shove but the incremental mode's inability
 to escape a corner it had routed itself into, and nothing said so. The
 envelope now names `--mode full` when `repair` stops making progress.
 
-The router's real ceiling is still that it does not push and shove, and
+### The router cannot see a pour, and fixing that is not a one-line change
+
+`mode_full` reads its set of plane nets from a `log` key that nothing ever
+writes, so the set is always empty and the whole plane-awareness path is dead:
+`escape_pins` skips no pin, `fanout_planes` iterates nothing, `plane_served`
+always reports `[]`. Ground is routed pair by pair with a ground plane sitting
+right there. `fanout_planes` also special-cases the net *named* GND and calls
+it served without doing anything, which is a fact about the board this was
+written for rather than about ground.
+
+Reading plane nets from the board's zones and replacing the name check with
+"is this pad covered by copper of its own net on its own layer" was measured
+and is a large win on a board out of this chain: unconnected 34 -> 0, copper
+257.6 mm -> 178.1 mm, tracks 160 -> 110, segments with no reference plane
+109 -> 75.
+
+It was **not** kept. On KiCad's own `interf_u` demo -- which has a real GND
+pour on bottom copper -- leaving ground to the plane raises DRC errors from 3
+to 5 (`starved_thermal`: the pour's spoke settings do not support carrying
+those connections), the rollback guard fires, and `board route --mode full`
+fails on a board where it used to succeed. A capability that breaks a stock
+demo board is not a capability yet.
+
+The shape of the real fix is the one `sch create` now uses for its drawing:
+try the better way, and fall back to the old way when the result is worse,
+rather than failing. That means a retry path inside `mode_full`, which is a
+change to its control flow and its write transaction, not a flag.
+
+The router's other ceiling is still that it does not push and shove, and
 Specctra DSN export / SES import are available for handing the board to an
 external router. That remains the largest open routing gap.
 

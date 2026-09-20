@@ -365,6 +365,24 @@ SCHEMAS: dict[str, dict[str, Any]] = {
         "fields": ["plan", "moved", "courtyard_clash", "note"],
         "untrusted_fields": ["plan", "moved", "courtyard_clash"],
     },
+    "board_pour": {
+        "shape": "object",
+        # `filled_mm2` is measured after the fill, not before: asking a zone for
+        # its area before filling reports zero and reads as an empty pour.
+        "fields": [
+            "board",
+            "net",
+            "layer",
+            "area_mm",
+            "filled_mm2",
+            "outlines",
+            "connect",
+            "clearance_mm",
+            "tracks",
+            "note",
+        ],
+        "untrusted_fields": ["net", "layer"],
+    },
     "board_netclass": {
         "shape": "object",
         # `action` is "created" or "updated". The copper is unchanged either
@@ -1039,6 +1057,73 @@ def build() -> list[dict[str, Any]]:
                 "kicad-cli board move --board board.kicad_pcb --confirm ct_xxx --compact",
             ],
             layout.move,
+        ),
+        _cmd(
+            "board pour",
+            "write",
+            "Fill a copper layer with a zone for one net, usually ground, and fill it. "
+            "DRC has no opinion about reference planes; board plane does.",
+            [
+                _board_param(),
+                {
+                    "name": "net",
+                    "type": "string",
+                    "required": True,
+                    "multiple": False,
+                    "default": None,
+                },
+                {
+                    "name": "layer",
+                    "type": "string",
+                    "required": True,
+                    "multiple": False,
+                    "default": None,
+                },
+                {
+                    "name": "margin",
+                    "type": "number",
+                    "required": False,
+                    "multiple": False,
+                    "default": 0.5,
+                },
+                {
+                    "name": "clearance",
+                    "type": "number",
+                    "required": False,
+                    "multiple": False,
+                    "default": 0.3,
+                },
+                {
+                    "name": "min-width",
+                    "type": "number",
+                    "required": False,
+                    "multiple": False,
+                    "default": 0.25,
+                },
+                {
+                    "name": "connect",
+                    "type": "string",
+                    "required": False,
+                    "multiple": False,
+                    "default": "thermal",
+                    "enum": ["thermal", "solid"],
+                },
+                {
+                    "name": "ignore-lock",
+                    "type": "boolean",
+                    "required": False,
+                    "multiple": False,
+                    "default": False,
+                },
+            ],
+            "board_pour",
+            [
+                "kicad-cli board pour --board b.kicad_pcb --net GND --layer B.Cu "
+                "--dry-run --compact",
+                "kicad-cli board pour --board b.kicad_pcb --net GND --layer B.Cu "
+                "--confirm ct_xxx --compact",
+            ],
+            layout.pour,
         ),
         _cmd(
             "board netclass",
