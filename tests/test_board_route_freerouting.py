@@ -249,3 +249,97 @@ def test_fanout_necking_is_brought_back_to_the_board_minimum(tmp_path):
     drc, _ = run(["board", "drc", "--board", str(board)])
     assert drc["data"]["counts"].get("error", 0) == 0, drc["data"]["violations"]
     assert drc["data"]["unconnected_count"] == 0
+
+
+# --- layer policy --------------------------------------------------------------
+
+
+@needs_kicad
+@needs_engine
+def test_plane_first_keeps_signals_off_the_ground_plane(tmp_path):
+    """Best practice on a two-layer board is signals on top and the bottom left
+    as solid a ground plane as possible. Freerouting has no layer-preference
+    switch -- `ScoringSettings.preferredDirectionTraceCost` and
+    `RouterSettings.layers` are both `transient`, so neither the JSON config nor
+    a `-dr` rules file reaches them, which four byte-identical runs confirmed.
+
+    Via cost is the lever that works, through the environment-variable settings
+    source. Measured on this board, same placement and pour:
+
+        balanced      21.5% of copper on B.Cu, 11 vias, backed_fraction 0.73
+        plane-first    5.1% of copper on B.Cu,  7 vias, backed_fraction 0.87
+    """
+    board = build(tmp_path)
+    confirmed(["board", "pour", "--board", str(board), "--net", "GND", "--layer", "B.Cu"])
+    doc = confirmed(
+        [
+            "board",
+            "route",
+            "--board",
+            str(board),
+            "--engine",
+            "freerouting",
+            "--layer-policy",
+            "plane-first",
+        ]
+    )
+    assert doc["ok"] is True, doc
+    data = doc["data"]
+    assert data["unconnected_after"] == 0, data
+    by_layer = data["copper_by_layer_mm"]
+    total = sum(by_layer.values())
+    assert total > 0 and by_layer.get("B.Cu", 0) / total < 0.5, by_layer
+
+
+@needs_kicad
+@needs_engine
+def test_plane_first_falls_back_rather_than_leaving_a_net_open(tmp_path):
+    """It trades routability for layer purity, and that trade is not always
+    worth it: on this board with the ground pour removed, plane-first leaves a
+    connection unrouted. A board short one connection cannot be built, however
+    clean its layer split, so it re-routes with `balanced` and says so -- the
+    same shape as `sch create` falling back to auto-stubbing.
+    """
+    board = build(tmp_path)  # deliberately no `board pour`
+    doc = confirmed(
+        [
+            "board",
+            "route",
+            "--board",
+            str(board),
+            "--engine",
+            "freerouting",
+            "--layer-policy",
+            "plane-first",
+        ]
+    )
+    assert doc["ok"] is True, doc
+    data = doc["data"]
+    assert data["layer_policy"] == "plane-first"
+    assert data["unconnected_after"] == 0, "a fallback that still leaves nets open is no fallback"
+    if data["layer_policy_applied"] == "balanced":
+        assert data["layer_policy_fallback"]["to"] == "balanced"
+        assert "plane-first" in doc["data"]["note"]
+
+
+@needs_kicad
+@needs_engine
+def test_balanced_on_a_poured_board_says_what_plane_first_would_buy(tmp_path):
+    """The knowledge is measured and would otherwise be undiscoverable."""
+    board = build(tmp_path)
+    confirmed(["board", "pour", "--board", str(board), "--net", "GND", "--layer", "B.Cu"])
+    doc = confirmed(["board", "route", "--board", str(board), "--engine", "freerouting"])
+    assert doc["data"]["layer_policy_applied"] == "balanced"
+    assert "plane-first" in doc["data"]["note"]
+
+
+@needs_kicad
+def test_audit_reports_copper_per_layer(tmp_path):
+    """The total cannot show it: 200 mm all on top and 200 mm half on the
+    bottom are two different boards, and only one of them has a plane left."""
+    board = build(tmp_path)
+    confirmed(["board", "route", "--board", str(board), "--mode", "repair"])
+    doc, _ = run(["board", "audit", "--board", str(board)])
+    by_layer = doc["data"]["copper_by_layer_mm"]
+    assert by_layer, "a routed board has copper on at least one layer"
+    assert abs(sum(by_layer.values()) - doc["data"]["copper_mm"]) < 1.0, by_layer

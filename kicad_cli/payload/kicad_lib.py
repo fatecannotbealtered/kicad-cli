@@ -242,6 +242,25 @@ def discard_write_state(path):
     return write_txn.discard(path)
 
 
+def copper_by_layer(board, pcbnew):
+    """每一层上的走线铜长,mm。
+
+    两层板上这是判断布局质量的关键一条:底层的每一段信号线都在地平面上割一
+    道口子,而回流电流要绕着口子走。总铜长看不出这件事——同样 200 mm 的铜,
+    全在顶层和一半在底层,是两块完全不同的板。board plane 的 backed_fraction
+    是后果,这里是原因。
+
+    过孔不算:它穿过所有层,归给哪一层都不对。
+    """
+    out = {}
+    for track in tracks_of(board):
+        if track.GetClass() != "PCB_TRACK":
+            continue
+        name = board.GetLayerName(track.GetLayer())
+        out[name] = out.get(name, 0.0) + pcbnew.ToMM(track.GetLength())
+    return {name: round(value, 1) for name, value in sorted(out.items(), key=lambda kv: -kv[1])}
+
+
 def commit_write():
     """Finish the write for a path that does not end at `ok()`.
 

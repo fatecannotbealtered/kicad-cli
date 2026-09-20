@@ -125,6 +125,7 @@ ones apart:
 | Connections are missing | `board route --mode repair` (repeat until it stops improving) | `--mode full` clears every existing track first |
 | `repair` stopped improving with connections still open | `board route --mode full` — ask the user first, it deletes every existing track | repeating `repair` again; it only finds paths through gaps in existing copper, and that copper is what is blocking it |
 | Routing leaves too many vias, or a net will not route at all | `board route --engine freerouting` (needs a local install; `doctor` says) | it is optional — `--engine grid` is the default and needs no external program |
+| The ground plane is cut to pieces by bottom-layer traces | `board pour`, then `board route --engine freerouting --layer-policy plane-first` | `--layer-policy` only applies to the freerouting engine; it costs ~31% more copper and falls back on its own if a net will not route |
 | Traces are long, or the router cannot get through | `board place` before routing | it moves parts, so any existing tracks must be re-routed after |
 | Copper pour looks connected but is not | `board stitch` | `board audit` |
 | No ground plane / EMC / return paths | `board pour --net GND --layer B.Cu`, then `board plane` to check coverage | `board stitch` and `board plane` both assume a pour exists; neither makes one |
@@ -169,8 +170,12 @@ kicad-cli board route --board build/circuit.kicad_pcb --mode full --use-planes -
 #    errors rise it rolls the whole board back and says so; drop it and re-run.
 #    Second engine, if doctor says freerouting_engine is pass. It pushes and
 #    shoves, which the grid router cannot: measured 178 mm copper / 23 vias
-#    (grid) vs 172 mm / 11 vias (freerouting) on the same board.
-# kicad-cli board route --board build/circuit.kicad_pcb --engine freerouting --confirm ct_xxx --compact
+#    (grid) vs 172 mm / 11 vias (freerouting) on the same board. Add
+#    --layer-policy plane-first when the board has a ground pour: it keeps
+#    signals on top so the plane stays whole (B.Cu copper 21.5% -> 5.1%,
+#    vias 11 -> 7, board plane backed_fraction 0.73 -> 0.87) at ~31% more
+#    copper, and falls back to balanced by itself if a net will not route.
+# kicad-cli board route --board build/circuit.kicad_pcb --engine freerouting #     --layer-policy plane-first --confirm ct_xxx --compact
 
 # 6. Power nets need a wider target than Default's 0.20 mm (about 0.74 A).
 #    board audit reports an error until they have one.
