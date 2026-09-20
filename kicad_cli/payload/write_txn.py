@@ -65,6 +65,34 @@ def _paths(path: Path) -> tuple[Path, Path, Path]:
     )
 
 
+def discard(path: str | Path) -> list[str]:
+    """Throw away another process's unfinished transaction on this board.
+
+    `begin` refuses a board whose journal is still there, and deliberately does
+    not clean it up itself: choosing between a half-written board and its
+    backup is the owner's call, and guessing is the worse error.
+
+    There is one caller that is not guessing. `pcb_route` re-routes one net per
+    subprocess, and a subprocess that dies on a segfault -- SWIG does, in the
+    revert path -- never reaches its commit, so its journal, backup and lock
+    stay on disk and the board is unwritable until the lock goes stale. The
+    parent holds its own whole-board copy from before any child ran, and
+    restores it. At that point the child's half-write is not a decision anyone
+    still has to make; it is bytes that have already been overwritten, and
+    leaving the lock behind only wedges the next run.
+
+    So: restore the board first, then call this. Returns what it removed.
+    """
+    removed = []
+    for candidate in _paths(Path(path).resolve()):
+        try:
+            candidate.unlink()
+            removed.append(candidate.name)
+        except OSError:
+            pass
+    return removed
+
+
 def _acquire(lock: Path, target: Path) -> None:
     try:
         handle = os.open(str(lock), os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o600)

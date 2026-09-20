@@ -948,6 +948,21 @@ def mode_full(R, b, pcbnew, nc, neck, log, use_planes=False):
     log["unresolved"] = {k: v for k, v in sorted(per_net.items()) if v[1]}
 
 
+def _abort(path, backup, message, code="E_IO"):
+    """子进程崩了：整盘回到动手之前，并把它没来得及提交的事务清掉。
+
+    段错误的子进程走不到 _emit，也就走不到提交，于是它的 journal / backup /
+    lock 三件留在盘上——下一次写这块板会被 E_CONFLICT 挡住，直到锁过期。
+    通常这种「保留现场让人自己选」是对的，但这里不是：我们手上有一份动手
+    之前的整盘副本，并且刚刚用它把板子覆盖回去了，子进程那半截写入已经不
+    存在了，留着锁只会把下一次调用也拖下水。
+
+    顺序要紧：先还原板子，再清事务。反过来会留下一个没有锁保护的半截板。
+    """
+    shutil.copyfile(backup, path)
+    K.fail(code, message, {**(_child.last_err or {}), "discarded": K.discard_write_state(path)})
+
+
 def _rewidth_classes(args, path):
     """要重布哪几个网络类。没点名就按工程里实际有的来。
 
@@ -1172,9 +1187,13 @@ def main():
     # repair 和 full 的判据基线：必须在任何改动落盘之前取。
     # 这两个模式过去完全不跑 DRC，只数连通性——而 full 的定义就是清空全板走线。
     # 一个察觉不到自己把板子改坏的模式，回滚机制对它毫无意义：没有东西会触发回滚。
+    # rewidth 也要取。它有一套逐网络的 DRC 回退循环，那个循环只看自己动过的
+    # 网络，所以「每条网络单独看都没引入 error」和「整盘 error 数没上升」不是
+    # 一回事——实测一块 0 error 的板重布完剩 3 个 clearance error，命令还报
+    # ok。逐网络回退是手段，整盘基线才是判据，route 和 place 都是这么定的。
     errors_baseline = None
     width_before = None
-    if mode in ("repair", "full"):
+    if mode in ("repair", "full", "rewidth"):
         errors_baseline = K.err_count(run_drc(path))
         # Widths are the thing DRC cannot see. full routes at neck width by
         # design and expects `board widen` after, which the note has always
@@ -1200,10 +1219,18 @@ def main():
             ]
         res, keep = {}, {}
         pre, need_restore = {}, []
-        grp_bak = None
+        # 整组拆重布跨十几个子进程，任何一个崩掉都会把板子留在半截状态。
+        # 先存一份整盘备份，出事直接回滚——per-net 还原救不了崩溃。
+        #
+        # 这份备份原来只在 --nets 那一支里取，于是按网络类走的那一支（也就是
+        # board rewidth 的默认路径）完全没有保护：revert 子进程在 SWIG 里
+        # 段错误（rc 0xC0000005）之后，板子停在半还原状态，子进程的 journal、
+        # backup、lock 三件也留在盘上，这块板直到锁过期都写不进去。
+        # 备份跟崩溃有关，跟怎么选网络无关，所以两支都取。
+        grp_bak = os.path.join(tempfile.gettempdir(), "kicad_layout_group_backup.kicad_pcb")
+        shutil.copyfile(path, grp_bak)
+        _child.soft = True  # 崩溃由这里整盘兜底，不让 _child 自己 fail 掉
         if args.get("nets"):
-            # 整组拆重布跨十几个子进程，任何一个崩掉都会把板子留在半截状态。
-            # 先存一份整盘备份，出事直接回滚——per-net 还原救不了崩溃。
             d0 = run_drc(path)
             unconn_before_names = set()
             for u in d0.get("unconnected_items", []):
@@ -1211,22 +1238,15 @@ def main():
                     m0 = re.search(r"\[([^\]]+)\]", it.get("description", ""))
                     if m0:
                         unconn_before_names.add(m0.group(1))
-            grp_bak = os.path.join(tempfile.gettempdir(), "kicad_layout_group_backup.kicad_pcb")
-            shutil.copyfile(path, grp_bak)
-            _child.soft = True
             st0 = _child(path, ["--sub", "strip", "--nets", args["nets"], "--mode", mode])
             if st0 is None:
-                shutil.copyfile(grp_bak, path)
-                K.fail("E_IO", "整组拆除失败，板子已整盘回滚到操作之前", _child.last_err)
+                _abort(path, grp_bak, "整组拆除失败，板子已整盘回滚到操作之前")
             pre = st0.get("snaps") or {}
             log["stripped_segments"] = st0.get("stripped")
         for nn in names:
             r = _child(path, ["--sub", "one", "--net", nn, "--neck", str(neck), "--mode", mode])
             if r is None:
-                if grp_bak:
-                    shutil.copyfile(grp_bak, path)
-                    K.fail("E_IO", "重布 %s 时子进程崩溃，板子已整盘回滚" % nn, _child.last_err)
-                K.fail("E_IO", "重布 %s 时子进程崩溃" % nn, _child.last_err)
+                _abort(path, grp_bak, "重布 %s 时子进程崩溃，板子已整盘回滚" % nn)
             if r["txt"].startswith("跳过"):
                 log.setdefault("skipped_nets", []).append(nn)
             res[nn] = r["txt"]
@@ -1258,8 +1278,7 @@ def main():
             with open(sf, "w", encoding="utf-8") as f:
                 json.dump(pre[nn], f)
             if _child(path, ["--sub", "revert", "--net", nn, "--snap", sf, "--mode", mode]) is None:
-                shutil.copyfile(grp_bak, path)
-                K.fail("E_IO", "还原 %s 时子进程崩溃，板子已整盘回滚" % nn, _child.last_err)
+                _abort(path, grp_bak, "还原 %s 时子进程崩溃，板子已整盘回滚" % nn)
             res[nn] = "已还原（整组重布后仍布不通，恢复原走线）"
         log["rewidth"] = res
         log["rewidth_total"] = len(res)
@@ -1296,6 +1315,18 @@ def main():
             if reverted:
                 log["rewidth_reverted"] = sorted(reverted)
         log["rewidth_ok"] = sum(1 for v in res.values() if v.startswith("重布"))
+        # 逐网络回退跑完之后，再问一次整盘。还高于基线就整盘回到动手之前——
+        # 宁可这几条线宽不达标，也不交一块比原来更差的板。
+        errors_final = K.err_count(run_drc(path))
+        if not args.get("no-verify") and errors_final > errors_baseline:
+            # E_INTEGRITY，和 board route 同一个判据同一个码：调用方按码分支时
+            # 「子进程崩了」和「改完变差了」是两件要分开处理的事。
+            _abort(
+                path,
+                grp_bak,
+                "重布后整盘 DRC error 数高于动手前（逐网络回退没能收敛），板子已整盘回滚",
+                code="E_INTEGRITY",
+            )
         st = _child(path, ["--sub", "stats", "--mode", mode])
         K.ok(
             route_envelope(
@@ -1312,9 +1343,12 @@ def main():
                     "verify": {
                         "ran": not args.get("no-verify"),
                         "oracle": "kicad-cli pcb drc",
-                        "scope": "per-net revert loop",
+                        "scope": "per-net revert loop, then a whole-board baseline",
                         "reverted": log.get("rewidth_reverted") or [],
-                        "note": "引入 DRC error 的网络已逐条还原；未做整盘 error 基线比较",
+                        "errors_baseline": errors_baseline,
+                        "errors_final": errors_final,
+                        "note": "引入 DRC error 的网络已逐条还原，之后整盘 error 数"
+                        "与动手前比对；高于基线则整盘回滚，所以走到这里即未变差",
                     },
                     "note": "线宽按目标值重布；仍未达标的段是真的放不下",
                 }

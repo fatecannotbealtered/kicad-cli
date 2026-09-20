@@ -165,6 +165,9 @@ kicad-cli board route --board build/circuit.kicad_pcb --mode full --use-planes -
 #    board audit reports an error until they have one.
 kicad-cli board netclass --board build/circuit.kicad_pcb --name Power --width 0.6 --nets +3V3,VIN --confirm ct_xxx --compact
 kicad-cli board rewidth --board build/circuit.kicad_pcb --confirm ct_xxx --compact
+#    E_INTEGRITY here means the wider traces raised the DRC error count and the
+#    whole board was rolled back. The board is intact and still at the old width:
+#    make room (board place, a bigger outline) or accept the narrower trace.
 
 # 7. Check it before plotting. Exit is 0 even when DRC finds problems.
 kicad-cli board drc --board build/circuit.kicad_pcb --compact

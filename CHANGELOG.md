@@ -48,6 +48,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   is `E_NOT_FOUND` rather than a quiet no-op.
 
 ### Fixed
+- `board rewidth` reported `ok` while leaving the board with more DRC errors
+  than it started with. Its verify was a per-net revert loop, which only ever
+  looks at the nets it touched -- and "no single net introduced an error" is
+  not "the board has no more errors than before". Measured: a board at 0
+  errors came out of rewidth with 3 clearance violations and `ok: true`. It
+  now takes a whole-board baseline like `board route` and `board place` do,
+  and rolls the entire board back with `E_INTEGRITY` when the count rises.
+- A subprocess that segfaults no longer wedges the board. `board rewidth`
+  re-routes one net per subprocess; SWIG crashes in the revert path
+  (`rc 0xC0000005`), and a process that dies that way never reaches its
+  commit, so its journal, backup and lock stayed on disk and the board was
+  unwritable until the lock went stale. The whole-board copy that guards
+  against this was only taken on the `--nets` path, so the netclass path --
+  which is what `board rewidth` actually uses -- had no protection at all.
+  It is now taken on both, and after restoring from it the dead worker's
+  transaction is discarded, which is the one case where that is a fact rather
+  than a guess.
 - `board rewidth` could not finish a class with more than one net. Each net is
   re-routed in its own subprocess, and each one left a journal, a backup and a
   lock behind: the worker exits through `os._exit`, which skips the commit.
