@@ -40,6 +40,10 @@ _ROUTE_ONLY = frozenset(
         "cleared_tracks",
         "escape",
         "fanout",
+        # Both describe the router's use of copper pours. `board rewidth` skips
+        # plane nets rather than reporting on them, so neither is part of what
+        # it promises.
+        "plane_nets",
         "plane_served",
         "ripup",
     }
@@ -135,6 +139,7 @@ def route(args: dict[str, Any]) -> None:
             *_opt(args, "classes"),
             *_opt(args, "neck"),
             *_flag(args, "ripup"),
+            *_flag(args, "use-planes"),
             *_flag(args, "no-verify"),
             *_flag(args, "no-restore"),
         ],

@@ -71,6 +71,9 @@ ROUTE_FIELDS = (
     "cleared_tracks",
     "escape",
     "fanout",
+    # plane_nets 是板上有敷铜的网络（--use-planes 关时为空）；plane_served 是
+    # 其中扇出完整、真正由平面承担连接的那些。差集就是有铜却够不到的网络。
+    "plane_nets",
     "plane_served",
     "ripup",
     "vias",
@@ -598,15 +601,18 @@ def fanout_planes(R, b, pcbnew, nc, plane_nets, log):
     res = {}
     served = set()
     for netname in sorted(plane_nets):
-        if netname in ("GND",):
-            served.add(netname)
-            continue  # GND 顶层有铺铜，焊盘就近入铜，不需要逐个打孔
+        # GND 原来在这里按名字直接判为「已服务」并跳过，理由是「顶层也有铺铜，
+        # 焊盘就近入铜」。那是那块板的事实，不是 GND 的性质：只在 B.Cu 敷了地铜
+        # 的板子上，顶层的贴片地焊盘够不到任何铜，被跳过的它们一条都没连上——
+        # 实测 34 条未连接只降到 12，剩下的正是这些。判据改成问板子：焊盘所在层
+        # 上本网络的铜盖住它了吗？盖住就不必打孔，没盖住就往下走通用逻辑。
         net = b.FindNet(netname)
         if net is None:
             continue
         ncode = net.GetNetCode()
         w, cl, vd, vh = nc.params(netname)
         zones = [z for z in K.zones_of(b) if not z.GetIsRuleArea() and z.GetNetname() == netname]
+        top_zones = [z for z in zones if z.IsOnLayer(pcbnew.F_Cu)]
         ok = fail = 0
         for f in K.footprints_of(b):
             for p in f.Pads():
@@ -615,19 +621,16 @@ def fanout_planes(R, b, pcbnew, nc, plane_nets, log):
                 if p.GetAttribute() != pcbnew.PAD_ATTRIB_SMD:
                     continue  # 通孔焊盘本身已穿过内层
                 px, py = mm(p.GetPosition().x), mm(p.GetPosition().y)
+                if zone_covers(top_zones, px, py):
+                    ok += 1
+                    continue  # 同层就有本网络的铜盖着，焊盘直接入铜，不必打孔
                 spot = None
                 for step in range(0, 40):
                     rad = step * 0.15
                     for ang in range(0, 360, 15) if step else (0,):
                         x = float(px + rad * math.cos(math.radians(ang)))
                         y = float(py + rad * math.sin(math.radians(ang)))
-                        inside = any(
-                            z.GetFilledPolysList(z.GetLayerSet().Seq()[0]).Collide(
-                                VECTOR2I(MM(x), MM(y)), MM(0.35)
-                            )
-                            for z in zones
-                        )
-                        if inside and via_spot_ok(R, x, y, vd, ncode):
+                        if zone_covers(zones, x, y) and via_spot_ok(R, x, y, vd, ncode):
                             spot = (x, y)
                             break
                     if spot:
@@ -660,6 +663,25 @@ def fanout_planes(R, b, pcbnew, nc, plane_nets, log):
             served.add(netname)
     log["fanout"] = res
     return served
+
+
+ZONE_TOUCH_MM = 0.35  # 判定「这一点落在铜里」的容差，约半个过孔环宽
+
+
+def zone_covers(zones, x, y):
+    """这些敷铜区里有没有哪一块盖住了 (x, y)。
+
+    问的是**灌完之后**的铜（GetFilledPolysList），不是敷铜区轮廓：轮廓覆盖整块
+    板，灌出来的铜却被走线、焊盘和间距挖得千疮百孔。拿轮廓当判据会把一个其实
+    没有铜的位置当成已连。
+    """
+    for zone in zones:
+        layers = zone.GetLayerSet().Seq()
+        if not layers:
+            continue
+        if zone.GetFilledPolysList(layers[0]).Collide(VECTOR2I(MM(x), MM(y)), MM(ZONE_TOUCH_MM)):
+            return True
+    return False
 
 
 def via_spot_ok(R, x, y, d, ncode):
@@ -833,8 +855,31 @@ def revert_net(path, pcbnew, nn, snaps):
     K.fill_and_save(pcbnew, b, path)
 
 
-def mode_full(R, b, pcbnew, nc, neck, log):
-    plane_nets = set(log.get("plane_nets", []))
+def mode_full(R, b, pcbnew, nc, neck, log, use_planes=False):
+    """--use-planes 打开时，敷铜承担它自己的网络；默认关，保持原行为。
+
+    这一行原来是 log.get("plane_nets", [])，而没有任何地方往 log 里写过
+    plane_nets——于是它恒为空集，整套平面感知是死的：escape_pins 一个引脚都不
+    跳过，fanout_planes 遍历空集，plane_served 永远报 []。板上明明有地铜，GND
+    仍然被当成普通信号逐对布线。
+
+    改成问板子之后实测很划算：本链条产出的 15 器件板上未连接 34->0、铜
+    257.6->178.1 mm、走线 160->110 段、无参考平面的段 109->75。
+
+    但它不能默认打开。KiCad 自带的 interf_u 例板有真的 GND 敷铜，把地交给平面
+    之后 DRC error 从 3 涨到 5（starved_thermal：那块敷铜的辐条设置撑不起这些
+    连接），回滚守卫触发，--mode full 在一块原本跑得通的板上失败。所以做成开关：
+    要省铜就打开，DRC 变差照样整盘回滚，谁也不会被它坑。
+
+    真正的解法是 sch create 画图那套「先试好的，不行就退回旧的」——那要改
+    mode_full 的控制流和写事务，不是一个开关的事。见 docs/DEVELOPMENT_STATUS.md。
+    """
+    plane_nets = set()
+    if use_planes:
+        # 判据和 rewidth_targets 用的是同一句，免得两处对「什么算平面网络」
+        # 有两种说法。
+        plane_nets = {z.GetNetname() for z in K.zones_of(b) if not z.GetIsRuleArea()}
+    log["plane_nets"] = sorted(plane_nets)
     # 只有扇出完整的网络才真正由平面服务。像 +3V3 这种平面只覆盖局部区域的，
     # 够不到平面的焊盘必须照常走线——否则它们会被当成「平面已连」整个跳过，
     # 表现为布线成功率很高而未连接数居高不下。
@@ -856,8 +901,11 @@ def mode_full(R, b, pcbnew, nc, neck, log):
         nn = net.GetNetname()
         if nn.startswith("unconnected-"):
             continue
-        # 有平面服务的网络不逐对布线
-        if nn in log.get("plane_nets", []):
+        # 有平面服务的网络不逐对布线。用的是 served（上面赋回了 plane_nets），
+        # 不是板上所有有敷铜的网络——本函数开头那段注释说的就是这件事：平面只
+        # 覆盖局部的网络，够不到平面的焊盘还得照常走线，按原集合跳过会让它们被
+        # 当成「已连」，于是布线成功率很好看而未连接数下不来。
+        if nn in plane_nets:
             continue
         pts = []
         for p in ps:
@@ -1033,7 +1081,8 @@ def _emit(obj):
 
 def main():
     args = K.parse_args(
-        sys.argv[1:], flags=("dry-run", "ripup", "internal", "no-verify", "no-restore")
+        sys.argv[1:],
+        flags=("dry-run", "ripup", "internal", "no-verify", "no-restore", "use-planes"),
     )
     path = K.board_arg(args)
     mode = args.get("mode", "repair")
@@ -1286,7 +1335,7 @@ def main():
         b.BuildConnectivity()
         log["cleared_tracks"] = len(old_tracks)
         R = Router(b, lambda s: None)
-        mode_full(R, b, pcbnew, nc, neck, log)
+        mode_full(R, b, pcbnew, nc, neck, log, use_planes=bool(args.get("use-planes")))
 
     K.fill_and_save(pcbnew, b, path)
     after_un = K.unconnected(b)

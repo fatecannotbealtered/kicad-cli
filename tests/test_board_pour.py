@@ -7,9 +7,9 @@ board out of this chain had zero zones and `board plane` returned FAIL with
 beneath it, on a board DRC was perfectly happy with. Return current has to go
 around, and the loop it encloses is what radiates.
 
-The last test asserts a limitation rather than a feature: the router does not
-consult pours yet, so ordering barely matters today. It is written down so
-that fixing the router breaks this test and forces the claim to be updated.
+The router only takes a pour into account when asked: `--use-planes` is off by
+default because turning it on regresses KiCad's own `interf_u` demo. The last
+three tests cover both sides of that switch and the copper it saves.
 """
 
 from __future__ import annotations
@@ -241,23 +241,61 @@ def test_routing_over_a_pour_keeps_the_board_connected(tmp_path):
 
 
 @needs_kicad
-def test_the_router_does_not_yet_take_the_pour_into_account(tmp_path):
-    """A limitation, asserted so that fixing it has to come here and say so.
+def test_the_router_ignores_the_pour_unless_asked(tmp_path):
+    """Default behaviour is unchanged, and that is deliberate.
 
-    `mode_full` reads its plane nets from a `log` key nothing writes, so the
-    set is always empty: ground is routed pad to pad with a ground plane
-    sitting right there. Reading the zones instead was measured -- unconnected
-    34 -> 0 with copper 257.6 mm -> 178.1 mm on the 15-part board -- and not
-    kept, because on KiCad's own `interf_u` demo it takes DRC errors from 3 to
-    5 and `--mode full` then rolls back and fails where it used to succeed.
-
-    Until that has a fallback path, pouring before or after routing makes
-    almost no difference, and `docs/DEVELOPMENT_STATUS.md` says why.
+    Letting a pour carry its own net is a large win on a board from this
+    chain and takes KiCad's own `interf_u` demo from 3 DRC errors to 5, where
+    `--mode full` then rolls back and fails on a board that used to route. So
+    it is a flag: off by default, and nothing that routes today changes.
     """
     board = build(tmp_path)
     confirmed(["board", "pour", "--board", str(board), "--net", "GND", "--layer", "B.Cu"])
     routed = confirmed(["board", "route", "--board", str(board), "--mode", "full"])
-    assert routed["data"]["plane_served"] in ([], None), (
-        "the router now consults pours -- good, but then the claims in "
-        "SKILL.md and DEVELOPMENT_STATUS.md about ordering need rewriting"
-    )
+    assert routed["ok"] is True, routed
+    assert routed["data"]["plane_nets"] == [], routed["data"]
+    assert routed["data"]["unconnected_after"] == 0, routed["data"]
+
+
+@needs_kicad
+def test_use_planes_lets_the_pour_carry_its_own_net(tmp_path):
+    """`mode_full` read plane nets from a `log` key nothing ever wrote, so the
+    set was always empty and the whole path was dead: `escape_pins` skipped no
+    pin, `fanout_planes` iterated nothing, `plane_served` always reported [].
+    Ground was routed pad to pad with a ground plane sitting right there.
+
+    `fanout` is the evidence: the count of pads given a via down to the plane,
+    unreachable before. Measured on the 15-part board: copper 255.1 mm ->
+    177.5 mm with both boards fully connected.
+    """
+    board = build(tmp_path)
+    confirmed(["board", "pour", "--board", str(board), "--net", "GND", "--layer", "B.Cu"])
+    routed = confirmed(["board", "route", "--board", str(board), "--mode", "full", "--use-planes"])
+    assert routed["ok"] is True, routed
+    assert routed["data"]["plane_nets"] == ["GND"], routed["data"]
+    assert routed["data"]["plane_served"] == ["GND"], routed["data"]
+    assert routed["data"]["unconnected_after"] == 0, routed["data"]
+
+
+@needs_kicad
+def test_leaving_ground_to_the_plane_costs_less_copper(tmp_path):
+    """The reason the flag exists, measured rather than argued.
+
+    Same netlist, same placer, same router, same pour. The only difference is
+    whether ground pads reach the plane through a via or through a trace to
+    every other ground pad.
+    """
+    off = build(tmp_path / "off")
+    on = build(tmp_path / "on")
+    for board in (off, on):
+        confirmed(["board", "pour", "--board", str(board), "--net", "GND", "--layer", "B.Cu"])
+    confirmed(["board", "route", "--board", str(off), "--mode", "full"])
+    confirmed(["board", "route", "--board", str(on), "--mode", "full", "--use-planes"])
+
+    copper = {}
+    for name, board in (("off", off), ("on", on)):
+        doc, _ = run(["board", "audit", "--board", str(board)])
+        copper[name] = doc["data"]["copper_mm"]
+        drc, _ = run(["board", "drc", "--board", str(board)])
+        assert drc["data"]["unconnected_count"] == 0, (name, drc["data"])
+    assert copper["on"] < copper["off"], copper

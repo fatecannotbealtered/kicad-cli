@@ -261,6 +261,10 @@ SCHEMAS: dict[str, dict[str, Any]] = {
             "cleared_tracks",
             "escape",
             "fanout",
+            # plane_nets: nets with a pour, empty unless --use-planes.
+            # plane_served: those whose fanout actually reaches it, so the
+            # router left them to the plane.
+            "plane_nets",
             "plane_served",
             "ripup",
             "vias",
@@ -285,6 +289,9 @@ SCHEMAS: dict[str, dict[str, Any]] = {
             "rewidth_reverted",
             "rewidth_drc_cause",
             "skipped_nets",
+            # Lists of net names read out of the board file.
+            "plane_nets",
+            "plane_served",
         ],
     },
     "board_rewidth": {
@@ -474,6 +481,9 @@ def _cmd(
             "nets": {"when": {"mode": ["rewidth"]}, "conflicts_with": ["classes"]},
             "classes": {"when": {"mode": ["rewidth"]}},
             "ripup": {"when": {"mode": ["repair"]}},
+            # Only `full` plans from scratch, which is when leaving a net to
+            # its pour is a decision rather than a retrofit.
+            "use-planes": {"when": {"mode": ["full"]}},
             "no-verify": {"when": {"mode": ["rewidth"]}},
             "no-restore": {"when": {"mode": ["rewidth"]}, "requires": ["nets"]},
         }
@@ -866,6 +876,13 @@ def build() -> list[dict[str, Any]]:
                 },
                 {
                     "name": "ripup",
+                    "type": "boolean",
+                    "required": False,
+                    "multiple": False,
+                    "default": False,
+                },
+                {
+                    "name": "use-planes",
                     "type": "boolean",
                     "required": False,
                     "multiple": False,
