@@ -237,6 +237,11 @@ def begin_write(path):
         fail(exc.code, str(exc), exc.details)
 
 
+def discard_write_state(path):
+    """Clear a crashed worker's leftover transaction. Restore the board first."""
+    return write_txn.discard(path)
+
+
 def commit_write():
     """Finish the write for a path that does not end at `ok()`.
 
