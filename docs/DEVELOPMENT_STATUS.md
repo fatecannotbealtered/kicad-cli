@@ -148,33 +148,34 @@ The ceiling here was not push-and-shove but the incremental mode's inability
 to escape a corner it had routed itself into, and nothing said so. The
 envelope now names `--mode full` when `repair` stops making progress.
 
-### The router cannot see a pour, and fixing that is not a one-line change
+### The router takes a pour into account only when asked
 
-`mode_full` reads its set of plane nets from a `log` key that nothing ever
-writes, so the set is always empty and the whole plane-awareness path is dead:
-`escape_pins` skips no pin, `fanout_planes` iterates nothing, `plane_served`
-always reports `[]`. Ground is routed pair by pair with a ground plane sitting
-right there. `fanout_planes` also special-cases the net *named* GND and calls
-it served without doing anything, which is a fact about the board this was
-written for rather than about ground.
+`mode_full` read its set of plane nets from a `log` key that nothing ever
+wrote, so the set was always empty and the whole plane-awareness path was dead:
+`escape_pins` skipped no pin, `fanout_planes` iterated nothing, `plane_served`
+always reported `[]`. Ground was routed pad to pad with a ground plane sitting
+right there. `fanout_planes` also special-cased the net *named* GND and called
+it served without doing anything, which was a fact about the board it was
+written for rather than about ground -- where the pour is only on B.Cu, the
+top-layer SMD ground pads reach no copper and were skipped anyway.
 
-Reading plane nets from the board's zones and replacing the name check with
-"is this pad covered by copper of its own net on its own layer" was measured
-and is a large win on a board out of this chain: unconnected 34 -> 0, copper
-257.6 mm -> 178.1 mm, tracks 160 -> 110, segments with no reference plane
-109 -> 75.
+Both are fixed, behind `board route --mode full --use-planes`. With it, plane
+nets come from the board's zones and a pad is judged by whether copper of its
+own net covers it on its own layer. Measured on the 15-part board: copper
+255.1 mm -> 177.5 mm, all twelve top-layer ground pads fanned out to the
+plane, both boards fully connected.
 
-It was **not** kept. On KiCad's own `interf_u` demo -- which has a real GND
-pour on bottom copper -- leaving ground to the plane raises DRC errors from 3
-to 5 (`starved_thermal`: the pour's spoke settings do not support carrying
-those connections), the rollback guard fires, and `board route --mode full`
-fails on a board where it used to succeed. A capability that breaks a stock
-demo board is not a capability yet.
+It is a flag rather than the default because turning it on takes KiCad's own
+`interf_u` demo from 3 DRC errors to 5 (`starved_thermal`: that pour's spoke
+settings do not support carrying those connections), and the rollback guard
+then fails a board that used to route. Off by default, nothing that routes
+today changes; on, the guard still restores the board if the result is worse,
+and says why.
 
-The shape of the real fix is the one `sch create` now uses for its drawing:
-try the better way, and fall back to the old way when the result is worse,
-rather than failing. That means a retry path inside `mode_full`, which is a
-change to its control flow and its write transaction, not a flag.
+Making it the default needs the pattern `sch create` uses for its drawing --
+try the better way, fall back to the old way when the result is worse -- which
+is a change to `mode_full`'s control flow and its write transaction, not a
+flag.
 
 The router's other ceiling is still that it does not push and shove, and
 Specctra DSN export / SES import are available for handing the board to an

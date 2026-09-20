@@ -152,11 +152,14 @@ kicad-cli board place --board build/circuit.kicad_pcb --confirm ct_xxx --compact
 # 4. Ground pour. Without one, board plane reports FAIL with backed_fraction 0:
 #    every track with no copper beneath it, on a board DRC is happy with.
 kicad-cli board pour --board build/circuit.kicad_pcb --net GND --layer B.Cu --confirm ct_xxx --compact
-#    Order is not critical today -- the router does not consult pours yet --
-#    but pour before routing so this does not have to change later.
+#    Pour BEFORE routing, then route with --use-planes: ground pads then reach
+#    the plane through a via instead of a trace to every other ground pad.
+#    Measured on a 15-part board: 255.1 mm of copper -> 177.5 mm.
 
 # 5. Route, then read verify.width_regressed and widen if it is true.
-kicad-cli board route --board build/circuit.kicad_pcb --mode repair --confirm ct_xxx --compact
+kicad-cli board route --board build/circuit.kicad_pcb --mode full --use-planes --confirm ct_xxx --compact
+#    --use-planes is off by default and only applies to --mode full. If DRC
+#    errors rise it rolls the whole board back and says so; drop it and re-run.
 
 # 6. Power nets need a wider target than Default's 0.20 mm (about 0.74 A).
 #    board audit reports an error until they have one.

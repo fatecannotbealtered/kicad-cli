@@ -14,6 +14,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   one. A board out of this chain had zero zones, so `board plane` returned
   FAIL with `backed_fraction: 0.0` -- all 170 track segments with no copper
   beneath them, on a board DRC was perfectly happy with.
+- `board route --mode full --use-planes` — let a copper pour carry its own
+  net. `mode_full` read its plane nets from a `log` key nothing ever wrote, so
+  the set was always empty and the entire plane-awareness path was dead code:
+  `escape_pins` skipped no pin, `fanout_planes` iterated an empty set,
+  `plane_served` always reported `[]`. Ground was routed pad to pad with a
+  ground plane sitting right there. `fanout_planes` also special-cased the net
+  *named* GND and called it served without doing anything -- a fact about the
+  board it was written for, not about ground: where the pour is only on B.Cu,
+  the top-layer SMD ground pads reach no copper and were skipped anyway.
+
+  Plane nets now come from the board's zones and a pad is judged by whether
+  copper of its own net covers it on its own layer. Measured on a 15-part
+  board: copper 255.1 mm -> 177.5 mm, all twelve top-layer ground pads fanned
+  out to the plane, both boards fully connected.
+
+  Off by default: turning it on takes KiCad's own `interf_u` demo from 3 DRC
+  errors to 5 and the rollback guard then fails a board that used to route.
+  Nothing that routes today changes; opting in still gets the guard.
 - `board netclass` — create a netclass and assign nets to it. The chain had
   no way to say "this net carries current". `board from-netlist` makes a board
   whose only class is Default at 0.20 mm, roughly 0.74 A on 1 oz copper at a
