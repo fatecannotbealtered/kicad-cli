@@ -15,9 +15,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
       balanced      21.5% of copper on B.Cu   172.6 mm   11 vias   backed 0.73
       plane-first    5.1% of copper on B.Cu   225.2 mm    7 vias   backed 0.87
 
-  Four times less plane cutting and a third fewer vias, for about 31% more
-  copper. On a two-layer board that trade is usually right: a longer trace
-  over a solid plane beats a shorter one over a shredded plane.
+  A second board generated from the same specification -- the chain is not
+  bit-identical across regenerations -- gave 24.1% -> 12.2%, 11 -> 8 vias and
+  0.67 -> 0.79. The effect is reliable and roughly halves bottom-layer copper;
+  the absolute figure is a property of the board, not a number to expect.
+
+  About 31% more copper either way. On a two-layer board that trade is usually
+  right: a longer trace over a solid plane beats a shorter one over a shredded
+  plane.
 
   Freerouting has no layer-preference switch. `ScoringSettings.preferredDirectionTraceCost`
   and `RouterSettings.layers` are both `transient`, so neither its JSON config
