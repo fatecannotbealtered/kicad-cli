@@ -242,6 +242,22 @@ def netclass(args: dict[str, Any]) -> None:
     _relay("netclass", args, extra)
 
 
+def pour(args: dict[str, Any]) -> None:
+    """Fill a layer with copper for one net -- usually the ground pour.
+
+    `board stitch` joins the islands of a pour and `board plane` audits what
+    sits under each track; both assume a pour exists and neither could make
+    one. A board out of this chain had zero zones, so `board plane` returned
+    FAIL with `backed_fraction: 0.0` -- every track with no copper beneath it,
+    on a board DRC was perfectly happy with.
+    """
+    extra = ["--net", str(args["net"]), "--layer", str(args["layer"])]
+    for option in ("margin", "clearance", "min-width", "connect"):
+        if args.get(option) is not None:
+            extra += [f"--{option}", str(args[option])]
+    _relay("pour", args, extra)
+
+
 def _list(value: Any) -> list[str]:
     if value is None:
         return []

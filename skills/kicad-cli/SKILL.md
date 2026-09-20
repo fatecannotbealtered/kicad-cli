@@ -110,7 +110,7 @@ ones apart:
 |---|---|---|
 | Is this board manufacturable? | `board drc` — read `ok_to_fabricate`, not the exit code | `board audit` does not run DRC; it reports design quality |
 | Does the board still match the schematic? | `board parity` (components and nets) | — |
-| Make a board from a requirement (no design exists yet) | `sch create` → `board from-netlist` → `board place` → `board route` → `board widen` → `fab *` | see "Building a board from nothing" below; do not hand-write a `.kicad_sch` |
+| Make a board from a requirement (no design exists yet) | `sch create` → `board from-netlist` → `board place` → `board pour` → `board route` → `board netclass`/`board rewidth` → `board drc` → `fab *` | see "Building a board from nothing" below; do not hand-write a `.kicad_sch` |
 | Turn an existing schematic into a board | KiCad's own `sch export netlist`, then `board from-netlist` | this creates a *new* board; it does not update one that already has a layout |
 | Will "Update PCB from Schematic" destroy my layout? | `sch link`, then `sch sync-preview` | never `pcb drc --schematic-parity`; it matches by reference designator and is blind to broken links |
 | ERC says zero — is the schematic fine? | `sch audit` (re-runs the silenced rules) | `sch link` |
@@ -120,6 +120,7 @@ ones apart:
 | `repair` stopped improving with connections still open | `board route --mode full` — ask the user first, it deletes every existing track | repeating `repair` again; it only finds paths through gaps in existing copper, and that copper is what is blocking it |
 | Traces are long, or the router cannot get through | `board place` before routing | it moves parts, so any existing tracks must be re-routed after |
 | Copper pour looks connected but is not | `board stitch` | `board audit` |
+| No ground plane / EMC / return paths | `board pour --net GND --layer B.Cu`, then `board plane` to check coverage | `board stitch` and `board plane` both assume a pour exists; neither makes one |
 | Return paths / EMC | `board plane` | `board audit` |
 | Inspect the open editor | `board live` (read-only IPC status) | it does not edit the board or create undo entries |
 
@@ -148,19 +149,25 @@ kicad-cli board from-netlist --netlist build/circuit.net --out build/circuit.kic
 kicad-cli board place --board build/circuit.kicad_pcb --dry-run --compact
 kicad-cli board place --board build/circuit.kicad_pcb --confirm ct_xxx --compact
 
-# 4. Route, then read verify.width_regressed and widen if it is true.
+# 4. Ground pour. Without one, board plane reports FAIL with backed_fraction 0:
+#    every track with no copper beneath it, on a board DRC is happy with.
+kicad-cli board pour --board build/circuit.kicad_pcb --net GND --layer B.Cu --confirm ct_xxx --compact
+#    Order is not critical today -- the router does not consult pours yet --
+#    but pour before routing so this does not have to change later.
+
+# 5. Route, then read verify.width_regressed and widen if it is true.
 kicad-cli board route --board build/circuit.kicad_pcb --mode repair --confirm ct_xxx --compact
 
-# 5. Power nets need a wider target than Default's 0.20 mm (about 0.74 A).
+# 6. Power nets need a wider target than Default's 0.20 mm (about 0.74 A).
 #    board audit reports an error until they have one.
-kicad-cli board netclass --board build/circuit.kicad_pcb --name Power     --width 0.6 --nets +3V3,VIN --confirm ct_xxx --compact
+kicad-cli board netclass --board build/circuit.kicad_pcb --name Power --width 0.6 --nets +3V3,VIN --confirm ct_xxx --compact
 kicad-cli board rewidth --board build/circuit.kicad_pcb --confirm ct_xxx --compact
 
-# 6. Check it before plotting. Exit is 0 even when DRC finds problems.
+# 7. Check it before plotting. Exit is 0 even when DRC finds problems.
 kicad-cli board drc --board build/circuit.kicad_pcb --compact
 #    ok_to_fabricate false => errors or missing connections remain. Fix, re-check.
 
-# 7. Manufacturing output.
+# 8. Manufacturing output.
 kicad-cli fab gerber --board build/circuit.kicad_pcb --out build/fab --confirm ct_xxx --compact
 kicad-cli fab drill  --board build/circuit.kicad_pcb --out build/fab --confirm ct_xxx --compact
 ```
@@ -194,8 +201,8 @@ built without it. Name footprints when you write the spec.
 
 STOP CHECKPOINT: Ask the user before confirming any write. All of `sch create`,
 `board from-netlist`, `board route`, `board stitch`, `board rewidth`,
-`board widen`, `board move`, `board place`, `board netclass`, `sch relink` and
-`fab *` modify files on disk.
+`board widen`, `board move`, `board place`, `board netclass`, `board pour`,
+`sch relink` and `fab *` modify files on disk.
 `sch create` and `board from-netlist` replace a file of that name if one exists.
 
 STOP CHECKPOINT: `board route --mode full` **deletes every existing track**
