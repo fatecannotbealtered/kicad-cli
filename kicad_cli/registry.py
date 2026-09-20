@@ -251,6 +251,15 @@ SCHEMAS: dict[str, dict[str, Any]] = {
     "board_route": {
         "shape": "object",
         "fields": [
+            # engine=grid 的那套字段与 engine=freerouting 的那套互不适用，
+            # 不适用的一律为 null——和三个 mode 的处理方式一致。
+            "engine",
+            "passes",
+            "freerouting_unrouted",
+            "freerouting_violations",
+            "necked_tracks_widened",
+            "min_track_width_mm",
+            "board",
             "mode",
             "targets",
             "routed",
@@ -484,6 +493,8 @@ def _cmd(
             # Only `full` plans from scratch, which is when leaving a net to
             # its pour is a decision rather than a retrofit.
             "use-planes": {"when": {"mode": ["full"]}},
+            # freerouting 自己决定怎么布，--mode 对它没有意义；--passes 只对它有。
+            "passes": {"when": {"engine": ["freerouting"]}},
             "no-verify": {"when": {"mode": ["rewidth"]}},
             "no-restore": {"when": {"mode": ["rewidth"]}, "requires": ["nets"]},
         }
@@ -887,6 +898,21 @@ def build() -> list[dict[str, Any]]:
                     "required": False,
                     "multiple": False,
                     "default": False,
+                },
+                {
+                    "name": "engine",
+                    "type": "string",
+                    "required": False,
+                    "multiple": False,
+                    "default": "grid",
+                    "enum": ["grid", "freerouting"],
+                },
+                {
+                    "name": "passes",
+                    "type": "integer",
+                    "required": False,
+                    "multiple": False,
+                    "default": 10,
                 },
                 {
                     "name": "no-verify",

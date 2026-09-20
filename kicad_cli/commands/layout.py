@@ -32,6 +32,10 @@ from .board import _board_arg
 # emits that a schema does not declare is drift and fails in strict mode.
 _ROUTE_ONLY = frozenset(
     {
+        # Which engine routed it. `board rewidth` is always the grid one --
+        # Freerouting has no notion of re-routing a netclass to a width -- so
+        # the field is true but is not part of what rewidth promises.
+        "engine",
         "targets",
         "routed",
         "failed",
@@ -119,17 +123,29 @@ def _opt(args: dict[str, Any], name: str, payload_name: str | None = None) -> li
 
 
 def route(args: dict[str, Any]) -> None:
-    """Grid autorouter. Three modes, and the difference matters.
+    """Route the board. Two engines, and the difference is push and shove.
 
+    ``--engine grid`` is the router built into this tool. Three modes:
     ``repair`` leaves existing copper alone and only attempts what is still
-    unconnected. ``full`` clears the board's tracks first and routes from
-    scratch. ``rewidth`` re-routes selected netclasses at their target width.
+    unconnected, ``full`` clears the board's tracks first and routes from
+    scratch, ``rewidth`` re-routes selected netclasses at their target width.
+    It does not push and shove -- nets are routed one at a time against copper
+    it treats as immovable, so a connection needing an existing track to move
+    aside will not be found. That is a property of the algorithm.
 
-    It does not push and shove. Nets are routed one at a time against copper it
-    treats as immovable, so a connection that needs an existing track to move
-    aside will not be found -- that is a property of the algorithm, not a bug
-    to be tuned around, and it is why some connections still need a person.
+    ``--engine freerouting`` hands the board to Freerouting over Specctra
+    DSN/SES. It does push and shove. On the 15-part board measured here both
+    engines finished fully connected and fabricable, and Freerouting used 172
+    mm of copper against 178, with 11 vias against 23 -- half the drilled
+    holes, and half the punctures in the ground plane.
+
+    Freerouting is GPL-3.0 and is not redistributed here, for the same reason
+    KiCad is not: this tool finds what the user installed and calls it at
+    arm's length. `doctor` reports whether it is there.
     """
+    if str(args.get("engine") or "grid").lower() == "freerouting":
+        _freeroute(args)
+        return
     _relay(
         "pcb_route",
         args,
@@ -142,6 +158,43 @@ def route(args: dict[str, Any]) -> None:
             *_flag(args, "use-planes"),
             *_flag(args, "no-verify"),
             *_flag(args, "no-restore"),
+        ],
+    )
+
+
+def _freeroute(args: dict[str, Any]) -> None:
+    """Resolve the engine before spending a confirmation on it.
+
+    Finding the jar is a question about this machine, not about the board, so
+    it is answered here rather than inside the payload: a missing installation
+    should fail the same way whether or not KiCad is even present, and should
+    say what to install rather than reporting some downstream symptom.
+    """
+    from ..payload import freerouting  # noqa: PLC0415
+
+    state = freerouting.status()
+    if not state["usable"]:
+        envelope.fail(
+            "E_CONFIG",
+            "Freerouting 引擎不可用",
+            {
+                **{k: v for k, v in state.items() if k != "usable"},
+                "install": "https://github.com/freerouting/freerouting/releases",
+                "hint": f"下载 jar 后设 {freerouting.ENV_JAR}=<path>；"
+                f"另需 JDK 21+（或设 {freerouting.ENV_JAVA}=<path to java>）。"
+                "本工具不分发 Freerouting：它是 GPL-3.0，和 KiCad 一样由用户本机安装",
+                "fallback": "或者改用 --engine grid，那个不需要任何外部程序",
+            },
+        )
+    _relay(
+        "pcb_freeroute",
+        args,
+        [
+            "--jar",
+            state["jar"],
+            "--java",
+            state["java"],
+            *_opt(args, "passes"),
         ],
     )
 

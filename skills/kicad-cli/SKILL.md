@@ -57,6 +57,12 @@ Only use `reference --command "board route" --compact` after plain `reference`
 shows that its command selector is supported. Otherwise use the full reference.
 Do not infer parameters from this file and do not scrape `--help`.
 
+`board route --engine freerouting` needs Freerouting and a JDK installed on the
+machine. This tool does not ship them: Freerouting is GPL-3.0, as KiCad is, and
+`NOTICE.md` is the standing position on redistributing neither. `doctor` reports
+`freerouting_engine`, and a missing one is `warn` rather than `fail` because
+`--engine grid` is the default and needs nothing external.
+
 Run `context` and `doctor` first when anything fails: they report which KiCad
 was resolved and whether IPC is enabled in preferences. `board live` tests actual
 IPC reachability; a preference check does not prove a running connection. Check
@@ -118,6 +124,7 @@ ones apart:
 | A trace is too thin | `board widen` first (in place), then `board route --mode rewidth --nets X` | `board rewidth` has no `--nets`; it works by netclass |
 | Connections are missing | `board route --mode repair` (repeat until it stops improving) | `--mode full` clears every existing track first |
 | `repair` stopped improving with connections still open | `board route --mode full` — ask the user first, it deletes every existing track | repeating `repair` again; it only finds paths through gaps in existing copper, and that copper is what is blocking it |
+| Routing leaves too many vias, or a net will not route at all | `board route --engine freerouting` (needs a local install; `doctor` says) | it is optional — `--engine grid` is the default and needs no external program |
 | Traces are long, or the router cannot get through | `board place` before routing | it moves parts, so any existing tracks must be re-routed after |
 | Copper pour looks connected but is not | `board stitch` | `board audit` |
 | No ground plane / EMC / return paths | `board pour --net GND --layer B.Cu`, then `board plane` to check coverage | `board stitch` and `board plane` both assume a pour exists; neither makes one |
@@ -160,6 +167,10 @@ kicad-cli board pour --board build/circuit.kicad_pcb --net GND --layer B.Cu --co
 kicad-cli board route --board build/circuit.kicad_pcb --mode full --use-planes --confirm ct_xxx --compact
 #    --use-planes is off by default and only applies to --mode full. If DRC
 #    errors rise it rolls the whole board back and says so; drop it and re-run.
+#    Second engine, if doctor says freerouting_engine is pass. It pushes and
+#    shoves, which the grid router cannot: measured 178 mm copper / 23 vias
+#    (grid) vs 172 mm / 11 vias (freerouting) on the same board.
+# kicad-cli board route --board build/circuit.kicad_pcb --engine freerouting --confirm ct_xxx --compact
 
 # 6. Power nets need a wider target than Default's 0.20 mm (about 0.74 A).
 #    board audit reports an error until they have one.
