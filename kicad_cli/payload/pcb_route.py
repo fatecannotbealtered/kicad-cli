@@ -900,6 +900,46 @@ def mode_full(R, b, pcbnew, nc, neck, log):
     log["unresolved"] = {k: v for k, v in sorted(per_net.items()) if v[1]}
 
 
+def _rewidth_classes(args, path):
+    """要重布哪几个网络类。没点名就按工程里实际有的来。
+
+    默认值原来写死成 PWR_MAIN,BTL_OUT,SWITCH——本工具最早服务的那块功放板
+    上的三个类名。换一块板，这三个名字一个都不存在，于是 rewidth 什么都不做
+    还报 ok:true。链条自己造出来的板（只有 Default 一个类）正是这种情况。
+
+    现在默认取工程里 Default 之外的全部类：一个类之所以被建出来，就是因为
+    有人要给它不一样的几何，而 rewidth 的职责就是把那个几何落到铜上。
+    点名了却不存在，则如实报错——那是笔误，不是「没什么可做」。
+    """
+    pro, _ = K.load_project(path)
+    defined = [c.get("name") for c in pro.get("net_settings", {}).get("classes", [])]
+    asked = [c.strip() for c in (args.get("classes") or "").split(",") if c.strip()]
+    if not asked:
+        chosen = tuple(n for n in defined if n and n != "Default")
+        if not chosen:
+            K.fail(
+                "E_VALIDATION",
+                "工程里除 Default 外没有别的网络类，rewidth 无从下手",
+                {
+                    "defined": defined,
+                    "hint": "先用 board netclass 建一个类并把网络指派进去，再跑 rewidth",
+                },
+            )
+        return chosen
+    missing = [name for name in asked if name not in defined]
+    if missing:
+        K.fail(
+            "E_NOT_FOUND",
+            "工程里没有这些网络类",
+            {
+                "missing": missing,
+                "defined": defined,
+                "hint": "用 board netclass 先建出来，或改用工程里已有的类名",
+            },
+        )
+    return tuple(asked)
+
+
 def _child(path, extra):
     """把一次「只碰一块板一次」的工作交给独立子进程。
 
@@ -920,11 +960,34 @@ def _child(path, extra):
     out = (r.stdout or b"").decode("utf-8", "replace").splitlines()
     for line in out:  # SWIG 的 C 层噪声可能抢在前面
         line = line.strip()
-        if line.startswith("{"):
-            try:
-                return json.loads(line)
-            except ValueError:
-                pass
+        if not line.startswith("{"):
+            continue
+        try:
+            doc = json.loads(line)
+        except ValueError:
+            continue
+        # 子进程正经报的失败也是一行 JSON，长的是 {"ok": false, "error": ...}，
+        # 没有 txt / names / snaps。原来这里照单全收，于是一个**规规矩矩报错**
+        # 的子进程会让父进程在 r["txt"] 上抛 KeyError——子进程做对了每一步，
+        # 父进程把它变成了一条没人能看懂的 traceback。
+        # 实测触发：残留 journal 让第二条网络拿到 E_CONFLICT。
+        if isinstance(doc, dict) and doc.get("ok") is False:
+            error = doc.get("error") or {}
+            _child.last_err = {
+                "cmd": extra,
+                "rc": r.returncode,
+                "child_code": error.get("code"),
+                "child_message": error.get("message"),
+                "child_details": error.get("details"),
+            }
+            if _child.soft:
+                return None
+            K.fail(
+                error.get("code") or "E_IO",
+                "子进程报错：" + str(error.get("message") or "(无消息)"),
+                {"cmd": extra, **(error.get("details") or {})},
+            )
+        return doc
     if _child.soft:
         _child.last_err = {
             "cmd": extra,
@@ -951,8 +1014,20 @@ _child.last_err = None
 
 
 def _emit(obj):
+    """子进程交作业并立刻退出。
+
+    os._exit 是刻意的：SWIG 在解释器关闭时会对已经交还给 C 层的对象再动一次
+    手，正常 return 有机会在这里崩掉，而活都已经干完了。
+
+    但它同时跳过 atexit，于是写事务永远不提交——journal、backup、lock 三件
+    原样留在盘上，下一个子进程一看就 E_CONFLICT 拒写。rewidth 是一条网络一个
+    子进程的，所以第一条写成功、第二条必然撞上自己刚留下的 journal；留下的
+    lock 还会把这块板锁到过期为止。K.ok 本来负责提交，而这条路径不走 K.ok。
+    所以这里显式提交，再退出。
+    """
     sys.stdout.write(json.dumps(obj, ensure_ascii=False) + chr(10))
     sys.stdout.flush()
+    K.commit_write()
     os._exit(0)
 
 
@@ -965,7 +1040,7 @@ def main():
     neck = float(args.get("neck", NECK_DEFAULT))
     if mode not in ("full", "repair", "rewidth"):
         K.fail("E_USAGE", "--mode 只能是 full / repair / rewidth", {"got": mode})
-    classes = tuple((args.get("classes") or "PWR_MAIN,BTL_OUT,SWITCH").split(","))
+    classes = _rewidth_classes(args, path) if mode == "rewidth" else ()
 
     pcbnew = K.import_pcbnew()
     if args.get("internal"):
@@ -1060,6 +1135,11 @@ def main():
     if mode == "rewidth":
         # 先把当前状态落盘，之后每条网络都从磁盘重新加载一份干净的板子。
         K.fill_and_save(pcbnew, b, path)
+        # 这一笔写到此结束。不提交的话 journal 和 lock 会被父进程一直攥到
+        # K.ok，而每个子进程都要写同一块板——它们看见的是「上一次写没写完」，
+        # 于是第一条网络就 E_CONFLICT。下面那句注释说得很清楚：父进程从此
+        # 不再碰板子。那这笔事务也该在这里了结。
+        K.commit_write()
         del b  # 父进程从此不再碰板子，全部交给子进程
         if args.get("nets"):
             # 显式指定网络与顺序。这是解「先布的占了走廊、后布的没位置」的正解：
