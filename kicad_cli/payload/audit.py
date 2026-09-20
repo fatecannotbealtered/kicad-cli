@@ -452,6 +452,7 @@ def main():
             "copper_layers": cu_layers,
             "copper_oz": oz,
             "copper_mm": round(track_mm, 1),
+            "copper_by_layer_mm": K.copper_by_layer(b, pcbnew),
             "track_count": tracks,
             "via_count": vias,
             "delta_t_c": dT,

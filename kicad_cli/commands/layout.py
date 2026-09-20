@@ -44,6 +44,11 @@ _ROUTE_ONLY = frozenset(
         "cleared_tracks",
         "escape",
         "fanout",
+        # Freerouting-only; `board rewidth` is always the grid engine.
+        "layer_policy",
+        "layer_policy_applied",
+        "layer_policy_fallback",
+        "copper_by_layer_mm",
         # Both describe the router's use of copper pours. `board rewidth` skips
         # plane nets rather than reporting on them, so neither is part of what
         # it promises.
@@ -195,6 +200,7 @@ def _freeroute(args: dict[str, Any]) -> None:
             "--java",
             state["java"],
             *_opt(args, "passes"),
+            *_opt(args, "layer-policy"),
         ],
     )
 

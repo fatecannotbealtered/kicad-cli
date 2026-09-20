@@ -8,6 +8,43 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- `board route --engine freerouting --layer-policy plane-first` — keep signals
+  on the top layer so the ground plane underneath stays whole. Best practice on
+  a two-layer board, and measured on the 15-part ATmega328P with its pour:
+
+      balanced      21.5% of copper on B.Cu   172.6 mm   11 vias   backed 0.73
+      plane-first    5.1% of copper on B.Cu   225.2 mm    7 vias   backed 0.87
+
+  Four times less plane cutting and a third fewer vias, for about 31% more
+  copper. On a two-layer board that trade is usually right: a longer trace
+  over a solid plane beats a shorter one over a shredded plane.
+
+  Freerouting has no layer-preference switch. `ScoringSettings.preferredDirectionTraceCost`
+  and `RouterSettings.layers` are both `transient`, so neither its JSON config
+  nor a `-dr` rules file can reach them -- four runs (no rules, cost 1.0, cost
+  50.0, and the two layers' preferred directions swapped) produced byte-identical
+  output. Via cost is the lever that does work, through the environment-variable
+  settings source the jar exposes. It is not monotonic: 300 and 500 sit on a
+  plateau that is best on every metric, and 800 and above fall back to worse
+  than the default -- which is why this is a named policy and not a number the
+  caller tunes.
+
+  `plane-first` trades routability for layer purity and that trade is not
+  always worth it: with the pour removed, the same board comes back one
+  connection short. A board missing a connection cannot be built, so it
+  re-routes with `balanced` and reports `layer_policy_fallback` saying why --
+  the same shape as `sch create` falling back to auto-stubbing. Default stays
+  `balanced`, and a balanced run on a board that has a pour now says in its
+  note what plane-first would buy, with these numbers.
+- `board audit` and `board route --engine freerouting` report
+  `copper_by_layer_mm`. The total cannot show what matters here: 200 mm all on
+  the top layer and 200 mm with half on the bottom are two different boards,
+  and only one of them still has a reference plane.
+- Freerouting now runs against a private config in the scratch directory
+  (`FREEROUTING__USER_DATA_PATH`). Without it, it reads and writes the user's
+  own `freerouting.json` -- our earlier calls had already left a
+  `logging.file.location` in it pointing at a temporary directory that no
+  longer existed. A routing call has no business editing the user's settings.
 - `board route --engine freerouting` — a second routing engine, reached over
   Specctra DSN/SES. The grid router does not push and shove: nets are routed
   one at a time against copper it treats as immovable, so a connection needing
