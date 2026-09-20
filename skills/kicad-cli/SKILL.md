@@ -172,9 +172,12 @@ kicad-cli board route --board build/circuit.kicad_pcb --mode full --use-planes -
 #    shoves, which the grid router cannot: measured 178 mm copper / 23 vias
 #    (grid) vs 172 mm / 11 vias (freerouting) on the same board. Add
 #    --layer-policy plane-first when the board has a ground pour: it keeps
-#    signals on top so the plane stays whole (B.Cu copper 21.5% -> 5.1%,
-#    vias 11 -> 7, board plane backed_fraction 0.73 -> 0.87) at ~31% more
-#    copper, and falls back to balanced by itself if a net will not route.
+#    signals on top so the plane stays whole. Two boards from the same spec
+#    measured B.Cu copper 21.5% -> 5.1% and 24.1% -> 12.2%, vias 11 -> 7 and
+#    11 -> 8, backed_fraction 0.73 -> 0.87 and 0.67 -> 0.79. It roughly halves
+#    bottom-layer copper; the absolute figure depends on the board. Costs
+#    ~31% more copper, and falls back to balanced by itself if a net will not
+#    route.
 # kicad-cli board route --board build/circuit.kicad_pcb --engine freerouting #     --layer-policy plane-first --confirm ct_xxx --compact
 
 # 6. Power nets need a wider target than Default's 0.20 mm (about 0.74 A).

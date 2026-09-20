@@ -289,9 +289,10 @@ def main():
             )
             + (
                 "这块板有敷铜，而现在是 balanced：底层每一段信号线都在平面上割一刀。"
-                "同一块板实测 --layer-policy plane-first 能把底层铜从 21.5% 压到 5.1%、"
-                "过孔 11 个减到 7 个、board plane 的 backed_fraction 从 0.73 升到 0.87，"
-                "代价是铜长多约 31%。布不通会自动退回来，试一次不亏。"
+                "--layer-policy plane-first 大致能把底层铜砍掉一半、过孔少两三个、"
+                "board plane 的 backed_fraction 涨 0.1 上下（两块同规格板实测分别是 "
+                "21.5%->5.1% 和 24.1%->12.2%），代价是铜长多约 31%。"
+                "布不通会自动退回来，试一次不亏。"
                 if suggest
                 else ""
             )
