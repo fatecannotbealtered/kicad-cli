@@ -101,15 +101,57 @@ def test_status_names_the_missing_java_rather_than_the_jar(tmp_path, monkeypatch
 
 
 @needs_engine
-def test_asking_the_version_does_not_litter_the_caller_directory(tmp_path, monkeypatch):
-    """Freerouting writes its log to <cwd>/<language>/freerouting.log, so a
-    bare `--help` grows an `en/` folder wherever it was run from. `doctor`
-    calls this on every invocation; it did that in the repository root and the
-    folder was very nearly committed."""
+def test_the_version_is_read_from_the_jar_rather_than_by_running_it(tmp_path, monkeypatch):
+    """This used to run `java -jar ... --help` and scrape the output, which
+    cost a JVM start: `doctor` went from 0.79 s to 3.59 s, and `doctor` is the
+    first thing anyone runs when something is wrong. It also wrote a log to
+    <cwd>/<language>/freerouting.log, so the probe grew an `en/` folder
+    wherever it ran -- in the repository root, once, very nearly committed.
+
+    Reading the jar is milliseconds, and it means an unverified jar is not
+    executed merely to ask its version.
+    """
     monkeypatch.chdir(tmp_path)
     state = F.status()
     assert state["version"], state
     assert sorted(p.name for p in tmp_path.iterdir()) == [], "the probe left files behind"
+
+
+def test_a_renamed_jar_still_yields_its_version(tmp_path):
+    """The filename is the cheap source and the official release naming, but a
+    jar the user renamed is still perfectly usable, so the version also comes
+    out of the class constant inside it."""
+    import shutil as _shutil
+
+    original = F.find_jar()
+    if not original:
+        pytest.skip("no jar configured")
+    renamed = tmp_path / "router.jar"
+    _shutil.copy2(original, renamed)
+    assert F.version(str(renamed)) == F.version(original)
+
+
+def test_something_that_is_not_a_jar_has_no_version(tmp_path):
+    """None rather than a guess: status decides what to do about it."""
+    fake = tmp_path / "freerouting.jar"
+    fake.write_bytes(b"not a zip at all")
+    assert F.version(str(fake)) is None
+
+
+def test_an_unreadable_version_is_not_treated_as_unusable(tmp_path, monkeypatch):
+    """Refusing costs a capability outright; trying costs a confusing error
+    only if the jar really is too old, and that error comes from Freerouting
+    itself, which says more than we could."""
+    fake = tmp_path / "router.jar"
+    fake.write_bytes(b"not a zip at all")
+    monkeypatch.setenv(F.ENV_JAR, str(fake))
+    java = tmp_path / "java.exe"
+    java.write_bytes(b"")
+    monkeypatch.setenv(F.ENV_JAVA, str(java))
+    state = F.status()
+    assert state["version"] is None
+    assert state["usable"] is True
+    assert state["reason"]
 
 
 # --- reading what Freerouting said --------------------------------------------

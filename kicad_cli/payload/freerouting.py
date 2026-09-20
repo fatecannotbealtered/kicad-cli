@@ -16,8 +16,7 @@ from __future__ import annotations
 import os
 import re
 import shutil
-import subprocess
-import tempfile
+import zipfile
 from pathlib import Path
 
 ENV_JAR = "KICAD_CLI_FREEROUTING"
@@ -79,30 +78,30 @@ def find_java() -> str | None:
     return str(Path(found).resolve()) if found else None
 
 
-def version(java: str, jar: str, timeout: float = 120.0) -> str | None:
-    """问它自己的版本号。
+def version(jar: str) -> str | None:
+    """从 jar 里读版本号,不启动它。
 
-    在临时目录里问。Freerouting 把自己的日志写到 <工作目录>/<语言>/ 下面,
-    所以就这么一次 --help 也会在调用方的当前目录里凭空长出一个 en/ 文件夹。
-    doctor 每跑一次就拉一次——实测在本仓库根目录里拉出来过,还差点被提交。
+    原来是跑一次 `java -jar ... --help` 再从输出里抠。那要起一个 JVM,实测把
+    doctor 从 0.79 秒拖到 3.59 秒——而 doctor 正是出问题时第一个要跑的命令,
+    为了一个可选引擎的版本号让它慢四倍半不划算。
 
-    不带 -l:版本那一行是 "Freerouting v2.4.1 (build-date: ...)",产品名加版本号,
-    不跟着语言走。少一个参数,少一个副作用。
+    顺带还少了一件事:不必为了问版本去执行一个我们没验证过的 jar。
+
+    两个来源。文件名是官方 release 的命名,最便宜;改过名就去 Constants.class
+    里扫——版本号以字面量编在里面。两个都读不到就返回 None,由 status 决定
+    怎么办,不猜。
     """
+    name = Path(jar).name
+    match = re.search(r"freerouting[-_]v?(\d+\.\d+[\w.]*?)(?:\.jar)?$", name, re.I)
+    if match:
+        return match.group(1)
     try:
-        with tempfile.TemporaryDirectory(prefix="kicadcli-fr-v") as scratch:
-            proc = subprocess.run(
-                [java, "-jar", jar, "--help"],
-                capture_output=True,
-                timeout=timeout,
-                cwd=scratch,
-            )
-    except (OSError, subprocess.SubprocessError):
+        with zipfile.ZipFile(jar) as archive:
+            body = archive.read("app/freerouting/constants/Constants.class")
+    except (OSError, KeyError, zipfile.BadZipFile):
         return None
-    text = (proc.stdout or b"").decode("utf-8", "replace")
-    text += (proc.stderr or b"").decode("utf-8", "replace")
-    match = re.search(r"Freerouting\s+v?(\d+\.\d+[\w.]*)", text)
-    return match.group(1) if match else None
+    found = re.search(rb"(\d+\.\d+\.\d+)", body)
+    return found.group(1).decode("ascii") if found else None
 
 
 def status() -> dict:
@@ -124,9 +123,13 @@ def status() -> dict:
     if not java:
         out["reason"] = f"找到了 jar 但没有 java。装 JDK 21+，或设 {ENV_JAVA}=<path to java>"
         return out
-    out["version"] = version(java, jar)
+    out["version"] = version(jar)
     if out["version"] is None:
-        out["reason"] = "jar 和 java 都在，但问不出版本号——这一对可能配不上"
+        # 读不出版本不等于不能用。拦下来的代价是明确的（这个引擎用不了），
+        # 放过去的代价是可能撞上 1.x 的参数不兼容——而那会带着 Freerouting
+        # 自己的报错回来，比我们在这里替它拒绝更说得清。
+        out["usable"] = True
+        out["reason"] = "读不出版本号（jar 改过名？）——按能用处理；真不兼容会在调用时报出来"
         return out
     try:
         major = int(out["version"].split(".")[0])
