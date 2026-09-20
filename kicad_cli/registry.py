@@ -422,6 +422,28 @@ SCHEMAS: dict[str, dict[str, Any]] = {
         ],
         "untrusted_fields": ["assigned", "already_assigned"],
     },
+    "board_silkscreen": {
+        "shape": "object",
+        # `crowded` is how many were in the way; `moved` how many were fixed;
+        # `stuck` names the ones with nowhere free to go.
+        "fields": [
+            "board",
+            "references",
+            "crowded",
+            "moved",
+            "moves",
+            "stuck",
+            "clearance_mm",
+            # How far the text had to go. Legible is the floor; still obviously
+            # belonging to its own part is the bar, and distance is what tells
+            # the two apart.
+            "max_move_mm",
+            "mean_move_mm",
+            "verify",
+            "note",
+        ],
+        "untrusted_fields": ["moves", "stuck"],
+    },
     "board_place": {
         "shape": "object",
         # `improved` is the field to read first: false means the board was left
@@ -1250,6 +1272,35 @@ def build() -> list[dict[str, Any]]:
                 "--nets +3V3,VIN --confirm ct_xxx --compact",
             ],
             layout.netclass,
+        ),
+        _cmd(
+            "board silkscreen",
+            "write",
+            "Move reference designators clear of pads and other silkscreen, so the board "
+            "can be read when assembling it.",
+            [
+                _board_param(),
+                {
+                    "name": "clearance",
+                    "type": "number",
+                    "required": False,
+                    "multiple": False,
+                    "default": 0.15,
+                },
+                {
+                    "name": "ignore-lock",
+                    "type": "boolean",
+                    "required": False,
+                    "multiple": False,
+                    "default": False,
+                },
+            ],
+            "board_silkscreen",
+            [
+                "kicad-cli board silkscreen --board b.kicad_pcb --dry-run --compact",
+                "kicad-cli board silkscreen --board b.kicad_pcb --confirm ct_xxx --compact",
+            ],
+            layout.silkscreen,
         ),
         _cmd(
             "board place",

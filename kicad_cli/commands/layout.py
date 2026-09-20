@@ -322,6 +322,19 @@ def pour(args: dict[str, Any]) -> None:
     _relay("pour", args, extra)
 
 
+def silkscreen(args: dict[str, Any]) -> None:
+    """Move reference designators off pads and off each other.
+
+    The last class of problem this chain leaves on a finished board: every
+    board it makes comes out with silkscreen warnings, and the reference
+    designator is one side of all of them. Not purely cosmetic -- a refdes you
+    cannot read is a part you cannot hand-place, rework or check against a BOM,
+    and silk over a pad is clipped by the solder mask opening, so it prints as
+    half a character.
+    """
+    _relay("silkscreen", args, [*_opt(args, "clearance")])
+
+
 def _list(value: Any) -> list[str]:
     if value is None:
         return []

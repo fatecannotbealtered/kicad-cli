@@ -116,7 +116,7 @@ ones apart:
 |---|---|---|
 | Is this board manufacturable? | `board drc` — read `ok_to_fabricate`, not the exit code | `board audit` does not run DRC; it reports design quality |
 | Does the board still match the schematic? | `board parity` (components and nets) | — |
-| Make a board from a requirement (no design exists yet) | `sch create` → `board from-netlist` → `board place` → `board pour` → `board route` → `board netclass`/`board rewidth` → `board drc` → `fab *` | see "Building a board from nothing" below; do not hand-write a `.kicad_sch` |
+| Make a board from a requirement (no design exists yet) | `sch create` → `board from-netlist` → `board place` → `board pour` → `board route` → `board netclass`/`board rewidth` → `board silkscreen` → `board drc` → `fab *` | see "Building a board from nothing" below; do not hand-write a `.kicad_sch` |
 | Turn an existing schematic into a board | KiCad's own `sch export netlist`, then `board from-netlist` | this creates a *new* board; it does not update one that already has a layout |
 | Will "Update PCB from Schematic" destroy my layout? | `sch link`, then `sch sync-preview` | never `pcb drc --schematic-parity`; it matches by reference designator and is blind to broken links |
 | ERC says zero — is the schematic fine? | `sch audit` (re-runs the silenced rules) | `sch link` |
@@ -125,6 +125,7 @@ ones apart:
 | Connections are missing | `board route --mode repair` (repeat until it stops improving) | `--mode full` clears every existing track first |
 | `repair` stopped improving with connections still open | `board route --mode full` — ask the user first, it deletes every existing track | repeating `repair` again; it only finds paths through gaps in existing copper, and that copper is what is blocking it |
 | Routing leaves too many vias, or a net will not route at all | `board route --engine freerouting` (needs a local install; `doctor` says) | it is optional — `--engine grid` is the default and needs no external program |
+| Reference designators are unreadable / silkscreen warnings | `board silkscreen` after routing | it only moves text; it never resizes, rotates or hides a refdes |
 | The ground plane is cut to pieces by bottom-layer traces | `board pour`, then `board route --engine freerouting --layer-policy plane-first` | `--layer-policy` only applies to the freerouting engine; it costs ~31% more copper and falls back on its own if a net will not route |
 | Traces are long, or the router cannot get through | `board place` before routing | it moves parts, so any existing tracks must be re-routed after |
 | Copper pour looks connected but is not | `board stitch` | `board audit` |
@@ -188,11 +189,18 @@ kicad-cli board rewidth --board build/circuit.kicad_pcb --confirm ct_xxx --compa
 #    whole board was rolled back. The board is intact and still at the old width:
 #    make room (board place, a bigger outline) or accept the narrower trace.
 
-# 7. Check it before plotting. Exit is 0 even when DRC finds problems.
+# 7. Reference designators, after routing: the router decides where copper
+#    goes, so text can only be placed once it has. Took 20 silkscreen
+#    warnings to 0 on the test board.
+kicad-cli board silkscreen --board build/circuit.kicad_pcb --confirm ct_xxx --compact
+#    Read max_move_mm: a refdes far from its own part is legible and still
+#    tells you nothing. stuck names any it could not place.
+
+# 8. Check it before plotting. Exit is 0 even when DRC finds problems.
 kicad-cli board drc --board build/circuit.kicad_pcb --compact
 #    ok_to_fabricate false => errors or missing connections remain. Fix, re-check.
 
-# 8. Manufacturing output.
+# 9. Manufacturing output.
 kicad-cli fab gerber --board build/circuit.kicad_pcb --out build/fab --confirm ct_xxx --compact
 kicad-cli fab drill  --board build/circuit.kicad_pcb --out build/fab --confirm ct_xxx --compact
 ```
@@ -227,7 +235,7 @@ built without it. Name footprints when you write the spec.
 STOP CHECKPOINT: Ask the user before confirming any write. All of `sch create`,
 `board from-netlist`, `board route`, `board stitch`, `board rewidth`,
 `board widen`, `board move`, `board place`, `board netclass`, `board pour`,
-`sch relink` and `fab *` modify files on disk.
+`board silkscreen`, `sch relink` and `fab *` modify files on disk.
 `sch create` and `board from-netlist` replace a file of that name if one exists.
 
 STOP CHECKPOINT: `board route --mode full` **deletes every existing track**

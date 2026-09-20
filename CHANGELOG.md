@@ -8,6 +8,39 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- `doctor` no longer starts a JVM to report an optional engine's version. It
+  ran `java -jar freerouting.jar --help` and scraped the output, which took
+  `doctor` from 0.79 s to 3.59 s -- and `doctor` is the first thing anyone runs
+  when something is wrong. The version now comes from the jar: the release
+  filename, or the class constant inside it if the file was renamed. That is
+  milliseconds, and it means an unverified jar is no longer executed merely to
+  ask its version. A version that cannot be read is treated as usable rather
+  than refused: the cost of refusing is the capability, and the cost of trying
+  is a clear error from Freerouting itself if the jar really is too old.
+- `board silkscreen` — move reference designators clear of pads and of each
+  other. The last class of problem this chain left on a finished board: every
+  board it made came out with silkscreen warnings, and the refdes was one side
+  of all of them. On the 15-part ATmega328P, **20 silkscreen warnings to 0**,
+  leaving the board with no DRC findings of any kind.
+
+  Not cosmetic. A refdes you cannot read is a part you cannot hand-place,
+  rework or check against a BOM, and silk over a pad is clipped by the solder
+  mask opening, so it prints as half a character.
+
+  Only moves. It never resizes, rotates or hides a refdes: text shrunk until
+  it is illegible is no better than text in the wrong place, and hiding one
+  throws the information away, which is a person's decision to make.
+
+  The first version moved J2 and Y1 to y=51 on a board that ends at 48.75 --
+  DRC clean, and no text on the board, because silk outside Edge.Cuts breaks
+  no rule and simply does not print. Candidates are now constrained to the
+  board outline, and a refdes with nowhere left to go is reported in `stuck`
+  rather than forced somewhere wrong.
+
+  `max_move_mm` and `mean_move_mm` are reported because legible is only the
+  floor: a refdes 6 mm from its own part in a row of 0603s is readable and
+  still tells you nothing. On a crowded board the distance is the cost, and it
+  is the caller's call whether to grow the board instead.
 - `board route --engine freerouting --layer-policy plane-first` — keep signals
   on the top layer so the ground plane underneath stays whole. Best practice on
   a two-layer board, and measured on the 15-part ATmega328P with its pour:
