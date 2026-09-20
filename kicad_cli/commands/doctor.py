@@ -12,6 +12,7 @@ from pathlib import Path
 from typing import Any
 
 from .. import envelope, kicad_env
+from ..payload import freerouting
 from . import live, reference
 
 
@@ -120,6 +121,24 @@ def run(_args: dict[str, Any]) -> None:
 
     status, fix = _ipc_server_state()
     checks.append(_check("ipc_api_server", status, fix))
+
+    # Optional, and reported as such. `board route --engine grid` needs nothing
+    # external, so a missing Freerouting is a capability this machine does not
+    # have rather than something wrong with it -- `warn`, never `fail`, or
+    # every user who never wanted the second engine reads a broken doctor.
+    engine = freerouting.status()
+    checks.append(
+        _check(
+            "freerouting_engine",
+            "pass" if engine["usable"] else "warn",
+            None
+            if engine["usable"]
+            else f"{engine['reason']} -- optional: `--engine grid` needs no external program",
+            jar=engine["jar"],
+            java=engine["java"],
+            freerouting_version=engine["version"],
+        )
+    )
 
     level = reference.RELEASE_READINESS["level"]
     rr_status = {"stable": "pass", "beta": "warn"}.get(level, "fail")

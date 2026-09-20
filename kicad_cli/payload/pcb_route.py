@@ -61,6 +61,8 @@ def _objcount(b, pcbnew, tracks):
 # None，而不是让键消失。full 模式六个字段对不上 schema 一直没被发现，因为
 # 从来没有测试真实跑过它。
 ROUTE_FIELDS = (
+    # 哪个引擎布的。栅格这条路固定是 grid；freerouting 走的是另一个载荷。
+    "engine",
     "mode",
     "targets",
     "routed",
@@ -1183,7 +1185,7 @@ def main():
         args.get("confirm"), preview, "pcb_route:%s:%s" % (mode, os.path.basename(path)), path
     )
 
-    log = {"mode": mode}
+    log = {"mode": mode, "engine": "grid"}
     # repair 和 full 的判据基线：必须在任何改动落盘之前取。
     # 这两个模式过去完全不跑 DRC，只数连通性——而 full 的定义就是清空全板走线。
     # 一个察觉不到自己把板子改坏的模式，回滚机制对它毫无意义：没有东西会触发回滚。

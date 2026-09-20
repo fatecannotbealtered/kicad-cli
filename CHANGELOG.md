@@ -8,6 +8,42 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- `board route --engine freerouting` — a second routing engine, reached over
+  Specctra DSN/SES. The grid router does not push and shove: nets are routed
+  one at a time against copper it treats as immovable, so a connection needing
+  an existing track to move aside is never found. Freerouting does. Measured
+  on the 15-part ATmega328P, same placement and the same ground pour, both
+  fully connected and fabricable:
+
+      grid          178 mm copper   113 tracks   23 vias
+      freerouting   172 mm copper   112 tracks   11 vias
+
+  Half the vias: half the drilled holes, half the punctures in the plane.
+
+  Freerouting is **not redistributed**. It is GPL-3.0, as KiCad is, and
+  `NOTICE.md` has always said this project runs what the user installed rather
+  than shipping it. `KICAD_CLI_FREEROUTING` and `KICAD_CLI_JAVA` point at them,
+  `doctor` reports `freerouting_engine`, and a missing install is `warn` rather
+  than `fail` because `--engine grid` remains the default and needs nothing.
+
+  Three things the first real run forced: `-mt 1`, because Freerouting's own
+  log warns its multi-threaded optimiser is broken and produces clearance
+  violations; `-l en`, because otherwise its output follows the system locale
+  and comes back as mojibake on a Chinese Windows; and widening its fanout
+  stubs back to the board's own minimum track width, because it necks to
+  0.15 mm to escape tight pads and KiCad DRC called that 22 `track_width`
+  errors. The widened count is reported, not absorbed.
+
+  Freerouting writes its log to `<cwd>/<language>/freerouting.log`, so even a
+  bare `--help` grows an `en/` folder wherever it ran. `doctor` calls that on
+  every invocation; it did so in this repository's root and the folder was
+  very nearly committed. The probe now runs in a temporary directory and
+  without `-l`, and the routing run is given the scratch directory as its cwd.
+
+  `freerouting_violations` is its clearance model and `verify.errors_final` is
+  KiCad's. They disagree -- it reported 0 violations on the board KiCad found
+  22 errors on -- so both are reported and KiCad's is what the rollback is
+  judged against.
 - `board pour` — fill a copper layer with a zone for one net, usually ground.
   `board stitch` joins the islands of a pour and `board plane` audits what
   sits under each track; both assumed a pour existed and neither could make
