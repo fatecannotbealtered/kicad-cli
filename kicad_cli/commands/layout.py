@@ -225,6 +225,29 @@ def place(args: dict[str, Any]) -> None:
     _relay("pcb_autoplace", args, extra)
 
 
+def netclass(args: dict[str, Any]) -> None:
+    """Create a netclass and put nets in it.
+
+    The chain has been missing this. `board from-netlist` makes a board whose
+    only netclass is Default at 0.20 mm -- roughly 0.74 A on 1 oz copper at a
+    10 C rise, which is fine for a signal and not for a supply. `board rewidth`
+    and `board widen` both work *from* a netclass, and nothing could make one,
+    so `board audit` reported an error against a board this tool had just
+    produced and no command in it could clear that error.
+    """
+    extra = ["--name", str(args["name"]), "--nets", ",".join(_list(args.get("nets")))]
+    for option in ("width", "clearance", "via-diameter", "via-drill"):
+        if args.get(option) is not None:
+            extra += [f"--{option}", str(args[option])]
+    _relay("netclass", args, extra)
+
+
+def _list(value: Any) -> list[str]:
+    if value is None:
+        return []
+    return [str(v) for v in (value if isinstance(value, list) else [value])]
+
+
 def _guard(board: str, args: dict[str, Any]) -> None:
     """Refuse to write to a board another KiCad has open.
 

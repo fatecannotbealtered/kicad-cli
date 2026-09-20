@@ -365,6 +365,22 @@ SCHEMAS: dict[str, dict[str, Any]] = {
         "fields": ["plan", "moved", "courtyard_clash", "note"],
         "untrusted_fields": ["plan", "moved", "courtyard_clash"],
     },
+    "board_netclass": {
+        "shape": "object",
+        # `action` is "created" or "updated". The copper is unchanged either
+        # way: a netclass is a target, and `board rewidth` is what applies it.
+        "fields": [
+            "project",
+            "netclass",
+            "action",
+            "params",
+            "ampacity_a",
+            "assigned",
+            "already_assigned",
+            "note",
+        ],
+        "untrusted_fields": ["assigned", "already_assigned"],
+    },
     "board_place": {
         "shape": "object",
         # `improved` is the field to read first: false means the board was left
@@ -817,7 +833,7 @@ def build() -> list[dict[str, Any]]:
                     "type": "string",
                     "required": False,
                     "multiple": False,
-                    "default": "PWR_MAIN,BTL_OUT,SWITCH",
+                    "default": None,
                     "separator": ",",
                     "description": "Legacy profile; pass the board's real netclasses explicitly.",
                 },
@@ -930,7 +946,7 @@ def build() -> list[dict[str, Any]]:
                     "type": "string",
                     "required": False,
                     "multiple": False,
-                    "default": "PWR_MAIN,BTL_OUT,SWITCH",
+                    "default": None,
                     "separator": ",",
                     "description": "Legacy profile; pass the board's real netclasses explicitly.",
                 },
@@ -1023,6 +1039,73 @@ def build() -> list[dict[str, Any]]:
                 "kicad-cli board move --board board.kicad_pcb --confirm ct_xxx --compact",
             ],
             layout.move,
+        ),
+        _cmd(
+            "board netclass",
+            "write",
+            "Create or update a netclass in the project and assign nets to it. Sets the "
+            "target only; run board rewidth or board widen to change the copper.",
+            [
+                _board_param(),
+                {
+                    "name": "name",
+                    "type": "string",
+                    "required": True,
+                    "multiple": False,
+                    "default": None,
+                },
+                {
+                    "name": "nets",
+                    "type": "string",
+                    "required": True,
+                    "multiple": True,
+                    "separator": ",",
+                    "default": None,
+                },
+                {
+                    "name": "width",
+                    "type": "number",
+                    "required": True,
+                    "multiple": False,
+                    "default": None,
+                },
+                {
+                    "name": "clearance",
+                    "type": "number",
+                    "required": False,
+                    "multiple": False,
+                    "default": None,
+                },
+                {
+                    "name": "via-diameter",
+                    "type": "number",
+                    "required": False,
+                    "multiple": False,
+                    "default": None,
+                },
+                {
+                    "name": "via-drill",
+                    "type": "number",
+                    "required": False,
+                    "multiple": False,
+                    "default": None,
+                },
+                {
+                    "name": "ignore-lock",
+                    "type": "boolean",
+                    "required": False,
+                    "multiple": False,
+                    "default": False,
+                },
+            ],
+            "board_netclass",
+            [
+                "kicad-cli board netclass --board b.kicad_pcb --name Power --width 0.5 "
+                "--nets +3V3,VIN --dry-run --compact",
+                "kicad-cli board netclass --board b.kicad_pcb --name Power --width 0.5 "
+                "--nets +3V3,VIN --confirm ct_xxx --compact",
+            ],
+            layout.netclass,
         ),
         _cmd(
             "board place",

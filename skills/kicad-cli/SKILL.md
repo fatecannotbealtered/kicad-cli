@@ -114,6 +114,7 @@ ones apart:
 | Turn an existing schematic into a board | KiCad's own `sch export netlist`, then `board from-netlist` | this creates a *new* board; it does not update one that already has a layout |
 | Will "Update PCB from Schematic" destroy my layout? | `sch link`, then `sch sync-preview` | never `pcb drc --schematic-parity`; it matches by reference designator and is blind to broken links |
 | ERC says zero — is the schematic fine? | `sch audit` (re-runs the silenced rules) | `sch link` |
+| Power nets are being routed at signal width | `board netclass --name Power --width 0.6 --nets +3V3,VIN`, then `board rewidth` | widening without a netclass: `board widen` and `board rewidth` both read the target *from* a netclass |
 | A trace is too thin | `board widen` first (in place), then `board route --mode rewidth --nets X` | `board rewidth` has no `--nets`; it works by netclass |
 | Connections are missing | `board route --mode repair` (repeat until it stops improving) | `--mode full` clears every existing track first |
 | `repair` stopped improving with connections still open | `board route --mode full` — ask the user first, it deletes every existing track | repeating `repair` again; it only finds paths through gaps in existing copper, and that copper is what is blocking it |
@@ -150,11 +151,16 @@ kicad-cli board place --board build/circuit.kicad_pcb --confirm ct_xxx --compact
 # 4. Route, then read verify.width_regressed and widen if it is true.
 kicad-cli board route --board build/circuit.kicad_pcb --mode repair --confirm ct_xxx --compact
 
-# 5. Check it before plotting. Exit is 0 even when DRC finds problems.
+# 5. Power nets need a wider target than Default's 0.20 mm (about 0.74 A).
+#    board audit reports an error until they have one.
+kicad-cli board netclass --board build/circuit.kicad_pcb --name Power     --width 0.6 --nets +3V3,VIN --confirm ct_xxx --compact
+kicad-cli board rewidth --board build/circuit.kicad_pcb --confirm ct_xxx --compact
+
+# 6. Check it before plotting. Exit is 0 even when DRC finds problems.
 kicad-cli board drc --board build/circuit.kicad_pcb --compact
 #    ok_to_fabricate false => errors or missing connections remain. Fix, re-check.
 
-# 6. Manufacturing output.
+# 7. Manufacturing output.
 kicad-cli fab gerber --board build/circuit.kicad_pcb --out build/fab --confirm ct_xxx --compact
 kicad-cli fab drill  --board build/circuit.kicad_pcb --out build/fab --confirm ct_xxx --compact
 ```
@@ -188,8 +194,8 @@ built without it. Name footprints when you write the spec.
 
 STOP CHECKPOINT: Ask the user before confirming any write. All of `sch create`,
 `board from-netlist`, `board route`, `board stitch`, `board rewidth`,
-`board widen`, `board move`, `board place`, `sch relink` and `fab *` modify
-files on disk.
+`board widen`, `board move`, `board place`, `board netclass`, `sch relink` and
+`fab *` modify files on disk.
 `sch create` and `board from-netlist` replace a file of that name if one exists.
 
 STOP CHECKPOINT: `board route --mode full` **deletes every existing track**

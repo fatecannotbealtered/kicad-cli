@@ -8,6 +8,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- `board netclass` — create a netclass and assign nets to it. The chain had
+  no way to say "this net carries current". `board from-netlist` makes a board
+  whose only class is Default at 0.20 mm, roughly 0.74 A on 1 oz copper at a
+  10 C rise; `board rewidth` and `board widen` both read their target *from* a
+  netclass and nothing could make one. So `board audit` reported an error
+  against a board this tool had just produced, and no command in the tool
+  could clear it. Netclasses live in the project file, so this is a JSON edit
+  behind the same write gate and transaction as everything else.
+- `board rewidth` no longer defaults to three netclass names from one board.
+  `--classes` defaulted to `PWR_MAIN,BTL_OUT,SWITCH` -- the classes of the
+  amplifier this tool was first written for. On any other board none of them
+  exist, so rewidth did nothing and returned `ok: true`. It now defaults to
+  every non-Default class in the project, and naming a class that is not there
+  is `E_NOT_FOUND` rather than a quiet no-op.
+
+### Fixed
+- `board rewidth` could not finish a class with more than one net. Each net is
+  re-routed in its own subprocess, and each one left a journal, a backup and a
+  lock behind: the worker exits through `os._exit`, which skips the commit.
+  The next worker read that as an unfinished write and refused. The parent
+  did the same thing on a larger scale -- it saved the board before delegating
+  and held that transaction open across every child. The leftover lock also
+  wedged the board against any later write until it went stale.
+- A subprocess that reported a failure correctly became a `KeyError` in the
+  parent. `_child` returned any JSON line it found, including a well-formed
+  `{"ok": false, ...}`, and the caller then read `r["txt"]`. The child's own
+  error code and message are now propagated instead of discarded.
 - `sch create` survives a drawing that will not route, and usually now draws
   it anyway. The netlist and the `.kicad_sch` are separate outputs of the same
   generator and only the netlist is load-bearing, but a failure in the wire

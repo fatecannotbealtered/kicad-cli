@@ -237,6 +237,19 @@ def begin_write(path):
         fail(exc.code, str(exc), exc.details)
 
 
+def commit_write():
+    """Finish the write for a path that does not end at `ok()`.
+
+    `ok()` commits, and that covers every payload that reports and returns.
+    A worker that writes the board and then exits by another route -- pcb_route
+    spawns one subprocess per net and each leaves through `os._exit` -- never
+    reaches it, so the journal, backup and lock stay on disk. The next worker
+    reads that as an unfinished write and refuses, which is exactly right of it
+    and fatal for a command whose whole shape is one subprocess per net.
+    """
+    write_txn.commit()
+
+
 def save_board(board, path):
     """For payloads that save without refilling zones."""
     begin_write(path)
