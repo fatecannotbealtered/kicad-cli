@@ -63,6 +63,17 @@ the 15 end nearer another part than their own in every run, `C7` printed
 inside `U1`'s courtyard among them. `ok_to_fabricate: true` is DRC's view of a
 board a person would misassemble.
 
+**The schematic is a deliverable too, and it is further off.** In every run
+the generator's wire router failed and `sch create` fell back to drawing
+high-fanout nets as labels; in one run of five that failed as well
+(`KeyError: 'pop from an empty set'`) and only the netlist was written. The
+four drawings differ from each other -- symbol positions, in one the
+microcontroller's rotation. In the one inspected closely, the crystal, both
+load capacitors and the LED circuit are drawn on top of the
+microcontroller's pins and of each other, labels overprinted. KiCad's ERC
+finds the same 23 errors in all four: 19 unused pins with no no-connect
+marker, 4 power or input pins undriven, and 15 to 18 warnings.
+
 ## Acceptance for the replacement engine
 
 Same specification, same recipe:
@@ -70,4 +81,7 @@ Same specification, same recipe:
 - one run, because the output is the same every time;
 - no metric worse than the worst run above;
 - the silkscreen attribution and the outline measured by the tool itself,
-  so the next regression of that kind is a number.
+  so the next regression of that kind is a number;
+- the schematic measured as well: ERC, and symbols or text drawn over one
+  another. The goal in `docs/DEVELOPMENT_STATUS.md` is a schematic a person
+  reads, not one only the netlist step consumes.

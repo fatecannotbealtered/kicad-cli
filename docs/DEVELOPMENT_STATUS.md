@@ -5,6 +5,49 @@ PR #4 is a scoped command-boundary improvement. Merging it does not assert that
 all board operations are safe, that FCC is verified, or that live E2E passed.
 An empty issue/PR queue is an organizational state, not a quality certificate.
 
+## Goal (agreed 2026-09-28)
+
+An agent using only this tool takes a circuit description to a schematic and
+a board that an engineer would sign off for fabrication -- both are
+deliverables -- and can check and modify existing designs, schematic and
+board alike, with evidence for every conclusion.
+
+The engineer states the requirement, reads the previews and signs off; the
+agent does the work in between; this tool is the deterministic, verifiable
+instrument the agent holds. Not goals: replacing the engineer, inferring
+electrical requirements from names, relaxing design rules, declaring a board
+correct because DRC passes, authoring symbols or footprints, choosing parts,
+SPICE.
+
+What "an engineer would sign off" means, measured on `bench/`:
+
+- **Schematic.** Its netlist matches the specification. ERC is clean: unused
+  pins marked no-connect, power inputs driven. It reads: grouped by function,
+  no symbol or text drawn over another, power and ground as power symbols.
+  Every part is annotated, valued and has a footprint.
+- **Board.** Matches the schematic, fully connected, no DRC errors. Every net
+  at its netclass width. A complete, self-consistent fabrication package.
+  Every reference designator identifies its own part. An outline from the
+  mechanical requirement or fitted to the placement; decoupling at the pins it
+  serves; connectors at the edge. A reference plane under signal tracks.
+- **Reproducible.** The same input gives the same schematic and board.
+
+For existing designs: the checks above; editing a schematic -- parts,
+connections, values; carrying a schematic change onto a board that is already
+placed and routed without disturbing the layout, which is what KiCad's
+"Update PCB from Schematic" does and has no headless entry point for; and
+board edits with preview, verification and rollback. The first two do not
+exist yet.
+
+Where it stands: the chain runs end to end and produces neither deliverable
+to that standard. On the benchmark (below), the board misses the width,
+silkscreen, layout, plane and reproducibility criteria in every run. The
+schematic is further off: five runs gave four different drawings and, once,
+no drawing at all; the one inspected closely draws the crystal, its load
+capacitors and the LED circuit on top of the microcontroller's pins and of
+each other; and every drawing has 23 ERC errors -- 19 unused pins without a
+no-connect marker, 4 power or input pins undriven.
+
 ## Direction: the engine moves into this tool (decided 2026-09-28)
 
 KiCad 11 removes the SWIG `pcbnew` bindings -- the plan of record is 11.0,
@@ -40,15 +83,19 @@ Order, by deadline:
 
 1. **Benchmark.** The chain on a reconstructed 15-part ATmega328P board,
    recorded against the current implementation (`bench/`).
-2. **Board model.** Parse `.kicad_pcb` / `.kicad_pro`, geometry and
-   connectivity, compared against pcbnew on the demo projects while pcbnew
-   still exists to compare against.
+2. **File model.** One lossless document layer for `.kicad_pcb`,
+   `.kicad_sch` and `.kicad_pro` -- editing an existing schematic needs the
+   same guarantees as editing a board, so both are built on it -- with board
+   geometry and connectivity compared against pcbnew on the demo projects
+   while pcbnew still exists to compare against.
 3. **Replace SWIG, command by command.** The DRC referee stays the official
    binary for this step, so only one thing is unknown at a time: new code is
    judged by the referee it has always been judged by.
 4. **Own DRC**, check class by check class, measured against KiCad's. It
    becomes the referee when the measurement says it can.
-5. **Schematic side:** connectivity, netlist, ERC.
+5. **Schematic side:** connectivity, netlist and ERC; a drawing a person can
+   read; editing an existing schematic; carrying its changes onto a routed
+   board.
 6. **Remove the last call into KiCad's binaries**, then verify on KiCad 10 and
    11 before anything is released.
 
