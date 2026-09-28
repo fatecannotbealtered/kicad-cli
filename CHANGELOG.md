@@ -8,6 +8,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- `kicad_cli/fileformat/connectivity.py` — which copper touches which, and
+  how many connections are still open, worked out by this tool. No command
+  uses it yet. One rule: items of one net on a shared layer are joined when
+  their copper meets -- pads, tracks, arcs, vias, zone fills, and graphics
+  drawn on copper with a net. Open connections are counted per net as the
+  clusters holding a pad, track, via or copper graphic, less one; a pour's
+  island alone does not count. Pad clusters and the count agree with pcbnew
+  on every net of all 19 KiCad demo boards.
+
+  The demos could not have found two of the rules. Every one agreed with
+  "tracks connect only at their ends", because none has two same-net tracks
+  crossing, or a track crossing a fill with both ends outside it; pcbnew
+  joins both. `tests/fixtures/connectivity/scenarios.kicad_pcb` puts one such
+  case on each net -- crossing tracks, a track through a fill, a track ending
+  0.28 mm short of a pad with its copper on it, overlapping pads, a loose
+  track, via, copper rectangle and island -- and what pcbnew said about each
+  is written into the tests as fact, with a live test that says when a new
+  KiCad changes its mind.
 - `kicad_cli/fileformat/` — this tool's own reader and writer for KiCad's
   S-expression files, the first piece of the engine that replaces SWIG. No
   command uses it yet. Two promises, both measured on the roughly 16,000 files

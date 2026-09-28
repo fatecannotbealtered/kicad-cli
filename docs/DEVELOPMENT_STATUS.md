@@ -107,9 +107,11 @@ Progress. Step 1 is in (`bench/`). Step 2 is in for boards:
 losslessly, held to KiCad's own files by `tests/test_fileformat_conformance.py`;
 `kicad_cli/fileformat/board.py` reads a board into footprints, pads, tracks,
 vias, zones and its outline, held to pcbnew item by item on every board KiCad
-ships by `tests/test_fileformat_board.py`. Not yet built: connectivity (which
-copper touches which), and the schematic side of the file model. No command
-has moved onto either yet; that is step 3.
+ships by `tests/test_fileformat_board.py`; `kicad_cli/fileformat/connectivity.py`
+works out which copper touches which and what is left unconnected, held to
+pcbnew net by net by `tests/test_fileformat_connectivity.py`. Not yet built:
+the schematic side of the file model. No command has moved onto any of it
+yet; that is step 3.
 
 ## What the benchmark showed
 
