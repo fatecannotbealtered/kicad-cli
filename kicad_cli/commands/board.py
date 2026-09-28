@@ -12,6 +12,7 @@ from pathlib import Path
 from typing import Any
 
 from .. import boardgen, envelope, kicad_env
+from ..native import audit as native_audit
 
 
 def _board_arg(args: dict[str, Any]) -> str:
@@ -37,14 +38,15 @@ def _relay(payload: str, argv: list[str], timeout: int = 1800) -> None:
 
 
 def audit(args: dict[str, Any]) -> None:
-    argv = ["--board", _board_arg(args)]
-    # Copper weight and allowed temperature rise drive the IPC-2221 ampacity
-    # maths, so they belong to the caller, not to a hard-coded default.
-    if args.get("oz"):
-        argv += ["--oz", str(args["oz"])]
-    if args.get("dt"):
-        argv += ["--dt", str(args["dt"])]
-    _relay("audit", argv)
+    """Runs in this process on the file itself; no KiCad involved.
+
+    Copper weight and allowed temperature rise drive the IPC-2221 ampacity
+    maths, so they belong to the caller, not to a hard-coded default.
+    """
+    board = _board_arg(args)
+    oz = float(args["oz"]) if args.get("oz") else 1.0
+    dt = float(args["dt"]) if args.get("dt") else 10.0
+    envelope.ok(native_audit.run(board, oz, dt))
 
 
 def parity(args: dict[str, Any]) -> None:

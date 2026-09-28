@@ -279,6 +279,15 @@ class Document:
         # CRLF file on the way in, and every offset after it would be wrong.
         return cls.parse(Path(path).read_bytes().decode("utf-8"), lazy=lazy)
 
+    def span(self, node: List) -> tuple[int, int] | None:
+        """Where an untouched list lies in the source, or None once anything in
+        it has changed. For readers that can take what they need straight from
+        the text -- a run of coordinates, whether a word occurs -- without
+        building a list for every item in it."""
+        if node.start < 0 or node._changed or node._touched:
+            return None
+        return node.start, node.end
+
     def dumps(self) -> str:
         # Re-rendered text takes the file's newline as it is written; copied
         # text keeps whatever it had, down to a stray LF in a CRLF file.

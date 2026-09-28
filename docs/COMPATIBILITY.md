@@ -22,8 +22,8 @@ the interpreter and the official binary and prints both. Do not infer it.
 
 | Route | How | Used by | Lifetime |
 |-------|-----|---------|----------|
-| File format | Read and write the `.kicad_pcb` / `.kicad_sch` text directly | `sch link`, `sch relink` | Stable. Independent of any KiCad API. |
-| `pcbnew` (SWIG) | Run under KiCad's bundled Python | `board audit`, `board plane`, `board parity`, `board route`, `board rewidth`, `board widen`, `board stitch`, `board move`, `fab *` | **Scheduled for removal in KiCad 11.** |
+| File format | Read and write the `.kicad_pcb` / `.kicad_sch` text directly | `sch link`, `sch relink`, `board audit` | Stable. Independent of any KiCad API, and needs no KiCad installed. |
+| `pcbnew` (SWIG) | Run under KiCad's bundled Python | `board plane`, `board parity`, `board route`, `board rewidth`, `board widen`, `board stitch`, `board move`, `fab *` | **Scheduled for removal in KiCad 11.** |
 | Official binary | Shell out to KiCad's own `kicad-cli` | ERC and DRC oracles behind `sch audit`, `sch sync-preview`, and every write command's self-verification | Stable. |
 | IPC API | `kipy` over KiCad's API server | `board live` | Young. Requires KiCad running with the API enabled under Preferences → KiCad API. |
 

@@ -93,12 +93,13 @@ def circle(radius: float, max_error: float = MAX_ERROR) -> list[tuple[float, flo
     return arc(0, 0, radius, 0, 360, max_error)[:-1]
 
 
-def arc_through(start: Point, mid: Point, end: Point, max_error: float = MAX_ERROR):
-    """The arc KiCad stores as start / mid / end, as points from start to end."""
+def _circle_through(start: Point, mid: Point, end: Point):
+    """Centre, radius, start angle and signed sweep of the arc from start
+    through mid to end -- or None when the three points are in a line."""
     (x1, y1), (x2, y2), (x3, y3) = start, mid, end
     d = 2 * (x1 * (y2 - y3) + x2 * (y3 - y1) + x3 * (y1 - y2))
     if d == 0:  # collinear: a straight track that says it is an arc
-        return [start, end]
+        return None
     ux = ((x1 * x1 + y1 * y1) * (y2 - y3) + (x2 * x2 + y2 * y2) * (y3 - y1)
           + (x3 * x3 + y3 * y3) * (y1 - y2)) / d  # fmt: skip
     uy = ((x1 * x1 + y1 * y1) * (x3 - x2) + (x2 * x2 + y2 * y2) * (x1 - x3)
@@ -111,7 +112,25 @@ def arc_through(start: Point, mid: Point, end: Point, max_error: float = MAX_ERR
     # The sweep that passes through the middle point, not the other way round.
     if (a2 - a1) % 360 > sweep:
         sweep -= 360
+    return ux, uy, r, a1, sweep
+
+
+def arc_through(start: Point, mid: Point, end: Point, max_error: float = MAX_ERROR):
+    """The arc KiCad stores as start / mid / end, as points from start to end."""
+    circle_ = _circle_through(start, mid, end)
+    if circle_ is None:
+        return [start, end]
+    ux, uy, r, a1, sweep = circle_
     return arc(ux, uy, r, a1, sweep, max_error)
+
+
+def arc_length(start: Point, mid: Point, end: Point) -> float:
+    """The length along the arc from start through mid to end."""
+    circle_ = _circle_through(start, mid, end)
+    if circle_ is None:
+        return math.dist(start, end)
+    _, _, r, _, sweep = circle_
+    return r * math.radians(abs(sweep))
 
 
 # -- pad shapes, centred on the origin, before any rotation ---------------------

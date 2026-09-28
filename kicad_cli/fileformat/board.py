@@ -23,6 +23,8 @@ on KiCad's demo boards (`tests/test_fileformat_board.py`):
 
 from __future__ import annotations
 
+import math
+import re
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -30,6 +32,7 @@ from . import geometry
 from .sexpr import Document, List, text
 
 NM = 1_000_000
+_XY = re.compile(r"\(xy ([^\s()]+) ([^\s()]+)\)")
 
 TECHNICAL_WILDCARDS = {
     "*.Mask": ("F.Mask", "B.Mask"),
@@ -71,6 +74,10 @@ class Pad:
     chamfer_corners: frozenset[str] = frozenset()
     rect_delta: tuple[int, int] = (0, 0)
     anchor: str | None = None  # custom pads: the shape under the primitives
+    # How a zone may connect to it, when the pad says: KiCad's ZONE_CONNECTION
+    # numbers, 0 none, 1 thermal relief, 2 solid, 3 thermal on THT only.
+    # None means the pad inherits the footprint's or the zone's setting.
+    zone_connect: int | None = None
     node: List | None = field(default=None, repr=False)
 
     def polygon(self, max_error: float = geometry.MAX_ERROR) -> list[tuple[int, int]] | None:
@@ -139,6 +146,28 @@ class Footprint:
     attributes: frozenset[str] = frozenset()
     node: List | None = field(default=None, repr=False)
 
+    def bbox(self) -> tuple[int, int, int, int] | None:
+        """The box around its pads and drawings, text left out -- what pcbnew
+        means by a footprint's bounding box without text."""
+        boxes = [pad.bbox() for pad in self.pads]
+        for node in self.node.lists() if self.node is not None else []:
+            if node.head not in ("fp_line", "fp_arc", "fp_circle", "fp_rect", "fp_poly"):
+                continue
+            local = shape_points(node)
+            if not local:
+                continue
+            half = stroke_width(node) // 2
+            x1, y1, x2, y2 = geometry.bbox(geometry.place(local, *self.position, self.angle))
+            boxes.append((x1 - half, y1 - half, x2 + half, y2 + half))
+        if not boxes:
+            return None
+        return (
+            min(b[0] for b in boxes),
+            min(b[1] for b in boxes),
+            max(b[2] for b in boxes),
+            max(b[3] for b in boxes),
+        )
+
 
 @dataclass(slots=True)
 class Track:
@@ -150,6 +179,12 @@ class Track:
     net: str
     mid: tuple[int, int] | None = None
     node: List | None = field(default=None, repr=False)
+
+    def length(self) -> float:
+        """Along the copper, in nm: an arc's length is its arc, not its chord."""
+        if self.kind != "arc" or self.mid is None:
+            return math.dist(self.start, self.end)
+        return geometry.arc_length(self.start, self.mid, self.end)
 
 
 @dataclass(slots=True)
@@ -175,6 +210,10 @@ class Zone:
     node: List | None = field(default=None, repr=False)
 
 
+class BoardError(ValueError):
+    """The file parses, but it is not a board KiCad would open."""
+
+
 class Board:
     """The objects of one `.kicad_pcb`, read on demand from its document."""
 
@@ -183,8 +222,13 @@ class Board:
         self.path = path
         self.root = document.root
         if self.root.head != "kicad_pcb":
-            raise ValueError(f"not a board: the file starts with ({self.root.head} ...)")
-        self.version = int(self.root.find("version").atom(1))
+            raise BoardError(f"not a board: the file starts with ({self.root.head} ...)")
+        version = self.root.find("version")
+        if version is None or not (version.atom(1) or "").isdigit():
+            # KiCad refuses a board without one, so reading on would describe
+            # a file nothing else can open.
+            raise BoardError("the file has no (version ...), and KiCad will not open it")
+        self.version = int(version.atom(1))
         self.layers = self._layers()
         self._net_names = self._net_table()
         self._footprints: list[Footprint] | None = None
@@ -324,6 +368,7 @@ class Board:
         options = node.find("options")
         anchor = options.find("anchor") if options is not None else None
         layers = node.find("layers")
+        zone_connect = node.find("zone_connect")
         return Pad(
             number=node.value(1) or "",
             kind=node.atom(2),
@@ -341,6 +386,7 @@ class Board:
             chamfer_corners=frozenset(corners.values()) if corners is not None else frozenset(),
             rect_delta=(nm(delta.atom(1)), nm(delta.atom(2))) if delta is not None else (0, 0),
             anchor=anchor.atom(1) if anchor is not None else None,
+            zone_connect=int(zone_connect.atom(1)) if zone_connect is not None else None,
             node=node,
         )
 
@@ -387,7 +433,7 @@ class Board:
         filled: dict[str, list[list[tuple[int, int]]]] = {}
         for poly in node.find_all("filled_polygon"):
             layer = poly.find("layer").value(1)
-            filled.setdefault(layer, []).append(points(poly.find("pts")))
+            filled.setdefault(layer, []).append(self._points(poly.find("pts")))
         name = node.find("name")
         priority = node.find("priority")
         return Zone(
@@ -396,10 +442,22 @@ class Board:
             name=name.value(1) if name is not None else "",
             priority=int(priority.atom(1)) if priority is not None else 0,
             rule_area=node.find("keepout") is not None or node.find("rule_area") is not None,
-            outlines=[points(p.find("pts")) for p in node.find_all("polygon")],
+            outlines=[self._points(p.find("pts")) for p in node.find_all("polygon")],
             filled=filled,
             node=node,
         )
+
+    def _points(self, pts: List | None) -> list[tuple[int, int]]:
+        """`points`, read straight from the text when it can be: a zone's fill
+        is tens of thousands of (xy ...), and building a list for each of them
+        only to read two numbers is most of the time a large board takes."""
+        span = self.document.span(pts) if pts is not None else None
+        if span is None:
+            return points(pts)
+        source = self.document.source
+        if source.find("(arc", *span) >= 0:
+            return points(pts)
+        return [(nm(x), nm(y)) for x, y in _XY.findall(source, *span)]
 
     # -- the outline ---------------------------------------------------------------
 
@@ -423,7 +481,11 @@ class Board:
             half = stroke_width(node) // 2
             x1, y1, x2, y2 = geometry.bbox(shape_points(node, max_error))
             boxes.append((x1 - half, y1 - half, x2 + half, y2 + half))
+        source = self.document.source
         for fp in self.footprints:
+            span = self.document.span(fp.node)
+            if span is not None and source.find('"Edge.Cuts"', *span) < 0:
+                continue  # nothing of it is outline: skip reading its drawings
             for node in fp.node.lists():
                 if node.head not in ("fp_line", "fp_arc", "fp_circle", "fp_rect", "fp_poly"):
                     continue
