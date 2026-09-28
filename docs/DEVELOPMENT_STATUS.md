@@ -102,6 +102,13 @@ Order, by deadline:
 `board live` is outside this: it talks to a running KiCad over the IPC API,
 and there is no other way to do what it does.
 
+Progress. Step 1 is in (`bench/`). Step 2's foundation is in:
+`kicad_cli/fileformat/sexpr.py` reads and writes KiCad's S-expressions
+losslessly, and `tests/test_fileformat_conformance.py` holds it to KiCad's
+own files -- untouched text comes back byte for byte, re-rendered text
+exactly as KiCad writes it. The board model -- pads, tracks, zones and their
+geometry, compared against pcbnew -- is built on it next.
+
 ## What the benchmark showed
 
 The numbers this project has quoted for a realistic board came from a 15-part
