@@ -174,6 +174,19 @@ def test_a_crlf_file_gets_crlf_in_what_was_written_new(defer_everything):
     assert "\n" not in after.replace("\r\n", ""), "a bare LF crept into a CRLF file"
 
 
+def test_a_stray_lf_in_untouched_text_survives_an_edit_elsewhere(defer_everything):
+    # A hand-edited CRLF file with one bare LF: rewriting the file's newlines
+    # wholesale would "fix" a line nobody asked to change.
+    source = BOARD.replace("\n", "\r\n").replace(
+        '(generator "pcbnew")\r\n', '(generator "pcbnew")\n'
+    )
+    doc = Document.parse(source)
+    doc.root.find("footprint").append(List.new("attr", "smd"))
+    after = doc.dumps()
+    assert '(generator "pcbnew")\n\t(general' in after
+    assert "\t\t(attr smd)\r\n" in after
+
+
 def test_the_same_edit_gives_the_same_bytes_deferred_or_whole(defer_everything):
     outputs = []
     for lazy in (True, False):

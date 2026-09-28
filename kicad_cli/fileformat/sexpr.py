@@ -280,11 +280,9 @@ class Document:
         return cls.parse(Path(path).read_bytes().decode("utf-8"), lazy=lazy)
 
     def dumps(self) -> str:
-        body = _emit(self.root, 0, self.source)
-        if self.newline != "\n" and self.root._touched:
-            # What was re-rendered used '\n'; what was copied kept its own.
-            body = re.sub(r"(?<!\r)\n", "\r\n", body)
-        return self.lead + body + self.trail
+        # Re-rendered text takes the file's newline as it is written; copied
+        # text keeps whatever it had, down to a stray LF in a CRLF file.
+        return self.lead + _emit(self.root, 0, self.source, self.newline) + self.trail
 
     def save(self, path: str | Path) -> None:
         Path(path).write_bytes(self.dumps().encode("utf-8"))
@@ -447,9 +445,9 @@ def _children_unparsed(source: str, start: int, end: int, depth: int, parent: Li
 # -- writing -----------------------------------------------------------------
 
 
-def _emit(node: List, depth: int, source: str) -> str:
+def _emit(node: List, depth: int, source: str, newline: str = "\n") -> str:
     if node.start < 0 or node._changed:
-        return _render(node, depth, source)
+        return _render(node, depth, source, newline)
     if not node._touched:
         return source[node.start : node.end]
     # Unchanged itself, changed below: keep its own text and splice.
@@ -458,7 +456,7 @@ def _emit(node: List, depth: int, source: str) -> str:
     for item in node.items:
         if isinstance(item, List) and (item._touched or item._changed):
             out.append(source[pos : item.start])
-            out.append(_emit(item, depth + 1, source))
+            out.append(_emit(item, depth + 1, source, newline))
             pos = item.end
     out.append(source[pos : node.end])
     return "".join(out)
@@ -470,8 +468,9 @@ def _is_xy(item: Atom | List) -> bool:
     )
 
 
-def _render(node: List, depth: int, source: str) -> str:
-    inner = "\t" * (depth + 1)
+def _render(node: List, depth: int, source: str, newline: str = "\n") -> str:
+    inner = newline + "\t" * (depth + 1)
+    width = depth + 1  # of the indentation that starts each inner line
     out = ["("]
     line = depth + 1  # length of the current line so far, tabs included
     multiline = False
@@ -485,24 +484,24 @@ def _render(node: List, depth: int, source: str) -> str:
                 out.append(" " + item)
                 line += 1 + len(item)
             else:
-                out.append("\n" + inner + item)
-                line = len(inner) + len(item)
+                out.append(inner + item)
+                line = width + len(item)
                 multiline = True
             after_xy = False
             continue
-        rendered = _emit(item, depth + 1, source)
+        rendered = _emit(item, depth + 1, source, newline)
         xy = _is_xy(item)
         if xy and after_xy and line < XY_WRAP:
             out.append(" " + rendered)
             line += 1 + len(rendered)
         else:
-            out.append("\n" + inner + rendered)
+            out.append(inner + rendered)
             tail = rendered.rfind("\n")
-            line = len(inner) + len(rendered) if tail < 0 else len(rendered) - tail - 1
+            line = width + len(rendered) if tail < 0 else len(rendered) - tail - 1
             multiline = True
         after_xy = xy
     if multiline:
-        out.append("\n" + "\t" * depth + ")")
+        out.append(newline + "\t" * depth + ")")
     else:
         out.append(")")
     return "".join(out)
