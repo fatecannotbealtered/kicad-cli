@@ -202,6 +202,41 @@ def build_shapes_board(footprint_dir: str, out: str) -> None:
     board.Save(out)
 
 
+def connectivity_record(board) -> dict:
+    """Which pads copper joins, per net, and how many connections are open.
+
+    A cluster is every item copper joins to a pad, found once per cluster:
+    a pad already placed in one is not asked again.
+    """
+    board.BuildConnectivity()
+    conn = board.GetConnectivity()
+    placed = set()
+    clusters: dict[str, list[list[str]]] = {}
+    for fp in board.GetFootprints():
+        for pad in fp.Pads():
+            if pad.GetNetCode() <= 0:
+                continue
+            where = pad.GetPosition()
+            key = (fp.GetReference(), pad.GetNumber(), int(where.x), int(where.y))
+            if key in placed:
+                continue
+            members = [key]
+            for item in conn.GetConnectedItems(pad):
+                if item.Type() == pcbnew.PCB_PAD_T:
+                    parent = item.GetParentFootprint()
+                    ref = parent.GetReference() if parent else ""
+                    p = item.GetPosition()
+                    members.append((ref, item.GetNumber(), int(p.x), int(p.y)))
+            for member in members:
+                placed.add(member)
+            clusters.setdefault(pad.GetNetname(), []).append(
+                sorted({f"{ref}.{number}@{x},{y}" for ref, number, x, y in members})
+            )
+    for net in clusters:
+        clusters[net].sort()
+    return {"unconnected": int(conn.GetUnconnectedCount(False)), "clusters": clusters}
+
+
 def main(path: str) -> None:
     board = pcbnew.LoadBoard(path)
     footprints = [footprint_record(board, fp) for fp in board.GetFootprints()]
@@ -233,5 +268,7 @@ def main(path: str) -> None:
 if __name__ == "__main__":
     if sys.argv[1] == "--build-shapes-board":
         build_shapes_board(sys.argv[2], sys.argv[3])
+    elif sys.argv[1] == "--connectivity":
+        json.dump(connectivity_record(pcbnew.LoadBoard(sys.argv[2])), sys.stdout)
     else:
         main(sys.argv[1])
