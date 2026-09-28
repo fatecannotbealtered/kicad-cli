@@ -1,7 +1,10 @@
 """``board parity``, in this process: does the board still match its schematic?
 
-A port of `payload/parity.py`, which ran on pcbnew; its output is identical
-on every board KiCad ships (`tests/test_native_parity.py`).
+A port of `payload/parity.py`, which ran on pcbnew and asked KiCad's binary
+for the schematic's netlist. Both sides are read here now: the board from its
+file, the schematic through this tool's own netlist
+(`kicad_cli/fileformat/netlist.py`), which is KiCad's own on 34 of its 35 demo
+projects. Nothing here needs KiCad installed.
 
 KiCad's "Update PCB from Schematic" is interactive and its result is not
 machine-readable. This compares four things and returns the differences:
@@ -12,37 +15,37 @@ machine-readable. This compares four things and returns the differences:
 - each net's set of pads -- the one that matters most, and the one that
   drifts without anyone noticing.
 
-The schematic side is the netlist KiCad's own binary exports, fresh, so the
-comparison is against the schematic as it is now. That call is the last
-thing here that needs KiCad; it goes when this tool exports the netlist
-itself.
+A part marked "exclude from board" is not expected on the board. The payload
+read KiCad's XML netlist, which keeps such parts, and reported them missing:
+five on the CM5_MINIMA_3 demo, the compute module among them.
 """
 
 from __future__ import annotations
 
 import os
-import xml.etree.ElementTree as ET  # noqa: N817
 from collections import defaultdict
-from pathlib import Path
 from typing import Any
 
-from .. import envelope, netlist
+from .. import envelope
+from ..fileformat import netlist
 from ..fileformat.connectivity import connect
+from ..fileformat.schematic import SchematicError
+from ..fileformat.sexpr import SexprError
 from . import load_board
 
 
-def schematic_side(root: ET.Element) -> tuple[dict[str, dict[str, str]], dict[str, set[str]]]:
-    """Components and each net's pins, from an exported XML netlist."""
-    components: dict[str, dict[str, str]] = {}
-    for comp in root.findall("components/comp"):
-        components[comp.get("ref")] = {
-            "value": (comp.findtext("value") or "").strip(),
-            "footprint": (comp.findtext("footprint") or "").strip(),
-        }
+def schematic_side(
+    built: netlist.Netlist,
+) -> tuple[dict[str, dict[str, str]], dict[str, set[str]]]:
+    """Components and each net's pins, from a design's netlist."""
+    components = {
+        c.ref: {"value": c.value.strip(), "footprint": c.footprint.strip()}
+        for c in built.components
+    }
     nets: dict[str, set[str]] = defaultdict(set)
-    for net in root.findall("nets/net"):
-        for pin in net.findall("node"):
-            nets[net.get("name")].add(f"{pin.get('ref')}.{pin.get('pin')}")
+    for net in built.nets:
+        for node in net.nodes:
+            nets[net.name].add(f"{node.ref}.{node.pin}")
     return components, nets
 
 
@@ -54,22 +57,26 @@ def run(path: str) -> dict[str, Any]:
             "找不到原理图，且没有给 --netlist",
             {"sch": sch, "write_state": "not_started"},
         )
-    # XML, as the payload read: it keeps the parts marked "exclude from
-    # board", which the S-expression netlist leaves out -- see
-    # DEVELOPMENT_STATUS.md for what that costs.
-    text, _stderr = netlist.export_text(Path(sch), "kicadxml")
-    source = f"现导（{os.path.basename(sch)}）"
     try:
-        root = ET.fromstring(text)  # noqa: S314 - KiCad's own export of the user's file
-    except ET.ParseError as exc:
+        built = netlist.build(sch)
+    except (SchematicError, SexprError, UnicodeDecodeError, OSError) as exc:
         envelope.fail(
-            "E_IO",
-            "KiCad's netlist export is not the XML it was asked for",
+            "E_VALIDATION",
+            "the schematic could not be read",
             {"sch": sch, "reason": str(exc)[:300], "write_state": "not_started"},
         )
         raise AssertionError("unreachable") from exc
-    sch_comp, sch_net = schematic_side(root)
+    sch_comp, sch_net = schematic_side(built)
+    return report(path, sch_comp, sch_net, f"现导（{os.path.basename(sch)}）")
 
+
+def report(
+    path: str,
+    sch_comp: dict[str, dict[str, str]],
+    sch_net: dict[str, set[str]],
+    source: str,
+) -> dict[str, Any]:
+    """The comparison itself, whichever netlist the schematic side came from."""
     board = load_board(path)
     pcb_comp: dict[str, dict[str, str]] = {}
     pcb_net: dict[str, set[str]] = defaultdict(set)

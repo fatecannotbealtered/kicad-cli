@@ -14,9 +14,6 @@ import time
 from pathlib import Path
 
 NETLIST = '(export (version "E")\n  (components)\n  (nets))\n'
-NETLIST_XML = (
-    '<?xml version="1.0" encoding="utf-8"?>\n<export version="E"><components/><nets/></export>\n'
-)
 ERC = {"$schema": "fake", "source": "fake.kicad_sch", "sheets": []}
 DRC = {"$schema": "fake", "source": "fake.kicad_pcb", "violations": [], "unconnected_items": []}
 
@@ -80,8 +77,6 @@ def main() -> int:
         dest.write_text(json.dumps(ERC), encoding="utf-8")
     elif "drc" in argv:
         dest.write_text(json.dumps(DRC), encoding="utf-8")
-    elif "kicadxml" in argv:
-        dest.write_text(NETLIST_XML, encoding="utf-8")
     else:
         dest.write_text(NETLIST, encoding="utf-8")
     return 0

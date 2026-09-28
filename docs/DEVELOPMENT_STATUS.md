@@ -111,8 +111,9 @@ On 34 the names and their order are too; one net of 95 is named differently
 on RoyalBlue54L-Feather (`tests/test_fileformat_circuit.py`).
 `kicad_cli/fileformat/netlist.py` writes the netlist from that, and it is
 KiCad's own on 34 of the 35, part for part and net for net
-(`tests/test_fileformat_netlist.py`). Next on that side: `board parity` and
-the `sch` commands use it instead of KiCad's binary; then ERC.
+(`tests/test_fileformat_netlist.py`). `board parity` reads the schematic
+through it. Next on that side: the `sch` commands use it instead of KiCad's
+binary; then ERC.
 
 Progress. Step 1 is in (`bench/`). Step 2 is in for boards:
 `kicad_cli/fileformat/sexpr.py` reads and writes KiCad's S-expressions
@@ -128,9 +129,9 @@ Step 3 has begun: `board audit`, `board plane`, `board parity`, `board move`,
 `board netclass` and `board from-netlist` run in this process
 (`kicad_cli/native/`), output identical to the pcbnew versions -- on every
 demo board, and for `board from-netlist` on a netlist of every kind of part a
-footprint library holds. `board parity` still asks KiCad's binary for the
-schematic's netlist, until step 5 exports it here; `board from-netlist` reads
-KiCad's footprint libraries, as files; the rest need no KiCad installed. The
+footprint library holds. `board from-netlist` reads KiCad's footprint
+libraries, as files; the rest need no KiCad installed -- `board parity` reads
+the schematic through this tool's own netlist. The
 three writes go through the same transaction the payloads used -- backup,
 lock, journal, rollback on any failure, `write_state` in every refusal -- now
 in this process (`kicad_cli/native/write.py`). Each port keeps the old
@@ -163,20 +164,19 @@ Found while porting `board audit`, kept so the port stays identical:
 
 Found while porting `board parity`:
 
-- The schematic side is KiCad's XML netlist, which keeps the parts marked
-  "exclude from board"; the netlist a board is updated from leaves them out.
-  So a part deliberately kept off the board is reported missing from it --
-  five on the CM5_MINIMA_3 demo, among them the compute module itself -- and
-  a net holding one of its pins is reported as not matching.
 - The sample of mismatched nets was the first ten of a Python set, which is
-  ordered differently in every process. The port sorts it; that is the one
-  place the port does not match, and the test holds it to the payload only
-  where there are ten or fewer to sample.
-- The payload asked KiCad's binary for the netlist once, and Windows fails
-  roughly one launch in six with no output; the payload reported that as the
-  netlist export failing. The port goes through the exporter the `sch`
-  commands use, which tries three times.
+  ordered differently in every process. The port sorts it, and the test
+  holds it to the payload only where there are ten or fewer to sample.
 - The `unrouted` count is connectivity's, now this tool's own.
+- A board with no schematic beside it is refused with a message that
+  mentions `--netlist`, a flag the payload had and the command never
+  passed through.
+
+Fixed since: the schematic side was KiCad's XML netlist, which keeps the
+parts marked "exclude from board", so a part kept off the board on purpose
+was reported missing from it -- five on the CM5_MINIMA_3 demo, the compute
+module among them. It is this tool's own netlist now, which leaves them out
+as the netlist a board is updated from does.
 
 Found while porting `board move` and `board netclass`:
 

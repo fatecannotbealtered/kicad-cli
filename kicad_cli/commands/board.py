@@ -41,8 +41,8 @@ def audit(args: dict[str, Any]) -> None:
 
 
 def parity(args: dict[str, Any]) -> None:
-    """Runs in this process; the schematic's netlist still comes from KiCad's
-    own binary until this tool exports it itself."""
+    """Runs in this process, both sides: the board from its file, the
+    schematic through this tool's own netlist. Needs no KiCad."""
     envelope.ok(native_parity.run(_board_arg(args)))
 
 
