@@ -124,16 +124,21 @@ works out which copper touches which and what is left unconnected, held to
 pcbnew net by net by `tests/test_fileformat_connectivity.py`. Not yet built:
 the schematic side of the file model.
 
-Step 3 has begun: `board audit`, `board plane`, `board parity`, `board move`
-and `board netclass` run in this process (`kicad_cli/native/`), output
-identical to the pcbnew versions on every demo board. `board parity` still
-asks KiCad's binary for the schematic's netlist, until step 5 exports it here;
-the rest need no KiCad installed. The two writes go through the same
-transaction the payloads used -- backup, lock, journal, rollback on any
-failure, `write_state` in every refusal -- now in this process
-(`kicad_cli/native/write.py`). Each port keeps the old version's behaviour exactly, mistakes included,
-so that the port is provable by comparison; the mistakes are fixed
-afterwards, one change each.
+Step 3 has begun: `board audit`, `board plane`, `board parity`, `board move`,
+`board netclass` and `board from-netlist` run in this process
+(`kicad_cli/native/`), output identical to the pcbnew versions -- on every
+demo board, and for `board from-netlist` on a netlist of every kind of part a
+footprint library holds. `board parity` still asks KiCad's binary for the
+schematic's netlist, until step 5 exports it here; `board from-netlist` reads
+KiCad's footprint libraries, as files; the rest need no KiCad installed. The
+three writes go through the same transaction the payloads used -- backup,
+lock, journal, rollback on any failure, `write_state` in every refusal -- now
+in this process (`kicad_cli/native/write.py`). Each port keeps the old
+version's behaviour exactly, mistakes included, so that the port is provable
+by comparison; the mistakes are fixed afterwards, one change each. The one
+exception is a mistake that destroys the owner's work: pcbnew's Save reset an
+existing `.kicad_pro` to KiCad's defaults, and `board from-netlist` leaves it
+alone.
 
 ### Carried over from the payloads, to fix after the port
 
@@ -183,6 +188,19 @@ Found while porting `board move` and `board netclass`:
   whose name has a comma in it is taken for two nets.
 - It writes the project file in text mode, so on Windows `.kicad_pro` comes
   back with CRLF line ends.
+
+Found while porting `board from-netlist`:
+
+- A placed footprint is named by its file alone -- "C_0603_1608Metric", not
+  "Capacitor_SMD:C_0603_1608Metric" -- so it no longer names its library,
+  and `board parity` reports every part's footprint as differing from the
+  schematic's.
+- Of several pads with one number -- a crystal's case, a QFN's exposed pad
+  and its vias, a connector's shield -- only the last gets the net.
+  KiCad's own update puts it on all of them.
+- Footprints get no path to their symbols, though the netlist carries the
+  symbols' uuids, so every footprint of a board made this way is unlinked
+  (`sch link`).
 
 ## What the benchmark showed
 
