@@ -85,6 +85,44 @@ def test_a_native_command_runs_without_kicad(command: str, tmp_path: Path) -> No
     assert fake_upstream.attempts(tmp_path) == 0, f"board {command} started KiCad after all"
 
 
+ONE_PART = """(kicad_pcb (version 20241229) (generator "t") (general (thickness 1.6)) (paper "A4")
+	(layers (0 "F.Cu" signal) (2 "B.Cu" signal) (44 "Edge.Cuts" user))
+	(footprint "R:R" (layer "F.Cu") (at 10 10)
+		(property "Reference" "R1" (at 0 0 0) (layer "F.SilkS"))
+		(pad "1" smd rect (at -1 0) (size 1 1) (layers "F.Cu"))
+	)
+)
+"""
+
+
+def _confirmed(argv: list[str], env: dict) -> dict:
+    asked, _, _ = run(argv, env)
+    assert code_of(asked) == "E_CONFIRMATION_REQUIRED", asked
+    done, _, _ = run([*argv, "--confirm", asked["error"]["details"]["confirm_token"]], env)
+    return done
+
+
+def test_the_native_writes_run_without_kicad(tmp_path: Path) -> None:
+    """`board move` edits the board and `board netclass` the project, with
+    both of KiCad's boundaries replaced by stubs that fail when called."""
+    board = tmp_path / "one.kicad_pcb"
+    board.write_text(ONE_PART, encoding="utf-8")
+    (tmp_path / "one.kicad_pro").write_text("{}", encoding="utf-8")
+    env = fake_upstream.env(tmp_path / "fake", "launch_fail")
+
+    moved = _confirmed(["board", "move", "--board", str(board), "--moves", "R1:12.5,11"], env)
+    assert code_of(moved) == "OK", moved
+    assert "(at 12.5 11)" in board.read_text(encoding="utf-8")
+
+    netclass = [
+        "board", "netclass", "--board", str(board), "--name", "Power", "--nets", "GND",
+        "--width", "0.5",
+    ]  # fmt: skip
+    assert code_of(_confirmed(netclass, env)) == "OK"
+    assert "Power" in (tmp_path / "one.kicad_pro").read_text(encoding="utf-8")
+    assert fake_upstream.attempts(tmp_path / "fake") == 0, "a write started KiCad after all"
+
+
 def test_board_parity_needs_only_kicads_binary(tmp_path: Path) -> None:
     """The schematic's netlist still comes from KiCad's binary; everything
     else is read here. The interpreter is pointed at nothing, so any call
@@ -106,14 +144,14 @@ def test_a_netlist_export_that_is_not_xml_is_e_io(tmp_path: Path) -> None:
     assert exit_code == 1
 
 
-# The payload bridge is exercised through `board move`, which still runs in
-# KiCad's interpreter; `board audit`, `board plane` and `board parity` did
-# until each moved into this process. A move is a write, but its confirmation
-# gate lives in the payload, so without a token the call still goes straight
-# to the interpreter -- which is all these tests need.
+# The payload bridge is exercised through `board route`, which still runs in
+# KiCad's interpreter; `board audit`, `board plane`, `board parity` and
+# `board move` did until each moved into this process. Routing is a write,
+# but its confirmation gate lives in the payload, so without a token the call
+# still goes straight to the interpreter -- which is all these tests need.
 def test_a_payload_envelope_is_relayed(tmp_path: Path) -> None:
     doc, exit_code, _ = run(
-        ["board", "move", "--board", str(MINI), "--moves", "U1:1,1"],
+        ["board", "route", "--board", str(MINI)],
         fake_upstream.env(tmp_path, "ok"),
     )
     assert code_of(doc) == "OK"
@@ -126,10 +164,10 @@ def test_strict_mode_rejects_a_payload_that_does_not_match_its_schema(tmp_path: 
     wrong fields is the only way to find out."""
     env = fake_upstream.env(tmp_path, "ok")
     env["KICAD_CLI_STRICT"] = "1"
-    doc, exit_code, err = run(["board", "move", "--board", str(MINI), "--moves", "U1:1,1"], env)
+    doc, exit_code, err = run(["board", "route", "--board", str(MINI)], env)
     assert doc is None, "a contract violation must not be emitted as a successful envelope"
     assert exit_code != 0
-    assert "contract violation in board_move" in err
+    assert "contract violation in board_route" in err
     # A write command's relay fills the fields a mode does not set, so only
     # the undeclared one can be caught here; a missing field is caught for
     # every command by the envelope's own strict check.
@@ -176,7 +214,7 @@ def test_retrying_actually_recovers(tmp_path: Path) -> None:
 )
 def test_an_unusable_interpreter_is_e_io(behaviour: str, expected: str, tmp_path: Path) -> None:
     doc, exit_code, _ = run(
-        ["board", "move", "--board", str(MINI), "--moves", "U1:1,1"],
+        ["board", "route", "--board", str(MINI)],
         fake_upstream.env(tmp_path, behaviour),
     )
     assert code_of(doc) == expected
@@ -188,7 +226,7 @@ def test_noise_before_the_envelope_is_stepped_over(tmp_path: Path) -> None:
     process, so the rule is "first line that parses", not "the output". The
     stub also emits a decoy line that starts with `{` and is not JSON."""
     doc, exit_code, _ = run(
-        ["board", "move", "--board", str(MINI), "--moves", "U1:1,1"],
+        ["board", "route", "--board", str(MINI)],
         fake_upstream.env(tmp_path, "noisy"),
     )
     assert code_of(doc) == "OK"
@@ -266,7 +304,7 @@ def test_every_error_here_maps_to_its_declared_exit_code(tmp_path: Path) -> None
     from kicad_cli.contract_gen import CODES
 
     seen = {
-        "E_IO": ["board", "move", "--board", str(MINI), "--moves", "U1:1,1"],
+        "E_IO": ["board", "route", "--board", str(MINI)],
         "E_NOT_FOUND": ["sch", "link", "--board", str(MINI)],
     }
     for expected, argv in seen.items():

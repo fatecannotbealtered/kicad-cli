@@ -112,11 +112,14 @@ works out which copper touches which and what is left unconnected, held to
 pcbnew net by net by `tests/test_fileformat_connectivity.py`. Not yet built:
 the schematic side of the file model.
 
-Step 3 has begun: `board audit`, `board plane` and `board parity` run in
-this process (`kicad_cli/native/`), output identical to the pcbnew versions on
-every demo board. The first two need no KiCad installed; `board parity` still
-asks KiCad's binary for the schematic's netlist, until step 5 exports it
-here. Each port keeps the old version's behaviour exactly, mistakes included,
+Step 3 has begun: `board audit`, `board plane`, `board parity`, `board move`
+and `board netclass` run in this process (`kicad_cli/native/`), output
+identical to the pcbnew versions on every demo board. `board parity` still
+asks KiCad's binary for the schematic's netlist, until step 5 exports it here;
+the rest need no KiCad installed. The two writes go through the same
+transaction the payloads used -- backup, lock, journal, rollback on any
+failure, `write_state` in every refusal -- now in this process
+(`kicad_cli/native/write.py`). Each port keeps the old version's behaviour exactly, mistakes included,
 so that the port is provable by comparison; the mistakes are fixed
 afterwards, one change each.
 
@@ -157,6 +160,17 @@ Found while porting `board parity`:
   netlist export failing. The port goes through the exporter the `sch`
   commands use, which tries three times.
 - The `unrouted` count is connectivity's, now this tool's own.
+
+Found while porting `board move` and `board netclass`:
+
+- `board move` converts millimetres to nanometres by truncating, as
+  pcbnew's `FromMM` does: asked for 1.005 mm, a part lands on 1.004999.
+- Its note tells the caller to re-route with `pcb_route.py`; the command is
+  `board route`.
+- `board netclass` splits `--nets` on commas after joining them, so a net
+  whose name has a comma in it is taken for two nets.
+- It writes the project file in text mode, so on Windows `.kicad_pro` comes
+  back with CRLF line ends.
 
 ## What the benchmark showed
 
