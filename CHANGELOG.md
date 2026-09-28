@@ -412,8 +412,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   and listed in DEVELOPMENT_STATUS.md, to be fixed in changes of their own, so
   that a difference in what the audit says is never also a difference in what
   computes it.
-- The payload bridge's own tests now go through `board plane`, which still
-  runs in KiCad's interpreter; `board audit` no longer touches it.
+- `board plane` runs in this process too, and needs no KiCad. Its output is
+  identical to the pcbnew version's on all 19 demo boards and on both
+  benchmark boards, checked field by field by `tests/test_native_plane.py`.
+  On the Jetson baseboard it takes 4.8 s against 32 s; on `video`, 1.7 s
+  against 18 s.
+- Whether a point lies in a polygon is decided on the boundary the way pcbnew
+  decides it (`Polygon.contains`, shared with connectivity). A point on an
+  edge that the polygon lies above or to the right of is inside; a point on
+  an edge that it lies below or to the left of is outside. Where an edge
+  crosses the point's row is rounded to the nearest nanometre, halves away
+  from zero. The textbook rule gets the horizontal half backwards. That
+  mattered on two demo boards, where a track runs along the edge of a pour
+  for its whole length. On `interf_u`, eight samples under one track went
+  from "on GND" to "no copper". The rule was measured from
+  `SHAPE_POLY_SET.Contains` on purpose-built polygons.
+  `tests/test_fileformat_polygon.py` records pcbnew's answers and asks pcbnew
+  again whenever KiCad is installed. Connectivity still agrees with pcbnew on
+  every demo board.
+- The payload bridge's own tests now go through `board parity`, which still
+  runs in KiCad's interpreter. `board audit` and `board plane` no longer
+  touch it.
 - Separate FCC measurement from FCC enforcement. The guard returned early unless
   `fcc_status` already said `verified`, so while the status was `unknown` nothing
   was counted -- and the status cannot honestly become `verified` without the

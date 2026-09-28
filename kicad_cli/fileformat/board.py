@@ -282,6 +282,14 @@ class Board:
             return net.value(2)  # KiCad 9 on a pad: (net 3 "GND")
         return self._net_names.get(first, "")  # KiCad 9 on a track: (net 3)
 
+    def layer_name(self, layer: str) -> str:
+        """The board's own name for a layer: what someone renamed it to, or
+        the standard name -- what pcbnew's GetLayerName says."""
+        for entry in self.layers:
+            if entry.name == layer:
+                return entry.user_name or entry.name
+        return layer
+
     def expand_layers(self, names: list[str]) -> list[str]:
         out: list[str] = []
         for name in names:

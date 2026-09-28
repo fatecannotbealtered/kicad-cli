@@ -21,8 +21,8 @@
 
 | 路 | 方式 | 谁在用 | 寿命 |
 |----|------|--------|------|
-| 文件格式 | 直接读写 `.kicad_pcb` / `.kicad_sch` 文本 | `sch link`、`sch relink`、`board audit` | 稳定。不依赖任何 KiCad API，也不需要装 KiCad。 |
-| `pcbnew`（SWIG） | 跑在 KiCad 自带的 Python 下 | `board plane`、`board parity`、`board route`、`board rewidth`、`board widen`、`board stitch`、`board move`、`fab *` | **KiCad 11 计划移除。** |
+| 文件格式 | 直接读写 `.kicad_pcb` / `.kicad_sch` 文本 | `sch link`、`sch relink`、`board audit`、`board plane` | 稳定。不依赖任何 KiCad API，也不需要装 KiCad。 |
+| `pcbnew`（SWIG） | 跑在 KiCad 自带的 Python 下 | `board parity`、`board route`、`board rewidth`、`board widen`、`board stitch`、`board move`、`fab *` | **KiCad 11 计划移除。** |
 | 官方二进制 | 调 KiCad 自己的 `kicad-cli` | `sch audit`、`sch sync-preview` 背后的 ERC/DRC 裁判，以及每条写命令的自验 | 稳定。 |
 | IPC API | 通过 `kipy` 连 KiCad 的 API 服务 | `board live` | 年轻。需要 KiCad 开着，且在「偏好设置 → KiCad API」里启用。 |
 
