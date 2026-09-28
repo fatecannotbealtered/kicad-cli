@@ -110,8 +110,34 @@ vias, zones and its outline, held to pcbnew item by item on every board KiCad
 ships by `tests/test_fileformat_board.py`; `kicad_cli/fileformat/connectivity.py`
 works out which copper touches which and what is left unconnected, held to
 pcbnew net by net by `tests/test_fileformat_connectivity.py`. Not yet built:
-the schematic side of the file model. No command has moved onto any of it
-yet; that is step 3.
+the schematic side of the file model.
+
+Step 3 has begun: `board audit` runs in this process (`kicad_cli/native/`),
+output identical to the pcbnew version on every demo board, and needs no KiCad
+installed. Each port keeps the old version's behaviour exactly, mistakes
+included, so that the port is provable by comparison; the mistakes are fixed
+afterwards, one change each.
+
+### Carried over from the payloads, to fix after the port
+
+Found while porting `board audit`, kept so the port stays identical:
+
+- Width compliance (A4) counts straight segments only; an arc track is left
+  out of every net's and class's length -- while `copper_mm` counts arcs, and
+  `copper_by_layer_mm` again does not, so the three numbers disagree.
+- A zone's fill is judged (A1, A2) on the first of its layers only; a pour on
+  several layers is reported as if it had one.
+- Layers are reported under the board's own names ("top_copper"), and "an
+  inner ground plane exists" (A2) is decided by the name starting with `In`,
+  so an inner layer someone renamed is not seen as inner.
+- Net classes are matched with `fnmatch.fnmatch`, which ignores case on
+  Windows and not elsewhere: one board can be classed differently by
+  platform. What KiCad itself does is to be measured against pcbnew first.
+- The power-node check (A3) compares a reference's first character with
+  "FB", which can never match; only inductors are caught.
+- Two fix texts name `pcb_route.py`, a script this tool does not have; the
+  command is `board route`.
+- Titles, details and fixes are Chinese in an otherwise English contract.
 
 ## What the benchmark showed
 

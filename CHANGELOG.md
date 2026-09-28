@@ -228,6 +228,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   is `E_NOT_FOUND` rather than a quiet no-op.
 
 ### Fixed
+- `board audit` on a file that is not a board says so: `E_VALIDATION` with the
+  reason -- no expression, a schematic, no `(version ...)`, unbalanced. The
+  pcbnew version could not: pcbnew returned nothing for a file it could not
+  open, the next line raised, and the caller got `E_IO` wrapped around a
+  Python traceback. Found by a test that used `(kicad_pcb)` as a stand-in
+  board and only ever reached the missing-interpreter error first.
 - A board whose text names a font the machine lacks no longer hangs the
   command that loads it. pcbnew logs "Font 'X' not found; substituting 'Y'"
   and wx shows a log message as a modal box, so the command sat -- no output,
@@ -393,6 +399,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   being able to say `unknown` after a failure.
 
 ### Changed
+- `board audit` runs in this process, reading the board file itself: the first
+  command off SWIG, and it no longer needs KiCad installed at all -- a test
+  replaces both of KiCad's boundaries with stubs that fail when called and the
+  audit calls neither. What it says is unchanged, to the field: on every board
+  KiCad ships, its output is identical to the pcbnew version's, numbers, order
+  and wording, and `tests/test_native_audit.py` keeps checking that while the
+  old version exists to check against. On KiCad's 89 MB Jetson baseboard it
+  takes 4.1 s against 4.9 s.
+
+  Identical includes what the old version got wrong. Those are kept on purpose
+  and listed in DEVELOPMENT_STATUS.md, to be fixed in changes of their own, so
+  that a difference in what the audit says is never also a difference in what
+  computes it.
+- The payload bridge's own tests now go through `board plane`, which still
+  runs in KiCad's interpreter; `board audit` no longer touches it.
 - Separate FCC measurement from FCC enforcement. The guard returned early unless
   `fcc_status` already said `verified`, so while the status was `unknown` nothing
   was counted -- and the status cannot honestly become `verified` without the
