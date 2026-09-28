@@ -23,8 +23,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   A board is mostly what a given command never reads, so nothing is parsed
   until it is: a list's children are found by where KiCad starts their lines,
   and each is parsed on first read. Reading every footprint, pad and track of
-  KiCad's 89 MB Jetson baseboard takes 1.1 s; `pcbnew.LoadBoard` takes 275 s
-  on the same file. On the 5.9 MB `video` demo, 0.12 s against 0.59 s.
+  KiCad's 89 MB Jetson baseboard takes 1.2 s, against 3.9 s for
+  `pcbnew.LoadBoard`; on the 5.9 MB `video` demo, 0.12 s against 0.48 s.
+  (An earlier version of this entry said 275 s for pcbnew. That run was
+  sitting on a "font not found" dialog for most of it -- see Fixed.)
+- `kicad_cli/fileformat/board.py` — the board as objects, read by this tool:
+  footprints, pads, tracks, arcs, vias, zones and the outline, in integer
+  nanometres. No command uses it yet. It is measured against pcbnew item by
+  item on every board KiCad ships -- 19 of them, the 89 MB Jetson baseboard
+  included -- and on a board pcbnew builds for the purpose from KiCad's own
+  trapezoid, chamfered and custom-pad footprints at five angles on both
+  sides. Rectangles, trapezoids and chamfers agree vertex by vertex to the
+  nanometre; curves within what two approximations of one curve can differ.
+
+  What the numbers in the file mean, as pcbnew showed it: a footprint's
+  children are stored in its own frame, already mirrored on the back; the
+  angle on a pad is its final angle on the board, the footprint's included;
+  KiCad 10 names nets on every item where KiCad 9 numbers them; `*.Cu` is the
+  board's copper, not all 32 layers KiCad could have; and the outline counts
+  half the width of the line it is drawn with, and whatever a footprint draws
+  on Edge.Cuts.
 - `bench/` — the chain, measured the same way every time. `bench/chain.py`
   runs the Skill's "Building a board from nothing" recipe on a specification,
   dry run then confirm at every write, and records each step and the finished

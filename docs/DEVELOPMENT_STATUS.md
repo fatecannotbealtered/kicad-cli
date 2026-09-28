@@ -102,12 +102,14 @@ Order, by deadline:
 `board live` is outside this: it talks to a running KiCad over the IPC API,
 and there is no other way to do what it does.
 
-Progress. Step 1 is in (`bench/`). Step 2's foundation is in:
+Progress. Step 1 is in (`bench/`). Step 2 is in for boards:
 `kicad_cli/fileformat/sexpr.py` reads and writes KiCad's S-expressions
-losslessly, and `tests/test_fileformat_conformance.py` holds it to KiCad's
-own files -- untouched text comes back byte for byte, re-rendered text
-exactly as KiCad writes it. The board model -- pads, tracks, zones and their
-geometry, compared against pcbnew -- is built on it next.
+losslessly, held to KiCad's own files by `tests/test_fileformat_conformance.py`;
+`kicad_cli/fileformat/board.py` reads a board into footprints, pads, tracks,
+vias, zones and its outline, held to pcbnew item by item on every board KiCad
+ships by `tests/test_fileformat_board.py`. Not yet built: connectivity (which
+copper touches which), and the schematic side of the file model. No command
+has moved onto either yet; that is step 3.
 
 ## What the benchmark showed
 
