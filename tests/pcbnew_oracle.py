@@ -237,6 +237,21 @@ def connectivity_record(board) -> dict:
     return {"unconnected": int(conn.GetUnconnectedCount(False)), "clusters": clusters}
 
 
+def contains_record(cases: list) -> list[int]:
+    """Whether each point is inside its polygon, by SHAPE_POLY_SET.Contains:
+    ``cases`` is a list of [polygon, [x, y]], a polygon a list of [x, y]."""
+    out = []
+    for polygon, (x, y) in cases:
+        chain = pcbnew.SHAPE_LINE_CHAIN()
+        for px, py in polygon:
+            chain.Append(int(px), int(py))
+        chain.SetClosed(True)
+        shape = pcbnew.SHAPE_POLY_SET()
+        shape.AddOutline(chain)
+        out.append(int(shape.Contains(pcbnew.VECTOR2I(int(x), int(y)))))
+    return out
+
+
 def main(path: str) -> None:
     board = pcbnew.LoadBoard(path)
     footprints = [footprint_record(board, fp) for fp in board.GetFootprints()]
@@ -270,5 +285,7 @@ if __name__ == "__main__":
         build_shapes_board(sys.argv[2], sys.argv[3])
     elif sys.argv[1] == "--connectivity":
         json.dump(connectivity_record(pcbnew.LoadBoard(sys.argv[2])), sys.stdout)
+    elif sys.argv[1] == "--contains":
+        json.dump(contains_record(json.load(sys.stdin)), sys.stdout)
     else:
         main(sys.argv[1])

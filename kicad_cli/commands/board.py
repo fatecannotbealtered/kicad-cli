@@ -13,6 +13,7 @@ from typing import Any
 
 from .. import boardgen, envelope, kicad_env
 from ..native import audit as native_audit
+from ..native import plane as native_plane
 
 
 def _board_arg(args: dict[str, Any]) -> str:
@@ -131,21 +132,12 @@ def plane(args: dict[str, Any]) -> None:
 
     A track can be spacing-legal, connected and still wrong: if the layer
     beneath it has a gap, the return current has to go around, and the loop it
-    encloses is what radiates. DRC has no opinion about this.
+    encloses is what radiates. DRC has no opinion about this. Runs in this
+    process on the file itself; no KiCad involved.
     """
     board = _board_arg(args)
-    argv = ["--board", board]
-    if args.get("step"):
-        argv += ["--step", str(args["step"])]
-    result = kicad_env.run_payload("plane", argv, timeout=3600)
-    if result.get("ok"):
-        envelope.ok(result.get("data"))
-    err = result.get("error") or {}
-    envelope.fail(
-        err.get("code", "E_UNKNOWN"),
-        err.get("message", "plane payload reported an error"),
-        err.get("details") or {},
-    )
+    step = float(args["step"]) if args.get("step") else native_plane.STEP_MM
+    envelope.ok(native_plane.run(board, step))
 
 
 def from_netlist(args: dict[str, Any]) -> None:

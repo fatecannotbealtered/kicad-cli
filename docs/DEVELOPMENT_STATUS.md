@@ -112,9 +112,9 @@ works out which copper touches which and what is left unconnected, held to
 pcbnew net by net by `tests/test_fileformat_connectivity.py`. Not yet built:
 the schematic side of the file model.
 
-Step 3 has begun: `board audit` runs in this process (`kicad_cli/native/`),
-output identical to the pcbnew version on every demo board, and needs no KiCad
-installed. Each port keeps the old version's behaviour exactly, mistakes
+Step 3 has begun: `board audit` and `board plane` run in this process
+(`kicad_cli/native/`), output identical to the pcbnew versions on every demo
+board, and need no KiCad installed. Each port keeps the old version's behaviour exactly, mistakes
 included, so that the port is provable by comparison; the mistakes are fixed
 afterwards, one change each.
 

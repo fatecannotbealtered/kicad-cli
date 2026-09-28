@@ -49,13 +49,7 @@ def run(path: str, oz: float = 1.0, dT: float = 10.0, carry: float = 0.8) -> dic
     project, _ = load_project(path)
     nc = NetClasses(project)
 
-    def name(layer: str) -> str:
-        """The board's own name for a layer -- what pcbnew's GetLayerName says."""
-        for entry in board.layers:
-            if entry.name == layer:
-                return entry.user_name or entry.name
-        return layer
-
+    name = board.layer_name
     number = {entry.name: entry.number for entry in board.layers}
     findings: list[dict[str, Any]] = []
 

@@ -71,24 +71,26 @@ def test_the_fixture_board_needs_no_kicad() -> None:
 # --- success and schema -----------------------------------------------------
 
 
-def test_board_audit_runs_without_kicad(tmp_path: Path) -> None:
-    """The audit reads the file itself now. Both of KiCad's boundaries are
-    replaced by stubs that fail when called, and the audit must neither call
-    them nor need them."""
+@pytest.mark.parametrize("command", ["audit", "plane"])
+def test_a_native_command_runs_without_kicad(command: str, tmp_path: Path) -> None:
+    """These read the file themselves now. Both of KiCad's boundaries are
+    replaced by stubs that fail when called, and the command must neither
+    call them nor need them."""
     doc, exit_code, _ = run(
-        ["board", "audit", "--board", str(MINI)],
+        ["board", command, "--board", str(MINI)],
         fake_upstream.env(tmp_path, "launch_fail"),
     )
     assert code_of(doc) == "OK", doc
     assert exit_code == 0
-    assert fake_upstream.attempts(tmp_path) == 0, "the audit started KiCad after all"
+    assert fake_upstream.attempts(tmp_path) == 0, f"board {command} started KiCad after all"
 
 
-# The payload bridge is exercised through `board plane`, which still runs in
-# KiCad's interpreter; `board audit` did until it moved into this process.
+# The payload bridge is exercised through `board parity`, which still runs in
+# KiCad's interpreter; `board audit` and then `board plane` did until each
+# moved into this process.
 def test_a_payload_envelope_is_relayed(tmp_path: Path) -> None:
     doc, exit_code, _ = run(
-        ["board", "plane", "--board", str(MINI)],
+        ["board", "parity", "--board", str(MINI)],
         fake_upstream.env(tmp_path, "ok"),
     )
     assert code_of(doc) == "OK"
@@ -101,12 +103,12 @@ def test_strict_mode_rejects_a_payload_that_does_not_match_its_schema(tmp_path: 
     wrong fields is the only way to find out."""
     env = fake_upstream.env(tmp_path, "ok")
     env["KICAD_CLI_STRICT"] = "1"
-    doc, exit_code, err = run(["board", "plane", "--board", str(MINI)], env)
+    doc, exit_code, err = run(["board", "parity", "--board", str(MINI)], env)
     assert doc is None, "a contract violation must not be emitted as a successful envelope"
     assert exit_code != 0
-    assert "contract violation in board_plane" in err
+    assert "contract violation in board_parity" in err
     assert "undeclared ['fake']" in err
-    assert "missing" in err and "backed_fraction" in err
+    assert "missing" in err and "netlist_source" in err
 
 
 # --- upstream failures ------------------------------------------------------
@@ -149,7 +151,7 @@ def test_retrying_actually_recovers(tmp_path: Path) -> None:
 )
 def test_an_unusable_interpreter_is_e_io(behaviour: str, expected: str, tmp_path: Path) -> None:
     doc, exit_code, _ = run(
-        ["board", "plane", "--board", str(MINI)],
+        ["board", "parity", "--board", str(MINI)],
         fake_upstream.env(tmp_path, behaviour),
     )
     assert code_of(doc) == expected
@@ -161,7 +163,7 @@ def test_noise_before_the_envelope_is_stepped_over(tmp_path: Path) -> None:
     process, so the rule is "first line that parses", not "the output". The
     stub also emits a decoy line that starts with `{` and is not JSON."""
     doc, exit_code, _ = run(
-        ["board", "plane", "--board", str(MINI)],
+        ["board", "parity", "--board", str(MINI)],
         fake_upstream.env(tmp_path, "noisy"),
     )
     assert code_of(doc) == "OK"
@@ -239,7 +241,7 @@ def test_every_error_here_maps_to_its_declared_exit_code(tmp_path: Path) -> None
     from kicad_cli.contract_gen import CODES
 
     seen = {
-        "E_IO": ["board", "plane", "--board", str(MINI)],
+        "E_IO": ["board", "parity", "--board", str(MINI)],
         "E_NOT_FOUND": ["sch", "link", "--board", str(MINI)],
     }
     for expected, argv in seen.items():

@@ -156,6 +156,15 @@ class Polygon:
         return found
 
     def contains(self, x, y) -> bool:
+        """Whether the point is inside, decided on the boundary as pcbnew
+        decides it -- measured, not assumed (`tests/test_fileformat_polygon.py`):
+        a point on an edge the polygon lies above or to the right of is
+        inside, one on an edge it lies below or to the left of is outside,
+        and where an edge crosses the point's row is taken to the nearest
+        nanometre, halves away from zero, before the point is compared with
+        it. The textbook rule gets the first half the other way round, and on
+        KiCad's interf_u demo that alone put a track running along the edge
+        of a ground pour on the wrong side of it."""
         box = self.bbox
         if not (box[0] <= x <= box[2] and box[1] <= y <= box[3]):
             return False
@@ -165,10 +174,21 @@ class Polygon:
             if self._bands is None:
                 self._index()
             edges = self._bands.get(math.floor(y) // BAND, ())
+        exact = isinstance(x, int) and isinstance(y, int)
         inside = False
         for (xi, yi), (xj, yj) in edges:
-            if (yi > y) != (yj > y) and x < (xj - xi) * (y - yi) / (yj - yi) + xi:
-                inside = not inside
+            if (yi < y) != (yj < y):
+                num, den = (xj - xi) * (y - yi), yj - yi
+                if exact and isinstance(num, int):
+                    if den < 0:
+                        num, den = -num, -den
+                    half_up = (2 * abs(num) + den) // (2 * den)
+                    crossing = half_up if num >= 0 else -half_up
+                else:
+                    q = num / den
+                    crossing = math.floor(q + 0.5) if q >= 0 else -math.floor(0.5 - q)
+                if x - xi < crossing:
+                    inside = not inside
         return inside
 
     def path_within(self, path, reach) -> bool:
