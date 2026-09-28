@@ -159,6 +159,13 @@ def import_pcbnew():
         import wx
 
         wx.DisableAsserts()
+        # Asserts are not the only modal dialog. A board whose text names a
+        # font this machine lacks makes pcbnew log "Font 'X' not found;
+        # substituting 'Y'", and wx shows a log message as a message box --
+        # which blocks a headless command until someone clicks OK. KiCad's
+        # own Lato, Ubuntu Sans and FreeMono demos all do it on a stock
+        # Windows. Sent to stderr, the note stays and the block goes.
+        wx.Log.SetActiveTarget(wx.LogStderr())
     except Exception:  # noqa: BLE001
         pass  # 没有 wx 也无妨，只是少一层保险
     try:

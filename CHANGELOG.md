@@ -192,6 +192,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   is `E_NOT_FOUND` rather than a quiet no-op.
 
 ### Fixed
+- A board whose text names a font the machine lacks no longer hangs the
+  command that loads it. pcbnew logs "Font 'X' not found; substituting 'Y'"
+  and wx shows a log message as a modal box, so the command sat -- no output,
+  no exit -- until someone clicked OK. Three of KiCad's own demos do it on a
+  stock Windows (Lato, Ubuntu Sans, FreeMono); it surfaced as boxes popping
+  up on the desktop of the machine running the suite, one per load. Assert
+  dialogs were already silenced for the same reason; log messages now go to
+  stderr as well. It disappears for good with SWIG.
 - `board rewidth` reported `ok` while leaving the board with more DRC errors
   than it started with. Its verify was a per-net revert loop, which only ever
   looks at the nets it touched -- and "no single net introduced an error" is
