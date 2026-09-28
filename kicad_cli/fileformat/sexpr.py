@@ -438,6 +438,13 @@ def _children_unparsed(source: str, start: int, end: int, depth: int, parent: Li
             and source[child_end - len(closing) - 1] == "\n"
         ):
             return None
+        # And a child must be whole. KiCad 9.0 wrote some footprints' pads a
+        # tab too shallow, so a pad can look like a sibling of its own
+        # footprint, and the footprint like a list that ends early. Only the
+        # count says otherwise. A ')' inside a string can unbalance it too;
+        # that costs a whole parse, never a wrong one.
+        if source.count("(", begin, child_end) != source.count(")", begin, child_end):
+            return None
         items.append(List._unparsed(source, begin, child_end, parent, depth + 1))
     return items
 

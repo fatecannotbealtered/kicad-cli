@@ -114,6 +114,37 @@ def test_deferred_parsing_builds_the_same_tree_as_parsing_whole(defer_everything
     assert same_tree(lazy, whole)
 
 
+def test_a_footprint_whose_children_lost_a_tab_is_not_split_wrongly(defer_everything):
+    """KiCad 9.0 wrote whole footprints' pads and lines one tab too shallow.
+
+    RoyalBlue54L-Feather.kicad_pcb, a demo KiCad ships, has 279 pads at the
+    depth of a board item. Found by line start, each looks like a top-level
+    item, and the footprint before them looks like one that ends early. When
+    the line before the first of them happens to be a lone ")" at depth one,
+    every layout check passes -- so a pad would silently become a board item.
+    Only counting the parentheses says the footprint was not finished.
+    """
+    shallow = BOARD.replace(
+        '\t\t(pad "1" smd roundrect\n'
+        "\t\t\t(at -0.825 0 90)\n"
+        "\t\t\t(size 0.8 0.95)\n"
+        '\t\t\t(layers "F.Cu" "F.Mask" "F.Paste")\n'
+        '\t\t\t(net "GND")\n'
+        "\t\t)\n",
+        '\t(pad "1" smd roundrect\n'
+        "\t\t(at -0.825 0 90)\n"
+        "\t\t(size 0.8 0.95)\n"
+        '\t\t(layers "F.Cu" "F.Mask" "F.Paste")\n'
+        '\t\t(net "GND")\n'
+        "\t)\n",
+    ).replace('\t\t\t)\n\t\t)\n\t(pad "1"', '\t\t\t)\n\t)\n\t(pad "1"')
+    assert '\t)\n\t(pad "1"' in shallow, "the fixture no longer reproduces the defect"
+    lazy = Document.parse(shallow)
+    assert same_tree(lazy.root, Document.parse(shallow, lazy=False).root)
+    assert [i.head for i in lazy.root.items[1:]].count("pad") == 0
+    assert lazy.dumps() == shallow
+
+
 def test_asking_what_an_item_is_does_not_parse_it(defer_everything):
     doc = Document.parse(BOARD)
     heads = [item.head for item in doc.root.items[1:]]
