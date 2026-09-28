@@ -112,8 +112,17 @@ on RoyalBlue54L-Feather (`tests/test_fileformat_circuit.py`).
 `kicad_cli/fileformat/netlist.py` writes the netlist from that, and it is
 KiCad's own on 34 of the 35, part for part and net for net
 (`tests/test_fileformat_netlist.py`). `board parity` reads the schematic
-through it. Next on that side: the `sch` commands use it instead of KiCad's
-binary; then ERC.
+through it.
+
+`sch create` draws its schematic in this process now
+(`kicad_cli/native/sch_create.py`); SKiDL is gone. On the benchmark's
+ATmega328P the drawing KiCad's own ERC finds nothing in -- SKiDL's drawings
+had 23 errors each -- no symbol or text over another, power and ground as
+power symbols, decoupling beneath the chip it serves, and the same file from
+the same description every time. Next on that side: the other `sch`
+commands use this tool's netlist instead of KiCad's binary; then ERC of this
+tool's own, editing an existing schematic, and carrying a schematic change
+onto a routed board.
 
 Progress. Step 1 is in (`bench/`). Step 2 is in for boards:
 `kicad_cli/fileformat/sexpr.py` reads and writes KiCad's S-expressions

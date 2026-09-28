@@ -10,7 +10,6 @@ one that refuses.
 
 from __future__ import annotations
 
-import importlib.util
 import json
 import os
 import subprocess
@@ -59,20 +58,8 @@ SPEC = {
 }
 
 
-def _skidl_available() -> bool:
-    """Look without importing.
-
-    Importing the generator opens a log file named after the running script, in
-    the current working directory, and keeps it open -- so a collection-time
-    import here drops `test_sch_create.log` into the repository root. Asking the
-    import system whether the module exists does not execute it.
-    """
-    return importlib.util.find_spec("skidl") is not None
-
-
 needs_generator = pytest.mark.skipif(
-    not _skidl_available() or not DEMOS.exists(),
-    reason=f"needs the schematic generator and KiCad's libraries ({SKIP_REASON})",
+    not DEMOS.exists(), reason=f"needs KiCad's symbol libraries ({SKIP_REASON})"
 )
 
 
@@ -144,52 +131,59 @@ def test_a_confirmed_run_produces_a_schematic_kicad_itself_accepts(tmp_path):
         assert f'(ref "{part["ref"]}")' in text or f'(ref "{part["ref"]}"' in text, part["ref"]
 
 
-@needs_generator
-def test_a_simple_circuit_is_drawn_without_needing_the_fallback(tmp_path):
-    """`drawing` reports which of the two routes produced the picture.
-
-    Plain routing is tried first precisely so that a circuit which draws
-    correctly today keeps coming out the same way. If this starts reporting
-    `auto_stub`, the order was changed and every existing schematic's
-    appearance changed with it.
-    """
-    spec = write_spec(tmp_path, SPEC)
-    plan, _ = run(["sch", "create", "--spec", str(spec), "--dry-run"], tmp_path)
+def created(tmp_path, spec=SPEC) -> dict:
+    path = write_spec(tmp_path, spec)
+    plan, _ = run(["sch", "create", "--spec", str(path), "--dry-run"], tmp_path)
     token = plan["error"]["details"]["confirm_token"]
-    doc, _ = run(["sch", "create", "--spec", str(spec), "--confirm", token], tmp_path)
-    drawing = doc["data"]["drawing"]
-    assert drawing["status"] == "drawn", drawing
-    assert drawing["style"] == "routed", drawing
-    assert drawing["reason"] is None
+    doc, _ = run(["sch", "create", "--spec", str(path), "--confirm", token], tmp_path)
+    assert doc is not None and doc["ok"] is True, doc
+    return doc["data"]
 
 
 @needs_generator
-def test_a_circuit_the_wire_router_cannot_draw_still_yields_its_netlist(tmp_path):
-    """The netlist is what the chain consumes; the drawing is for a person.
+def test_the_drawing_is_labelled_and_reads_back_as_the_specification(tmp_path):
+    """The generator reads what it drew back through this tool's netlist and
+    refuses to deliver a schematic that joins other pins than asked; this
+    checks the same from outside, net by net."""
+    from kicad_cli.fileformat import netlist  # noqa: PLC0415
 
-    A 15-part ATmega328P failed here outright: `generate_netlist` had already
-    written a correct netlist, then the wire router could not lay out a 14-pin
-    ground net, and the whole command failed and threw the netlist away.
+    data = created(tmp_path)
+    assert data["drawing"] == {"status": "drawn", "style": "labelled", "reason": None,
+                               "paper": "A4"}  # fmt: skip
+    built = netlist.build(data["written"]["schematic"])
+    got = {n.name.lstrip("/"): sorted(f"{x.ref}.{x.pin}" for x in n.nodes) for n in built.nets}
+    assert got["+5V"] == ["C1.1", "J1.1", "U1.3"]
+    assert got["+3V3"] == ["R1.1", "U1.2"]
+    assert got["LED_A"] == ["D1.1", "R1.2"]
+    assert got["GND"] == ["C1.2", "D1.2", "J1.2", "U1.1"]
 
-    Rather than reconstruct that board, this asserts the contract directly --
-    whatever happens to the drawing, a netlist comes back and `drawing` says
-    which. Both outcomes are legitimate; silently returning neither is not.
-    """
-    spec = write_spec(tmp_path, SPEC)
-    plan, _ = run(["sch", "create", "--spec", str(spec), "--dry-run"], tmp_path)
-    token = plan["error"]["details"]["confirm_token"]
-    doc, _ = run(["sch", "create", "--spec", str(spec), "--confirm", token], tmp_path)
-    assert doc["ok"] is True, doc
 
-    written, drawing = doc["data"]["written"], doc["data"]["drawing"]
-    assert written["netlist"] and Path(written["netlist"]).is_file()
-    assert drawing["status"] in ("drawn", "failed"), drawing
-    if drawing["status"] == "failed":
-        assert written["schematic"] is None
-        assert "NO SCHEMATIC DRAWING" in doc["data"]["note"]
-        assert drawing["reason"] and drawing["reason_auto_stub"]
-    else:
-        assert written["schematic"] and Path(written["schematic"]).is_file()
+@needs_generator
+def test_kicads_own_erc_finds_nothing(tmp_path):
+    """Unused pins are flagged no-connect and undriven supplies get a
+    PWR_FLAG, so ERC has nothing to report -- as KiCad's own ERC says."""
+    from kicad_cli import kicad_env  # noqa: PLC0415
+
+    schematic = Path(created(tmp_path)["written"]["schematic"])
+    report = tmp_path / "erc.json"
+    subprocess.run(
+        [kicad_env.find_official_cli(), "sch", "erc", "--format", "json", "-o", str(report),
+         str(schematic)],
+        capture_output=True, timeout=900,
+    )  # fmt: skip
+    violations = [
+        (v["severity"], v["type"], v["description"])
+        for sheet in json.loads(report.read_text(encoding="utf-8"))["sheets"]
+        for v in sheet["violations"]
+    ]
+    assert violations == []
+
+
+@needs_generator
+def test_one_specification_gives_one_schematic(tmp_path):
+    first = Path(created(tmp_path / "a")["written"]["schematic"]).read_bytes()
+    second = Path(created(tmp_path / "b")["written"]["schematic"]).read_bytes()
+    assert first == second
 
 
 @needs_generator

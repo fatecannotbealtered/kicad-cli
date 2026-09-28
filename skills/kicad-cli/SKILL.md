@@ -222,9 +222,14 @@ overturn — a board-edge connector, say. Expect `verify.warnings_added` to be
 positive: packing parts closer collides silkscreen text. Those are warnings, not
 errors, and the command rolls the whole board back if DRC *errors* increase.
 
-**The schematic is for machines.** Symbol placement comes from the generator
-and is not laid out for reading. The netlist is the part step 2 consumes; treat
-the `.kicad_sch` as a by-product until someone opens it on purpose.
+**The schematic is a deliverable: have it read.** Every net is a label or a
+power symbol at the pins it joins, unused pins carry no-connect flags and
+supplies nothing drives carry a PWR_FLAG, so ERC has nothing to report; parts
+are grouped around their ICs, decoupling beneath them. The grouping is a
+heuristic, so show the drawing to the person who will sign it off -- that is
+the step that finds a wrong part, which no check here can. The netlist the
+command writes is the one step 2 consumes, and it was read back from the
+drawing, net for net, before the command returned.
 
 **Every footprint must be named in the specification.** A part without one
 fails step 2, not step 1 — the schematic does not care and the board cannot be

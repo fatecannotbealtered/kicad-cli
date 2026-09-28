@@ -13,6 +13,7 @@ from pathlib import Path
 from typing import Any
 
 from .. import envelope, kicad_env, netlist, schematic, sexpr
+from ..native import sch_create as native_sch
 
 
 def _find_schematics(board: Path) -> tuple[list[Path], str | None]:
@@ -672,51 +673,34 @@ def relink(args: dict[str, Any]) -> None:
 
 
 def create(args: dict[str, Any]) -> None:
-    """Build a schematic and its netlist from a JSON circuit specification.
+    """Draw a schematic and write its netlist from a JSON circuit specification.
 
     The only command in this tool that starts from a description rather than a
     design. Everything is resolved against the real KiCad libraries during the
     dry run, so the preview is a statement about this machine's libraries and
-    not a restatement of the input.
+    not a restatement of the input. Drawn in this process
+    (`kicad_cli/native/sch_create.py`); no KiCad runs.
     """
-    spec = args.get("spec")
-    out = args.get("out") or str(Path(str(spec)).parent)
-    plan = schematic.plan(str(spec))
+    spec_path = args.get("spec")
+    out = args.get("out") or str(Path(str(spec_path)).parent)
+    spec = schematic.load_spec(str(spec_path))
+    parts, on, joins, _ = native_sch.plan(spec)
     preview = {
-        "spec": str(spec),
+        "spec": str(spec_path),
         "out": out,
-        "title": plan["title"],
-        "parts": len(plan["parts"]),
-        "nets": len(plan["nets"]),
-        "unconnected_parts": plan["unconnected_parts"],
+        "title": str(spec.get("title") or Path(str(spec_path)).stem),
+        "parts": len(parts),
+        "nets": len(joins),
+        "unconnected_parts": sorted(
+            (p.ref for p in parts if not any(key[0] == p.ref for key in on)),
+            key=native_sch._natural,
+        ),
         "will": "write a .kicad_sch and a .net; existing files with those names are replaced",
     }
     envelope.check_confirm(
-        args.get("confirm"), f"sch create:{Path(str(spec)).name}", preview, str(spec)
+        args.get("confirm"), f"sch create:{Path(str(spec_path)).name}", preview, str(spec_path)
     )
-    result = schematic.generate(str(spec), out)
-    drawing = result["drawing"]
-    note = (
-        "symbol placement comes from the generator and is not laid out for reading; "
-        "the netlist is the part downstream commands consume. Run `sch audit` or KiCad's "
-        "own ERC before trusting the circuit."
-    )
-    if drawing["status"] == "failed":
-        # Said plainly rather than left for whoever notices written.schematic is
-        # null. The netlist is complete and the board chain can run on it; what
-        # is missing is the picture.
-        note = (
-            "NO SCHEMATIC DRAWING WAS PRODUCED -- written.schematic is null. The netlist "
-            "is complete and correct, so `board from-netlist` and the rest of the chain "
-            "run normally; what is missing is the human-readable picture. See "
-            "drawing.reason. " + note
-        )
-    elif drawing["style"] == "auto_stub":
-        note = (
-            "the drawing needed auto-stubbing: high-fanout nets such as ground are drawn "
-            "as global labels and power symbols rather than as wires, which is how they "
-            "would normally be drawn anyway. The netlist is unaffected. " + note
-        )
+    result = native_sch.create(str(spec_path), out)
     envelope.ok(
         {
             "title": result["title"],
@@ -724,7 +708,11 @@ def create(args: dict[str, Any]) -> None:
             "nets": result["nets"],
             "unconnected_parts": result["unconnected_parts"],
             "written": result["written"],
-            "drawing": drawing,
-            "note": note,
+            "drawing": result["drawing"],
+            "note": "every net is drawn as a label or a power symbol at the pins it joins, "
+            "unused pins carry a no-connect flag and undriven supplies a PWR_FLAG, so ERC "
+            "has nothing to report by construction; the drawing was read back and matches "
+            "the specification net for net. Parts are grouped around their ICs by the "
+            "signals they share -- a heuristic: read the drawing before signing it off.",
         }
     )

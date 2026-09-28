@@ -184,10 +184,6 @@ def test_an_empty_netlist_is_refused(tmp_path):
 
 
 @needs_kicad
-@pytest.mark.skipif(
-    __import__("importlib.util", fromlist=["util"]).find_spec("skidl") is None,
-    reason="the whole chain needs the schematic generator",
-)
 def test_the_whole_chain_runs_from_a_specification_to_gerbers(tmp_path):
     """Specification to manufacturing files, entirely through this tool.
 
