@@ -131,7 +131,11 @@ def run(path: str, step: float = STEP_MM) -> dict[str, Any]:
     name = board.layer_name
     order = board.copper_layers
     if len(order) < 2:
-        envelope.fail("E_VALIDATION", "单层板没有参考平面可查", {"copper_layers": len(order)})
+        envelope.fail(
+            "E_VALIDATION",
+            "单层板没有参考平面可查",
+            {"copper_layers": len(order), "write_state": "not_started"},
+        )
 
     edge = board.edge_bbox() or (0, 0, 0, 0)
     board_area = mm(edge[2] - edge[0]) * mm(edge[3] - edge[1])

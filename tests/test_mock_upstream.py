@@ -85,12 +85,35 @@ def test_a_native_command_runs_without_kicad(command: str, tmp_path: Path) -> No
     assert fake_upstream.attempts(tmp_path) == 0, f"board {command} started KiCad after all"
 
 
-# The payload bridge is exercised through `board parity`, which still runs in
-# KiCad's interpreter; `board audit` and then `board plane` did until each
-# moved into this process.
-def test_a_payload_envelope_is_relayed(tmp_path: Path) -> None:
+def test_board_parity_needs_only_kicads_binary(tmp_path: Path) -> None:
+    """The schematic's netlist still comes from KiCad's binary; everything
+    else is read here. The interpreter is pointed at nothing, so any call
+    into it would fail the command."""
+    env = fake_upstream.env(tmp_path, "ok")
+    env["KICAD_CLI_PYTHON"] = str(tmp_path / "no-such-python.exe")
+    doc, exit_code, _ = run(["board", "parity", "--board", str(MINI)], env)
+    assert code_of(doc) == "OK", doc
+    assert exit_code == 0
+    assert fake_upstream.attempts(tmp_path) == 1, "one netlist export, nothing else"
+
+
+def test_a_netlist_export_that_is_not_xml_is_e_io(tmp_path: Path) -> None:
     doc, exit_code, _ = run(
         ["board", "parity", "--board", str(MINI)],
+        fake_upstream.env(tmp_path, "garbage"),
+    )
+    assert code_of(doc) == "E_IO", doc
+    assert exit_code == 1
+
+
+# The payload bridge is exercised through `board move`, which still runs in
+# KiCad's interpreter; `board audit`, `board plane` and `board parity` did
+# until each moved into this process. A move is a write, but its confirmation
+# gate lives in the payload, so without a token the call still goes straight
+# to the interpreter -- which is all these tests need.
+def test_a_payload_envelope_is_relayed(tmp_path: Path) -> None:
+    doc, exit_code, _ = run(
+        ["board", "move", "--board", str(MINI), "--moves", "U1:1,1"],
         fake_upstream.env(tmp_path, "ok"),
     )
     assert code_of(doc) == "OK"
@@ -103,12 +126,14 @@ def test_strict_mode_rejects_a_payload_that_does_not_match_its_schema(tmp_path: 
     wrong fields is the only way to find out."""
     env = fake_upstream.env(tmp_path, "ok")
     env["KICAD_CLI_STRICT"] = "1"
-    doc, exit_code, err = run(["board", "parity", "--board", str(MINI)], env)
+    doc, exit_code, err = run(["board", "move", "--board", str(MINI), "--moves", "U1:1,1"], env)
     assert doc is None, "a contract violation must not be emitted as a successful envelope"
     assert exit_code != 0
-    assert "contract violation in board_parity" in err
+    assert "contract violation in board_move" in err
+    # A write command's relay fills the fields a mode does not set, so only
+    # the undeclared one can be caught here; a missing field is caught for
+    # every command by the envelope's own strict check.
     assert "undeclared ['fake']" in err
-    assert "missing" in err and "netlist_source" in err
 
 
 # --- upstream failures ------------------------------------------------------
@@ -151,7 +176,7 @@ def test_retrying_actually_recovers(tmp_path: Path) -> None:
 )
 def test_an_unusable_interpreter_is_e_io(behaviour: str, expected: str, tmp_path: Path) -> None:
     doc, exit_code, _ = run(
-        ["board", "parity", "--board", str(MINI)],
+        ["board", "move", "--board", str(MINI), "--moves", "U1:1,1"],
         fake_upstream.env(tmp_path, behaviour),
     )
     assert code_of(doc) == expected
@@ -163,7 +188,7 @@ def test_noise_before_the_envelope_is_stepped_over(tmp_path: Path) -> None:
     process, so the rule is "first line that parses", not "the output". The
     stub also emits a decoy line that starts with `{` and is not JSON."""
     doc, exit_code, _ = run(
-        ["board", "parity", "--board", str(MINI)],
+        ["board", "move", "--board", str(MINI), "--moves", "U1:1,1"],
         fake_upstream.env(tmp_path, "noisy"),
     )
     assert code_of(doc) == "OK"
@@ -241,7 +266,7 @@ def test_every_error_here_maps_to_its_declared_exit_code(tmp_path: Path) -> None
     from kicad_cli.contract_gen import CODES
 
     seen = {
-        "E_IO": ["board", "parity", "--board", str(MINI)],
+        "E_IO": ["board", "move", "--board", str(MINI), "--moves", "U1:1,1"],
         "E_NOT_FOUND": ["sch", "link", "--board", str(MINI)],
     }
     for expected, argv in seen.items():

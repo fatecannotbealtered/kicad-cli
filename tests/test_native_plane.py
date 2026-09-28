@@ -14,17 +14,24 @@ import pytest
 from payload_reference import DEMO_BOARDS, assert_same, kicad_env, native, needs_payload
 
 
-def test_a_single_layer_board_has_no_plane_to_check(tmp_path):
+def single_layer_board(tmp_path):
     board = tmp_path / "one.kicad_pcb"
     board.write_text(
         '(kicad_pcb (version 20260206) (generator "t")\n'
         '\t(layers (0 "F.Cu" signal) (25 "Edge.Cuts" user))\n)\n',
         encoding="utf-8",
     )
-    doc = native("board", "plane", "--board", str(board))
+    return board
+
+
+def test_a_single_layer_board_has_no_plane_to_check(tmp_path):
+    """The payload never reached this refusal: pcbnew will not load a board
+    with one copper layer, returns nothing, and the payload died on the next
+    line. Refused here the way the payload meant to refuse it."""
+    doc = native("board", "plane", "--board", str(single_layer_board(tmp_path)))
     assert doc["ok"] is False
     assert doc["error"]["code"] == "E_VALIDATION"
-    assert doc["error"]["details"] == {"copper_layers": 1}
+    assert doc["error"]["details"] == {"copper_layers": 1, "write_state": "not_started"}
 
 
 @needs_payload

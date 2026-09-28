@@ -77,6 +77,17 @@ def export(schematic: Path, timeout: int = 1800) -> tuple[sexpr.Node, str]:
     annotated -- the only sign is a warning on stderr. A caller that checks
     only the exit code gets a confident wrong answer.
     """
+    text, stderr = export_text(schematic, "kicadsexpr", timeout)
+    return sexpr.parse(text), stderr
+
+
+def export_text(schematic: Path, fmt: str, timeout: int = 1800) -> tuple[str, str]:
+    """The netlist in one of KiCad's formats, as text, and KiCad's stderr.
+
+    The formats do not hold the same parts: ``kicadsexpr`` is the netlist a
+    board is updated from and leaves out every part marked "exclude from
+    board"; ``kicadxml`` keeps them.
+    """
     exe = kicad_env.find_official_cli()
     if not exe:
         envelope.fail(
@@ -93,7 +104,7 @@ def export(schematic: Path, timeout: int = 1800) -> tuple[sexpr.Node, str]:
         "export",
         "netlist",
         "--format",
-        "kicadsexpr",
+        fmt,
         "-o",
         "",
         str(schematic),
@@ -115,10 +126,10 @@ def export(schematic: Path, timeout: int = 1800) -> tuple[sexpr.Node, str]:
         stderr = proc.stderr.decode("utf-8", "replace").strip()
         if out.exists():
             try:
-                node = sexpr.parse(out.read_text(encoding="utf-8"))
+                text = out.read_text(encoding="utf-8")
             finally:
                 shutil.rmtree(tmp, ignore_errors=True)
-            return node, stderr
+            return text, stderr
         attempts.append({"returncode": proc.returncode, "stderr": stderr[-300:]})
         last = stderr
         shutil.rmtree(tmp, ignore_errors=True)

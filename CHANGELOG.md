@@ -412,7 +412,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   and listed in DEVELOPMENT_STATUS.md, to be fixed in changes of their own, so
   that a difference in what the audit says is never also a difference in what
   computes it.
-- `board plane` runs in this process too, and needs no KiCad. Its output is
+- `board plane` runs in this process too, and needs no KiCad. A board with
+  one copper layer is refused with `E_VALIDATION` and `write_state` in its
+  details, like every refusal the payloads made. The payload meant to refuse
+  it that way but never got there: pcbnew will not load such a board, and the
+  payload died on the next line. Its output is
   identical to the pcbnew version's on all 19 demo boards and on both
   benchmark boards, checked field by field by `tests/test_native_plane.py`.
   On the Jetson baseboard it takes 4.8 s against 32 s; on `video`, 1.7 s
@@ -430,9 +434,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `tests/test_fileformat_polygon.py` records pcbnew's answers and asks pcbnew
   again whenever KiCad is installed. Connectivity still agrees with pcbnew on
   every demo board.
-- The payload bridge's own tests now go through `board parity`, which still
-  runs in KiCad's interpreter. `board audit` and `board plane` no longer
-  touch it.
+- `board parity` runs in this process, and its board side needs no KiCad:
+  footprints, values, pads and nets are read from the file, and the
+  unconnected count is this tool's own connectivity. The schematic side is
+  still KiCad's XML netlist export, the same one the payload used, until this
+  tool exports netlists itself. Output is identical to the pcbnew version's
+  on every demo board, checked by `tests/test_native_parity.py`, except for
+  one list: the sample of up to ten mismatched nets. The payload took it from
+  a Python set, so it changed from run to run; it is now sorted.
+
+  The export now goes through the same exporter as the `sch` commands. That
+  exporter uses an isolated KiCad configuration and tries three times. The
+  payload launched KiCad's binary once, and on Windows about one launch in
+  six fails with no output. On the RoyalBlue54L-Feather demo that failure
+  came back as the parity check's answer: `E_IO`, "netlist export failed".
+  A netlist that is not the XML asked for is now `E_IO` too, rather than a
+  traceback.
+- The payload bridge's own tests now go through `board move`, which still
+  runs in KiCad's interpreter. `board audit`, `board plane` and `board parity`
+  no longer touch it.
 - Separate FCC measurement from FCC enforcement. The guard returned early unless
   `fcc_status` already said `verified`, so while the status was `unknown` nothing
   was counted -- and the status cannot honestly become `verified` without the

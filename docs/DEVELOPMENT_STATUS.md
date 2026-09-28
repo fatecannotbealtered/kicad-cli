@@ -112,10 +112,12 @@ works out which copper touches which and what is left unconnected, held to
 pcbnew net by net by `tests/test_fileformat_connectivity.py`. Not yet built:
 the schematic side of the file model.
 
-Step 3 has begun: `board audit` and `board plane` run in this process
-(`kicad_cli/native/`), output identical to the pcbnew versions on every demo
-board, and need no KiCad installed. Each port keeps the old version's behaviour exactly, mistakes
-included, so that the port is provable by comparison; the mistakes are fixed
+Step 3 has begun: `board audit`, `board plane` and `board parity` run in
+this process (`kicad_cli/native/`), output identical to the pcbnew versions on
+every demo board. The first two need no KiCad installed; `board parity` still
+asks KiCad's binary for the schematic's netlist, until step 5 exports it
+here. Each port keeps the old version's behaviour exactly, mistakes included,
+so that the port is provable by comparison; the mistakes are fixed
 afterwards, one change each.
 
 ### Carried over from the payloads, to fix after the port
@@ -138,6 +140,23 @@ Found while porting `board audit`, kept so the port stays identical:
 - Two fix texts name `pcb_route.py`, a script this tool does not have; the
   command is `board route`.
 - Titles, details and fixes are Chinese in an otherwise English contract.
+
+Found while porting `board parity`:
+
+- The schematic side is KiCad's XML netlist, which keeps the parts marked
+  "exclude from board"; the netlist a board is updated from leaves them out.
+  So a part deliberately kept off the board is reported missing from it --
+  five on the CM5_MINIMA_3 demo, among them the compute module itself -- and
+  a net holding one of its pins is reported as not matching.
+- The sample of mismatched nets was the first ten of a Python set, which is
+  ordered differently in every process. The port sorts it; that is the one
+  place the port does not match, and the test holds it to the payload only
+  where there are ten or fewer to sample.
+- The payload asked KiCad's binary for the netlist once, and Windows fails
+  roughly one launch in six with no output; the payload reported that as the
+  netlist export failing. The port goes through the exporter the `sch`
+  commands use, which tries three times.
+- The `unrouted` count is connectivity's, now this tool's own.
 
 ## What the benchmark showed
 
