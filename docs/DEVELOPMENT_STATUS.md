@@ -102,6 +102,18 @@ Order, by deadline:
 `board live` is outside this: it talks to a running KiCad over the IPC API,
 and there is no other way to do what it does.
 
+Step 5 has begun ahead of order, because it does not wait on the zone
+filler that most of step 3's remaining writes need:
+`kicad_cli/fileformat/schematic.py` reads a schematic into symbols, pins,
+wires, labels and sheets, and `kicad_cli/fileformat/circuit.py` works out the
+design's nets. On KiCad's 35 demo projects its nets are KiCad's, pin for pin.
+On 34 the names and their order are too; one net of 95 is named differently
+on RoyalBlue54L-Feather (`tests/test_fileformat_circuit.py`).
+`kicad_cli/fileformat/netlist.py` writes the netlist from that, and it is
+KiCad's own on 34 of the 35, part for part and net for net
+(`tests/test_fileformat_netlist.py`). Next on that side: `board parity` and
+the `sch` commands use it instead of KiCad's binary; then ERC.
+
 Progress. Step 1 is in (`bench/`). Step 2 is in for boards:
 `kicad_cli/fileformat/sexpr.py` reads and writes KiCad's S-expressions
 losslessly, held to KiCad's own files by `tests/test_fileformat_conformance.py`;

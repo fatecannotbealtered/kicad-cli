@@ -297,6 +297,11 @@ class Document:
         Path(path).write_bytes(self.dumps().encode("utf-8"))
 
 
+def render(node: List, newline: str = "\n") -> str:
+    """A list built in memory, written out as KiCad writes a file of it."""
+    return _render(node, 0, "", newline) + newline
+
+
 # -- atoms --------------------------------------------------------------------
 
 
