@@ -5,6 +5,85 @@ PR #4 is a scoped command-boundary improvement. Merging it does not assert that
 all board operations are safe, that FCC is verified, or that live E2E passed.
 An empty issue/PR queue is an organizational state, not a quality certificate.
 
+## Direction: the engine moves into this tool (decided 2026-09-28)
+
+KiCad 11 removes the SWIG `pcbnew` bindings -- the plan of record is 11.0,
+expected around February 2027 -- and most commands here run on them. The
+decision is to drop SWIG entirely, and not to replace it with calls into
+KiCad's official binary either: the work moves into this tool. That includes
+the three things the binary has done for it until now: DRC, ERC and netlist
+export.
+
+This reverses a position held since 0.1.0: that DRC is deliberately not
+reimplemented, because a verdict is only worth something if an unmodified
+KiCad reproduces it. The argument has not gone away; it changes what is owed.
+A verdict from this tool's own engine has to say which checks it does not run
+(`not_checked`), and its agreement with KiCad's DRC has to be measured and
+published per check class rather than assumed.
+
+Rules for the work:
+
+- KiCad is GPL-3.0 and this tool is MIT. Nothing is translated from KiCad's
+  source. Behaviour comes from published formats -- KiCad's file-format
+  documentation, Gerber X2, Excellon -- and from KiCad itself treated as a
+  black box: the official binary appears only in tests, as the reference that
+  this tool's output is compared against.
+- Silkscreen text uses the upstream Newstroke release, which is CC0. KiCad's
+  own copy carries a GPL header and its CJK glyphs are under the OFL.
+- Every step shows it made nothing worse: field-by-field comparison against
+  KiCad on its bundled demo projects, and the chain benchmark in `bench/`.
+- Same input, same output. The SWIG-era router is not deterministic -- see
+  below -- and a benchmark that moves between runs cannot tell a regression
+  from noise. The new engine is byte-for-byte reproducible by construction.
+
+Order, by deadline:
+
+1. **Benchmark.** The chain on a reconstructed 15-part ATmega328P board,
+   recorded against the current implementation (`bench/`).
+2. **Board model.** Parse `.kicad_pcb` / `.kicad_pro`, geometry and
+   connectivity, compared against pcbnew on the demo projects while pcbnew
+   still exists to compare against.
+3. **Replace SWIG, command by command.** The DRC referee stays the official
+   binary for this step, so only one thing is unknown at a time: new code is
+   judged by the referee it has always been judged by.
+4. **Own DRC**, check class by check class, measured against KiCad's. It
+   becomes the referee when the measurement says it can.
+5. **Schematic side:** connectivity, netlist, ERC.
+6. **Remove the last call into KiCad's binaries**, then verify on KiCad 10 and
+   11 before anything is released.
+
+`board live` is outside this: it talks to a running KiCad over the IPC API,
+and there is no other way to do what it does.
+
+## What the benchmark showed
+
+The numbers this project has quoted for a realistic board came from a 15-part
+ATmega328P whose specification was never checked in. `bench/specs/atmega328p.json`
+reconstructs it from the description -- TQFP-32, regulator, crystal, ICSP
+header, decoupling -- and `bench/chain.py` runs the Skill's own recipe on it.
+The two boards are not the same board, so the old figures are not comparable;
+what matters is that these can be made again.
+
+Five runs of one specification did not produce one board. The grid router
+breaks ties between equal-length paths in an order that follows object
+identity, so the geometry differs from run to run, and on this board that is
+the difference between `board rewidth` succeeding and rolling back. Fixing
+`PYTHONHASHSEED` makes routing repeat and leaves the silkscreen step varying.
+
+Across the five recorded runs (`bench/baseline/atmega328p-swig.json`): no DRC
+errors in any; 0 or 1 connection left open, so two of five end with
+`ok_to_fabricate: true`; the Power class at 0 to 52% of its 0.5 mm target --
+in two runs `board rewidth` rolled back with `E_INTEGRITY` and left power at
+0.2 mm; `backed_fraction` 0.31 to 0.41, which `board plane` calls FAIL.
+
+`ok_to_fabricate` is DRC's view, and the board fails in ways DRC does not
+see. In every run, 9 or 10 of the 15 reference designators end nearer another
+part's courtyard than their own -- `C7` printed inside `U1`'s courtyard, for
+one -- so the silkscreen is legible and points at the wrong parts. And every
+part sits in one corner of an outline sized for the grid layout that `board
+place` replaced; nothing shrinks it. Looking at the plotted copper found both;
+no metric here would have.
+
 ## Landed scope
 
 Typed parameter validation, mode constraints, discoverable defaults and enums,

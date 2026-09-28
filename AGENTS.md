@@ -28,6 +28,6 @@ This repo is an **AI-native CLI tool**: designed for AI agents first.
 - Language / distribution: Python + PyInstaller, wrapped for npm as `@fateforge/kicad-cli`; the Skill installs separately with `npx skills add fatecannotbealtered/kicad-cli -y -g`.
 - Source: `kicad_cli/`; the half that needs `pcbnew` lives in `kicad_cli/payload/` and runs as a subprocess under KiCad's own interpreter, speaking the same envelope back.
 - Tests: `tests/`; Skill: `skills/kicad-cli/SKILL.md`.
-- Local checks: `pytest tests/ -v --tb=short && ruff check kicad_cli/ tests/ && ruff format --check kicad_cli/ tests/`
+- Local checks: `pytest tests/ -v --tb=short && ruff check kicad_cli/ tests/ bench/ && ruff format --check kicad_cli/ tests/ bench/`
 - No credentials anywhere. If you are about to add one, read `SECURITY.md` first — the absence is documented as load-bearing.
 - **Never change KiCad's behaviour.** This tool exposes entry points KiCad already has; it does not alter what KiCad does with a board.

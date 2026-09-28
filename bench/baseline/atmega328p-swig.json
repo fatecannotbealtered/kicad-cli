@@ -1,0 +1,1564 @@
+{
+  "spec": "atmega328p.json",
+  "provenance": {
+    "commit": "8984ec22c7a5",
+    "dirty": false,
+    "kicad_version": "10.0.6",
+    "platform": "win32"
+  },
+  "runs": 5,
+  "every_run_ok": false,
+  "spread": {
+    "drc_errors": [
+      0,
+      0
+    ],
+    "drc_warnings": [
+      2,
+      3
+    ],
+    "unconnected": [
+      0,
+      1
+    ],
+    "copper_mm": [
+      263.1,
+      305.7
+    ],
+    "vias": [
+      24,
+      28
+    ],
+    "tracks": [
+      155,
+      176
+    ],
+    "backed_fraction": [
+      0.309,
+      0.4101
+    ]
+  },
+  "results": [
+    {
+      "every_step_ok": true,
+      "drc_errors": 0,
+      "drc_warnings": 2,
+      "unconnected": 1,
+      "ok_to_fabricate": false,
+      "copper_mm": 263.1,
+      "copper_by_layer_mm": {
+        "F.Cu": 155.0,
+        "B.Cu": 108.1
+      },
+      "vias": 24,
+      "tracks": 170,
+      "width_compliance": [
+        {
+          "class": "Default",
+          "target_mm": 0.2,
+          "len_mm": 122.2,
+          "compliant_pct": 100.0,
+          "min_mm": 0.2,
+          "target_amp": 0.74,
+          "min_amp": 0.74,
+          "note": "已剔除平面服务的网络"
+        },
+        {
+          "class": "Power",
+          "target_mm": 0.5,
+          "len_mm": 71.7,
+          "compliant_pct": 30.2,
+          "min_mm": 0.2,
+          "target_amp": 1.45,
+          "min_amp": 0.74,
+          "note": "已剔除平面服务的网络"
+        }
+      ],
+      "backed_fraction": 0.4101
+    },
+    {
+      "every_step_ok": true,
+      "drc_errors": 0,
+      "drc_warnings": 2,
+      "unconnected": 0,
+      "ok_to_fabricate": true,
+      "copper_mm": 281.0,
+      "copper_by_layer_mm": {
+        "F.Cu": 151.9,
+        "B.Cu": 129.1
+      },
+      "vias": 28,
+      "tracks": 176,
+      "width_compliance": [
+        {
+          "class": "Default",
+          "target_mm": 0.2,
+          "len_mm": 127.6,
+          "compliant_pct": 100.0,
+          "min_mm": 0.2,
+          "target_amp": 0.74,
+          "min_amp": 0.74,
+          "note": "已剔除平面服务的网络"
+        },
+        {
+          "class": "Power",
+          "target_mm": 0.5,
+          "len_mm": 65.7,
+          "compliant_pct": 40.6,
+          "min_mm": 0.2,
+          "target_amp": 1.45,
+          "min_amp": 0.74,
+          "note": "已剔除平面服务的网络"
+        }
+      ],
+      "backed_fraction": 0.3137
+    },
+    {
+      "every_step_ok": true,
+      "drc_errors": 0,
+      "drc_warnings": 3,
+      "unconnected": 1,
+      "ok_to_fabricate": false,
+      "copper_mm": 271.3,
+      "copper_by_layer_mm": {
+        "F.Cu": 160.3,
+        "B.Cu": 110.9
+      },
+      "vias": 28,
+      "tracks": 169,
+      "width_compliance": [
+        {
+          "class": "Default",
+          "target_mm": 0.2,
+          "len_mm": 122.3,
+          "compliant_pct": 100.0,
+          "min_mm": 0.2,
+          "target_amp": 0.74,
+          "min_amp": 0.74,
+          "note": "已剔除平面服务的网络"
+        },
+        {
+          "class": "Power",
+          "target_mm": 0.5,
+          "len_mm": 73.1,
+          "compliant_pct": 52.4,
+          "min_mm": 0.2,
+          "target_amp": 1.45,
+          "min_amp": 0.74,
+          "note": "已剔除平面服务的网络"
+        }
+      ],
+      "backed_fraction": 0.3513
+    },
+    {
+      "every_step_ok": false,
+      "drc_errors": 0,
+      "drc_warnings": 2,
+      "unconnected": 1,
+      "ok_to_fabricate": false,
+      "copper_mm": 269.9,
+      "copper_by_layer_mm": {
+        "F.Cu": 159.0,
+        "B.Cu": 110.9
+      },
+      "vias": 24,
+      "tracks": 155,
+      "width_compliance": [
+        {
+          "class": "Default",
+          "target_mm": 0.2,
+          "len_mm": 122.3,
+          "compliant_pct": 100.0,
+          "min_mm": 0.2,
+          "target_amp": 0.74,
+          "min_amp": 0.74,
+          "note": "已剔除平面服务的网络"
+        },
+        {
+          "class": "Power",
+          "target_mm": 0.5,
+          "len_mm": 80.4,
+          "compliant_pct": 0.0,
+          "min_mm": 0.2,
+          "target_amp": 1.45,
+          "min_amp": 0.74,
+          "note": "已剔除平面服务的网络"
+        }
+      ],
+      "backed_fraction": 0.3858
+    },
+    {
+      "every_step_ok": false,
+      "drc_errors": 0,
+      "drc_warnings": 2,
+      "unconnected": 0,
+      "ok_to_fabricate": true,
+      "copper_mm": 305.7,
+      "copper_by_layer_mm": {
+        "F.Cu": 166.6,
+        "B.Cu": 139.1
+      },
+      "vias": 26,
+      "tracks": 161,
+      "width_compliance": [
+        {
+          "class": "Default",
+          "target_mm": 0.2,
+          "len_mm": 127.8,
+          "compliant_pct": 100.0,
+          "min_mm": 0.2,
+          "target_amp": 0.74,
+          "min_amp": 0.74,
+          "note": "已剔除平面服务的网络"
+        },
+        {
+          "class": "Power",
+          "target_mm": 0.5,
+          "len_mm": 72.9,
+          "compliant_pct": 0.0,
+          "min_mm": 0.2,
+          "target_amp": 1.45,
+          "min_amp": 0.74,
+          "note": "已剔除平面服务的网络"
+        }
+      ],
+      "backed_fraction": 0.309
+    }
+  ],
+  "steps": [
+    [
+      {
+        "step": "sch create",
+        "ok": true,
+        "seconds": 23.9,
+        "data": {
+          "drawing": {
+            "status": "drawn",
+            "style": "auto_stub",
+            "reason": "RoutingFailure: (no message)"
+          },
+          "parts": 15
+        }
+      },
+      {
+        "step": "board from-netlist",
+        "ok": true,
+        "seconds": 2.1,
+        "data": {
+          "footprints": 15,
+          "nets": 11,
+          "pads_connected": 46,
+          "board_mm": [
+            42.35,
+            42.98
+          ]
+        }
+      },
+      {
+        "step": "board place",
+        "ok": true,
+        "seconds": 5.8,
+        "data": {
+          "improved": true,
+          "moved": 15,
+          "hpwl_before_mm": 402.84,
+          "hpwl_after_mm": 183.28,
+          "hpwl_reduction_pct": 54.5,
+          "courtyard_clash": [],
+          "verify": {
+            "ran": true,
+            "oracle": "kicad-cli pcb drc",
+            "drc_before": {
+              "error": 14,
+              "warning": 11
+            },
+            "drc_after": {
+              "warning": 16
+            },
+            "warnings_added": 5,
+            "note": "error 数没超过动手前的基线，否则这次调用已经回滚。warnings_added 为正说明挤得更紧了——那是本命令的目的，也是它的代价"
+          }
+        }
+      },
+      {
+        "step": "board pour",
+        "ok": true,
+        "seconds": 1.4,
+        "data": {
+          "area_mm": [
+            41.45,
+            42.08
+          ],
+          "filled_mm2": 1697.9
+        }
+      },
+      {
+        "step": "board route --use-planes",
+        "ok": false,
+        "seconds": 6.5,
+        "error": {
+          "code": "E_INTEGRITY",
+          "message": "布线后 DRC error 数高于动手前，已整盘回滚"
+        }
+      },
+      {
+        "step": "board route",
+        "ok": true,
+        "seconds": 7.7,
+        "data": {
+          "engine": "grid",
+          "routed": 34,
+          "failed": 1,
+          "vias": 23,
+          "track_len_mm": 270.8,
+          "unconnected_before": 34,
+          "unconnected_after": 1,
+          "plane_served": [],
+          "verify": {
+            "ran": true,
+            "oracle": "kicad-cli pcb drc",
+            "errors_baseline": 0,
+            "errors_final": 0,
+            "width_before": {
+              "len_mm": 0.0,
+              "min_mm": null,
+              "target_mm": null,
+              "compliant_pct": null
+            },
+            "width_after": {
+              "len_mm": 270.8,
+              "min_mm": 0.2,
+              "target_mm": 0.2,
+              "compliant_pct": 100.0
+            },
+            "width_regressed": false,
+            "note": "error 数未超过动手前的基线；这不等于板子没问题，只等于 DRC 没变差。线宽是 DRC 看不见的那部分：width_regressed 为真时走线已按缩颈宽度重布，载流能力随之下降，必须再跑 board widen 或 board rewidth 才算完成"
+          }
+        }
+      },
+      {
+        "step": "board netclass",
+        "ok": true,
+        "seconds": 0.8,
+        "data": {
+          "netclass": "Power",
+          "assigned": [
+            "+5V",
+            "VIN"
+          ],
+          "ampacity_a": 1.45
+        }
+      },
+      {
+        "step": "board rewidth",
+        "ok": true,
+        "seconds": 9.0,
+        "data": {
+          "rewidth_ok": 2,
+          "rewidth_total": 2,
+          "rewidth_reverted": null,
+          "unconnected_after": 1,
+          "verify": {
+            "ran": true,
+            "oracle": "kicad-cli pcb drc",
+            "scope": "per-net revert loop, then a whole-board baseline",
+            "reverted": [],
+            "errors_baseline": 0,
+            "errors_final": 0,
+            "note": "引入 DRC error 的网络已逐条还原，之后整盘 error 数与动手前比对；高于基线则整盘回滚，所以走到这里即未变差"
+          }
+        }
+      },
+      {
+        "step": "board silkscreen",
+        "ok": true,
+        "seconds": 5.2,
+        "data": {
+          "references": 15,
+          "crowded": 14,
+          "moved": 14,
+          "stuck": [],
+          "max_move_mm": 12.03,
+          "mean_move_mm": 5.75,
+          "verify": {
+            "ran": true,
+            "oracle": "kicad-cli pcb drc",
+            "errors_baseline": 0,
+            "errors_final": 0,
+            "note": "error 数没超过动手前的基线，否则这次调用已经回滚。丝印本身多数是 warning 不是 error，所以要看 warning 降了没有，跑一次 board drc"
+          }
+        }
+      },
+      {
+        "step": "board drc",
+        "ok": true,
+        "seconds": 2.0,
+        "data": {
+          "counts": {
+            "warning": 2
+          },
+          "unconnected_count": 1,
+          "ok_to_fabricate": false,
+          "violations_total": 2
+        }
+      },
+      {
+        "step": "board audit",
+        "ok": true,
+        "seconds": 0.6,
+        "data": {
+          "copper_mm": 263.1,
+          "copper_by_layer_mm": {
+            "F.Cu": 155.0,
+            "B.Cu": 108.1
+          },
+          "track_count": 170,
+          "via_count": 24,
+          "width_compliance": [
+            {
+              "class": "Default",
+              "target_mm": 0.2,
+              "len_mm": 122.2,
+              "compliant_pct": 100.0,
+              "min_mm": 0.2,
+              "target_amp": 0.74,
+              "min_amp": 0.74,
+              "note": "已剔除平面服务的网络"
+            },
+            {
+              "class": "Power",
+              "target_mm": 0.5,
+              "len_mm": 71.7,
+              "compliant_pct": 30.2,
+              "min_mm": 0.2,
+              "target_amp": 1.45,
+              "min_amp": 0.74,
+              "note": "已剔除平面服务的网络"
+            }
+          ],
+          "summary": {
+            "error": 1,
+            "warn": 3,
+            "info": 0
+          }
+        }
+      },
+      {
+        "step": "board plane",
+        "ok": true,
+        "seconds": 0.6,
+        "data": {
+          "samples": 656,
+          "backed_fraction": 0.4101,
+          "segments_without_reference": 105,
+          "segments_crossing_split": 0,
+          "status": "FAIL"
+        }
+      },
+      {
+        "step": "fab gerber",
+        "ok": true,
+        "seconds": 0.8,
+        "data": {
+          "layers": [
+            "F.Cu",
+            "B.Cu",
+            "F.Paste",
+            "B.Paste",
+            "F.SilkS",
+            "B.SilkS",
+            "F.Mask",
+            "B.Mask",
+            "Edge.Cuts"
+          ]
+        }
+      },
+      {
+        "step": "fab drill",
+        "ok": true,
+        "seconds": 0.8,
+        "data": {
+          "reconciled": {
+            "kicad_report": {
+              "plated": 32,
+              "unplated": 0
+            },
+            "counted_from_board": {
+              "plated": 32,
+              "unplated": 0
+            },
+            "agrees": true
+          },
+          "holes": {
+            "plated_pads": 8,
+            "non_plated_pads": 0,
+            "vias": 24
+          }
+        }
+      }
+    ],
+    [
+      {
+        "step": "sch create",
+        "ok": true,
+        "seconds": 24.3,
+        "data": {
+          "drawing": {
+            "status": "drawn",
+            "style": "auto_stub",
+            "reason": "RoutingFailure: (no message)"
+          },
+          "parts": 15
+        }
+      },
+      {
+        "step": "board from-netlist",
+        "ok": true,
+        "seconds": 1.6,
+        "data": {
+          "footprints": 15,
+          "nets": 11,
+          "pads_connected": 46,
+          "board_mm": [
+            42.35,
+            42.98
+          ]
+        }
+      },
+      {
+        "step": "board place",
+        "ok": true,
+        "seconds": 4.9,
+        "data": {
+          "improved": true,
+          "moved": 15,
+          "hpwl_before_mm": 402.84,
+          "hpwl_after_mm": 183.28,
+          "hpwl_reduction_pct": 54.5,
+          "courtyard_clash": [],
+          "verify": {
+            "ran": true,
+            "oracle": "kicad-cli pcb drc",
+            "drc_before": {
+              "error": 14,
+              "warning": 11
+            },
+            "drc_after": {
+              "warning": 16
+            },
+            "warnings_added": 5,
+            "note": "error 数没超过动手前的基线，否则这次调用已经回滚。warnings_added 为正说明挤得更紧了——那是本命令的目的，也是它的代价"
+          }
+        }
+      },
+      {
+        "step": "board pour",
+        "ok": true,
+        "seconds": 1.3,
+        "data": {
+          "area_mm": [
+            41.45,
+            42.08
+          ],
+          "filled_mm2": 1697.9
+        }
+      },
+      {
+        "step": "board route --use-planes",
+        "ok": false,
+        "seconds": 6.1,
+        "error": {
+          "code": "E_INTEGRITY",
+          "message": "布线后 DRC error 数高于动手前，已整盘回滚"
+        }
+      },
+      {
+        "step": "board route",
+        "ok": true,
+        "seconds": 6.3,
+        "data": {
+          "engine": "grid",
+          "routed": 35,
+          "failed": 0,
+          "vias": 25,
+          "track_len_mm": 288.2,
+          "unconnected_before": 34,
+          "unconnected_after": 0,
+          "plane_served": [],
+          "verify": {
+            "ran": true,
+            "oracle": "kicad-cli pcb drc",
+            "errors_baseline": 0,
+            "errors_final": 0,
+            "width_before": {
+              "len_mm": 0.0,
+              "min_mm": null,
+              "target_mm": null,
+              "compliant_pct": null
+            },
+            "width_after": {
+              "len_mm": 288.2,
+              "min_mm": 0.2,
+              "target_mm": 0.2,
+              "compliant_pct": 100.0
+            },
+            "width_regressed": false,
+            "note": "error 数未超过动手前的基线；这不等于板子没问题，只等于 DRC 没变差。线宽是 DRC 看不见的那部分：width_regressed 为真时走线已按缩颈宽度重布，载流能力随之下降，必须再跑 board widen 或 board rewidth 才算完成"
+          }
+        }
+      },
+      {
+        "step": "board netclass",
+        "ok": true,
+        "seconds": 0.9,
+        "data": {
+          "netclass": "Power",
+          "assigned": [
+            "+5V",
+            "VIN"
+          ],
+          "ampacity_a": 1.45
+        }
+      },
+      {
+        "step": "board rewidth",
+        "ok": true,
+        "seconds": 9.1,
+        "data": {
+          "rewidth_ok": 2,
+          "rewidth_total": 2,
+          "rewidth_reverted": null,
+          "unconnected_after": 0,
+          "verify": {
+            "ran": true,
+            "oracle": "kicad-cli pcb drc",
+            "scope": "per-net revert loop, then a whole-board baseline",
+            "reverted": [],
+            "errors_baseline": 0,
+            "errors_final": 0,
+            "note": "引入 DRC error 的网络已逐条还原，之后整盘 error 数与动手前比对；高于基线则整盘回滚，所以走到这里即未变差"
+          }
+        }
+      },
+      {
+        "step": "board silkscreen",
+        "ok": true,
+        "seconds": 5.5,
+        "data": {
+          "references": 15,
+          "crowded": 14,
+          "moved": 14,
+          "stuck": [],
+          "max_move_mm": 12.03,
+          "mean_move_mm": 5.46,
+          "verify": {
+            "ran": true,
+            "oracle": "kicad-cli pcb drc",
+            "errors_baseline": 0,
+            "errors_final": 0,
+            "note": "error 数没超过动手前的基线，否则这次调用已经回滚。丝印本身多数是 warning 不是 error，所以要看 warning 降了没有，跑一次 board drc"
+          }
+        }
+      },
+      {
+        "step": "board drc",
+        "ok": true,
+        "seconds": 2.1,
+        "data": {
+          "counts": {
+            "warning": 2
+          },
+          "unconnected_count": 0,
+          "ok_to_fabricate": true,
+          "violations_total": 2
+        }
+      },
+      {
+        "step": "board audit",
+        "ok": true,
+        "seconds": 0.6,
+        "data": {
+          "copper_mm": 281.0,
+          "copper_by_layer_mm": {
+            "F.Cu": 151.9,
+            "B.Cu": 129.1
+          },
+          "track_count": 176,
+          "via_count": 28,
+          "width_compliance": [
+            {
+              "class": "Default",
+              "target_mm": 0.2,
+              "len_mm": 127.6,
+              "compliant_pct": 100.0,
+              "min_mm": 0.2,
+              "target_amp": 0.74,
+              "min_amp": 0.74,
+              "note": "已剔除平面服务的网络"
+            },
+            {
+              "class": "Power",
+              "target_mm": 0.5,
+              "len_mm": 65.7,
+              "compliant_pct": 40.6,
+              "min_mm": 0.2,
+              "target_amp": 1.45,
+              "min_amp": 0.74,
+              "note": "已剔除平面服务的网络"
+            }
+          ],
+          "summary": {
+            "error": 0,
+            "warn": 3,
+            "info": 0
+          }
+        }
+      },
+      {
+        "step": "board plane",
+        "ok": true,
+        "seconds": 0.6,
+        "data": {
+          "samples": 695,
+          "backed_fraction": 0.3137,
+          "segments_without_reference": 131,
+          "segments_crossing_split": 0,
+          "status": "FAIL"
+        }
+      },
+      {
+        "step": "fab gerber",
+        "ok": true,
+        "seconds": 0.8,
+        "data": {
+          "layers": [
+            "F.Cu",
+            "B.Cu",
+            "F.Paste",
+            "B.Paste",
+            "F.SilkS",
+            "B.SilkS",
+            "F.Mask",
+            "B.Mask",
+            "Edge.Cuts"
+          ]
+        }
+      },
+      {
+        "step": "fab drill",
+        "ok": true,
+        "seconds": 0.8,
+        "data": {
+          "reconciled": {
+            "kicad_report": {
+              "plated": 36,
+              "unplated": 0
+            },
+            "counted_from_board": {
+              "plated": 36,
+              "unplated": 0
+            },
+            "agrees": true
+          },
+          "holes": {
+            "plated_pads": 8,
+            "non_plated_pads": 0,
+            "vias": 28
+          }
+        }
+      }
+    ],
+    [
+      {
+        "step": "sch create",
+        "ok": true,
+        "seconds": 25.1,
+        "data": {
+          "drawing": {
+            "status": "drawn",
+            "style": "auto_stub",
+            "reason": "RoutingFailure: (no message)"
+          },
+          "parts": 15
+        }
+      },
+      {
+        "step": "board from-netlist",
+        "ok": true,
+        "seconds": 1.6,
+        "data": {
+          "footprints": 15,
+          "nets": 11,
+          "pads_connected": 46,
+          "board_mm": [
+            42.35,
+            42.98
+          ]
+        }
+      },
+      {
+        "step": "board place",
+        "ok": true,
+        "seconds": 4.5,
+        "data": {
+          "improved": true,
+          "moved": 15,
+          "hpwl_before_mm": 402.84,
+          "hpwl_after_mm": 183.28,
+          "hpwl_reduction_pct": 54.5,
+          "courtyard_clash": [],
+          "verify": {
+            "ran": true,
+            "oracle": "kicad-cli pcb drc",
+            "drc_before": {
+              "error": 14,
+              "warning": 11
+            },
+            "drc_after": {
+              "warning": 16
+            },
+            "warnings_added": 5,
+            "note": "error 数没超过动手前的基线，否则这次调用已经回滚。warnings_added 为正说明挤得更紧了——那是本命令的目的，也是它的代价"
+          }
+        }
+      },
+      {
+        "step": "board pour",
+        "ok": true,
+        "seconds": 1.3,
+        "data": {
+          "area_mm": [
+            41.45,
+            42.08
+          ],
+          "filled_mm2": 1697.9
+        }
+      },
+      {
+        "step": "board route --use-planes",
+        "ok": false,
+        "seconds": 6.0,
+        "error": {
+          "code": "E_INTEGRITY",
+          "message": "布线后 DRC error 数高于动手前，已整盘回滚"
+        }
+      },
+      {
+        "step": "board route",
+        "ok": true,
+        "seconds": 7.7,
+        "data": {
+          "engine": "grid",
+          "routed": 34,
+          "failed": 1,
+          "vias": 23,
+          "track_len_mm": 276.7,
+          "unconnected_before": 34,
+          "unconnected_after": 1,
+          "plane_served": [],
+          "verify": {
+            "ran": true,
+            "oracle": "kicad-cli pcb drc",
+            "errors_baseline": 0,
+            "errors_final": 0,
+            "width_before": {
+              "len_mm": 0.0,
+              "min_mm": null,
+              "target_mm": null,
+              "compliant_pct": null
+            },
+            "width_after": {
+              "len_mm": 276.7,
+              "min_mm": 0.2,
+              "target_mm": 0.2,
+              "compliant_pct": 100.0
+            },
+            "width_regressed": false,
+            "note": "error 数未超过动手前的基线；这不等于板子没问题，只等于 DRC 没变差。线宽是 DRC 看不见的那部分：width_regressed 为真时走线已按缩颈宽度重布，载流能力随之下降，必须再跑 board widen 或 board rewidth 才算完成"
+          }
+        }
+      },
+      {
+        "step": "board netclass",
+        "ok": true,
+        "seconds": 0.8,
+        "data": {
+          "netclass": "Power",
+          "assigned": [
+            "+5V",
+            "VIN"
+          ],
+          "ampacity_a": 1.45
+        }
+      },
+      {
+        "step": "board rewidth",
+        "ok": true,
+        "seconds": 9.1,
+        "data": {
+          "rewidth_ok": 2,
+          "rewidth_total": 2,
+          "rewidth_reverted": null,
+          "unconnected_after": 1,
+          "verify": {
+            "ran": true,
+            "oracle": "kicad-cli pcb drc",
+            "scope": "per-net revert loop, then a whole-board baseline",
+            "reverted": [],
+            "errors_baseline": 0,
+            "errors_final": 0,
+            "note": "引入 DRC error 的网络已逐条还原，之后整盘 error 数与动手前比对；高于基线则整盘回滚，所以走到这里即未变差"
+          }
+        }
+      },
+      {
+        "step": "board silkscreen",
+        "ok": true,
+        "seconds": 5.2,
+        "data": {
+          "references": 15,
+          "crowded": 14,
+          "moved": 14,
+          "stuck": [],
+          "max_move_mm": 12.03,
+          "mean_move_mm": 5.44,
+          "verify": {
+            "ran": true,
+            "oracle": "kicad-cli pcb drc",
+            "errors_baseline": 0,
+            "errors_final": 0,
+            "note": "error 数没超过动手前的基线，否则这次调用已经回滚。丝印本身多数是 warning 不是 error，所以要看 warning 降了没有，跑一次 board drc"
+          }
+        }
+      },
+      {
+        "step": "board drc",
+        "ok": true,
+        "seconds": 2.3,
+        "data": {
+          "counts": {
+            "warning": 3
+          },
+          "unconnected_count": 1,
+          "ok_to_fabricate": false,
+          "violations_total": 3
+        }
+      },
+      {
+        "step": "board audit",
+        "ok": true,
+        "seconds": 0.6,
+        "data": {
+          "copper_mm": 271.3,
+          "copper_by_layer_mm": {
+            "F.Cu": 160.3,
+            "B.Cu": 110.9
+          },
+          "track_count": 169,
+          "via_count": 28,
+          "width_compliance": [
+            {
+              "class": "Default",
+              "target_mm": 0.2,
+              "len_mm": 122.3,
+              "compliant_pct": 100.0,
+              "min_mm": 0.2,
+              "target_amp": 0.74,
+              "min_amp": 0.74,
+              "note": "已剔除平面服务的网络"
+            },
+            {
+              "class": "Power",
+              "target_mm": 0.5,
+              "len_mm": 73.1,
+              "compliant_pct": 52.4,
+              "min_mm": 0.2,
+              "target_amp": 1.45,
+              "min_amp": 0.74,
+              "note": "已剔除平面服务的网络"
+            }
+          ],
+          "summary": {
+            "error": 1,
+            "warn": 3,
+            "info": 0
+          }
+        }
+      },
+      {
+        "step": "board plane",
+        "ok": true,
+        "seconds": 0.6,
+        "data": {
+          "samples": 669,
+          "backed_fraction": 0.3513,
+          "segments_without_reference": 122,
+          "segments_crossing_split": 0,
+          "status": "FAIL"
+        }
+      },
+      {
+        "step": "fab gerber",
+        "ok": true,
+        "seconds": 0.9,
+        "data": {
+          "layers": [
+            "F.Cu",
+            "B.Cu",
+            "F.Paste",
+            "B.Paste",
+            "F.SilkS",
+            "B.SilkS",
+            "F.Mask",
+            "B.Mask",
+            "Edge.Cuts"
+          ]
+        }
+      },
+      {
+        "step": "fab drill",
+        "ok": true,
+        "seconds": 0.8,
+        "data": {
+          "reconciled": {
+            "kicad_report": {
+              "plated": 36,
+              "unplated": 0
+            },
+            "counted_from_board": {
+              "plated": 36,
+              "unplated": 0
+            },
+            "agrees": true
+          },
+          "holes": {
+            "plated_pads": 8,
+            "non_plated_pads": 0,
+            "vias": 28
+          }
+        }
+      }
+    ],
+    [
+      {
+        "step": "sch create",
+        "ok": true,
+        "seconds": 30.2,
+        "data": {
+          "drawing": {
+            "status": "drawn",
+            "style": "auto_stub",
+            "reason": "RoutingFailure: (no message)"
+          },
+          "parts": 15
+        }
+      },
+      {
+        "step": "board from-netlist",
+        "ok": true,
+        "seconds": 1.7,
+        "data": {
+          "footprints": 15,
+          "nets": 11,
+          "pads_connected": 46,
+          "board_mm": [
+            42.35,
+            42.98
+          ]
+        }
+      },
+      {
+        "step": "board place",
+        "ok": true,
+        "seconds": 5.1,
+        "data": {
+          "improved": true,
+          "moved": 15,
+          "hpwl_before_mm": 402.84,
+          "hpwl_after_mm": 183.28,
+          "hpwl_reduction_pct": 54.5,
+          "courtyard_clash": [],
+          "verify": {
+            "ran": true,
+            "oracle": "kicad-cli pcb drc",
+            "drc_before": {
+              "error": 14,
+              "warning": 11
+            },
+            "drc_after": {
+              "warning": 16
+            },
+            "warnings_added": 5,
+            "note": "error 数没超过动手前的基线，否则这次调用已经回滚。warnings_added 为正说明挤得更紧了——那是本命令的目的，也是它的代价"
+          }
+        }
+      },
+      {
+        "step": "board pour",
+        "ok": true,
+        "seconds": 1.4,
+        "data": {
+          "area_mm": [
+            41.45,
+            42.08
+          ],
+          "filled_mm2": 1697.9
+        }
+      },
+      {
+        "step": "board route --use-planes",
+        "ok": false,
+        "seconds": 6.7,
+        "error": {
+          "code": "E_INTEGRITY",
+          "message": "布线后 DRC error 数高于动手前，已整盘回滚"
+        }
+      },
+      {
+        "step": "board route",
+        "ok": true,
+        "seconds": 8.6,
+        "data": {
+          "engine": "grid",
+          "routed": 34,
+          "failed": 1,
+          "vias": 24,
+          "track_len_mm": 269.9,
+          "unconnected_before": 34,
+          "unconnected_after": 1,
+          "plane_served": [],
+          "verify": {
+            "ran": true,
+            "oracle": "kicad-cli pcb drc",
+            "errors_baseline": 0,
+            "errors_final": 0,
+            "width_before": {
+              "len_mm": 0.0,
+              "min_mm": null,
+              "target_mm": null,
+              "compliant_pct": null
+            },
+            "width_after": {
+              "len_mm": 269.9,
+              "min_mm": 0.2,
+              "target_mm": 0.2,
+              "compliant_pct": 100.0
+            },
+            "width_regressed": false,
+            "note": "error 数未超过动手前的基线；这不等于板子没问题，只等于 DRC 没变差。线宽是 DRC 看不见的那部分：width_regressed 为真时走线已按缩颈宽度重布，载流能力随之下降，必须再跑 board widen 或 board rewidth 才算完成"
+          }
+        }
+      },
+      {
+        "step": "board netclass",
+        "ok": true,
+        "seconds": 0.8,
+        "data": {
+          "netclass": "Power",
+          "assigned": [
+            "+5V",
+            "VIN"
+          ],
+          "ampacity_a": 1.45
+        }
+      },
+      {
+        "step": "board rewidth",
+        "ok": false,
+        "seconds": 13.5,
+        "error": {
+          "code": "E_INTEGRITY",
+          "message": "重布后整盘 DRC error 数高于动手前（逐网络回退没能收敛），板子已整盘回滚"
+        }
+      },
+      {
+        "step": "board silkscreen",
+        "ok": true,
+        "seconds": 5.6,
+        "data": {
+          "references": 15,
+          "crowded": 14,
+          "moved": 14,
+          "stuck": [],
+          "max_move_mm": 12.03,
+          "mean_move_mm": 5.16,
+          "verify": {
+            "ran": true,
+            "oracle": "kicad-cli pcb drc",
+            "errors_baseline": 0,
+            "errors_final": 0,
+            "note": "error 数没超过动手前的基线，否则这次调用已经回滚。丝印本身多数是 warning 不是 error，所以要看 warning 降了没有，跑一次 board drc"
+          }
+        }
+      },
+      {
+        "step": "board drc",
+        "ok": true,
+        "seconds": 2.1,
+        "data": {
+          "counts": {
+            "warning": 2
+          },
+          "unconnected_count": 1,
+          "ok_to_fabricate": false,
+          "violations_total": 2
+        }
+      },
+      {
+        "step": "board audit",
+        "ok": true,
+        "seconds": 0.6,
+        "data": {
+          "copper_mm": 269.9,
+          "copper_by_layer_mm": {
+            "F.Cu": 159.0,
+            "B.Cu": 110.9
+          },
+          "track_count": 155,
+          "via_count": 24,
+          "width_compliance": [
+            {
+              "class": "Default",
+              "target_mm": 0.2,
+              "len_mm": 122.3,
+              "compliant_pct": 100.0,
+              "min_mm": 0.2,
+              "target_amp": 0.74,
+              "min_amp": 0.74,
+              "note": "已剔除平面服务的网络"
+            },
+            {
+              "class": "Power",
+              "target_mm": 0.5,
+              "len_mm": 80.4,
+              "compliant_pct": 0.0,
+              "min_mm": 0.2,
+              "target_amp": 1.45,
+              "min_amp": 0.74,
+              "note": "已剔除平面服务的网络"
+            }
+          ],
+          "summary": {
+            "error": 1,
+            "warn": 3,
+            "info": 0
+          }
+        }
+      },
+      {
+        "step": "board plane",
+        "ok": true,
+        "seconds": 0.6,
+        "data": {
+          "samples": 648,
+          "backed_fraction": 0.3858,
+          "segments_without_reference": 103,
+          "segments_crossing_split": 0,
+          "status": "FAIL"
+        }
+      },
+      {
+        "step": "fab gerber",
+        "ok": true,
+        "seconds": 0.8,
+        "data": {
+          "layers": [
+            "F.Cu",
+            "B.Cu",
+            "F.Paste",
+            "B.Paste",
+            "F.SilkS",
+            "B.SilkS",
+            "F.Mask",
+            "B.Mask",
+            "Edge.Cuts"
+          ]
+        }
+      },
+      {
+        "step": "fab drill",
+        "ok": true,
+        "seconds": 0.8,
+        "data": {
+          "reconciled": {
+            "kicad_report": {
+              "plated": 32,
+              "unplated": 0
+            },
+            "counted_from_board": {
+              "plated": 32,
+              "unplated": 0
+            },
+            "agrees": true
+          },
+          "holes": {
+            "plated_pads": 8,
+            "non_plated_pads": 0,
+            "vias": 24
+          }
+        }
+      }
+    ],
+    [
+      {
+        "step": "sch create",
+        "ok": true,
+        "seconds": 22.3,
+        "data": {
+          "drawing": {
+            "status": "failed",
+            "style": null,
+            "reason": "RoutingFailure: (no message)",
+            "reason_auto_stub": "KeyError: 'pop from an empty set'"
+          },
+          "parts": 15
+        }
+      },
+      {
+        "step": "board from-netlist",
+        "ok": true,
+        "seconds": 1.6,
+        "data": {
+          "footprints": 15,
+          "nets": 11,
+          "pads_connected": 46,
+          "board_mm": [
+            42.35,
+            42.98
+          ]
+        }
+      },
+      {
+        "step": "board place",
+        "ok": true,
+        "seconds": 5.0,
+        "data": {
+          "improved": true,
+          "moved": 15,
+          "hpwl_before_mm": 402.84,
+          "hpwl_after_mm": 183.28,
+          "hpwl_reduction_pct": 54.5,
+          "courtyard_clash": [],
+          "verify": {
+            "ran": true,
+            "oracle": "kicad-cli pcb drc",
+            "drc_before": {
+              "error": 14,
+              "warning": 11
+            },
+            "drc_after": {
+              "warning": 16
+            },
+            "warnings_added": 5,
+            "note": "error 数没超过动手前的基线，否则这次调用已经回滚。warnings_added 为正说明挤得更紧了——那是本命令的目的，也是它的代价"
+          }
+        }
+      },
+      {
+        "step": "board pour",
+        "ok": true,
+        "seconds": 1.4,
+        "data": {
+          "area_mm": [
+            41.45,
+            42.08
+          ],
+          "filled_mm2": 1697.9
+        }
+      },
+      {
+        "step": "board route --use-planes",
+        "ok": false,
+        "seconds": 6.8,
+        "error": {
+          "code": "E_INTEGRITY",
+          "message": "布线后 DRC error 数高于动手前，已整盘回滚"
+        }
+      },
+      {
+        "step": "board route",
+        "ok": true,
+        "seconds": 8.0,
+        "data": {
+          "engine": "grid",
+          "routed": 35,
+          "failed": 0,
+          "vias": 26,
+          "track_len_mm": 305.7,
+          "unconnected_before": 34,
+          "unconnected_after": 0,
+          "plane_served": [],
+          "verify": {
+            "ran": true,
+            "oracle": "kicad-cli pcb drc",
+            "errors_baseline": 0,
+            "errors_final": 0,
+            "width_before": {
+              "len_mm": 0.0,
+              "min_mm": null,
+              "target_mm": null,
+              "compliant_pct": null
+            },
+            "width_after": {
+              "len_mm": 305.7,
+              "min_mm": 0.2,
+              "target_mm": 0.2,
+              "compliant_pct": 100.0
+            },
+            "width_regressed": false,
+            "note": "error 数未超过动手前的基线；这不等于板子没问题，只等于 DRC 没变差。线宽是 DRC 看不见的那部分：width_regressed 为真时走线已按缩颈宽度重布，载流能力随之下降，必须再跑 board widen 或 board rewidth 才算完成"
+          }
+        }
+      },
+      {
+        "step": "board netclass",
+        "ok": true,
+        "seconds": 0.9,
+        "data": {
+          "netclass": "Power",
+          "assigned": [
+            "+5V",
+            "VIN"
+          ],
+          "ampacity_a": 1.45
+        }
+      },
+      {
+        "step": "board rewidth",
+        "ok": false,
+        "seconds": 12.4,
+        "error": {
+          "code": "E_INTEGRITY",
+          "message": "重布后整盘 DRC error 数高于动手前（逐网络回退没能收敛），板子已整盘回滚"
+        }
+      },
+      {
+        "step": "board silkscreen",
+        "ok": true,
+        "seconds": 5.8,
+        "data": {
+          "references": 15,
+          "crowded": 14,
+          "moved": 14,
+          "stuck": [],
+          "max_move_mm": 12.03,
+          "mean_move_mm": 5.12,
+          "verify": {
+            "ran": true,
+            "oracle": "kicad-cli pcb drc",
+            "errors_baseline": 0,
+            "errors_final": 0,
+            "note": "error 数没超过动手前的基线，否则这次调用已经回滚。丝印本身多数是 warning 不是 error，所以要看 warning 降了没有，跑一次 board drc"
+          }
+        }
+      },
+      {
+        "step": "board drc",
+        "ok": true,
+        "seconds": 2.3,
+        "data": {
+          "counts": {
+            "warning": 2
+          },
+          "unconnected_count": 0,
+          "ok_to_fabricate": true,
+          "violations_total": 2
+        }
+      },
+      {
+        "step": "board audit",
+        "ok": true,
+        "seconds": 0.6,
+        "data": {
+          "copper_mm": 305.7,
+          "copper_by_layer_mm": {
+            "F.Cu": 166.6,
+            "B.Cu": 139.1
+          },
+          "track_count": 161,
+          "via_count": 26,
+          "width_compliance": [
+            {
+              "class": "Default",
+              "target_mm": 0.2,
+              "len_mm": 127.8,
+              "compliant_pct": 100.0,
+              "min_mm": 0.2,
+              "target_amp": 0.74,
+              "min_amp": 0.74,
+              "note": "已剔除平面服务的网络"
+            },
+            {
+              "class": "Power",
+              "target_mm": 0.5,
+              "len_mm": 72.9,
+              "compliant_pct": 0.0,
+              "min_mm": 0.2,
+              "target_amp": 1.45,
+              "min_amp": 0.74,
+              "note": "已剔除平面服务的网络"
+            }
+          ],
+          "summary": {
+            "error": 0,
+            "warn": 3,
+            "info": 0
+          }
+        }
+      },
+      {
+        "step": "board plane",
+        "ok": true,
+        "seconds": 0.6,
+        "data": {
+          "samples": 725,
+          "backed_fraction": 0.309,
+          "segments_without_reference": 121,
+          "segments_crossing_split": 0,
+          "status": "FAIL"
+        }
+      },
+      {
+        "step": "fab gerber",
+        "ok": true,
+        "seconds": 0.9,
+        "data": {
+          "layers": [
+            "F.Cu",
+            "B.Cu",
+            "F.Paste",
+            "B.Paste",
+            "F.SilkS",
+            "B.SilkS",
+            "F.Mask",
+            "B.Mask",
+            "Edge.Cuts"
+          ]
+        }
+      },
+      {
+        "step": "fab drill",
+        "ok": true,
+        "seconds": 0.9,
+        "data": {
+          "reconciled": {
+            "kicad_report": {
+              "plated": 34,
+              "unplated": 0
+            },
+            "counted_from_board": {
+              "plated": 34,
+              "unplated": 0
+            },
+            "agrees": true
+          },
+          "holes": {
+            "plated_pads": 8,
+            "non_plated_pads": 0,
+            "vias": 26
+          }
+        }
+      }
+    ]
+  ]
+}

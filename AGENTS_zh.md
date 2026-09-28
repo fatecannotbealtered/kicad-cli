@@ -28,6 +28,6 @@
 - 语言 / 分发：Python + PyInstaller，以 `@fateforge/kicad-cli` 包装为 npm 包；Skill 单独安装，走 `npx skills add fatecannotbealtered/kicad-cli -y -g`。
 - 源码：`kicad_cli/`；需要 `pcbnew` 的那一半在 `kicad_cli/payload/`，以子进程形式跑在 KiCad 自带的解释器下，回传同一套信封。
 - 测试：`tests/`；Skill：`skills/kicad-cli/SKILL.md`。
-- 本地检查：`pytest tests/ -v --tb=short && ruff check kicad_cli/ tests/ && ruff format --check kicad_cli/ tests/`
+- 本地检查：`pytest tests/ -v --tb=short && ruff check kicad_cli/ tests/ bench/ && ruff format --check kicad_cli/ tests/ bench/`
 - 全程没有任何凭据。如果你正要加一个，先读 `SECURITY_zh.md` —— 这个「没有」是被当成承重结构写进文档的。
 - **绝不改动 KiCad 的功能。** 本工具只是把 KiCad 已有的入口暴露出来，不改变 KiCad 对一块板做什么。

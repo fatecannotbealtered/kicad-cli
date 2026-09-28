@@ -8,6 +8,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- `bench/` — the chain, measured the same way every time. `bench/chain.py`
+  runs the Skill's "Building a board from nothing" recipe on a specification,
+  dry run then confirm at every write, and records each step and the finished
+  board as the tool's own read commands see it. The realistic-board figures
+  quoted in this changelog came from an ATmega328P whose specification was
+  never checked in, so none could be made again; `bench/specs/atmega328p.json`
+  reconstructs it and `bench/baseline/atmega328p-swig.json` is five runs of the
+  current engine. It is the yardstick for moving that engine off SWIG, which
+  KiCad 11 removes.
+
+  Five runs of one specification gave five boards: the grid router breaks
+  ties between equal-length paths in an order that follows object identity,
+  and on this board that decides whether `board rewidth` succeeds or rolls
+  back. Two of five end with `ok_to_fabricate: true`, and every one of them
+  has 9 or 10 of its 15 reference designators nearer another part than their
+  own -- which DRC does not see and a plot of the board shows at once.
 - `doctor` no longer starts a JVM to report an optional engine's version. It
   ran `java -jar freerouting.jar --help` and scraped the output, which took
   `doctor` from 0.79 s to 3.59 s -- and `doctor` is the first thing anyone runs

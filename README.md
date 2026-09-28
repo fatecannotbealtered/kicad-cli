@@ -144,8 +144,8 @@ kicad-cli/
 
 ```bash
 pip install -e ".[dev]"
-ruff check kicad_cli/ tests/
-ruff format --check kicad_cli/ tests/
+ruff check kicad_cli/ tests/ bench/
+ruff format --check kicad_cli/ tests/ bench/
 pytest tests/ -v --tb=short
 ```
 
