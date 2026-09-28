@@ -8,6 +8,60 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- `kicad_cli/fileformat/schematic.py` and `circuit.py` read a design's
+  schematics and work out its nets: which pins are joined, and what each net
+  is called. No command uses them yet. On every project KiCad ships as a
+  demo -- 35 of them, the Jetson carrier board's 1,355 nets, buses, bus
+  aliases and nested sheets included -- the nets and their pins are KiCad's
+  own, and so are the names and their order in 34; in the 35th one net of 95
+  is named differently (listed below).
+
+  What a schematic means was settled against KiCad's own netlists, not
+  assumed. Several of the answers differ from what the drawing suggests:
+
+  - A wire ending in the middle of another joins it only if a junction dot
+    is there.
+  - A pin in the middle of a wire does not join it.
+  - A label anywhere along a wire does join it.
+  - A symbol is rotated before it is mirrored.
+  - Everything of one name on one sheet is one net, whatever kind of label
+    or power symbol carries the name.
+  - A pin's "~" meant "no name" up to KiCad 9's file format and is a name
+    from 10's.
+
+  `tests/fixtures/schematic/` is a design drawn for the purpose -- its own
+  symbols, nothing from KiCad's libraries -- in which each net asks one
+  question. KiCad's answers are recorded in the test, so the rules are
+  checked on every run; when KiCad is installed, it is asked again.
+
+  The one name that still differs is on RoyalBlue54L-Feather. A net joined
+  across sheets through a bus carries local labels of one name on the root
+  and on two sheets below. Everywhere else the name nearest the root wins
+  such a tie; there KiCad takes a sheet's.
+- `kicad_cli/fileformat/netlist.py` writes a design's netlist in KiCad's
+  S-expression format, from the schematics alone: every part with its value,
+  footprint, fields, library, properties, sheet and unit uuids, and every net
+  with each pin's function and type. No command uses it yet; `board parity`
+  and the `sch` commands still ask KiCad's binary for theirs. On 34 of KiCad's
+  35 demo projects it says what KiCad's own export says, part for part and
+  net for net; on the 35th, one net name differs, the one above. Two things
+  are left out of the comparison: net codes, since KiCad numbers nets that
+  never reach its netlist, and the order of a part's unit uuids, since
+  KiCad's follows no rule found on 35 projects.
+
+  Measured on the way, and not what the drawing suggests:
+
+  - A part marked "exclude from board" is not in the netlist at all, yet
+    still takes part in naming its nets.
+  - The fields someone added to a sheet symbol are carried to every part on
+    that sheet.
+  - A pin set to an alternate function has that function's name and type.
+  - A net's class can come from a regular expression ("uio\\d+"). A class
+    that leaves a board rule undefined is completed by Default, and the net's
+    class is then named for both: "85Ohm-diff_PCIE,Default".
+  - "+no_connect" goes on a pin wired to a no-connect flag, even across a
+    sheet's edge, but only when that wiring reaches pins at one point and no
+    power symbol or global label.
 - `kicad_cli/fileformat/connectivity.py` — which copper touches which, and
   how many connections are still open, worked out by this tool. No command
   uses it yet. One rule: items of one net on a shared layer are joined when
