@@ -21,6 +21,7 @@ Two kinds of evidence:
 
 from __future__ import annotations
 
+import functools
 import subprocess
 import sys
 import tempfile
@@ -215,7 +216,10 @@ def official_cli() -> str | None:
 needs_kicad = pytest.mark.skipif(official_cli() is None, reason="needs KiCad's own binary")
 
 
+@functools.cache
 def export(schematic: Path) -> str:
+    """KiCad's netlist of a design. Cached: the netlist tests ask for every
+    demo's too, and one export of each per run is enough."""
     with tempfile.TemporaryDirectory() as tmp:
         out = Path(tmp) / "out.net"
         for _ in range(3):  # Windows fails roughly one launch in six
