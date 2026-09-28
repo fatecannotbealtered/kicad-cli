@@ -11,6 +11,7 @@ import json
 import os
 import sys
 import time
+from collections.abc import Callable
 from typing import Any
 
 from . import errors
@@ -27,6 +28,11 @@ _OPTS: dict[str, Any] = {
     "schema_name": None,
     "schema_fields": None,
 }
+# Called with (code, details) before a failure is emitted, and free to add to
+# the details. A command that writes registers one so that every way out of
+# it -- a refusal, a check that failed, a crash turned into E_UNKNOWN -- puts
+# the board back first and then says so (`kicad_cli/native/write.py`).
+_ON_FAIL: list[Callable[[str, dict[str, Any]], None]] = []
 
 
 def configure(
@@ -46,6 +52,13 @@ def configure(
         schema_name=schema_name,
         schema_fields=schema_fields,
     )
+    _ON_FAIL.clear()
+
+
+def on_fail(hook: Callable[[str, dict[str, Any]], None]) -> None:
+    """Run ``hook(code, details)`` before any failure of this invocation is emitted."""
+    if hook not in _ON_FAIL:
+        _ON_FAIL.append(hook)
 
 
 def reject_undeclared(data: Any, allowed_extra: Any = frozenset()) -> None:
@@ -187,6 +200,9 @@ def _trace_error(code: str) -> None:
 
 def fail(code: str, message: str, details: dict[str, Any] | None = None) -> None:
     _trace_error(code)
+    details = dict(details or {})
+    for hook in list(_ON_FAIL):
+        hook(code, details)
     _emit(
         {
             "ok": False,
@@ -194,7 +210,7 @@ def fail(code: str, message: str, details: dict[str, Any] | None = None) -> None
             "error": {
                 "code": code,
                 "message": message,
-                "details": details or {},
+                "details": details,
                 "retryable": errors.retryable(code),
             },
             "meta": {"duration_ms": _duration_ms()},

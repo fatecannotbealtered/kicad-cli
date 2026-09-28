@@ -23,6 +23,8 @@ from pathlib import Path
 from typing import Any
 
 from .. import envelope, kicad_env
+from ..native import move as native_move
+from ..native import netclass as native_netclass
 from .board import _board_arg
 
 # `pcb_route` backs two commands with different contracts, so some of what it
@@ -262,7 +264,9 @@ def move(args: dict[str, Any]) -> None:
                 "format": 'REF:x,y separated by ";" -- for example "U1:120.5,60.0; C3:118,62"',
             },
         )
-    _relay("pcb_place", args, ["--moves", str(moves)])
+    board = _board_arg(args)
+    _guard(board, args)
+    native_move.run(board, str(moves), args.get("confirm"))
 
 
 def place(args: dict[str, Any]) -> None:
@@ -299,11 +303,9 @@ def netclass(args: dict[str, Any]) -> None:
     so `board audit` reported an error against a board this tool had just
     produced and no command in it could clear that error.
     """
-    extra = ["--name", str(args["name"]), "--nets", ",".join(_list(args.get("nets")))]
-    for option in ("width", "clearance", "via-diameter", "via-drill"):
-        if args.get(option) is not None:
-            extra += [f"--{option}", str(args[option])]
-    _relay("netclass", args, extra)
+    board = _board_arg(args)
+    _guard(board, args)
+    native_netclass.run(board, args)
 
 
 def pour(args: dict[str, Any]) -> None:
@@ -333,12 +335,6 @@ def silkscreen(args: dict[str, Any]) -> None:
     half a character.
     """
     _relay("silkscreen", args, [*_opt(args, "clearance")])
-
-
-def _list(value: Any) -> list[str]:
-    if value is None:
-        return []
-    return [str(v) for v in (value if isinstance(value, list) else [value])]
 
 
 def _guard(board: str, args: dict[str, Any]) -> None:

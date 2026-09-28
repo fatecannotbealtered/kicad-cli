@@ -450,9 +450,36 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   came back as the parity check's answer: `E_IO`, "netlist export failed".
   A netlist that is not the XML asked for is now `E_IO` too, rather than a
   traceback.
-- The payload bridge's own tests now go through `board move`, which still
-  runs in KiCad's interpreter. `board audit`, `board plane` and `board parity`
-  no longer touch it.
+- `board move` and `board netclass` run in this process and need no KiCad:
+  the first writes off SWIG. Their write transaction is the one the payloads
+  used, now in this process: a backup and a lock before the first byte
+  changes, a journal that survives a kill, and every failure puts the file
+  back and reports `write_state`.
+
+  `board move` rewrites one line per part moved: the footprint's own
+  `(at x y)`, since everything in a footprint is stored relative to it. The
+  pcbnew version saved the whole board, and pcbnew's save is not a no-op:
+  loading and saving KiCad's CM5_MINIMA_3 demo puts nine of its pads on four
+  more copper layers than the file gives them. `tests/test_native_move.py`
+  moves three parts on every demo board with both versions. The previews and
+  reports must match. pcbnew must then read the moved parts where the
+  pcbnew version put them, and everything else as it was. Only the moved
+  footprints' lines may change.
+
+  Where two courtyards end up within a few micrometres of each other, the
+  two versions can disagree about whether they touch. pcbnew approximates a
+  courtyard's arcs and circles its own way, and this tool does not reproduce
+  that. Lines and rectangles agree exactly: a courtyard's box lies outside
+  its drawn lines by the line's width less 5 um, which was measured on every
+  footprint of five demo boards.
+
+  `board netclass` never needed pcbnew: it is a JSON edit of the project
+  file, and the file it writes is byte for byte the payload's.
+- `board move` with a malformed `--moves` is `E_USAGE`, naming the item it
+  could not read. The pcbnew version crashed, and the caller got `E_IO`
+  around a traceback.
+- The payload bridge's own tests now go through `board route`, which still
+  runs in KiCad's interpreter.
 - Separate FCC measurement from FCC enforcement. The guard returned early unless
   `fcc_status` already said `verified`, so while the status was `unknown` nothing
   was counted -- and the status cannot honestly become `verified` without the
