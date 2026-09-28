@@ -23,6 +23,10 @@ select = ["E", "F", "I", "UP", "B"]
 # rules that can hide a defect -- zip truncation, unused loop variables,
 # ambiguous names -- were fixed rather than silenced.
 "kicad_cli/payload/pcb_*.py" = ["UP031"]
+# The fixture board carries lines exactly as KiCad writes them -- a packed xy
+# line runs to 119 characters -- because what the renderer is held to is
+# KiCad's own output, not a version of it re-wrapped to fit this repository.
+"tests/test_fileformat_sexpr.py" = ["E501"]
 "kicad_cli/payload/plane.py" = ["UP031"]
 "kicad_cli/payload/router.py" = ["UP031"]
 
