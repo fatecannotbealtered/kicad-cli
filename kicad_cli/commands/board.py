@@ -1,9 +1,9 @@
 """``kicad-cli board ...`` -- read-only inspection of a board.
 
-These relay to payloads running inside KiCad's interpreter. The shell owns the
-envelope: we take the payload's ``data`` and re-emit it under our own timing
-and field projection, so ``--fields`` and ``--compact`` behave identically
-whether a command ran in-process or as a guest.
+Most run in this process on the files themselves (`kicad_cli/native/`).
+`board from-netlist` still relays to a payload in KiCad's interpreter, and
+`board drc` asks KiCad's own binary; the shell owns the envelope either way,
+so ``--fields`` and ``--compact`` behave identically wherever a command ran.
 """
 
 from __future__ import annotations
@@ -13,6 +13,7 @@ from typing import Any
 
 from .. import boardgen, envelope, kicad_env
 from ..native import audit as native_audit
+from ..native import parity as native_parity
 from ..native import plane as native_plane
 
 
@@ -24,18 +25,6 @@ def _board_arg(args: dict[str, Any]) -> str:
     if not path.exists():
         envelope.fail("E_NOT_FOUND", "board file does not exist", {"path": str(path)})
     return str(path.resolve())
-
-
-def _relay(payload: str, argv: list[str], timeout: int = 1800) -> None:
-    result = kicad_env.run_payload(payload, argv, timeout=timeout)
-    if result.get("ok"):
-        envelope.ok(result.get("data"))
-    err = result.get("error") or {}
-    envelope.fail(
-        err.get("code", "E_UNKNOWN"),
-        err.get("message", "payload reported an error"),
-        err.get("details") or {},
-    )
 
 
 def audit(args: dict[str, Any]) -> None:
@@ -51,7 +40,9 @@ def audit(args: dict[str, Any]) -> None:
 
 
 def parity(args: dict[str, Any]) -> None:
-    _relay("parity", ["--board", _board_arg(args)])
+    """Runs in this process; the schematic's netlist still comes from KiCad's
+    own binary until this tool exports it itself."""
+    envelope.ok(native_parity.run(_board_arg(args)))
 
 
 # A board with more violations than this returns the first `limit` of them and

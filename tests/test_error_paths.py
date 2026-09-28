@@ -94,9 +94,9 @@ def test_a_missing_kicad_interpreter_is_e_config_whatever_else_is_running(tmp_pa
     machine's ambient state ends up deciding what a test run proves. This
     produces it from configuration instead, so the answer does not move.
 
-    Through `board parity`, which still needs KiCad's interpreter: `board
-    audit` and `board plane` read the file themselves now, and a missing
-    interpreter is nothing to them.
+    Through `board move`, which still needs KiCad's interpreter: `board
+    audit`, `board plane` and `board parity` read the files themselves now,
+    and a missing interpreter is nothing to them.
     """
     board = tmp_path / "demo.kicad_pcb"
     board.write_text("(kicad_pcb)", encoding="utf-8")
@@ -112,9 +112,11 @@ def test_a_missing_kicad_interpreter_is_e_config_whatever_else_is_running(tmp_pa
             "-m",
             "kicad_cli.main",
             "board",
-            "parity",
+            "move",
             "--board",
             str(board),
+            "--moves",
+            "U1:1,1",
             "--compact",
         ],
         capture_output=True,
