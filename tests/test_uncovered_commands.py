@@ -14,13 +14,12 @@ from __future__ import annotations
 
 import json
 import os
-import shutil
 import subprocess
 import sys
 from pathlib import Path
 
 import pytest
-from kicad_demos import DEMOS, SKIP_REASON
+from kicad_demos import DEMOS, SKIP_REASON, copy_demo
 
 REPO = Path(__file__).resolve().parents[1]
 
@@ -44,7 +43,7 @@ def run(*argv: str) -> tuple[dict, int]:
 
 
 def board(tmp_path: Path) -> Path:
-    shutil.copytree(DEMOS / "interf_u", tmp_path / "iu")
+    copy_demo(DEMOS / "interf_u", tmp_path / "iu")
     return next((tmp_path / "iu").glob("*.kicad_pcb"))
 
 

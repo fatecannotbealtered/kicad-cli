@@ -28,7 +28,7 @@ import tempfile
 from pathlib import Path
 
 import pytest
-from kicad_demos import DEMOS, SKIP_REASON
+from kicad_demos import DEMOS, SKIP_REASON, copy_demo
 
 REPO = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO))
@@ -219,8 +219,14 @@ needs_kicad = pytest.mark.skipif(official_cli() is None, reason="needs KiCad's o
 @functools.cache
 def export(schematic: Path) -> str:
     """KiCad's netlist of a design. Cached: the netlist tests ask for every
-    demo's too, and one export of each per run is enough."""
+    demo's too, and one export of each per run is enough. A demo is exported
+    from a copy: KiCad's binary, when it fails, leaves a lock file beside the
+    project it had open, and the installed demos are not the suite's to leave
+    things in."""
     with tempfile.TemporaryDirectory() as tmp:
+        if DEMOS.exists() and DEMOS.resolve() in schematic.resolve().parents:
+            copy = copy_demo(schematic.parent, Path(tmp) / "design", whole=False)
+            schematic = copy / schematic.name
         out = Path(tmp) / "out.net"
         for _ in range(3):  # Windows fails roughly one launch in six
             subprocess.run(

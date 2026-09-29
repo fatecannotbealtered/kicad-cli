@@ -9,13 +9,12 @@ points at the wrong copper and the whole analysis is confidently wrong.
 from __future__ import annotations
 
 import json
-import shutil
 import subprocess
 import sys
 from pathlib import Path
 
 import pytest
-from kicad_demos import DEMOS, SKIP_REASON
+from kicad_demos import DEMOS, SKIP_REASON, copy_demo
 
 REPO = Path(__file__).resolve().parents[1]
 
@@ -44,7 +43,7 @@ def test_the_stack_is_reported_in_physical_order(tmp_path: Path) -> None:
     to what.
     """
     work = tmp_path / "cm5"
-    shutil.copytree(DEMOS / "cm5_minima", work)
+    copy_demo(DEMOS / "cm5_minima", work)
     board = next(work.glob("*.kicad_pcb"))
 
     stack = run("board", "plane", "--board", str(board))["data"]["stackup"]
@@ -61,7 +60,7 @@ def test_every_layer_gets_an_adjacent_reference(tmp_path: Path) -> None:
     pour -- an ordinary four-layer board -- that left nothing to analyse and the
     command returned success having checked nothing."""
     work = tmp_path / "cm5"
-    shutil.copytree(DEMOS / "cm5_minima", work)
+    copy_demo(DEMOS / "cm5_minima", work)
     board = next(work.glob("*.kicad_pcb"))
 
     r = run("board", "plane", "--board", str(board))
@@ -82,7 +81,7 @@ def test_gaps_are_grouped_by_place(tmp_path: Path) -> None:
     """One hole in a plane hits every trace crossing it. Reporting each trace
     separately asks the reader to investigate the same hole many times."""
     work = tmp_path / "cm5"
-    shutil.copytree(DEMOS / "cm5_minima", work)
+    copy_demo(DEMOS / "cm5_minima", work)
     board = next(work.glob("*.kicad_pcb"))
 
     d = run("board", "plane", "--board", str(board))["data"]

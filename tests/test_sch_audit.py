@@ -8,13 +8,12 @@ rather than a claim, and that a rare finding is not buried under a common one.
 from __future__ import annotations
 
 import json
-import shutil
 import subprocess
 import sys
 from pathlib import Path
 
 import pytest
-from kicad_demos import DEMOS, SKIP_REASON
+from kicad_demos import DEMOS, SKIP_REASON, copy_demo
 
 REPO = Path(__file__).resolve().parents[1]
 
@@ -86,7 +85,7 @@ def test_unflattening_recovers_the_original_library_id() -> None:
 @pytest.mark.skipif(not DEMOS.exists(), reason=SKIP_REASON)
 def test_reports_shipped_defaults_as_defaults(tmp_path: Path) -> None:
     work = tmp_path / "cm5"
-    shutil.copytree(DEMOS / "cm5_minima", work)
+    copy_demo(DEMOS / "cm5_minima", work)
     board = next(work.glob("*.kicad_pcb"))
 
     r = run("sch", "audit", "--board", str(board))
@@ -102,7 +101,7 @@ def test_a_locally_disabled_rule_is_called_out(tmp_path: Path) -> None:
     """A rule this project turned off is a different conversation from one
     KiCad ships off, so the two must not be reported together."""
     work = tmp_path / "ecc83"
-    shutil.copytree(DEMOS / "ecc83", work)
+    copy_demo(DEMOS / "ecc83", work)
     board = next(work.glob("*.kicad_pcb"))
     project = board.with_suffix(".kicad_pro")
     data = json.loads(project.read_text(encoding="utf-8"))
@@ -121,7 +120,7 @@ def test_the_unmuted_run_never_reports_less(tmp_path: Path) -> None:
     """Enabling rules can only add violations. If this ever fails, the second
     run is not comparable to the first and the whole finding is worthless."""
     work = tmp_path / "ih"
-    shutil.copytree(DEMOS / "complex_hierarchy", work)
+    copy_demo(DEMOS / "complex_hierarchy", work)
     board = next(work.glob("*.kicad_pcb"))
     d = run("sch", "audit", "--board", str(board))["data"]
     assert d["with_rules_enabled"]["additional_violations"] >= 0

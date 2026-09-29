@@ -15,14 +15,13 @@ from __future__ import annotations
 
 import json
 import re
-import shutil
 import subprocess
 import sys
 from pathlib import Path
 
 import fake_upstream
 import pytest
-from kicad_demos import DEMOS, SKIP_REASON
+from kicad_demos import DEMOS, SKIP_REASON, copy_demo
 
 REPO = Path(__file__).resolve().parents[1]
 
@@ -44,15 +43,15 @@ def run(*argv: str, env: dict | None = None) -> dict:
     raise AssertionError(f"no envelope on stdout: {out[:400]}{proc.stderr.decode()[:400]}")
 
 
-def copy_demo(name: str, dest: Path) -> Path:
-    shutil.copytree(DEMOS / name, dest)
+def demo_board(name: str, dest: Path) -> Path:
+    copy_demo(DEMOS / name, dest)
     return next(dest.glob("*.kicad_pcb"))
 
 
 @pytest.mark.skipif(not DEMOS.exists(), reason=SKIP_REASON)
 @pytest.mark.parametrize("demo", ["complex_hierarchy", "interf_u", "kit-dev-coldfire-xilinx_5213"])
 def test_linked_board_predicts_no_changes(demo: str, tmp_path: Path) -> None:
-    board = copy_demo(demo, tmp_path / demo)
+    board = demo_board(demo, tmp_path / demo)
     r = run("sch", "sync-preview", "--board", str(board))
     assert r["ok"] is True, r
     d = r["data"]
@@ -68,7 +67,7 @@ def test_linked_board_predicts_no_changes(demo: str, tmp_path: Path) -> None:
 @pytest.mark.skipif(not DEMOS.exists(), reason=SKIP_REASON)
 def test_stripped_links_predict_a_destructive_update(tmp_path: Path) -> None:
     """The case the whole command exists for: references fine, links gone."""
-    board = copy_demo("complex_hierarchy", tmp_path / "ch")
+    board = demo_board("complex_hierarchy", tmp_path / "ch")
     before = run("sch", "sync-preview", "--board", str(board))["data"]
     assert before["counts"]["add"] == 0
 
@@ -104,7 +103,7 @@ def test_renaming_a_reference_is_not_an_add(tmp_path: Path) -> None:
     This is where matching by reference gives the wrong answer: the part is the
     same part, its uuid link is intact, and the updater simply renames it.
     """
-    board = copy_demo("interf_u", tmp_path / "iu")
+    board = demo_board("interf_u", tmp_path / "iu")
     text = board.read_text(encoding="utf-8")
     assert '(property "Reference" "R5"' in text
     board.write_text(
@@ -123,7 +122,7 @@ def test_renaming_a_reference_is_not_an_add(tmp_path: Path) -> None:
 
 @pytest.mark.skipif(not DEMOS.exists(), reason=SKIP_REASON)
 def test_board_only_footprints_are_never_removed(tmp_path: Path) -> None:
-    board = copy_demo("cm5_minima", tmp_path / "cm5")
+    board = demo_board("cm5_minima", tmp_path / "cm5")
     d = run("sch", "sync-preview", "--board", str(board))["data"]
     for combo, counts in d["matrix"].items():
         assert counts["remove"] == 0, f"{combo} wanted to delete board-only parts"
@@ -134,7 +133,7 @@ def test_board_only_footprints_are_never_removed(tmp_path: Path) -> None:
 @pytest.mark.skipif(not DEMOS.exists(), reason=SKIP_REASON)
 def test_refuses_on_an_unannotated_schematic(tmp_path: Path) -> None:
     """A confident zero from a broken input is worse than an error."""
-    board = copy_demo("ecc83", tmp_path / "ecc83")
+    board = demo_board("ecc83", tmp_path / "ecc83")
     sch = board.with_suffix(".kicad_sch")
     text = sch.read_text(encoding="utf-8")
     assert '"R1"' in text
@@ -151,7 +150,7 @@ def test_refuses_on_an_unannotated_schematic(tmp_path: Path) -> None:
 def test_the_preview_needs_no_kicad(tmp_path: Path) -> None:
     """The netlist is this tool's own. KiCad is a stub that fails when called,
     and is not called; the answer is the one the real KiCad's netlist gave."""
-    board = copy_demo("complex_hierarchy", tmp_path / "ch")
+    board = demo_board("complex_hierarchy", tmp_path / "ch")
     env = fake_upstream.env(tmp_path / "kicad", "launch_fail")
     r = run("sch", "sync-preview", "--board", str(board), env=env)
     assert r["ok"] is True, r
@@ -164,7 +163,7 @@ def test_refuses_on_a_reference_placed_twice(tmp_path: Path) -> None:
     """KiCad's export printed its annotation warning on stdout, and the check
     this replaced looked for it on stderr: a reference placed twice on two
     sheets went through, and the count with it. It is refused now."""
-    board = copy_demo("complex_hierarchy", tmp_path / "ch")
+    board = demo_board("complex_hierarchy", tmp_path / "ch")
     sheet = board.parent / "ampli_ht.kicad_sch"
     text = sheet.read_bytes().decode("utf-8")
     assert text.count('(reference "C301")') == 1

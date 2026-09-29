@@ -13,14 +13,13 @@ from __future__ import annotations
 
 import json
 import re
-import shutil
 import subprocess
 import sys
 from pathlib import Path
 
 import fake_upstream
 import pytest
-from kicad_demos import DEMOS, SKIP_REASON
+from kicad_demos import DEMOS, SKIP_REASON, copy_demo
 
 REPO = Path(__file__).resolve().parents[1]
 
@@ -63,7 +62,7 @@ def original_paths(board: Path) -> dict[str, str]:
 def test_relink_reproduces_kicads_own_paths(demo: str, tmp_path: Path) -> None:
     src = DEMOS / demo
     work = tmp_path / demo
-    shutil.copytree(src, work)
+    copy_demo(src, work)
     board = next(p for p in work.glob("*.kicad_pcb"))
 
     expected = original_paths(board)
@@ -111,7 +110,7 @@ def test_relink_reproduces_kicads_own_paths(demo: str, tmp_path: Path) -> None:
 @pytest.mark.skipif(not DEMOS.exists(), reason=SKIP_REASON)
 def test_relink_on_an_already_linked_board_is_a_noop(tmp_path: Path) -> None:
     work = tmp_path / "interf_u"
-    shutil.copytree(DEMOS / "interf_u", work)
+    copy_demo(DEMOS / "interf_u", work)
     board = next(p for p in work.glob("*.kicad_pcb"))
     digest = board.read_bytes()
 
@@ -126,7 +125,7 @@ def test_relink_refuses_when_a_footprint_has_no_symbol(tmp_path: Path) -> None:
     """A part that exists only on the board cannot be linked, and a partial
     write would leave the board in a state nobody asked for."""
     work = tmp_path / "interf_u"
-    shutil.copytree(DEMOS / "interf_u", work)
+    copy_demo(DEMOS / "interf_u", work)
     board = next(p for p in work.glob("*.kicad_pcb"))
 
     text = board.read_text(encoding="utf-8")
@@ -147,7 +146,7 @@ def test_relink_needs_no_kicad(tmp_path: Path) -> None:
     by this tool's own reader. KiCad's binary and interpreter are stubs that
     fail when called, and neither is called."""
     work = tmp_path / "interf_u"
-    shutil.copytree(DEMOS / "interf_u", work)
+    copy_demo(DEMOS / "interf_u", work)
     board = next(p for p in work.glob("*.kicad_pcb"))
     text = board.read_bytes().decode("utf-8")
     board.write_bytes(
