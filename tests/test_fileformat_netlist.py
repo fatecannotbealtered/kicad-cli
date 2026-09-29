@@ -6,13 +6,20 @@ board is built from and kept in step with: every part -- value, footprint,
 datasheet, fields, library, properties, sheet, the uuids of its units -- and
 every net -- name, class, and each pin on it with its function and type.
 
-Two things are not compared, on purpose:
+Parts are compared in order too: sheet by sheet in page order -- a page
+number two sheets share is renumbered, as KiCad does -- and by reference
+within a sheet. Each part lists every unit it has, placed or not, with the
+unit's pins.
+
+Three things are not compared, on purpose:
 
 - net codes. KiCad numbers nets that never reach its netlist; this tool
   numbers the ones it writes, in the same order. Nothing that reads a netlist
   goes by them: a board names its nets.
 - the order of a part's unit uuids. KiCad's follows no rule found on 35
   projects; the set is what links a footprint to its symbol.
+- the order of pins stacked at one point of a unit, which KiCad's sort
+  leaves to chance; a unit's pins are compared as a set.
 
 `tests/fixtures/schematic/rules.net` is KiCad 10.0's own export of the
 fixture design, so the comparison runs everywhere; with KiCad installed it is
@@ -67,6 +74,13 @@ def contents(text: str) -> dict:
             ],
             "sheet": (_v(path, "names"), _v(path, "tstamps")),
             "uuids": sorted(x for x in stamps[1:] if isinstance(x, str)),
+            "units": [
+                (
+                    _v(u, "name"),
+                    sorted(_v(n, "num") for n in sexpr.children(sexpr.child(u, "pins"), "pin")),
+                )
+                for u in sexpr.children(sexpr.child(comp, "units") or [], "unit")
+            ],
         }
     nets = []
     for net in sexpr.children(sexpr.child(node, "nets"), "net"):
@@ -80,7 +94,7 @@ def contents(text: str) -> dict:
                 ],
             )
         )
-    return {"parts": parts, "nets": nets}
+    return {"parts": parts, "order": list(parts), "nets": nets}
 
 
 def ours(root: Path) -> dict:
@@ -112,6 +126,7 @@ def test_kicad_still_writes_what_was_recorded(tmp_path):
 @pytest.mark.parametrize("root", demo_roots(), ids=lambda p: p.stem)
 def test_every_demo_netlist_is_kicads(root):
     theirs, mine = contents(export(root)), ours(root)
+    assert mine["order"] == theirs["order"]
     assert mine["parts"] == theirs["parts"]
     known = KNOWN.get(root.stem, set())
     their_nets = {tuple(nodes): (name, cls) for name, cls, nodes in theirs["nets"]}

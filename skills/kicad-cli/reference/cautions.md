@@ -58,9 +58,10 @@ returned success.
 long `not_checked` is a narrow result, not a clean bill of health. Quote it.
 
 **Some things only KiCad's GUI can confirm.** After `sch relink`, the tool has
-verified that what it wrote is what KiCad's netlist declares and that KiCad reads
-it back unchanged. It has *not* verified what the update dialog will say —
-there is no IPC command to read that. Say so rather than implying closure.
+verified that what it wrote is what the schematic's netlist declares and that the
+board reads back with exactly those links and nothing else changed. It has *not*
+verified what the update dialog will say — there is no IPC command to read that.
+Say so rather than implying closure.
 
 ## C. Counts far larger than the number of problems
 

@@ -173,9 +173,10 @@ def test_strict_mode_rejects_a_payload_that_does_not_match_its_schema(tmp_path: 
 def test_an_unusable_official_binary_is_e_io_after_retrying(behaviour: str, tmp_path: Path) -> None:
     """`no_output` is the observed Windows transient: exit 0, no file, empty
     stderr. Roughly one launch in six. It is why the retry exists, and it
-    cannot be provoked on a real KiCad."""
+    cannot be provoked on a real KiCad. `sch audit` is the command left that
+    launches KiCad's binary, for its ERC."""
     doc, exit_code, _ = run(
-        ["sch", "sync-preview", "--board", str(MINI)],
+        ["sch", "audit", "--board", str(MINI)],
         fake_upstream.env(tmp_path, behaviour),
     )
     assert code_of(doc) == "E_IO"
@@ -193,10 +194,12 @@ def test_retrying_actually_recovers(tmp_path: Path) -> None:
     rather than reporting the first failure, which is the whole point of the
     retry and was previously untested."""
     doc, _, _ = run(
-        ["sch", "sync-preview", "--board", str(MINI)],
+        ["sch", "audit", "--board", str(MINI)],
         fake_upstream.env(tmp_path, "flaky"),
     )
-    assert fake_upstream.attempts(tmp_path) == 3
+    # Three launches for the first ERC, the third succeeding; then one for
+    # the second, with the rules the fixture's project silences turned on.
+    assert fake_upstream.attempts(tmp_path) == 4
     assert code_of(doc) != "E_IO", "gave up despite the third attempt succeeding"
 
 
@@ -228,13 +231,13 @@ def test_noise_before_the_envelope_is_stepped_over(tmp_path: Path) -> None:
 def test_a_hanging_upstream_becomes_e_timeout(tmp_path: Path) -> None:
     """Exercised below the command, because the command's own timeout is half an
     hour and this has to be a test, not a coffee break. The path under test is
-    the real one: same export, same stub, same envelope."""
+    the real one: the ERC `sch audit` runs, same stub, same envelope."""
     env = fake_upstream.env(tmp_path, "hang")
     script = (
         "import sys\n"
         "from pathlib import Path\n"
-        "from kicad_cli import netlist\n"
-        "netlist.export(Path(sys.argv[1]), timeout=3)\n"
+        "from kicad_cli.commands import erc\n"
+        "erc._run_erc(Path(sys.argv[1]), timeout=3)\n"
     )
     proc = subprocess.run(
         [sys.executable, "-c", script, str(MINI.with_suffix(".kicad_sch"))],
@@ -253,16 +256,18 @@ def test_a_hanging_upstream_becomes_e_timeout(tmp_path: Path) -> None:
 
 def test_an_empty_netlist_is_refused_rather_than_counted(tmp_path: Path) -> None:
     """A count produced from nothing looks exactly like a count from a healthy
-    project. `add: 0` would be the dangerous answer here."""
+    project. `add: 0` would be the dangerous answer here. The netlist is this
+    tool's own, so KiCad is a stub that fails when called, and is not called."""
     doc, exit_code, _ = run(
         ["sch", "sync-preview", "--board", str(MINI)],
-        fake_upstream.env(tmp_path, "ok"),
+        fake_upstream.env(tmp_path, "launch_fail"),
     )
     assert code_of(doc) == "E_VALIDATION"
     assert exit_code == 2
     failed = doc["error"]["details"]["failed"]
     assert failed, "a refusal must say which precheck failed"
     assert any("netlist" in str(f.get("id", "")) for f in failed)
+    assert fake_upstream.attempts(tmp_path) == 0, "sync-preview started KiCad after all"
 
 
 def test_a_project_with_no_symbols_is_not_found_not_zero(tmp_path: Path) -> None:

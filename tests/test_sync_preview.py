@@ -20,6 +20,7 @@ import subprocess
 import sys
 from pathlib import Path
 
+import fake_upstream
 import pytest
 from kicad_demos import DEMOS, SKIP_REASON
 
@@ -28,12 +29,13 @@ REPO = Path(__file__).resolve().parents[1]
 PATH_LINE = re.compile(r'^\s*\(path "[^"]*"\)\s*$')
 
 
-def run(*argv: str) -> dict:
+def run(*argv: str, env: dict | None = None) -> dict:
     proc = subprocess.run(
         [sys.executable, "-m", "kicad_cli.main", *argv, "--compact"],
         capture_output=True,
         cwd=REPO,
         timeout=1800,
+        env=env,
     )
     out = proc.stdout.decode("utf-8", "replace")
     for line in out.splitlines():
@@ -143,3 +145,34 @@ def test_refuses_on_an_unannotated_schematic(tmp_path: Path) -> None:
     assert r["error"]["code"] == "E_VALIDATION"
     failed = {c["id"] for c in r["error"]["details"]["failed"]}
     assert "fully_annotated" in failed or "netlist_exported_cleanly" in failed
+
+
+@pytest.mark.skipif(not DEMOS.exists(), reason=SKIP_REASON)
+def test_the_preview_needs_no_kicad(tmp_path: Path) -> None:
+    """The netlist is this tool's own. KiCad is a stub that fails when called,
+    and is not called; the answer is the one the real KiCad's netlist gave."""
+    board = copy_demo("complex_hierarchy", tmp_path / "ch")
+    env = fake_upstream.env(tmp_path / "kicad", "launch_fail")
+    r = run("sch", "sync-preview", "--board", str(board), env=env)
+    assert r["ok"] is True, r
+    assert r["data"]["status"] == "CLEAN"
+    assert fake_upstream.attempts(tmp_path / "kicad") == 0, "sync-preview started KiCad"
+
+
+@pytest.mark.skipif(not DEMOS.exists(), reason=SKIP_REASON)
+def test_refuses_on_a_reference_placed_twice(tmp_path: Path) -> None:
+    """KiCad's export printed its annotation warning on stdout, and the check
+    this replaced looked for it on stderr: a reference placed twice on two
+    sheets went through, and the count with it. It is refused now."""
+    board = copy_demo("complex_hierarchy", tmp_path / "ch")
+    sheet = board.parent / "ampli_ht.kicad_sch"
+    text = sheet.read_bytes().decode("utf-8")
+    assert text.count('(reference "C301")') == 1
+    sheet.write_bytes(text.replace('(reference "C301")', '(reference "C201")').encode())
+
+    r = run("sch", "sync-preview", "--board", str(board))
+    assert r["ok"] is False
+    assert r["error"]["code"] == "E_VALIDATION"
+    failed = {c["id"]: c for c in r["error"]["details"]["failed"]}
+    errors = failed["netlist_exported_cleanly"]["evidence"]["annotation_errors"]
+    assert [(e["rule"], e["reference"]) for e in errors] == [("duplicate_reference", "C201")]

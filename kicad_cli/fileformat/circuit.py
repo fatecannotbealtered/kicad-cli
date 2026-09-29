@@ -110,6 +110,9 @@ class Design:
         self.project = self.root_path.stem
         top = SheetInstance("/" + root_schematic.uuid, "/", root_schematic, page="1")
         self.instances: list[SheetInstance] = []
+        # Sheets placed whose file is not there, as "/amp/ (amp.kicad_sch)".
+        # KiCad leaves their parts out without a word, and so does this.
+        self.missing: list[str] = []
         self._walk(top)
 
     def _schematic(self, path: Path) -> Schematic:
@@ -124,6 +127,7 @@ class Design:
         for sheet in instance.schematic.sheets:
             path = folder / sheet.file
             if not path.exists():
+                self.missing.append(f"{instance.name}{sheet.name}/ ({sheet.file})")
                 continue
             child = SheetInstance(
                 path=f"{instance.path}/{sheet.uuid}",
@@ -134,6 +138,32 @@ class Design:
                 page=sheet.pages.get(instance.path, ""),
             )
             self._walk(child)
+
+    def pages(self) -> dict[str, str]:
+        """Each sheet instance's page number, by path, as KiCad numbers them.
+
+        A number already taken by an instance met earlier in the hierarchy is
+        given the lowest number no sheet has: CM5_MINIMA_3 has two page 7s
+        and its PCIe-M2 sheet is page 2 to KiCad; vme-wren's second 26 and 33
+        are 71 and 72. The netlist lists parts in this order.
+        """
+        used = {instance.page for instance in self.instances}
+        taken: set[str] = set()
+        out: dict[str, str] = {}
+        again = []
+        for instance in self.instances:
+            if instance.page and instance.page in taken:
+                again.append(instance)
+                continue
+            taken.add(instance.page)
+            out[instance.path] = instance.page
+        number = 1
+        for instance in again:
+            while str(number) in used or str(number) in taken:
+                number += 1
+            taken.add(str(number))
+            out[instance.path] = str(number)
+        return out
 
     def bus_aliases(self) -> dict[str, list[str]]:
         """Every `(bus_alias ...)` of every sheet: aliases are the design's."""
