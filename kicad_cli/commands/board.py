@@ -13,6 +13,7 @@ from typing import Any
 
 from .. import boardgen, envelope, kicad_env
 from ..native import audit as native_audit
+from ..native import from_netlist as native_from_netlist
 from ..native import parity as native_parity
 from ..native import plane as native_plane
 
@@ -135,13 +136,10 @@ def from_netlist(args: dict[str, Any]) -> None:
     """Build a board from a netlist: place every footprint, join every net.
 
     The step KiCad's own "Update PCB from Schematic" performs and does not
-    expose headlessly. Everything checkable without pcbnew is checked first --
-    a footprint is a file, and a netlist naming one that is not installed fails
-    here rather than inside KiCad's interpreter.
+    expose headlessly. The plan is checked first -- a footprint is a file, and
+    a netlist naming one that is not installed fails before anything is built
+    -- and the board is built in this process, with no KiCad involved.
     """
-    import json  # noqa: PLC0415
-    import tempfile  # noqa: PLC0415
-
     netlist = args.get("netlist")
     out = args.get("out")
     if not out:
@@ -154,27 +152,4 @@ def from_netlist(args: dict[str, Any]) -> None:
         str(netlist), float(args.get("pitch", 10.0)), float(args.get("margin", 10.0))
     )
 
-    # The plan goes to the payload as a file. It is larger than an argument
-    # list should carry, and a temporary file keeps the netlist parsing on this
-    # side -- testable without KiCad -- while the payload only executes.
-    with tempfile.NamedTemporaryFile(
-        "w", suffix=".json", prefix="kicadcli-plan-", delete=False, encoding="utf-8"
-    ) as handle:
-        json.dump(plan, handle)
-        plan_path = handle.name
-    argv = ["--plan", plan_path, "--out", str(out), "--netlist", str(netlist)]
-    if args.get("confirm"):
-        argv += ["--confirm", str(args["confirm"])]
-    try:
-        result = kicad_env.run_payload("board_build", argv)
-    finally:
-        Path(plan_path).unlink(missing_ok=True)
-
-    if result.get("ok"):
-        envelope.ok(result.get("data"))
-    err = result.get("error") or {}
-    envelope.fail(
-        err.get("code", "E_UNKNOWN"),
-        err.get("message", "board_build reported an error"),
-        err.get("details") or {},
-    )
+    native_from_netlist.run(plan, str(out), str(netlist), args.get("confirm"))

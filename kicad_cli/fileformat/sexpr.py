@@ -528,6 +528,16 @@ def _render(node: List, depth: int, source: str, newline: str = "\n") -> str:
     return "".join(out)
 
 
+def copy(node: List) -> List:
+    """The same list, belonging to no document: to put it into another one.
+
+    A list read from a file keeps offsets into that file's text; moved as it
+    is into another document, it would copy text from the wrong source. The
+    copy has none, and is written out from its items as KiCad would write it.
+    """
+    return List([item if isinstance(item, str) else copy(item) for item in node.items])
+
+
 def mark_all(node: List) -> None:
     """Treat every list below ``node`` as changed, so all of it is re-rendered.
 

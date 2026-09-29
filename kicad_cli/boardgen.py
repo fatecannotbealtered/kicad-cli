@@ -12,7 +12,8 @@ there. A footprint is a file, and whether it exists is a question the
 filesystem answers, so a specification with a typo in it fails on a machine
 with no KiCad at all rather than waiting to fail inside the interpreter.
 
-The other half -- the part that needs pcbnew -- is `payload/board_build.py`.
+The other half, building the board, is `kicad_cli/native/from_netlist.py`,
+which needs no KiCad either.
 """
 
 from __future__ import annotations

@@ -529,6 +529,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
   `board netclass` never needed pcbnew: it is a JSON edit of the project
   file, and the file it writes is byte for byte the payload's.
+- `board from-netlist` builds the board in this process and needs no KiCad
+  beyond its footprint libraries. pcbnew reads the result as it read the
+  pcbnew version's, footprint for footprint and pad for pad, on a netlist
+  that has chip parts, a TQFP, a QFN whose exposed pad is a dozen pads of
+  one number, a USB-C receptacle, a header, a crystal and a mounting hole
+  (`tests/test_native_from_netlist.py`). It takes 77 ms where the pcbnew
+  version took 760.
+
+  Three changes, on purpose:
+
+  - The board is reproducible. Every uuid follows from the netlist and the
+    part it belongs to, so one netlist gives one board, byte for byte.
+    pcbnew drew them at random.
+  - The outline is fitted to the parts' copper, drawings and courtyards, a
+    margin out. The pcbnew version also counted their text, which needs the
+    font's measurements. The outline is provisional either way, because
+    `board place` moves the parts.
+  - A project already beside the board is left alone. pcbnew's Save wrote
+    `NAME.kicad_pro` and `NAME.kicad_prl` every time, so a project the
+    schematic already had came back as KiCad's defaults, its net classes
+    gone. Now the two files are written, byte for byte as pcbnew wrote them,
+    only where there are none, and `project_files` says which were
+    `created` and which `kept`. A failed build removes the ones it created.
+
+  Kept, and listed in DEVELOPMENT_STATUS.md: a footprint is named without
+  its library; of several pads with one number, only the last gets the net;
+  and no footprint is linked to its symbol.
 - `board move` with a malformed `--moves` is `E_USAGE`, naming the item it
   could not read. The pcbnew version crashed, and the caller got `E_IO`
   around a traceback.

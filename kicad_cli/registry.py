@@ -239,6 +239,7 @@ SCHEMAS: dict[str, dict[str, Any]] = {
         "shape": "object",
         "fields": [
             "board",
+            "project_files",
             "footprints",
             "nets",
             "pads_connected",
