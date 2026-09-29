@@ -7,6 +7,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- `sch create` draws a schematic a person can read, in this process, and
+  SKiDL is gone. Every net is a label or a power symbol at the pins it joins
+  (neighbouring pins on one supply share a symbol), unused pins carry a
+  no-connect flag, and a supply nothing drives gets a PWR_FLAG. Parts are
+  grouped around their ICs: signal partners beside the pins they meet,
+  capacitors between a supply and ground beneath the chip -- bulk ones by the
+  regulator driving the supply, small ones by the part it feeds. Nothing is
+  drawn over anything else, and the same description gives the same file,
+  byte for byte.
+
+  On the benchmark's 15-part ATmega328P, KiCad's own ERC finds nothing, where
+  each of SKiDL's drawings had 23 errors: 19 unused pins without a flag and 4
+  power inputs undriven. SKiDL also gave four different drawings in five
+  runs, and once none at all. Before returning, the command reads the drawing
+  back through this tool's netlist and compares every net with the
+  description, pin for pin (`E_INTEGRITY` if they differ). The netlist it
+  writes is that read-back.
+
+  Symbols come from KiCad's installed libraries, read as files. A symbol that
+  extends another (BC337 is Q_NPN_CBE) is written out whole, as KiCad embeds
+  it. `drawing.style` is now `labelled`, and `drawing.paper` says which sheet
+  size the parts needed.
+
 ### Added
 - `kicad_cli/fileformat/schematic.py` and `circuit.py` read a design's
   schematics and work out its nets: which pins are joined, and what each net
@@ -42,9 +66,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   S-expression format, from the schematics alone: every part with its value,
   footprint, fields, library, properties, sheet and unit uuids, and every net
   with each pin's function and type. `board parity` reads schematics
-  through it (below); the `sch` commands still ask KiCad's binary for
-  theirs. On 34 of KiCad's
-  35 demo projects it says what KiCad's own export says, part for part and
+  through it, and `sch create` reads its drawing back through it (both
+  above); the other `sch` commands still ask KiCad's binary for theirs. On
+  34 of KiCad's 35 demo projects it says what KiCad's own export says, part for part and
   net for net; on the 35th, one net name differs, the one above. Two things
   are left out of the comparison: net codes, since KiCad numbers nets that
   never reach its netlist, and the order of a part's unit uuids, since
