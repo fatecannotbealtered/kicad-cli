@@ -41,8 +41,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `kicad_cli/fileformat/netlist.py` writes a design's netlist in KiCad's
   S-expression format, from the schematics alone: every part with its value,
   footprint, fields, library, properties, sheet and unit uuids, and every net
-  with each pin's function and type. No command uses it yet; `board parity`
-  and the `sch` commands still ask KiCad's binary for theirs. On 34 of KiCad's
+  with each pin's function and type. `board parity` reads schematics
+  through it (below); the `sch` commands still ask KiCad's binary for
+  theirs. On 34 of KiCad's
   35 demo projects it says what KiCad's own export says, part for part and
   net for net; on the 35th, one net name differs, the one above. Two things
   are left out of the comparison: net codes, since KiCad numbers nets that
@@ -488,22 +489,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `tests/test_fileformat_polygon.py` records pcbnew's answers and asks pcbnew
   again whenever KiCad is installed. Connectivity still agrees with pcbnew on
   every demo board.
-- `board parity` runs in this process, and its board side needs no KiCad:
-  footprints, values, pads and nets are read from the file, and the
+- `board parity` runs in this process and needs no KiCad. The board side is
+  read from the file -- footprints, values, pads and nets -- and the
   unconnected count is this tool's own connectivity. The schematic side is
-  still KiCad's XML netlist export, the same one the payload used, until this
-  tool exports netlists itself. Output is identical to the pcbnew version's
-  on every demo board, checked by `tests/test_native_parity.py`, except for
-  one list: the sample of up to ten mismatched nets. The payload took it from
-  a Python set, so it changed from run to run; it is now sorted.
+  this tool's own netlist (above), where the payload asked KiCad's binary for
+  an XML export. The output is the pcbnew version's on every demo board
+  (`tests/test_native_parity.py`), with two differences:
 
-  The export now goes through the same exporter as the `sch` commands. That
-  exporter uses an isolated KiCad configuration and tries three times. The
-  payload launched KiCad's binary once, and on Windows about one launch in
-  six fails with no output. On the RoyalBlue54L-Feather demo that failure
-  came back as the parity check's answer: `E_IO`, "netlist export failed".
-  A netlist that is not the XML asked for is now `E_IO` too, rather than a
-  traceback.
+  - A part marked "exclude from board" is no longer reported missing from
+    the board. KiCad's XML netlist keeps such parts; the netlist a board is
+    updated from leaves them out. On the CM5_MINIMA_3 demo five parts kept
+    off the board on purpose -- the compute module among them -- were
+    reported missing, and the nets on their pins as not matching.
+  - The sample of up to ten mismatched nets is sorted. The payload took it
+    from a Python set, so it changed from run to run.
+
+  With no binary to launch, a failure that came back as the answer is gone:
+  on Windows about one launch in six gives no output, and the payload said
+  "netlist export failed" (`E_IO`) -- on the RoyalBlue54L-Feather demo, for
+  one. A schematic this tool cannot read is `E_VALIDATION`, with the file
+  and the reason.
 - `board move` and `board netclass` run in this process and need no KiCad:
   the first writes off SWIG. Their write transaction is the one the payloads
   used, now in this process: a backup and a lock before the first byte

@@ -123,25 +123,17 @@ def test_the_native_writes_run_without_kicad(tmp_path: Path) -> None:
     assert fake_upstream.attempts(tmp_path / "fake") == 0, "a write started KiCad after all"
 
 
-def test_board_parity_needs_only_kicads_binary(tmp_path: Path) -> None:
-    """The schematic's netlist still comes from KiCad's binary; everything
-    else is read here. The interpreter is pointed at nothing, so any call
-    into it would fail the command."""
-    env = fake_upstream.env(tmp_path, "ok")
-    env["KICAD_CLI_PYTHON"] = str(tmp_path / "no-such-python.exe")
-    doc, exit_code, _ = run(["board", "parity", "--board", str(MINI)], env)
-    assert code_of(doc) == "OK", doc
-    assert exit_code == 0
-    assert fake_upstream.attempts(tmp_path) == 1, "one netlist export, nothing else"
-
-
-def test_a_netlist_export_that_is_not_xml_is_e_io(tmp_path: Path) -> None:
+def test_board_parity_needs_no_kicad(tmp_path: Path) -> None:
+    """Both sides are read here now: the board from its file, the schematic
+    through this tool's own netlist. Both of KiCad's boundaries are stubs that
+    fail when called, and neither is called."""
     doc, exit_code, _ = run(
         ["board", "parity", "--board", str(MINI)],
-        fake_upstream.env(tmp_path, "garbage"),
+        fake_upstream.env(tmp_path, "launch_fail"),
     )
-    assert code_of(doc) == "E_IO", doc
-    assert exit_code == 1
+    assert code_of(doc) == "OK", doc
+    assert exit_code == 0
+    assert fake_upstream.attempts(tmp_path) == 0, "parity started KiCad after all"
 
 
 # The payload bridge is exercised through `board route`, which still runs in
