@@ -1,0 +1,1592 @@
+{
+ "kicad_version": "10.0.6",
+ "violations": [
+  {
+   "type": "endpoint_off_grid",
+   "severity": "warning",
+   "items": [
+    "05e3f6a8-1cfa-5ce5-bd4f-05c5a33e01eb"
+   ]
+  },
+  {
+   "type": "endpoint_off_grid",
+   "severity": "warning",
+   "items": [
+    "2f679cf9-a255-5f83-9a6d-27b474d87efa"
+   ]
+  },
+  {
+   "type": "endpoint_off_grid",
+   "severity": "warning",
+   "items": [
+    "532d473a-57a0-5042-8bbc-98812f6d0962"
+   ]
+  },
+  {
+   "type": "endpoint_off_grid",
+   "severity": "warning",
+   "items": [
+    "562cf876-bdad-50c5-a844-1174b1c0736e"
+   ]
+  },
+  {
+   "type": "endpoint_off_grid",
+   "severity": "warning",
+   "items": [
+    "ab3ef568-efc3-5b1b-876f-766dd2619e71"
+   ]
+  },
+  {
+   "type": "four_way_junction",
+   "severity": "warning",
+   "items": [
+    "97d7dbf3-9b68-5fde-86d3-3467332264e4",
+    "2b9b1090-51a2-5671-88fb-dd94574d3ffa"
+   ]
+  },
+  {
+   "type": "four_way_junction",
+   "severity": "warning",
+   "items": [
+    "b1061508-5465-59f8-94fd-cee63c04f110",
+    "7b3702ba-4ba4-51d8-a85c-d143c17af33a"
+   ]
+  },
+  {
+   "type": "four_way_junction",
+   "severity": "warning",
+   "items": [
+    "f2afd928-4fad-5c4c-9539-a9937009762c",
+    "71646518-0b7e-5f72-87b6-106b6ce411d2"
+   ]
+  },
+  {
+   "type": "isolated_pin_label",
+   "severity": "warning",
+   "items": [
+    "00c4db8c-a09f-5e48-bef2-27c0d4fcb47f"
+   ]
+  },
+  {
+   "type": "isolated_pin_label",
+   "severity": "warning",
+   "items": [
+    "07f9e2a7-16df-5b49-a6f5-aa6e8f833eb2"
+   ]
+  },
+  {
+   "type": "isolated_pin_label",
+   "severity": "warning",
+   "items": [
+    "08153141-ddaa-5452-a255-686a66213be0"
+   ]
+  },
+  {
+   "type": "isolated_pin_label",
+   "severity": "warning",
+   "items": [
+    "16184d44-c61d-5fbd-8bd6-958c514318ab"
+   ]
+  },
+  {
+   "type": "isolated_pin_label",
+   "severity": "warning",
+   "items": [
+    "18fff5ef-2855-5883-9729-67f2233503ea"
+   ]
+  },
+  {
+   "type": "isolated_pin_label",
+   "severity": "warning",
+   "items": [
+    "215a3953-b502-5dfb-9ae6-e2d1e3a46094"
+   ]
+  },
+  {
+   "type": "isolated_pin_label",
+   "severity": "warning",
+   "items": [
+    "280f2eb1-db5e-516b-b5ad-957ee44b8e9c"
+   ]
+  },
+  {
+   "type": "isolated_pin_label",
+   "severity": "warning",
+   "items": [
+    "2cd06bfa-fa4e-5ecd-8082-6798d269a7cd"
+   ]
+  },
+  {
+   "type": "isolated_pin_label",
+   "severity": "warning",
+   "items": [
+    "3387ff42-342d-520d-8ce3-ac0955a85de0"
+   ]
+  },
+  {
+   "type": "isolated_pin_label",
+   "severity": "warning",
+   "items": [
+    "461fa9b6-1097-5a70-b9eb-ffc0515f49c7"
+   ]
+  },
+  {
+   "type": "isolated_pin_label",
+   "severity": "warning",
+   "items": [
+    "49003052-5589-5809-9239-611fb78fdf6b"
+   ]
+  },
+  {
+   "type": "isolated_pin_label",
+   "severity": "warning",
+   "items": [
+    "4a509a6a-b310-5849-be28-4151c3efa576"
+   ]
+  },
+  {
+   "type": "isolated_pin_label",
+   "severity": "warning",
+   "items": [
+    "51302385-9a5b-5aae-a099-edd2ad3c852d"
+   ]
+  },
+  {
+   "type": "isolated_pin_label",
+   "severity": "warning",
+   "items": [
+    "5e2d1b38-9b8e-51c6-8afb-cb5954ea3e22"
+   ]
+  },
+  {
+   "type": "isolated_pin_label",
+   "severity": "warning",
+   "items": [
+    "653b559c-e49a-547c-a230-d43ca4e8cadf"
+   ]
+  },
+  {
+   "type": "isolated_pin_label",
+   "severity": "warning",
+   "items": [
+    "6b5b84a9-39eb-56e8-90b8-2fc1683854fe"
+   ]
+  },
+  {
+   "type": "isolated_pin_label",
+   "severity": "warning",
+   "items": [
+    "836cdd55-4a30-5f51-abae-38661adeedb2"
+   ]
+  },
+  {
+   "type": "isolated_pin_label",
+   "severity": "warning",
+   "items": [
+    "84bbc5a4-13a7-5106-929a-4266f81b4c6b"
+   ]
+  },
+  {
+   "type": "isolated_pin_label",
+   "severity": "warning",
+   "items": [
+    "8981b11f-d85b-5925-a77e-ae1e8e598446"
+   ]
+  },
+  {
+   "type": "isolated_pin_label",
+   "severity": "warning",
+   "items": [
+    "a8ead576-1bc3-550e-be59-3c5f7e046451"
+   ]
+  },
+  {
+   "type": "isolated_pin_label",
+   "severity": "warning",
+   "items": [
+    "aaa9af18-7ce0-564c-a89b-6a1b25b8ff94"
+   ]
+  },
+  {
+   "type": "isolated_pin_label",
+   "severity": "warning",
+   "items": [
+    "ae1add6c-1a7c-5d33-b651-4b0d9dc6dab3"
+   ]
+  },
+  {
+   "type": "isolated_pin_label",
+   "severity": "warning",
+   "items": [
+    "b4bbab7d-a9be-5495-803b-0958e01b801c"
+   ]
+  },
+  {
+   "type": "isolated_pin_label",
+   "severity": "warning",
+   "items": [
+    "b6afec7b-1ad9-5c9f-8812-db9c48c27a70"
+   ]
+  },
+  {
+   "type": "isolated_pin_label",
+   "severity": "warning",
+   "items": [
+    "c42e575f-de6e-5ed4-b689-185e78dedfaf"
+   ]
+  },
+  {
+   "type": "isolated_pin_label",
+   "severity": "warning",
+   "items": [
+    "c4d90726-9ec6-5a38-a0a3-b3af7d7d601b"
+   ]
+  },
+  {
+   "type": "isolated_pin_label",
+   "severity": "warning",
+   "items": [
+    "d528b94c-fd6d-517c-bb62-54d93cbb1369"
+   ]
+  },
+  {
+   "type": "isolated_pin_label",
+   "severity": "warning",
+   "items": [
+    "e7ad6856-8ad2-5333-a55c-3fe6db0c0c08"
+   ]
+  },
+  {
+   "type": "isolated_pin_label",
+   "severity": "warning",
+   "items": [
+    "f195cdc8-1d61-5156-a3af-68e2f17bd835"
+   ]
+  },
+  {
+   "type": "label_dangling",
+   "severity": "error",
+   "items": [
+    "0bdff802-fc03-5a39-87b5-79e1ad1dcd71"
+   ]
+  },
+  {
+   "type": "label_dangling",
+   "severity": "error",
+   "items": [
+    "0f168fae-af39-5c37-bd2f-939571aa364c"
+   ]
+  },
+  {
+   "type": "label_dangling",
+   "severity": "error",
+   "items": [
+    "16585d60-2b19-5828-90e1-cf61de04a084"
+   ]
+  },
+  {
+   "type": "label_dangling",
+   "severity": "error",
+   "items": [
+    "196d2f41-bdd6-505a-955a-63481f601d1a"
+   ]
+  },
+  {
+   "type": "label_dangling",
+   "severity": "error",
+   "items": [
+    "2490246a-07c2-5d05-9dac-21e150edff98"
+   ]
+  },
+  {
+   "type": "label_dangling",
+   "severity": "error",
+   "items": [
+    "24dec273-d07d-5199-a2fa-f282a73341ce"
+   ]
+  },
+  {
+   "type": "label_dangling",
+   "severity": "error",
+   "items": [
+    "2fe69a98-4a4c-5cd9-a21e-74e652bba6fb"
+   ]
+  },
+  {
+   "type": "label_dangling",
+   "severity": "error",
+   "items": [
+    "44322078-ebce-5da5-abb3-b4a28ac81d9c"
+   ]
+  },
+  {
+   "type": "label_dangling",
+   "severity": "error",
+   "items": [
+    "59fd98da-bef6-511c-9031-757f11e68f37"
+   ]
+  },
+  {
+   "type": "label_dangling",
+   "severity": "error",
+   "items": [
+    "61e14b02-314f-578e-884f-3a8244b6451a"
+   ]
+  },
+  {
+   "type": "label_dangling",
+   "severity": "error",
+   "items": [
+    "67306f03-ffd3-5587-b7f0-2bc2656ead51"
+   ]
+  },
+  {
+   "type": "label_dangling",
+   "severity": "error",
+   "items": [
+    "8db0582e-8889-5142-b776-b0c57f4e4587"
+   ]
+  },
+  {
+   "type": "label_dangling",
+   "severity": "error",
+   "items": [
+    "9758e2ff-3e08-52c0-aadc-d0d289ee27d2"
+   ]
+  },
+  {
+   "type": "label_dangling",
+   "severity": "error",
+   "items": [
+    "aac27df2-0078-5ede-b07b-533471f91d49"
+   ]
+  },
+  {
+   "type": "label_dangling",
+   "severity": "error",
+   "items": [
+    "b358ae84-efe4-5dd0-81e0-523dd69812c9"
+   ]
+  },
+  {
+   "type": "label_dangling",
+   "severity": "error",
+   "items": [
+    "b476817e-93a0-5955-aee3-75b9e8c57fd1"
+   ]
+  },
+  {
+   "type": "label_dangling",
+   "severity": "error",
+   "items": [
+    "c600066a-b7bf-5511-b34a-20feb158bb21"
+   ]
+  },
+  {
+   "type": "label_dangling",
+   "severity": "error",
+   "items": [
+    "c6b7f5c7-be4b-5ad6-bd4d-ffbf6badad53"
+   ]
+  },
+  {
+   "type": "label_dangling",
+   "severity": "error",
+   "items": [
+    "dec2de73-d8ca-58ed-bb07-187cc3800efe"
+   ]
+  },
+  {
+   "type": "label_dangling",
+   "severity": "error",
+   "items": [
+    "e0591d0e-a676-5893-9208-55ff5fc101a8"
+   ]
+  },
+  {
+   "type": "label_multiple_wires",
+   "severity": "warning",
+   "items": [
+    "6b5b84a9-39eb-56e8-90b8-2fc1683854fe",
+    "6dba067c-0bc5-5211-a2fc-06f0b1bda981"
+   ]
+  },
+  {
+   "type": "multiple_net_names",
+   "severity": "warning",
+   "items": [
+    "280f2eb1-db5e-516b-b5ad-957ee44b8e9c",
+    "a8ead576-1bc3-550e-be59-3c5f7e046451"
+   ]
+  },
+  {
+   "type": "multiple_net_names",
+   "severity": "warning",
+   "items": [
+    "8981b11f-d85b-5925-a77e-ae1e8e598446",
+    "3387ff42-342d-520d-8ce3-ac0955a85de0"
+   ]
+  },
+  {
+   "type": "multiple_net_names",
+   "severity": "warning",
+   "items": [
+    "bbbabbf1-083d-50c1-bca5-9347279a9c3c",
+    "68ab7947-1700-5c4a-a84f-5328c712b266"
+   ]
+  },
+  {
+   "type": "multiple_net_names",
+   "severity": "warning",
+   "items": [
+    "c4d90726-9ec6-5a38-a0a3-b3af7d7d601b",
+    "ae1add6c-1a7c-5d33-b651-4b0d9dc6dab3"
+   ]
+  },
+  {
+   "type": "no_connect_connected",
+   "severity": "warning",
+   "items": [
+    "01c5cb24-8156-5dde-b47b-1793c31328de",
+    "d3259aef-db55-5028-b982-2e4ed4dc0dfc"
+   ]
+  },
+  {
+   "type": "no_connect_connected",
+   "severity": "warning",
+   "items": [
+    "16af5a93-e2b2-50b3-8d50-83d86c3a215d",
+    "cb0950d9-40af-5749-8b29-7d8836d3804d"
+   ]
+  },
+  {
+   "type": "no_connect_connected",
+   "severity": "warning",
+   "items": [
+    "244b0fe2-183e-5379-9650-5df014032e3f",
+    "b6147247-70e4-5c3b-bca9-e55834b5e85d"
+   ]
+  },
+  {
+   "type": "no_connect_connected",
+   "severity": "warning",
+   "items": [
+    "2dcd611d-e0a5-5b61-be31-13eb0e6cb2d6",
+    "53b9aa25-9cb2-584f-8a92-28970012e700"
+   ]
+  },
+  {
+   "type": "no_connect_connected",
+   "severity": "warning",
+   "items": [
+    "413efbc0-a62a-58e7-bf11-ade9a16721b7",
+    "17fb6c85-477f-5265-80db-68b758be9eec"
+   ]
+  },
+  {
+   "type": "no_connect_connected",
+   "severity": "warning",
+   "items": [
+    "45bf410b-5b42-568d-ab8e-8d4515b982c0",
+    "ccf0d37f-c0f0-51d4-9a63-fabf7d4dfef3"
+   ]
+  },
+  {
+   "type": "no_connect_connected",
+   "severity": "warning",
+   "items": [
+    "4c11737c-ae49-5d1e-9ed5-804c28f7e968",
+    "dcb7feac-8818-52a8-9557-ddbe5a2be4db"
+   ]
+  },
+  {
+   "type": "no_connect_connected",
+   "severity": "warning",
+   "items": [
+    "64289344-7db0-58cb-8133-9e2b6669fa9b",
+    "dcb7feac-8818-52a8-9557-ddbe5a2be4db"
+   ]
+  },
+  {
+   "type": "no_connect_connected",
+   "severity": "warning",
+   "items": [
+    "7212afe0-ae8f-582a-b300-b9d076bd6134",
+    "a973148b-1c9e-5293-b3af-acff22bdc756"
+   ]
+  },
+  {
+   "type": "no_connect_connected",
+   "severity": "warning",
+   "items": [
+    "82245d77-9bc4-582d-a12e-02f895fa689f",
+    "485338c0-1fd9-5243-aabc-8c7e49040c5d"
+   ]
+  },
+  {
+   "type": "no_connect_connected",
+   "severity": "warning",
+   "items": [
+    "8d6456a7-73a5-5312-8bb6-b46640694f18",
+    "2d0b0dbd-2f93-58ee-aa89-84ced28ccc90"
+   ]
+  },
+  {
+   "type": "no_connect_connected",
+   "severity": "warning",
+   "items": [
+    "99c25b6d-7b8e-5300-b10e-4c65517b9bca",
+    "260f9db7-9020-5f15-9af3-530e14c945f1"
+   ]
+  },
+  {
+   "type": "no_connect_connected",
+   "severity": "warning",
+   "items": [
+    "c21268ab-dc56-5ce6-ba93-31d18a6e6ad7",
+    "8e3197c2-2e23-5481-9d63-8be1cd59330c"
+   ]
+  },
+  {
+   "type": "no_connect_connected",
+   "severity": "warning",
+   "items": [
+    "da19c089-9a65-58d2-afc4-75b309075387",
+    "10b64362-80af-5ccb-b77d-084275e55b4e"
+   ]
+  },
+  {
+   "type": "no_connect_connected",
+   "severity": "warning",
+   "items": [
+    "e77fbb58-2957-58bf-b040-651a05d00752",
+    "10dd2804-fe91-529f-9ded-5e66db0a6227"
+   ]
+  },
+  {
+   "type": "no_connect_connected",
+   "severity": "warning",
+   "items": [
+    "f83f5896-41f6-5edd-9cf7-ac345b316cf3",
+    "41d8c54f-9b73-5c42-987e-1e32ec1f51b0"
+   ]
+  },
+  {
+   "type": "no_connect_dangling",
+   "severity": "warning",
+   "items": [
+    "1413decd-4b5d-5d5d-98bf-eec793d1b754"
+   ]
+  },
+  {
+   "type": "no_connect_dangling",
+   "severity": "warning",
+   "items": [
+    "16d55863-b7bb-53d3-9257-3fd1a1df48f5"
+   ]
+  },
+  {
+   "type": "no_connect_dangling",
+   "severity": "warning",
+   "items": [
+    "3ff3689c-f348-59b2-9e16-21fed43b7d7d"
+   ]
+  },
+  {
+   "type": "no_connect_dangling",
+   "severity": "warning",
+   "items": [
+    "811baf7d-f01b-5926-bf4e-3c0b2e09f0d5"
+   ]
+  },
+  {
+   "type": "pin_not_connected",
+   "severity": "error",
+   "items": [
+    "1e3c1614-d24c-5fa2-a295-c17ac51e59b8"
+   ]
+  },
+  {
+   "type": "pin_not_connected",
+   "severity": "error",
+   "items": [
+    "236f1e7c-5a90-50d4-a213-8517683f1226"
+   ]
+  },
+  {
+   "type": "pin_not_connected",
+   "severity": "error",
+   "items": [
+    "29a7c232-666b-51cc-ba96-9884fed0b21b"
+   ]
+  },
+  {
+   "type": "pin_not_connected",
+   "severity": "error",
+   "items": [
+    "2f679cf9-a255-5f83-9a6d-27b474d87efa"
+   ]
+  },
+  {
+   "type": "pin_not_connected",
+   "severity": "error",
+   "items": [
+    "2fc90b89-4478-5af2-b32a-8e50e8ca9cb9"
+   ]
+  },
+  {
+   "type": "pin_not_connected",
+   "severity": "error",
+   "items": [
+    "3aa7b48b-a34b-52fc-8d00-faa90fb1fc7a"
+   ]
+  },
+  {
+   "type": "pin_not_connected",
+   "severity": "error",
+   "items": [
+    "46384b3b-b1a8-59bd-a4c6-9b307f693dba"
+   ]
+  },
+  {
+   "type": "pin_not_connected",
+   "severity": "error",
+   "items": [
+    "78d883c9-71ef-58b4-8e6e-5d491e3b4980"
+   ]
+  },
+  {
+   "type": "pin_not_connected",
+   "severity": "error",
+   "items": [
+    "8420e496-0174-5547-bd8d-d567c2dfd146"
+   ]
+  },
+  {
+   "type": "pin_not_connected",
+   "severity": "error",
+   "items": [
+    "84aa089a-6eb7-5433-982c-12d2e2f2e03c"
+   ]
+  },
+  {
+   "type": "pin_not_connected",
+   "severity": "error",
+   "items": [
+    "85718952-a00f-50d5-a11b-9db7080affae"
+   ]
+  },
+  {
+   "type": "pin_not_connected",
+   "severity": "error",
+   "items": [
+    "8cdb46a5-e550-5f33-9b4b-37492325f57f"
+   ]
+  },
+  {
+   "type": "pin_not_connected",
+   "severity": "error",
+   "items": [
+    "92241928-af4f-510a-959b-5bd5ba60f1c8"
+   ]
+  },
+  {
+   "type": "pin_not_connected",
+   "severity": "error",
+   "items": [
+    "9aceadde-d6ad-5f64-9ab5-800e58446e5d"
+   ]
+  },
+  {
+   "type": "pin_not_connected",
+   "severity": "error",
+   "items": [
+    "a0297fd7-24cb-5ab0-82c8-2bec1ff44c61"
+   ]
+  },
+  {
+   "type": "pin_not_connected",
+   "severity": "error",
+   "items": [
+    "aac2e7ec-79f8-53d7-9b36-05ff3506a42f"
+   ]
+  },
+  {
+   "type": "pin_not_connected",
+   "severity": "error",
+   "items": [
+    "b2f71907-cd9e-5689-ba15-7359815c02d5"
+   ]
+  },
+  {
+   "type": "pin_not_connected",
+   "severity": "error",
+   "items": [
+    "b3978f87-652c-5b96-8bf6-8d4f0bef83d5"
+   ]
+  },
+  {
+   "type": "pin_not_connected",
+   "severity": "error",
+   "items": [
+    "b605ab10-eed8-5faf-af7a-ddbd966e4de4"
+   ]
+  },
+  {
+   "type": "pin_not_connected",
+   "severity": "error",
+   "items": [
+    "de43c3e1-515f-52d1-9df1-6e33d7a3f24e"
+   ]
+  },
+  {
+   "type": "pin_not_connected",
+   "severity": "error",
+   "items": [
+    "e31cf6f5-ebdb-5ae8-bd63-60b4feb1136e"
+   ]
+  },
+  {
+   "type": "pin_not_driven",
+   "severity": "error",
+   "items": [
+    "191309cf-622e-5eda-ada0-0fe76bac05e8"
+   ]
+  },
+  {
+   "type": "pin_not_driven",
+   "severity": "error",
+   "items": [
+    "2e5a911f-ee10-545b-add1-158b37dd203f"
+   ]
+  },
+  {
+   "type": "pin_not_driven",
+   "severity": "error",
+   "items": [
+    "43009f92-4258-5b71-88ee-b518abc76aae"
+   ]
+  },
+  {
+   "type": "pin_not_driven",
+   "severity": "error",
+   "items": [
+    "44dcfb8e-86b3-539a-9ec8-7717e3bac2d5"
+   ]
+  },
+  {
+   "type": "pin_not_driven",
+   "severity": "error",
+   "items": [
+    "57dac9f4-54c1-545e-9f8b-2d4964067033"
+   ]
+  },
+  {
+   "type": "pin_not_driven",
+   "severity": "error",
+   "items": [
+    "63c916cd-4d12-55ec-b158-cc7ddadb69cb"
+   ]
+  },
+  {
+   "type": "pin_not_driven",
+   "severity": "error",
+   "items": [
+    "792afefc-0a53-5ea7-8839-54ce2e5e5433"
+   ]
+  },
+  {
+   "type": "pin_not_driven",
+   "severity": "error",
+   "items": [
+    "81605b02-1906-519a-bbbd-39cbe12a4607"
+   ]
+  },
+  {
+   "type": "pin_not_driven",
+   "severity": "error",
+   "items": [
+    "9a16e80c-a3c3-5c72-a180-e93a7d0c64a9"
+   ]
+  },
+  {
+   "type": "pin_not_driven",
+   "severity": "error",
+   "items": [
+    "a074e043-2ac7-5728-90cb-c5b37d8d978b"
+   ]
+  },
+  {
+   "type": "pin_not_driven",
+   "severity": "error",
+   "items": [
+    "aac2e7ec-79f8-53d7-9b36-05ff3506a42f"
+   ]
+  },
+  {
+   "type": "pin_not_driven",
+   "severity": "error",
+   "items": [
+    "c23a3916-9b4b-5dec-a0b3-8567e63e4572"
+   ]
+  },
+  {
+   "type": "pin_not_driven",
+   "severity": "error",
+   "items": [
+    "daa96eec-23e9-54d7-85ce-b74a1191bcd1"
+   ]
+  },
+  {
+   "type": "pin_not_driven",
+   "severity": "error",
+   "items": [
+    "f5322296-9090-5dd1-93b9-d3baac62cca8"
+   ]
+  },
+  {
+   "type": "pin_not_driven",
+   "severity": "error",
+   "items": [
+    "fb8043a5-c5ec-556b-b358-dde0886fda10"
+   ]
+  },
+  {
+   "type": "pin_to_pin",
+   "severity": "warning",
+   "items": [
+    "02c73a81-f2c5-58ae-8439-da57483250f7",
+    "a074e043-2ac7-5728-90cb-c5b37d8d978b"
+   ]
+  },
+  {
+   "type": "pin_to_pin",
+   "severity": "warning",
+   "items": [
+    "041a6062-fb80-581c-ae5e-5a7de7035d08",
+    "15d58400-36f6-54f2-9445-4d8761543fc6"
+   ]
+  },
+  {
+   "type": "pin_to_pin",
+   "severity": "error",
+   "items": [
+    "0653e5b9-36e8-5014-a63a-fccc1e942ef3",
+    "42169f70-87b7-5182-987d-3cd3001bcfd1"
+   ]
+  },
+  {
+   "type": "pin_to_pin",
+   "severity": "error",
+   "items": [
+    "1ec15fb0-b636-5046-9265-e73901158b65",
+    "54e76429-48f5-5e0e-bcfb-595f2c68403b"
+   ]
+  },
+  {
+   "type": "pin_to_pin",
+   "severity": "warning",
+   "items": [
+    "34a34445-b2ac-5ed9-9677-10f060c1a59b",
+    "af3eddff-dbdb-5642-9317-42588529f27a"
+   ]
+  },
+  {
+   "type": "pin_to_pin",
+   "severity": "warning",
+   "items": [
+    "4210c296-edaf-51a1-88d4-da3a287f76ce",
+    "67befa69-e83e-5a3d-ab3c-8877af1c9f6e"
+   ]
+  },
+  {
+   "type": "pin_to_pin",
+   "severity": "error",
+   "items": [
+    "46092180-5a6b-5d45-ad6c-5b1e90d27113",
+    "6bbea5af-16fb-5e35-9d5c-312e7f54be73"
+   ]
+  },
+  {
+   "type": "pin_to_pin",
+   "severity": "warning",
+   "items": [
+    "4ac5163e-7008-55c6-ab35-3444d83136d1",
+    "af3eddff-dbdb-5642-9317-42588529f27a"
+   ]
+  },
+  {
+   "type": "pin_to_pin",
+   "severity": "error",
+   "items": [
+    "4b899b1a-02d1-5b57-ba77-57feb88a1b5d",
+    "33c94ed7-a34e-5689-be54-783f81151b70"
+   ]
+  },
+  {
+   "type": "pin_to_pin",
+   "severity": "error",
+   "items": [
+    "531ca875-5bff-53f5-a445-8811e1abb89a",
+    "97bf9c2b-7d5a-5164-80d2-a3415e41e592"
+   ]
+  },
+  {
+   "type": "pin_to_pin",
+   "severity": "error",
+   "items": [
+    "5b85f5bc-d319-5a76-b886-c97d42866167",
+    "1ec15fb0-b636-5046-9265-e73901158b65"
+   ]
+  },
+  {
+   "type": "pin_to_pin",
+   "severity": "warning",
+   "items": [
+    "5ce83710-c4fb-5452-b172-a149d6b96793",
+    "c23a3916-9b4b-5dec-a0b3-8567e63e4572"
+   ]
+  },
+  {
+   "type": "pin_to_pin",
+   "severity": "warning",
+   "items": [
+    "6c7b704b-4bdc-59fa-938f-220845de57b8",
+    "af3eddff-dbdb-5642-9317-42588529f27a"
+   ]
+  },
+  {
+   "type": "pin_to_pin",
+   "severity": "warning",
+   "items": [
+    "767bf002-f92f-588f-a792-1af7628a8ad6",
+    "d35205bb-978a-5850-85c3-cc33adb97f42"
+   ]
+  },
+  {
+   "type": "pin_to_pin",
+   "severity": "warning",
+   "items": [
+    "7bc032bd-ebc7-5317-8e83-1d0404104359",
+    "129c91e6-25b9-5efc-8f35-c7290dce917f"
+   ]
+  },
+  {
+   "type": "pin_to_pin",
+   "severity": "warning",
+   "items": [
+    "7e760953-4259-5fa8-be06-17ad8c7f0012",
+    "b06d3d50-ff6b-55d8-8a87-6f2c966e23cc"
+   ]
+  },
+  {
+   "type": "pin_to_pin",
+   "severity": "warning",
+   "items": [
+    "81f4bd72-4b25-5c0e-940d-ad93d0cc10e8",
+    "0449e1c4-c7d1-5244-83c9-a911e2bd1950"
+   ]
+  },
+  {
+   "type": "pin_to_pin",
+   "severity": "error",
+   "items": [
+    "8d500f5f-a5a6-5195-93d9-d2d8a5ed6213",
+    "dbd61ba6-47eb-5ff7-b0a2-ad25b41da2eb"
+   ]
+  },
+  {
+   "type": "pin_to_pin",
+   "severity": "warning",
+   "items": [
+    "9a904223-dd41-59aa-9a96-144f6d4cef3b",
+    "af08e8b4-2790-5ed2-af46-4c11ae1514b3"
+   ]
+  },
+  {
+   "type": "pin_to_pin",
+   "severity": "error",
+   "items": [
+    "9d6d22dd-2760-5fa8-9d38-eacafdfb9065",
+    "be482835-f50e-5d21-b271-1ffc354f25e9"
+   ]
+  },
+  {
+   "type": "pin_to_pin",
+   "severity": "warning",
+   "items": [
+    "9ef8690e-4deb-5af0-aa1b-e6b3510db29b",
+    "cfad0359-ebda-5a04-bdd9-24d674a9db92"
+   ]
+  },
+  {
+   "type": "pin_to_pin",
+   "severity": "warning",
+   "items": [
+    "a2ad6ec7-91a4-53f9-844e-5ae9c87fd4b5",
+    "535863ec-b7e4-515c-bfd3-e629aac68881"
+   ]
+  },
+  {
+   "type": "pin_to_pin",
+   "severity": "warning",
+   "items": [
+    "a7eaaa74-c839-5992-bf4a-7c7a2b778b73",
+    "b98fe1c8-ec0a-56ab-854c-b56fa77fca64"
+   ]
+  },
+  {
+   "type": "pin_to_pin",
+   "severity": "warning",
+   "items": [
+    "ad8854b8-b56a-54cd-83ff-5c2e756282ad",
+    "31431b64-ed67-5b6e-b245-442d39e20e20"
+   ]
+  },
+  {
+   "type": "pin_to_pin",
+   "severity": "warning",
+   "items": [
+    "afadf755-8c7f-5c4e-b3d0-6d2468f230be",
+    "c1ebdfaf-1633-5112-ba6a-399b0b40bb85"
+   ]
+  },
+  {
+   "type": "pin_to_pin",
+   "severity": "warning",
+   "items": [
+    "b1596375-6b61-5f9f-9190-bf76884ed885",
+    "2c35e9ab-2ebe-5ee0-87b0-a1f074dbc4a3"
+   ]
+  },
+  {
+   "type": "pin_to_pin",
+   "severity": "warning",
+   "items": [
+    "b195a005-ab47-5661-951e-b9d807a403e3",
+    "b45f7a98-f1eb-5072-aa9f-52343da40905"
+   ]
+  },
+  {
+   "type": "pin_to_pin",
+   "severity": "error",
+   "items": [
+    "c8f61b8f-90a9-5fd9-909c-2d11a5421ff9",
+    "a5478df6-0827-5deb-8798-66fda0b93b12"
+   ]
+  },
+  {
+   "type": "pin_to_pin",
+   "severity": "error",
+   "items": [
+    "d1122518-de1e-559a-b1da-822146464567",
+    "a6ddf591-9a8b-5830-87eb-fecdb4fc80b9"
+   ]
+  },
+  {
+   "type": "pin_to_pin",
+   "severity": "warning",
+   "items": [
+    "e2b52a62-743d-5194-9bdb-88444904f8e9",
+    "293fdb83-5ced-5454-8ef9-20ab1b685163"
+   ]
+  },
+  {
+   "type": "pin_to_pin",
+   "severity": "error",
+   "items": [
+    "fe7a8f8b-91ad-58ef-b651-9275366761d6",
+    "bc0625aa-4543-5f09-aa10-db71ceecaf3d"
+   ]
+  },
+  {
+   "type": "power_pin_not_driven",
+   "severity": "error",
+   "items": [
+    "0394154a-0b1a-5fdf-8862-b44ef7787cf1"
+   ]
+  },
+  {
+   "type": "power_pin_not_driven",
+   "severity": "error",
+   "items": [
+    "1e31e173-5b00-5fbc-8d49-ff2e948e6695"
+   ]
+  },
+  {
+   "type": "power_pin_not_driven",
+   "severity": "error",
+   "items": [
+    "25a1a88b-50f7-581a-b916-ee3f8da52567"
+   ]
+  },
+  {
+   "type": "power_pin_not_driven",
+   "severity": "error",
+   "items": [
+    "293fdb83-5ced-5454-8ef9-20ab1b685163"
+   ]
+  },
+  {
+   "type": "power_pin_not_driven",
+   "severity": "error",
+   "items": [
+    "2a7fb879-ad04-53ba-9cf1-a1e51af75de8"
+   ]
+  },
+  {
+   "type": "power_pin_not_driven",
+   "severity": "error",
+   "items": [
+    "36e10796-fd1a-504c-b6d2-3444006656eb"
+   ]
+  },
+  {
+   "type": "power_pin_not_driven",
+   "severity": "error",
+   "items": [
+    "399f107b-5039-57c7-a590-8d2808b469c8"
+   ]
+  },
+  {
+   "type": "power_pin_not_driven",
+   "severity": "error",
+   "items": [
+    "3aa7b48b-a34b-52fc-8d00-faa90fb1fc7a"
+   ]
+  },
+  {
+   "type": "power_pin_not_driven",
+   "severity": "error",
+   "items": [
+    "50802181-badd-5268-964a-5c13f78d55f1"
+   ]
+  },
+  {
+   "type": "power_pin_not_driven",
+   "severity": "error",
+   "items": [
+    "51afa141-ab0e-5fca-87b6-9529ad4efccf"
+   ]
+  },
+  {
+   "type": "power_pin_not_driven",
+   "severity": "error",
+   "items": [
+    "6d88cfa1-7885-5f8e-8c4d-459988478c35"
+   ]
+  },
+  {
+   "type": "power_pin_not_driven",
+   "severity": "error",
+   "items": [
+    "754fd0ed-8cea-5eeb-9df8-fe2b6e2dfa48"
+   ]
+  },
+  {
+   "type": "power_pin_not_driven",
+   "severity": "error",
+   "items": [
+    "7acd75de-1751-513e-960a-ecd05adf20d9"
+   ]
+  },
+  {
+   "type": "power_pin_not_driven",
+   "severity": "error",
+   "items": [
+    "7bc37f81-53bd-5d51-8904-d169d399b90c"
+   ]
+  },
+  {
+   "type": "power_pin_not_driven",
+   "severity": "error",
+   "items": [
+    "7e6af948-4f1d-5a0b-80c4-d53e85c47900"
+   ]
+  },
+  {
+   "type": "power_pin_not_driven",
+   "severity": "error",
+   "items": [
+    "8432671e-eaa1-583b-a6b1-9b6087be3fa9"
+   ]
+  },
+  {
+   "type": "power_pin_not_driven",
+   "severity": "error",
+   "items": [
+    "845ec71a-542b-553a-b408-a9ac08251eef"
+   ]
+  },
+  {
+   "type": "power_pin_not_driven",
+   "severity": "error",
+   "items": [
+    "85718952-a00f-50d5-a11b-9db7080affae"
+   ]
+  },
+  {
+   "type": "power_pin_not_driven",
+   "severity": "error",
+   "items": [
+    "8f65ab53-2240-5d18-814b-95b8800981a7"
+   ]
+  },
+  {
+   "type": "power_pin_not_driven",
+   "severity": "error",
+   "items": [
+    "9471d697-0aac-5715-bd95-ddd838d3c70c"
+   ]
+  },
+  {
+   "type": "power_pin_not_driven",
+   "severity": "error",
+   "items": [
+    "ae075834-5c59-57e8-bde7-ee89ffa1222e"
+   ]
+  },
+  {
+   "type": "power_pin_not_driven",
+   "severity": "error",
+   "items": [
+    "b30ffb2a-ae44-5252-99dd-bdea6938a912"
+   ]
+  },
+  {
+   "type": "power_pin_not_driven",
+   "severity": "error",
+   "items": [
+    "b605ab10-eed8-5faf-af7a-ddbd966e4de4"
+   ]
+  },
+  {
+   "type": "power_pin_not_driven",
+   "severity": "error",
+   "items": [
+    "c092f012-7fbd-5986-a152-27f2f1ca9b5a"
+   ]
+  },
+  {
+   "type": "power_pin_not_driven",
+   "severity": "error",
+   "items": [
+    "c294bba0-56e7-5310-b99c-9867f472bf0d"
+   ]
+  },
+  {
+   "type": "power_pin_not_driven",
+   "severity": "error",
+   "items": [
+    "cb84e07f-11e8-5d74-a9bc-013e2ecf3c30"
+   ]
+  },
+  {
+   "type": "power_pin_not_driven",
+   "severity": "error",
+   "items": [
+    "cfad0359-ebda-5a04-bdd9-24d674a9db92"
+   ]
+  },
+  {
+   "type": "power_pin_not_driven",
+   "severity": "error",
+   "items": [
+    "e31cf6f5-ebdb-5ae8-bd63-60b4feb1136e"
+   ]
+  },
+  {
+   "type": "power_pin_not_driven",
+   "severity": "error",
+   "items": [
+    "f18e919d-5f71-5044-8936-ae7647539b47"
+   ]
+  },
+  {
+   "type": "power_pin_not_driven",
+   "severity": "error",
+   "items": [
+    "f3d7017b-7683-54a5-ab2d-34d4fc931ad1"
+   ]
+  },
+  {
+   "type": "same_local_global_label",
+   "severity": "warning",
+   "items": [
+    "64b74f74-431b-5b27-b10b-93dc9512ee60",
+    "0ecee341-ec6a-56ab-bfc6-5f3d067d4155"
+   ]
+  },
+  {
+   "type": "similar_label_and_power",
+   "severity": "warning",
+   "items": [
+    "4a509a6a-b310-5849-be28-4151c3efa576",
+    "51afa141-ab0e-5fca-87b6-9529ad4efccf"
+   ]
+  },
+  {
+   "type": "similar_labels",
+   "severity": "warning",
+   "items": [
+    "00c4db8c-a09f-5e48-bef2-27c0d4fcb47f",
+    "49003052-5589-5809-9239-611fb78fdf6b"
+   ]
+  },
+  {
+   "type": "similar_power",
+   "severity": "warning",
+   "items": [
+    "7acd75de-1751-513e-960a-ecd05adf20d9",
+    "8432671e-eaa1-583b-a6b1-9b6087be3fa9"
+   ]
+  },
+  {
+   "type": "single_global_label",
+   "severity": "warning",
+   "items": [
+    "64b74f74-431b-5b27-b10b-93dc9512ee60"
+   ]
+  },
+  {
+   "type": "single_global_label",
+   "severity": "warning",
+   "items": [
+    "b6afec7b-1ad9-5c9f-8812-db9c48c27a70"
+   ]
+  },
+  {
+   "type": "single_global_label",
+   "severity": "warning",
+   "items": [
+    "c4d90726-9ec6-5a38-a0a3-b3af7d7d601b"
+   ]
+  },
+  {
+   "type": "single_global_label",
+   "severity": "warning",
+   "items": [
+    "dec2de73-d8ca-58ed-bb07-187cc3800efe"
+   ]
+  },
+  {
+   "type": "unconnected_wire_endpoint",
+   "severity": "warning",
+   "items": [
+    "05b13a3e-7d9a-542c-a01d-2d3e9c8c8636"
+   ]
+  },
+  {
+   "type": "unconnected_wire_endpoint",
+   "severity": "warning",
+   "items": [
+    "05b13a3e-7d9a-542c-a01d-2d3e9c8c8636"
+   ]
+  },
+  {
+   "type": "unconnected_wire_endpoint",
+   "severity": "warning",
+   "items": [
+    "0b87a3c3-ea3f-5d54-90a8-019296fd8bff"
+   ]
+  },
+  {
+   "type": "unconnected_wire_endpoint",
+   "severity": "warning",
+   "items": [
+    "11d3d94f-2e80-5f7f-83fe-79e833c3383b"
+   ]
+  },
+  {
+   "type": "unconnected_wire_endpoint",
+   "severity": "warning",
+   "items": [
+    "11d3d94f-2e80-5f7f-83fe-79e833c3383b"
+   ]
+  },
+  {
+   "type": "unconnected_wire_endpoint",
+   "severity": "warning",
+   "items": [
+    "1875b160-0696-52c5-8362-bf18d4d2ee5d"
+   ]
+  },
+  {
+   "type": "unconnected_wire_endpoint",
+   "severity": "warning",
+   "items": [
+    "2a53f2e9-cacd-53e7-a0d3-a43bf59fc3e7"
+   ]
+  },
+  {
+   "type": "unconnected_wire_endpoint",
+   "severity": "warning",
+   "items": [
+    "3c6c8b2f-60d5-5775-a821-a4f8ad827da6"
+   ]
+  },
+  {
+   "type": "unconnected_wire_endpoint",
+   "severity": "warning",
+   "items": [
+    "54d7d326-9352-5960-94d2-77d8e557010c"
+   ]
+  },
+  {
+   "type": "unconnected_wire_endpoint",
+   "severity": "warning",
+   "items": [
+    "562cf876-bdad-50c5-a844-1174b1c0736e"
+   ]
+  },
+  {
+   "type": "unconnected_wire_endpoint",
+   "severity": "warning",
+   "items": [
+    "562cf876-bdad-50c5-a844-1174b1c0736e"
+   ]
+  },
+  {
+   "type": "unconnected_wire_endpoint",
+   "severity": "warning",
+   "items": [
+    "5ee6f6b7-3330-536c-9991-e78e9fe6516e"
+   ]
+  },
+  {
+   "type": "unconnected_wire_endpoint",
+   "severity": "warning",
+   "items": [
+    "5fefdf99-a4bf-5ffb-a62b-1eccf0e4f73e"
+   ]
+  },
+  {
+   "type": "unconnected_wire_endpoint",
+   "severity": "warning",
+   "items": [
+    "6dba067c-0bc5-5211-a2fc-06f0b1bda981"
+   ]
+  },
+  {
+   "type": "unconnected_wire_endpoint",
+   "severity": "warning",
+   "items": [
+    "6dba067c-0bc5-5211-a2fc-06f0b1bda981"
+   ]
+  },
+  {
+   "type": "unconnected_wire_endpoint",
+   "severity": "warning",
+   "items": [
+    "74697c53-0928-5e42-bd5e-7e16d753a8d9"
+   ]
+  },
+  {
+   "type": "unconnected_wire_endpoint",
+   "severity": "warning",
+   "items": [
+    "847beb66-04f2-5cce-ae66-1b07878d2676"
+   ]
+  },
+  {
+   "type": "unconnected_wire_endpoint",
+   "severity": "warning",
+   "items": [
+    "9c6af96a-8c76-510d-9ec2-7c5f593848bb"
+   ]
+  },
+  {
+   "type": "unconnected_wire_endpoint",
+   "severity": "warning",
+   "items": [
+    "9de25cbc-b7fd-55d6-b0a3-ca723d8668c7"
+   ]
+  },
+  {
+   "type": "unconnected_wire_endpoint",
+   "severity": "warning",
+   "items": [
+    "b84b81d0-8ba5-582d-8b9b-4a05e7d6404e"
+   ]
+  },
+  {
+   "type": "unconnected_wire_endpoint",
+   "severity": "warning",
+   "items": [
+    "c1ff9b54-dfc0-5f4e-912b-574ace66f27e"
+   ]
+  },
+  {
+   "type": "unconnected_wire_endpoint",
+   "severity": "warning",
+   "items": [
+    "cae63135-9547-58f6-9aae-6939364f6880"
+   ]
+  },
+  {
+   "type": "unconnected_wire_endpoint",
+   "severity": "warning",
+   "items": [
+    "cfdff7ec-f36f-52d7-908b-e6501133ebe7"
+   ]
+  },
+  {
+   "type": "unconnected_wire_endpoint",
+   "severity": "warning",
+   "items": [
+    "e602427c-a5fe-51a7-be30-e8391d7b627b"
+   ]
+  },
+  {
+   "type": "wire_dangling",
+   "severity": "error",
+   "items": [
+    "05b13a3e-7d9a-542c-a01d-2d3e9c8c8636"
+   ]
+  },
+  {
+   "type": "wire_dangling",
+   "severity": "error",
+   "items": [
+    "11d3d94f-2e80-5f7f-83fe-79e833c3383b"
+   ]
+  },
+  {
+   "type": "wire_dangling",
+   "severity": "error",
+   "items": [
+    "562cf876-bdad-50c5-a844-1174b1c0736e"
+   ]
+  },
+  {
+   "type": "wire_dangling",
+   "severity": "error",
+   "items": [
+    "5fefdf99-a4bf-5ffb-a62b-1eccf0e4f73e",
+    "3c6c8b2f-60d5-5775-a821-a4f8ad827da6"
+   ]
+  },
+  {
+   "type": "wire_dangling",
+   "severity": "error",
+   "items": [
+    "6994f159-2002-5506-ae83-832ddad2ef17",
+    "5ee6f6b7-3330-536c-9991-e78e9fe6516e"
+   ]
+  },
+  {
+   "type": "wire_dangling",
+   "severity": "error",
+   "items": [
+    "9de25cbc-b7fd-55d6-b0a3-ca723d8668c7"
+   ]
+  },
+  {
+   "type": "wire_dangling",
+   "severity": "error",
+   "items": [
+    "dcb7feac-8818-52a8-9557-ddbe5a2be4db"
+   ]
+  }
+ ]
+}

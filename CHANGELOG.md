@@ -50,6 +50,39 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   size the parts needed.
 
 ### Added
+- `kicad_cli/fileformat/erc.py` checks a design's electrical rules as
+  KiCad's ERC does, for 19 of KiCad 10's 44 rules: unconnected pins, nets
+  nothing drives, conflicting pin types, no-connect flags, dangling and
+  isolated labels, wires to nothing and unconnected wire ends, several names
+  on one net, labels differing only in case, global labels used once, ends
+  off the connection grid, four-way junctions and labels on several wires.
+  The project's rule severities and pin conflict matrix are honoured. No
+  command uses it yet; the other 25 rules are listed as not checked.
+
+  Every rule was measured on `tests/fixtures/erc/`, a design drawn to ask
+  KiCad's ERC one question per case, 169 of them. Several answers are not
+  what the drawing suggests:
+
+  - A pin with only a wire to nowhere is "not connected"; a pin with a
+    label is not, even when nothing else carries the label.
+  - A net nothing drives is reported once, by the pin whose reference sorts
+    first -- #PWR2 before #PWR11 -- and power inputs before inputs.
+    Unspecified, open-collector and open-emitter pins do not drive.
+  - Conflicting pins are reported in pairs: each pin with the nearest one
+    it conflicts with, however mild; three outputs on one wire are two
+    findings, not three.
+  - A label on a net with no pin is dangling and one with a single pin is
+    isolated -- but if a label of the net floats on nothing, only that one
+    is reported.
+  - A no-connect flag on a wire's end marks the wire, and is not "connected"
+    even when the wire reaches many pins; on a pin, it is.
+  - A wire's end joined to nothing is reported once per sheet file; an end
+    off the grid, for every placement of the sheet.
+
+  On KiCad's 35 demo projects it finds 2047 of the 2049 violations KiCad's
+  ERC finds under these rules, and nothing KiCad does not. The two are
+  labels on stubs off an aliased bus on vme-wren, which KiCad calls
+  dangling and this finds connected.
 - `kicad_cli/fileformat/schematic.py` and `circuit.py` read a design's
   schematics and work out its nets: which pins are joined, and what each net
   is called. No command uses them yet. On every project KiCad ships as a

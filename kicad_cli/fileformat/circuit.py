@@ -227,6 +227,26 @@ def _on_segment(p: Point, a: Point, b: Point) -> bool:
     return min(ax, bx) <= px <= max(ax, bx) and min(ay, by) <= py <= max(ay, by)
 
 
+@dataclass
+class Graph:
+    """What is joined to what, three ways: by the whole circuit (`net`), by
+    what is drawn on a sheet and the hierarchy's edges (`drawn`), and by what
+    is drawn on one sheet alone (`sheet`) -- a subgraph, in KiCad's word.
+
+    Items are keyed ("p", path, i) for a placed pin, ("w", path, i) a wire,
+    ("b", path, i) a bus, ("l", path, i) a label, ("s", path, sheet uuid, i)
+    a sheet pin and ("nc", path, i) a no-connect flag; `items` has each one.
+    """
+
+    net: _UnionFind
+    drawn: _UnionFind
+    sheet: _UnionFind
+    items: dict
+    pins_at: dict
+    names: dict
+    strong: list
+
+
 def connect(design: Design, keep_empty: bool = False) -> list[Net]:
     """Every net of the design, pins and names.
 
@@ -235,6 +255,39 @@ def connect(design: Design, keep_empty: bool = False) -> list[Net]:
     nets that have a name and no pins -- a label on a wire to nowhere -- are
     listed too: KiCad numbers them.
     """
+    found = graph(design)
+    uf, pins_at, names = found.net, found.pins_at, found.names
+    groups: dict = defaultdict(list)
+    for key in uf.parent:
+        groups[uf.find(key)].append(key)
+
+    nets = []
+    for keys in groups.values():
+        pins = [pins_at[k] for k in keys if k in pins_at and not pins_at[k].power_symbol]
+        named = [n for k in keys for n in names.get(k, [])]
+        if not pins and not (keep_empty and named):
+            continue
+        flagged = any(k[0] == "nc" for k in keys)
+        nets.append(Net(name="", pins=pins, names=named, no_connect=flagged))
+    for net in nets:
+        net.name = _name(net)
+        # A pin every unit of a part carries -- its supply -- is placed once
+        # per unit, and a net lists it once. (Units not joined to each other
+        # put their copies on different nets, and KiCad lists it on each.)
+        seen: set[tuple[str, str]] = set()
+        unique = []
+        for pp in net.pins:
+            if (pp.reference, pp.pin.number) not in seen:
+                seen.add((pp.reference, pp.pin.number))
+                unique.append(pp)
+        net.pins = unique
+    _deduplicate(nets)
+    nets.sort(key=lambda n: natural_key(n.name))
+    return nets
+
+
+def graph(design: Design) -> Graph:
+    """What is joined to what in the design; see `Graph`."""
     uf = _UnionFind()
     names: dict = defaultdict(list)  # item key -> [(priority, name)]
     pins_at: dict = {}  # item key -> PlacedPin
@@ -258,8 +311,10 @@ def connect(design: Design, keep_empty: bool = False) -> list[Net]:
     # What touches what on one sheet, before names join anything: a
     # no-connect flag speaks for that much and no more.
     drawn = _UnionFind()
-    both = _Both(uf, drawn)
+    sheet_only = _UnionFind()
+    both = _Both(uf, drawn, sheet_only)
     strong: list = []  # keys of power symbol pins and global labels
+    items: dict = {}
 
     for instance in design.instances:
         sch = instance.schematic
@@ -271,15 +326,20 @@ def connect(design: Design, keep_empty: bool = False) -> list[Net]:
         bus_keys = [("b", path, i) for i in range(len(buses))]
         for key in wire_keys + bus_keys:
             uf.add(key)
+            sheet_only.add(key)
+        items.update(zip(wire_keys, wires, strict=True))
+        items.update(zip(bus_keys, buses, strict=True))
         points: dict[Point, list] = defaultdict(list)  # things that attach at a point
 
         def attach(key, point, points=points):
             uf.add(key)
+            sheet_only.add(key)
             points[point].append(key)
 
         for pp_index, pp in enumerate(design.placed_pins(instance)):
             key = ("p", path, pp_index)
             pins_at[key] = pp
+            items[key] = pp
             attach(key, pp.position)
             lib = sch.library.get(pp.symbol.library_name)
             if lib is not None and lib.power and pp.pin.electrical == "power_in":
@@ -307,6 +367,7 @@ def connect(design: Design, keep_empty: bool = False) -> list[Net]:
         label_bus = {}  # label index -> (bus key, members), for labels on a bus
         for li, label in enumerate(sch.labels):
             key = ("l", path, li)
+            items[key] = label
             text = escape(label.text)
             members = bus_members(label.text, aliases)
             if members is not None:
@@ -356,13 +417,15 @@ def connect(design: Design, keep_empty: bool = False) -> list[Net]:
                     sheet_bus.append((bus, members))
                     continue
                 key = ("s", path, sheet.uuid, pi)
+                items[key] = (sheet, pin)
                 attach(key, pin.position)
                 names[key].append((PRIORITY["sheet_pin"], f"{instance.name}{sheet.name}/{text}"))
                 sheet_pins[(child_path, text)] = key
 
         # A no-connect flag joins what it marks, and says so of the whole net.
-        for ni, point in enumerate(sch.no_connects):
+        for ni, (point, flag) in enumerate(zip(sch.no_connects, sch.no_connect_uuids, strict=True)):
             attach(("nc", path, ni), point)
+            items[("nc", path, ni)] = (point, flag)
 
         # A pin or a sheet pin joins a wire at the wire's end, or anywhere a
         # junction marks.
@@ -397,10 +460,12 @@ def connect(design: Design, keep_empty: bool = False) -> list[Net]:
             for member_key, member_name in members:
                 uf.union(_member(uf, bus, member_key), local(path, escape(member_name)))
 
+    # Across a sheet's edge: the circuit and what is drawn, not the sheet.
+    edge = _Both(uf, drawn)
     for (child_path, text), key in hier.items():
         pin_key = sheet_pins.get((child_path, text))
         if pin_key is not None:
-            both.union(key, pin_key)
+            edge.union(key, pin_key)
     # Across a sheet boundary, a bus's members join the parent's bus's
     # members of the same name -- the prefix before the braces may differ.
     for (child_path, text), (child_bus, members) in bus_hier.items():
@@ -425,45 +490,19 @@ def connect(design: Design, keep_empty: bool = False) -> list[Net]:
     for key, pp in pins_at.items():
         root = drawn.find(key)
         pp.flagged = root in flagged and len(where[root]) == 1
-
-    groups: dict = defaultdict(list)
-    for key in uf.parent:
-        groups[uf.find(key)].append(key)
-
-    nets = []
-    for keys in groups.values():
-        pins = [pins_at[k] for k in keys if k in pins_at and not pins_at[k].power_symbol]
-        found = [n for k in keys for n in names.get(k, [])]
-        if not pins and not (keep_empty and found):
-            continue
-        flagged = any(k[0] == "nc" for k in keys)
-        nets.append(Net(name="", pins=pins, names=found, no_connect=flagged))
-    for net in nets:
-        net.name = _name(net)
-        # A pin every unit of a part carries -- its supply -- is placed once
-        # per unit, and a net lists it once. (Units not joined to each other
-        # put their copies on different nets, and KiCad lists it on each.)
-        seen: set[tuple[str, str]] = set()
-        unique = []
-        for pp in net.pins:
-            if (pp.reference, pp.pin.number) not in seen:
-                seen.add((pp.reference, pp.pin.number))
-                unique.append(pp)
-        net.pins = unique
-    _deduplicate(nets)
-    nets.sort(key=lambda n: natural_key(n.name))
-    return nets
+    return Graph(uf, drawn, sheet_only, items, pins_at, names, strong)
 
 
 class _Both:
-    """Joins in two union-finds at once: the circuit, and what is drawn."""
+    """Joins in several union-finds at once: the circuit, what is drawn, and
+    what is drawn on the sheet alone."""
 
-    def __init__(self, first: _UnionFind, second: _UnionFind) -> None:
-        self.first, self.second = first, second
+    def __init__(self, *finds: _UnionFind) -> None:
+        self.finds = finds
 
     def union(self, a, b) -> None:
-        self.first.union(a, b)
-        self.second.union(a, b)
+        for find in self.finds:
+            find.union(a, b)
 
 
 def _ends(keys: list, segments: list, uf) -> dict:

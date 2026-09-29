@@ -112,6 +112,8 @@ class Symbol:
     node: List | None = field(default=None, repr=False)
     # The alternate function chosen for a pin, by pin number.
     alternates: dict[str, str] = field(default_factory=dict)
+    # Each pin's own uuid, by number: what ERC names a pin by.
+    pin_uuids: dict[str, str] = field(default_factory=dict)
 
     @property
     def library_name(self) -> str:
@@ -268,6 +270,11 @@ class Schematic:
         return [_at(n) for n in self.root.find_all("no_connect")]
 
     @property
+    def no_connect_uuids(self) -> list[str]:
+        """The uuid of each no-connect flag, in the order `no_connects` lists them."""
+        return [uuid_of(n) for n in self.root.find_all("no_connect")]
+
+    @property
     def labels(self) -> list[Label]:
         out = []
         for node in self.root.lists():
@@ -320,6 +327,12 @@ class Schematic:
 
 
 # -- reading --------------------------------------------------------------------------
+
+
+def uuid_of(node: List | None) -> str:
+    """An item's own uuid, or nothing."""
+    found = node.find("uuid") if node is not None else None
+    return (found.value(1) or "") if found is not None else ""
 
 
 def _at(node: List) -> Point:
@@ -476,6 +489,11 @@ def _symbol(node: List, legacy: bool = False) -> Symbol:
             for pin in node.find_all("pin")
             if pin.find("alternate") is not None
         },
+        pin_uuids={
+            (pin.value(1) or ""): pin.find("uuid").value(1) or ""
+            for pin in node.find_all("pin")
+            if pin.find("uuid") is not None
+        },
     )
 
 
@@ -492,4 +510,5 @@ __all__ = [
     "Symbol",
     "Wire",
     "text",
+    "uuid_of",
 ]
