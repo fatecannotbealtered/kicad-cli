@@ -16,13 +16,12 @@ from __future__ import annotations
 
 import json
 import os
-import shutil
 import subprocess
 import sys
 from pathlib import Path
 
 import pytest
-from kicad_demos import DEMOS, SKIP_REASON
+from kicad_demos import DEMOS, SKIP_REASON, copy_demo
 
 REPO = Path(__file__).resolve().parents[1]
 
@@ -55,7 +54,7 @@ def check(argv: list[str]) -> dict:
 
 
 def demo(name: str, dest: Path) -> Path:
-    shutil.copytree(DEMOS / name, dest)
+    copy_demo(DEMOS / name, dest)
     return next(dest.glob("*.kicad_pcb"))
 
 

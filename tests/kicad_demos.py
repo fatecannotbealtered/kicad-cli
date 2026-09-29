@@ -14,6 +14,7 @@ unusual install.
 from __future__ import annotations
 
 import os
+import shutil
 import sys
 from pathlib import Path
 
@@ -67,3 +68,23 @@ SKIP_REASON = (
     f"KiCad demo projects not found (looked next to the resolved KiCad; "
     f"set KICAD_CLI_DEMOS to override). Tried: {DEMOS}"
 )
+
+
+# A KiCad that crashes while it has a project open leaves "~NAME.kicad_pro.lck"
+# beside it, and the write commands refuse a board whose project looks open.
+# Launched on the installed demos themselves, KiCad's binary left a dozen of
+# them there, and every test that copied a demo copied the lock too.
+LOCKS = shutil.ignore_patterns("~*.lck")
+# What KiCad's binary does not read to export a netlist or check a schematic:
+# 3D models, renders and documents, most of the demos' bytes.
+NOT_READ = shutil.ignore_patterns(
+    "~*.lck", "*.step", "*.stp", "*.wrl", "*.pdf", "*.png", "*.jpg", "*.3dshapes", "3d_lib"
+)
+
+
+def copy_demo(source: Path, dest: Path, *, whole: bool = True) -> Path:
+    """A demo project copied for a test to use or change, without lock files.
+    `whole=False` leaves out what only a person reads, for a quick copy that
+    KiCad's binary is run on instead of the installed original."""
+    shutil.copytree(source, dest, ignore=LOCKS if whole else NOT_READ)
+    return dest
