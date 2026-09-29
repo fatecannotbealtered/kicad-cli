@@ -8,6 +8,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Changed
+- `sch sync-preview` and `sch relink` need no KiCad. The parts they hold a
+  board up to come from this tool's own netlist, where they asked KiCad's
+  binary for its export; on all 35 of KiCad's demo projects the records are
+  the export's, part for part -- value, footprint, fields, properties, sheet
+  and every unit's uuid (`tests/test_netlist_read.py`). `sch relink` reads
+  the board back before and after its edit with this tool's reader instead
+  of pcbnew, and on every board KiCad ships that reader sees what pcbnew
+  sees: each footprint's link, the references carrying two, and the counts
+  of footprints, tracks, zones, drawings and nets
+  (`tests/test_native_links.py`). Its `verified.kicad_reads_back_what_we_wrote`
+  is `verified.reads_back_what_we_wrote` now, since KiCad is not what reads
+  it.
+- The netlist this tool writes lists parts in KiCad's order -- sheet by
+  sheet in page order, by reference within a sheet -- and every unit of a
+  part, placed or not, with its pins: KiCad's export, part for part and in
+  order, on all 35 demo projects. A page number two sheets share is
+  renumbered first, as KiCad does: the second one met gets the lowest number
+  no sheet has (CM5_MINIMA_3 has two page 7s; vme-wren two 26s and two 33s).
 - `sch create` draws a schematic a person can read, in this process, and
   SKiDL is gone. Every net is a label or a power symbol at the pins it joins
   (neighbouring pins on one supply share a symbol), unused pins carry a
@@ -307,6 +325,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   is `E_NOT_FOUND` rather than a quiet no-op.
 
 ### Fixed
+- `sch sync-preview` and `sch relink` count again only on a schematic whose
+  annotation KiCad accepts. They were meant to refuse when KiCad's netlist
+  export warned of annotation errors, and looked for the warning on stderr;
+  KiCad 10 prints it on stdout, so the refusal never came. A reference
+  placed on two sheets went through, and the count with it. The annotation
+  is checked here now (`kicad_cli/fileformat/annotation.py`) against what
+  makes KiCad's export warn, measured: a reference not numbered, one
+  reference and unit placed twice -- power symbols and a second instance of
+  a sheet included -- units of a part with different values, and a unit the
+  part does not have. The `netlist_exported_cleanly` check lists them.
+- A sheet whose file is missing no longer drops out of `sch sync-preview`
+  in silence. KiCad's export leaves such a sheet's parts out without a word,
+  so every one of them read as a footprint the update would find no symbol
+  for. `netlist_exported_cleanly` fails and names the sheet; `sch relink`
+  names it beside the footprints it cannot link.
 - `board audit` on a file that is not a board says so: `E_VALIDATION` with the
   reason -- no expression, a schematic, no `(version ...)`, unbalanced. The
   pcbnew version could not: pcbnew returned nothing for a file it could not

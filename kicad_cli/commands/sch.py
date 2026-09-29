@@ -12,7 +12,10 @@ import time
 from pathlib import Path
 from typing import Any
 
-from .. import envelope, kicad_env, netlist, schematic, sexpr
+from .. import envelope, netlist, schematic, sexpr
+from ..fileformat.board import BoardError
+from ..fileformat.sexpr import SexprError
+from ..native import links
 from ..native import sch_create as native_sch
 
 
@@ -358,13 +361,16 @@ def link(args: dict[str, Any]) -> None:
     envelope.ok(_analyse(_board_path(args)))
 
 
-def _netlist_paths(board: Path) -> dict[str, dict[str, Any]]:
-    """Ask KiCad for the path it will look for, instead of reconstructing it.
+def _netlist_paths(board: Path) -> tuple[dict[str, dict[str, Any]], list[str]]:
+    """The path the updater will look for each part under, from the netlist,
+    and the sheets whose file is missing.
 
     ``sch link`` derives a footprint path from the schematic files alone, and
-    that derivation is verified. Writing is a different bar: the netlist
-    exporter feeds the same updater that will read this field, so taking the
-    value from there removes a whole class of ways to be subtly wrong.
+    that derivation is verified. Writing is a different bar: the netlist feeds
+    the same updater that will read this field, so taking the value from there
+    removes a whole class of ways to be subtly wrong. The netlist is this
+    tool's own; its parts, uuids included, are KiCad's on all 35 of KiCad's
+    demo projects.
 
     One fact worth stating, because it is not obvious and it decides what is
     safe to write: a multi-unit part exports *several* uuids, one per unit --
@@ -374,19 +380,28 @@ def _netlist_paths(board: Path) -> dict[str, dict[str, Any]]:
     which unit it happens to be is not predictable from the files. So there is
     nothing to choose here: any unit is a correct answer.
     """
-    node, stderr = netlist.export(board.with_suffix(".kicad_sch"))
-    if "annotat" in stderr.lower() or "批注" in stderr:
+    found = netlist.read(board.with_suffix(".kicad_sch"))
+    if found.annotation:
         envelope.fail(
             "E_VALIDATION",
-            "the schematic is not fully annotated; KiCad would refuse the update too",
-            {"stderr": stderr[-400:]},
+            "the schematic's annotation has errors; KiCad would refuse the update too",
+            {"annotation_errors": [p.to_dict() for p in found.annotation][:20]},
         )
 
-    return {
+    paths = {
         c["ref"]: {"path": c["paths"][0], "units": len(c["paths"]), "accepted": c["paths"]}
-        for c in netlist.components(node)
+        for c in found.components
         if c["paths"]
     }
+    return paths, found.missing_sheets
+
+
+def _read_back(board: Path) -> dict[str, Any] | str:
+    """The board's links and census, or why it does not read as a board."""
+    try:
+        return links.read(board)
+    except (SexprError, BoardError, UnicodeDecodeError, OSError) as exc:
+        return f"{type(exc).__name__}: {exc}"[:300]
 
 
 def _read_raw(path: Path) -> str:
@@ -541,7 +556,7 @@ def relink(args: dict[str, Any]) -> None:
             }
         )
 
-    available = _netlist_paths(board)
+    available, missing_sheets = _netlist_paths(board)
     plan, unresolved = [], []
     for fp in targets:
         entry = available.get(fp["ref"])
@@ -559,6 +574,9 @@ def relink(args: dict[str, Any]) -> None:
                 "why": "these are on the board but not in the netlist, so there is no "
                 "symbol to link them to; relink writes nothing rather than fix part of "
                 "the board and leave the rest inconsistent",
+                # A sheet whose file is missing takes its parts out of the
+                # netlist: the likeliest reason for a list like this one.
+                "missing_sheets": missing_sheets,
             },
         )
 
@@ -579,13 +597,12 @@ def relink(args: dict[str, Any]) -> None:
     _write_raw(backup, before)
 
     wanted = {p["ref"]: p["path"] for p in plan}
-    baseline = kicad_env.run_payload("verify_links", ["--board", str(board)])
-    if not baseline.get("ok"):
-        err = baseline.get("error") or {}
+    baseline = _read_back(board)
+    if isinstance(baseline, str):
         envelope.fail(
-            err.get("code", "E_UNKNOWN"),
-            "could not read the board with KiCad before editing it",
-            {**(err.get("details") or {}), "nothing_written": True},
+            "E_VALIDATION",
+            "could not read the board before editing it",
+            {"board": str(board), "reason": baseline, "nothing_written": True},
         )
 
     after, inserted, missed = _insert_paths(before, wanted)
@@ -609,34 +626,34 @@ def relink(args: dict[str, Any]) -> None:
             {"unexpected_diff": unexpected},
         )
 
-    # KiCad's own parser is the judge of what we wrote. Reading the file back
-    # with pcbnew both proves it still parses and proves the links are the ones
-    # we planned -- our own parser agreeing with itself would prove nothing.
-    check = kicad_env.run_payload("verify_links", ["--board", str(board)])
-    if not check.get("ok"):
-        err = check.get("error") or {}
+    # The file is read back whole, as a board, by the reader that holds
+    # pcbnew's reading of every board KiCad ships (tests/test_native_links.py):
+    # it must still be a board, carry exactly the links planned, and hold as
+    # many of everything as before. The text-level check above only proved
+    # which lines changed.
+    check = _read_back(board)
+    if isinstance(check, str):
         put_back(
             "E_INTEGRITY",
-            "KiCad could not read the board after the edit; the board has been put back",
-            err.get("details") or {"payload_error": err.get("message")},
+            "the board no longer reads after the edit; the board has been put back",
+            {"reason": check},
         )
+        raise AssertionError("unreachable")
 
-    seen = check["data"]["links"]
-    wrong = {
-        r: {"wanted": p, "kicad_read": seen.get(r)} for r, p in wanted.items() if seen.get(r) != p
-    }
+    seen = check["links"]
+    wrong = {r: {"wanted": p, "read": seen.get(r)} for r, p in wanted.items() if seen.get(r) != p}
     if wrong:
         put_back(
             "E_INTEGRITY",
-            "KiCad read back a different link than we wrote; the board has been put back",
+            "the board reads back a different link than we wrote; the board has been put back",
             {"disagreements": dict(list(wrong.items())[:10]), "count": len(wrong)},
         )
-    census_same = check["data"]["census"] == baseline["data"]["census"]
+    census_same = check["census"] == baseline["census"]
     if not census_same:
         put_back(
             "E_INTEGRITY",
             "the object counts changed; the board has been put back",
-            {"before": baseline["data"]["census"], "after": check["data"]["census"]},
+            {"before": baseline["census"], "after": check["census"]},
         )
 
     recheck = _analyse(board)
@@ -650,8 +667,8 @@ def relink(args: dict[str, Any]) -> None:
             "verified": {
                 "diff_contains_only_link_fields": clean,
                 "object_counts_unchanged": census_same,
-                "kicad_reads_back_what_we_wrote": True,
-                "census": check["data"]["census"],
+                "reads_back_what_we_wrote": True,
+                "census": check["census"],
                 "link_status_after": recheck["status"],
                 "unlinked_after": recheck["unlinked"],
             },

@@ -73,10 +73,10 @@ class Netlist:
     nets: list[NetEntry]
 
 
-def build(root: str | Path) -> Netlist:
-    design = Design(root)
+def build(root: str | Path | Design) -> Netlist:
+    design = root if isinstance(root, Design) else Design(root)
     return Netlist(
-        source=str(Path(root).resolve()),
+        source=str(design.root_path.resolve()),
         components=components(design),
         nets=nets(design, connect(design, keep_empty=True)),
     )
@@ -88,9 +88,13 @@ def build(root: str | Path) -> Netlist:
 def components(design: Design) -> list[Component]:
     """One entry per reference. A part's units on one sheet are one component
     listing each unit's uuid; the sheet is the first, in page order, that has
-    one of its units -- units on other sheets are not listed."""
+    one of its units -- units on other sheets are not listed. Parts are listed
+    sheet by sheet in page order, by reference within a sheet."""
+    pages = design.pages()
+    order = sorted(design.instances, key=lambda i: natural_key(pages.get(i.path, "")))
+    rank = {instance.path: index for index, instance in enumerate(order)}
     found: dict[str, tuple[SheetInstance, list[tuple[Symbol, int]]]] = {}
-    for instance in sorted(design.instances, key=lambda i: natural_key(i.page or "")):
+    for instance in order:
         for symbol in instance.schematic.symbols:
             inst = symbol.instance(instance.path)
             reference = inst.reference if inst else symbol.properties.get("Reference", "")
@@ -105,7 +109,7 @@ def components(design: Design) -> list[Component]:
             if found[reference][0] is instance:
                 found[reference][1].append((symbol, unit))
     out = []
-    for reference in sorted(found, key=natural_key):
+    for reference in sorted(found, key=lambda r: (rank[found[r][0].path], natural_key(r))):
         instance, units = found[reference]
         placed = [(instance, symbol, unit) for symbol, unit in units]
         out.append(_component(reference, instance, units[0][0], placed))
@@ -146,13 +150,18 @@ def _component(reference, instance, symbol, placed) -> Component:
         lib, part = "", symbol.lib_name
     else:
         lib, _, part = symbol.lib_id.rpartition(":")
+    # Every unit the part has, placed or not, in order, with its pins: left
+    # to right, top to bottom in the library's drawing. Pins stacked at one
+    # point KiCad lists in an order its sort leaves to chance; here they keep
+    # the file's.
     units = []
-    if library is not None and library.unit_count > 1:
-        for _, sym, unit in placed:
-            pins = [p.number for p in library.pins_of(unit, sym.body_style)]
-            units.append((_unit_name(unit), pins))
-    elif library is not None:
-        units.append(("A", [p.number for p in library.pins_of(1, symbol.body_style)]))
+    if library is not None:
+        for unit in range(1, library.unit_count + 1):
+            pins = sorted(
+                library.pins_of(unit, symbol.body_style),
+                key=lambda p: (p.position[0], -p.position[1]),
+            )
+            units.append((_unit_name(unit), [p.number for p in pins]))
     return Component(
         ref=reference,
         value=expand(props.get("Value", ""), props, instance),

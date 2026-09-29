@@ -166,7 +166,7 @@ def _rows(comps: list[dict], fps: list[dict], sw: dict[str, bool]) -> dict[str, 
     }
 
 
-def _preflight(board: Path, comps: list[dict], fps: list[dict], stderr: str) -> list[dict]:
+def _preflight(board: Path, comps: list[dict], fps: list[dict], found: netlist.Read) -> list[dict]:
     """Conditions under which a count would be confidently wrong.
 
     Each of these produces a plausible number from a broken input, which is
@@ -187,14 +187,20 @@ def _preflight(board: Path, comps: list[dict], fps: list[dict], stderr: str) -> 
         }
     )
 
-    warned = "annotat" in stderr.lower() or "批注" in stderr
+    errors = [p.to_dict() for p in found.annotation]
     checks.append(
         {
             "id": "netlist_exported_cleanly",
-            "pass": bool(comps) and not warned,
-            "detail": "the netlist export writes a well-formed file and exits 0 even "
-            "when it has complaints; the only signal is on stderr",
-            "evidence": {"components": len(comps), "stderr": stderr[-300:] or "(quiet)"},
+            "pass": bool(comps) and not errors and not found.missing_sheets,
+            "detail": "the netlist was read from every sheet, and the annotation is one "
+            "KiCad accepts: with an annotation error -- a reference placed twice, units "
+            "of one part with different values -- KiCad refuses the update, and a sheet "
+            "whose file is missing leaves its parts out of every count without a word",
+            "evidence": {
+                "components": len(comps),
+                "annotation_errors": errors[:20],
+                "missing_sheets": found.missing_sheets[:20],
+            },
         }
     )
 
@@ -330,11 +336,11 @@ def preview(args: dict[str, Any]) -> None:
     schematic = (
         Path(str(args["schematic"])) if args.get("schematic") else board.with_suffix(".kicad_sch")
     )
-    node, stderr = netlist.export(schematic)
-    comps = netlist.components(node)
+    found = netlist.read(schematic)
+    comps = found.components
     fps = _board_footprints(board)
 
-    checks = _preflight(board, comps, fps, stderr)
+    checks = _preflight(board, comps, fps, found)
     blocking = [
         c
         for c in checks
@@ -391,7 +397,8 @@ def preview(args: dict[str, Any]) -> None:
             "status": "CLEAN" if not (rows["add"] or rows["remove"]) else "DESTRUCTIVE",
             "not_checked": [
                 "the dialog itself was never opened; every row here is computed from "
-                "KiCad's matching rule applied to the same netlist KiCad would use",
+                "KiCad's matching rule applied to this tool's own netlist of the "
+                "schematic, whose parts are KiCad's on all 35 of its demo projects",
                 "whether the library entries for any added or changed footprint resolve "
                 "on this machine -- a footprint KiCad cannot load produces an error row "
                 "instead of an add row"

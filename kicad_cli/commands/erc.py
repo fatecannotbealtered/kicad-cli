@@ -17,6 +17,7 @@ from __future__ import annotations
 
 import fnmatch
 import json
+import os
 import re
 import shutil
 import subprocess
@@ -26,7 +27,7 @@ from collections import Counter
 from pathlib import Path
 from typing import Any
 
-from .. import envelope, kicad_env, netlist, sexpr
+from .. import envelope, kicad_env, sexpr
 
 # The rules a freshly created KiCad 10 project has switched off. Measured, not
 # assumed: 9 of the 17 projects KiCad ships have exactly this set and no other
@@ -56,12 +57,50 @@ WHY_IT_MATTERS = {
 }
 
 
-def _run_erc(schematic: Path, env: dict[str, str] | None = None) -> dict[str, Any]:
-    """Run ERC, retrying the launch the way ``netlist.export`` does.
+_CONFIG_HOME: str | None = None
 
-    Same transient as the netlist export -- a process launch on Windows fails
-    now and then with an empty stderr and no output file, for reasons that have
-    nothing to do with the schematic. It went unhandled here, and `sch audit`
+
+def _isolated_env() -> dict[str, str]:
+    """Run KiCad's CLI against a throwaway config directory.
+
+    Every invocation rewrites ``kicad_common.json`` -- it stores the caller's
+    working directory there. That is a write into the user's KiCad settings,
+    and if the GUI is open at the time, two processes are writing the same
+    file. A read-only command has no business causing that, so we point
+    KICAD_CONFIG_HOME somewhere disposable.
+
+    One directory per process, not per call: pointing KiCad at an empty config
+    makes it rebuild its defaults, and doing that on every invocation is both
+    slow and a source of intermittent failures.
+    """
+    global _CONFIG_HOME
+    if _CONFIG_HOME is None:
+        _CONFIG_HOME = tempfile.mkdtemp(prefix="kicadcli-cfg-")
+        real = Path(os.environ.get("APPDATA", "")) / "kicad"
+        if real.is_dir():
+            # Seed from the user's own settings so library tables and paths
+            # resolve as they normally would; we only want the *writes* to land
+            # somewhere else. KICAD_CONFIG_HOME is used as the root itself --
+            # the version directory sits directly inside it -- so the contents
+            # are copied, not the directory. Getting this wrong is silent: KiCad
+            # simply rebuilds its defaults and the library tables go missing.
+            try:
+                shutil.copytree(real, _CONFIG_HOME, dirs_exist_ok=True)
+            except (OSError, shutil.Error):
+                pass  # falling back to KiCad's defaults is acceptable here
+    env = dict(os.environ)
+    env["KICAD_CONFIG_HOME"] = _CONFIG_HOME
+    return env
+
+
+def _run_erc(
+    schematic: Path, env: dict[str, str] | None = None, timeout: int = 1800
+) -> dict[str, Any]:
+    """Run ERC, retrying a launch that fails.
+
+    A process launch on Windows fails now and then with an empty stderr and no
+    output file, for reasons that have nothing to do with the schematic. It
+    went unhandled here, and `sch audit`
     runs ERC twice per call, so it had two chances per invocation to report a
     healthy schematic as E_IO. It flaked one full test run in three that way.
 
@@ -88,8 +127,8 @@ def _run_erc(schematic: Path, env: dict[str, str] | None = None) -> dict[str, An
                     str(schematic),
                 ],
                 capture_output=True,
-                timeout=1800,
-                env=env or netlist._isolated_env(),
+                timeout=timeout,
+                env=env or _isolated_env(),
             )
         except subprocess.TimeoutExpired:
             shutil.rmtree(tmp, ignore_errors=True)

@@ -1,8 +1,9 @@
 """Stands in for KiCad's own ``kicad-cli`` binary. See fake_upstream.py.
 
-Three subcommands are reached through this boundary: ``sch export netlist``,
-``sch erc`` and ``pcb drc``. Each writes its result to the path after ``-o``,
-which is the only part of the invocation this needs to understand.
+Two subcommands are reached through this boundary: ``sch erc`` and ``pcb
+drc``. Each writes its result to the path after ``-o``, which is the only part
+of the invocation this needs to understand. (``sch export netlist`` was a
+third, until this tool wrote its own netlists.)
 """
 
 from __future__ import annotations
@@ -13,7 +14,6 @@ import sys
 import time
 from pathlib import Path
 
-NETLIST = '(export (version "E")\n  (components)\n  (nets))\n'
 ERC = {"$schema": "fake", "source": "fake.kicad_sch", "sheets": []}
 DRC = {"$schema": "fake", "source": "fake.kicad_pcb", "violations": [], "unconnected_items": []}
 
@@ -78,7 +78,8 @@ def main() -> int:
     elif "drc" in argv:
         dest.write_text(json.dumps(DRC), encoding="utf-8")
     else:
-        dest.write_text(NETLIST, encoding="utf-8")
+        sys.stderr.write(f"fake kicad-cli: not a subcommand this tool uses: {argv[:3]}\n")
+        return 2
     return 0
 
 

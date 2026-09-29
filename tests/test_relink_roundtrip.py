@@ -18,6 +18,7 @@ import subprocess
 import sys
 from pathlib import Path
 
+import fake_upstream
 import pytest
 from kicad_demos import DEMOS, SKIP_REASON
 
@@ -34,12 +35,13 @@ CASES = [
 ]
 
 
-def run(*argv: str) -> dict:
+def run(*argv: str, env: dict | None = None) -> dict:
     proc = subprocess.run(
         [sys.executable, "-m", "kicad_cli.main", *argv, "--compact"],
         capture_output=True,
         cwd=REPO,
         timeout=1800,
+        env=env,
     )
     out = proc.stdout.decode("utf-8", "replace")
     for line in out.splitlines():
@@ -95,7 +97,7 @@ def test_relink_reproduces_kicads_own_paths(demo: str, tmp_path: Path) -> None:
     # there, the contract is membership, not equality.
     from kicad_cli.commands.sch import _netlist_paths
 
-    accepted = _netlist_paths(board)
+    accepted, _ = _netlist_paths(board)
     written = original_paths(board)
     assert set(written) == set(expected), "relink changed which footprints carry a link"
     for ref, want in expected.items():
@@ -137,3 +139,26 @@ def test_relink_refuses_when_a_footprint_has_no_symbol(tmp_path: Path) -> None:
     assert plan["ok"] is False
     assert plan["error"]["code"] == "E_CONFLICT"
     assert "R999" in plan["error"]["details"]["unresolved"]
+
+
+@pytest.mark.skipif(not DEMOS.exists(), reason=SKIP_REASON)
+def test_relink_needs_no_kicad(tmp_path: Path) -> None:
+    """The paths come from this tool's own netlist and the board is read back
+    by this tool's own reader. KiCad's binary and interpreter are stubs that
+    fail when called, and neither is called."""
+    work = tmp_path / "interf_u"
+    shutil.copytree(DEMOS / "interf_u", work)
+    board = next(p for p in work.glob("*.kicad_pcb"))
+    text = board.read_bytes().decode("utf-8")
+    board.write_bytes(
+        ("\n".join(ln for ln in text.splitlines() if not PATH_LINE.match(ln)) + "\n").encode()
+    )
+    env = fake_upstream.env(tmp_path / "kicad", "launch_fail")
+
+    plan = run("sch", "relink", "--board", str(board), "--dry-run", env=env)
+    token = plan["error"]["details"]["confirm_token"]
+    done = run("sch", "relink", "--board", str(board), "--confirm", token, env=env)
+    assert done["ok"] is True, done
+    assert done["data"]["status"] == "PASS"
+    assert done["data"]["verified"]["reads_back_what_we_wrote"] is True
+    assert fake_upstream.attempts(tmp_path / "kicad") == 0, "relink started KiCad after all"

@@ -1,134 +1,74 @@
-"""The schematic netlist, as KiCad itself produces it.
+"""The schematic's parts, as the commands that hold a board up to it read them.
 
-Several commands need to know what the schematic says. They could each parse
-the ``.kicad_sch`` files and derive it, and for read-only checks that is fine.
-But anything that predicts or changes what KiCad will do needs the same bytes
-KiCad uses, and that is this export: when the GUI updates a board it asks
-eeschema for a netlist over ``MAIL_SCH_GET_NETLIST``, produced by the same
-exporter the CLI drives here. Deriving it ourselves would be a second opinion
-where only the first one counts.
+`sch sync-preview` and `sch relink` need what "Update PCB from Schematic"
+reads: every part, with the uuids that link it to its footprint. They asked
+KiCad's binary for its netlist; this reads this tool's own
+(`kicad_cli/fileformat/netlist.py`), whose parts are KiCad's on all 35 of its
+demo projects (`tests/test_netlist_read.py`). Nothing here runs KiCad.
+
+Two things a count needs to know, and KiCad's export did not say in the
+netlist: whether the annotation has errors -- the export warned of them on
+stderr, and the update refuses to run -- and whether a sheet's file is
+missing, which the export passes over in silence, leaving that sheet's
+parts out.
 """
 
 from __future__ import annotations
 
-import os
-import shutil
-import subprocess
-import tempfile
-import time
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
-from . import envelope, kicad_env, sexpr
+from . import envelope, sexpr
+from .fileformat import annotation
+from .fileformat import netlist as built_netlist
+from .fileformat.circuit import Design
+from .fileformat.schematic import SchematicError
+from .fileformat.sexpr import SexprError
 
-_CONFIG_HOME: str | None = None
+
+@dataclass
+class Read:
+    components: list[dict[str, Any]]
+    annotation: list[annotation.Problem]
+    missing_sheets: list[str]
 
 
-def _isolated_env() -> dict[str, str]:
-    """Run KiCad's CLI against a throwaway config directory.
+def read(schematic: Path) -> Read:
+    """The design's parts, its annotation errors and its missing sheets.
 
-    Every invocation rewrites ``kicad_common.json`` -- it stores the caller's
-    working directory there. That is a write into the user's KiCad settings,
-    and if the GUI is open at the time, two processes are writing the same
-    file. A read-only command has no business causing that, so we point
-    KICAD_CONFIG_HOME somewhere disposable.
-
-    One directory per process, not per call: pointing KiCad at an empty config
-    makes it rebuild its defaults, and doing that on every invocation is both
-    slow and a source of intermittent failures.
+    E_NOT_FOUND without the schematic, E_VALIDATION when it does not read.
     """
-    global _CONFIG_HOME
-    if _CONFIG_HOME is None:
-        _CONFIG_HOME = tempfile.mkdtemp(prefix="kicadcli-cfg-")
-        real = Path(os.environ.get("APPDATA", "")) / "kicad"
-        if real.is_dir():
-            # Seed from the user's own settings so library tables and paths
-            # resolve as they normally would; we only want the *writes* to land
-            # somewhere else. KICAD_CONFIG_HOME is used as the root itself --
-            # the version directory sits directly inside it -- so the contents
-            # are copied, not the directory. Getting this wrong is silent: KiCad
-            # simply rebuilds its defaults and the library tables go missing.
-            try:
-                shutil.copytree(real, _CONFIG_HOME, dirs_exist_ok=True)
-            except (OSError, shutil.Error):
-                pass  # falling back to KiCad's defaults is acceptable here
-    env = dict(os.environ)
-    env["KICAD_CONFIG_HOME"] = _CONFIG_HOME
-    return env
-
-
-def export(schematic: Path, timeout: int = 1800) -> tuple[sexpr.Node, str]:
-    """Return the parsed netlist and whatever KiCad said on stderr.
-
-    The stderr is not decoration. ``sch export netlist`` writes a perfectly
-    well-formed file and exits 0 even when the schematic is not fully
-    annotated -- the only sign is a warning on stderr. A caller that checks
-    only the exit code gets a confident wrong answer.
-    """
-    text, stderr = export_text(schematic, "kicadsexpr", timeout)
-    return sexpr.parse(text), stderr
-
-
-def export_text(schematic: Path, fmt: str, timeout: int = 1800) -> tuple[str, str]:
-    """The netlist in one of KiCad's formats, as text, and KiCad's stderr.
-
-    The formats do not hold the same parts: ``kicadsexpr`` is the netlist a
-    board is updated from and leaves out every part marked "exclude from
-    board"; ``kicadxml`` keeps them.
-    """
-    exe = kicad_env.find_official_cli()
-    if not exe:
-        envelope.fail(
-            "E_CONFIG",
-            "this command needs the KiCad binary to export the schematic netlist",
-            {"hint": "run `kicad-cli context` to see where KiCad was searched for"},
-        )
     if not schematic.exists():
         envelope.fail("E_NOT_FOUND", "schematic file does not exist", {"path": str(schematic)})
+    try:
+        design = Design(schematic)
+        found = built_netlist.build(design)
+        problems = annotation.problems(design)
+    except (SchematicError, SexprError, UnicodeDecodeError, OSError) as exc:
+        envelope.fail(
+            "E_VALIDATION",
+            "the schematic could not be read",
+            {"schematic": str(schematic), "reason": str(exc)[:300]},
+        )
+        raise AssertionError("unreachable") from exc
+    return Read([record(c) for c in found.components], problems, list(design.missing))
 
-    cmd = [
-        str(exe),
-        "sch",
-        "export",
-        "netlist",
-        "--format",
-        fmt,
-        "-o",
-        "",
-        str(schematic),
-    ]
-    # Launching another process on Windows fails occasionally for reasons that
-    # have nothing to do with the design -- a scanner holding a freshly written
-    # file, a transient lock. Observed at roughly one run in six, with an empty
-    # stderr and no output. A read-only check has no reason to surface that as
-    # a design problem, so try again before giving up.
-    attempts, last = [], None
-    for _ in range(3):
-        tmp = Path(tempfile.mkdtemp(prefix="kicadcli-net-"))
-        out = tmp / "reference.net"
-        cmd[-2] = str(out)
-        try:
-            proc = subprocess.run(cmd, capture_output=True, timeout=timeout, env=_isolated_env())  # noqa: S603
-        except subprocess.TimeoutExpired:
-            envelope.fail("E_TIMEOUT", f"netlist export timed out after {timeout}s")
-        stderr = proc.stderr.decode("utf-8", "replace").strip()
-        if out.exists():
-            try:
-                text = out.read_text(encoding="utf-8")
-            finally:
-                shutil.rmtree(tmp, ignore_errors=True)
-            return text, stderr
-        attempts.append({"returncode": proc.returncode, "stderr": stderr[-300:]})
-        last = stderr
-        shutil.rmtree(tmp, ignore_errors=True)
-        time.sleep(0.4)
 
-    envelope.fail(
-        "E_IO",
-        "KiCad could not export a netlist from this schematic",
-        {"stderr": (last or "")[-800:], "schematic": str(schematic), "attempts": attempts},
-    )
-    raise AssertionError("unreachable")  # pragma: no cover
+def record(component: built_netlist.Component) -> dict[str, Any]:
+    """A part as `components()` reads it from a netlist file."""
+    sheet = component.sheet_tstamps
+    return {
+        "ref": component.ref,
+        "value": component.value,
+        "fpid": component.footprint,
+        "sheet": sheet,
+        "uuids": list(component.tstamps),
+        "paths": [join_path(sheet, u) for u in component.tstamps],
+        "fields": {name: value for name, value in component.fields},
+        "properties": {name: value or "" for name, value in component.properties},
+        "unit_names": [name for name, _ in component.units],
+    }
 
 
 def components(node: sexpr.Node) -> list[dict[str, Any]]:
