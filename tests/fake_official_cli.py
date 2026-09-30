@@ -1,9 +1,9 @@
 """Stands in for KiCad's own ``kicad-cli`` binary. See fake_upstream.py.
 
-Two subcommands are reached through this boundary: ``sch erc`` and ``pcb
-drc``. Each writes its result to the path after ``-o``, which is the only part
-of the invocation this needs to understand. (``sch export netlist`` was a
-third, until this tool wrote its own netlists.)
+One subcommand is reached through this boundary: ``pcb drc``. It writes its
+result to the path after ``-o``, which is the only part of the invocation this
+needs to understand. (``sch export netlist`` and ``sch erc`` were two more,
+until this tool wrote its own netlists and checked its own rules.)
 """
 
 from __future__ import annotations
@@ -14,7 +14,6 @@ import sys
 import time
 from pathlib import Path
 
-ERC = {"$schema": "fake", "source": "fake.kicad_sch", "sheets": []}
 DRC = {"$schema": "fake", "source": "fake.kicad_pcb", "violations": [], "unconnected_items": []}
 
 
@@ -73,9 +72,7 @@ def main() -> int:
         dest.write_text("<<< not the format anyone asked for >>>", encoding="utf-8")
         return 0
 
-    if "erc" in argv:
-        dest.write_text(json.dumps(ERC), encoding="utf-8")
-    elif "drc" in argv:
+    if "drc" in argv:
         dest.write_text(json.dumps(DRC), encoding="utf-8")
     else:
         sys.stderr.write(f"fake kicad-cli: not a subcommand this tool uses: {argv[:3]}\n")

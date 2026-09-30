@@ -131,10 +131,9 @@ designs drawn to ask KiCad's ERC one question per case
 projects: 7947 of the 7949 findings KiCad makes there, and nothing else.
 The library tables are read as files (`kicad_cli/fileformat/lib_tables.py`).
 Of the other five, one is about simulation and four KiCad's own ERC was
-never seen to report (`erc.NOT_CHECKED`). No command uses it yet. Next on
-that side: `sch audit` on it -- the last `sch` command on KiCad's binary --
-then editing an existing schematic, and carrying a schematic change onto a
-routed board.
+never seen to report (`erc.NOT_CHECKED`). `sch audit` runs on it, so no
+`sch` command runs KiCad's binary any more. Next on that side: editing an
+existing schematic, and carrying a schematic change onto a routed board.
 
 Progress. Step 1 is in (`bench/`). Step 2 is in for boards:
 `kicad_cli/fileformat/sexpr.py` reads and writes KiCad's S-expressions

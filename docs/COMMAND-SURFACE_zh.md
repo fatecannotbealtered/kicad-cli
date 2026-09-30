@@ -31,7 +31,7 @@ SWIG 有明确死期，而文件格式是 KiCad 的长期契约。今天写在 S
 | `board plane` | read | pcbnew | 逐段核验走线下方参考层有没有铜、有没有跨越平面分割。DRC 两样都不报 |
 | `sch link` | read | **fileformat** | 封装是否还带着符号 UUID。在 5 个官方 demo、332 个封装上零误报 |
 | `sch relink` | write | fileformat + official | 回填 UUID。路径取自 KiCad 网表，不是重建 |
-| `sch audit` | read | official + fileformat | **ERC 报 0 ≠ 没问题**：把被静默的规则打开重跑，量出后果 |
+| `sch audit` | read | fileformat | **ERC 报 0 ≠ 没问题**：用本工具自己的 ERC 把被静默的规则打开一起查，量出后果 |
 | `sch sync-preview` | read | official + fileformat | 「从原理图更新 PCB」会说什么——无需开 GUI |
 | `board route` | write | pcbnew | 栅格布线：repair / full / rewidth |
 | `board stitch` | write | pcbnew | 铺铜孤岛缝合，带 DRC 自验回退 |
@@ -85,7 +85,7 @@ SWIG 有明确死期，而文件格式是 KiCad 的长期契约。今天写在 S
 
 | 优先级 | 命令 | 类型 | 可达性 | 解决什么 |
 |--------|------|------|--------|----------|
-| ✅ | `sch audit` | read | official | ERC 之外的那一层：被静默的规则、被当消音器用的 no-connect、单节点网络。核心断言是「ERC 报 0 条 ≠ 没问题」 |
+| ✅ | `sch audit` | read | fileformat | ERC 之外的那一层：被静默的规则、被当消音器用的 no-connect、单节点网络。核心断言是「ERC 报 0 条 ≠ 没问题」 |
 | ✅ | `sch link` | read | **fileformat** | 板上封装是否带着原理图符号的 UUID。断链后「从原理图更新 PCB」会删光重建，一次性毁掉布局布线 |
 | ✅ | `sch relink` | write | fileformat + official | 按位号回填 UUID 恢复绑定。落盘后仍需在 GUI 里验证一次增删为 0——这一步不能假装闭环 |
 | P0 | `sch diff` | read | official | 两版原理图的**语义**差异。`git diff` 对 `.kicad_sch` 无用：挪一个器件就是几十行坐标噪声 |

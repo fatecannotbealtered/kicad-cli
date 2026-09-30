@@ -176,7 +176,14 @@ SCHEMAS: dict[str, dict[str, Any]] = {
             "status",
             "not_checked",
         ],
-        "untrusted_fields": ["findings", "as_configured", "with_rules_enabled"],
+        # Label names, references and footprints are the design's own text.
+        "untrusted_fields": [
+            "findings",
+            "as_configured",
+            "with_rules_enabled",
+            "cross_sheet_connectivity",
+            "footprint_filters",
+        ],
     },
     "sch_sync_preview": {
         "shape": "object",
@@ -781,8 +788,9 @@ def build() -> list[dict[str, Any]]:
             "sch audit",
             "read",
             "Report what ERC is not telling you: which rules are switched off, and what "
-            "they would report if they were on. The silenced rules are re-run in a copy "
-            "of the project, so the answer is measured rather than inferred.",
+            "they would report if they were on. The design is checked once with every rule "
+            "on, by this tool's own ERC, so the answer is measured rather than inferred, and "
+            "no KiCad runs for it.",
             [
                 {
                     "name": "schematic",

@@ -119,7 +119,7 @@ ones apart:
 | Make a board from a requirement (no design exists yet) | `sch create` → `board from-netlist` → `board place` → `board pour` → `board route` → `board netclass`/`board rewidth` → `board silkscreen` → `board drc` → `fab *` | see "Building a board from nothing" below; do not hand-write a `.kicad_sch` |
 | Turn an existing schematic into a board | KiCad's own `sch export netlist`, then `board from-netlist` | this creates a *new* board; it does not update one that already has a layout |
 | Will "Update PCB from Schematic" destroy my layout? | `sch link`, then `sch sync-preview` | never `pcb drc --schematic-parity`; it matches by reference designator and is blind to broken links |
-| ERC says zero — is the schematic fine? | `sch audit` (re-runs the silenced rules) | `sch link` |
+| ERC says zero — is the schematic fine? | `sch audit` (checks the silenced rules too) | `sch link` |
 | Power nets are being routed at signal width | `board netclass --name Power --width 0.6 --nets +3V3,VIN`, then `board rewidth` | widening without a netclass: `board widen` and `board rewidth` both read the target *from* a netclass |
 | A trace is too thin | `board widen` first (in place), then `board route --mode rewidth --nets X` | `board rewidth` has no `--nets`; it works by netclass |
 | Connections are missing | `board route --mode repair` (repeat until it stops improving) | `--mode full` clears every existing track first |

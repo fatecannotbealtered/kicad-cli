@@ -33,10 +33,10 @@ footprint is written into every affected footprint. Read `counts.update_fields`.
 
 **A clean ERC is not a clean schematic.** A stock KiCad project ships with four
 rules disabled, `single_global_label` among them — and a global label used
-exactly once is what a mistyped label looks like. `sch audit` re-runs the
-silenced rules in a throwaway copy; `with_rules_enabled` is a measurement, not a
-prediction. It re-runs everything at `warning` severity, so a rule whose default
-is `error` appears there as a warning.
+exactly once is what a mistyped label looks like. `sch audit` checks the
+design with the silenced rules on; `with_rules_enabled` is a measurement, not a
+prediction. It checks them at `warning` severity, so a rule whose default is
+`error` appears there as a warning.
 
 **`pcb drc --schematic-parity` is not an oracle for the update dialog.** KiCad's
 own parity check matches by reference designator; the updater matches by uuid

@@ -71,18 +71,18 @@ def test_the_fixture_board_needs_no_kicad() -> None:
 # --- success and schema -----------------------------------------------------
 
 
-@pytest.mark.parametrize("command", ["audit", "plane"])
-def test_a_native_command_runs_without_kicad(command: str, tmp_path: Path) -> None:
+@pytest.mark.parametrize("command", [["board", "audit"], ["board", "plane"], ["sch", "audit"]])
+def test_a_native_command_runs_without_kicad(command: list[str], tmp_path: Path) -> None:
     """These read the file themselves now. Both of KiCad's boundaries are
     replaced by stubs that fail when called, and the command must neither
-    call them nor need them."""
+    call them nor need them. `sch audit` checks the rules itself."""
     doc, exit_code, _ = run(
-        ["board", command, "--board", str(MINI)],
+        [*command, "--board", str(MINI)],
         fake_upstream.env(tmp_path, "launch_fail"),
     )
     assert code_of(doc) == "OK", doc
     assert exit_code == 0
-    assert fake_upstream.attempts(tmp_path) == 0, f"board {command} started KiCad after all"
+    assert fake_upstream.attempts(tmp_path) == 0, f"{' '.join(command)} started KiCad after all"
 
 
 ONE_PART = """(kicad_pcb (version 20241229) (generator "t") (general (thickness 1.6)) (paper "A4")
@@ -170,37 +170,18 @@ def test_strict_mode_rejects_a_payload_that_does_not_match_its_schema(tmp_path: 
 
 
 @pytest.mark.parametrize("behaviour", ["launch_fail", "no_output"])
-def test_an_unusable_official_binary_is_e_io_after_retrying(behaviour: str, tmp_path: Path) -> None:
+def test_an_unusable_official_binary_is_e_io(behaviour: str, tmp_path: Path) -> None:
     """`no_output` is the observed Windows transient: exit 0, no file, empty
-    stderr. Roughly one launch in six. It is why the retry exists, and it
-    cannot be provoked on a real KiCad. `sch audit` is the command left that
-    launches KiCad's binary, for its ERC."""
+    stderr. It cannot be provoked on a real KiCad. `board drc` is the command
+    left that launches KiCad's binary, and it launches it once: a failure is
+    reported with its evidence, never read as a clean board."""
     doc, exit_code, _ = run(
-        ["sch", "audit", "--board", str(MINI)],
+        ["board", "drc", "--board", str(MINI)],
         fake_upstream.env(tmp_path, behaviour),
     )
     assert code_of(doc) == "E_IO"
     assert exit_code == 1
-    assert fake_upstream.attempts(tmp_path) == 3, "the launch must be retried, not given up on"
-    attempts = doc["error"]["details"]["attempts"]
-    assert len(attempts) == 3
-    assert all("returncode" in a and "stderr" in a for a in attempts), (
-        "each attempt must carry evidence; a bare failure gives the next reader nothing"
-    )
-
-
-def test_retrying_actually_recovers(tmp_path: Path) -> None:
-    """Two failures then a success. The command must get past the upstream call
-    rather than reporting the first failure, which is the whole point of the
-    retry and was previously untested."""
-    doc, _, _ = run(
-        ["sch", "audit", "--board", str(MINI)],
-        fake_upstream.env(tmp_path, "flaky"),
-    )
-    # Three launches for the first ERC, the third succeeding; then one for
-    # the second, with the rules the fixture's project silences turned on.
-    assert fake_upstream.attempts(tmp_path) == 4
-    assert code_of(doc) != "E_IO", "gave up despite the third attempt succeeding"
+    assert fake_upstream.attempts(tmp_path) == 1
 
 
 @pytest.mark.parametrize(
@@ -231,16 +212,13 @@ def test_noise_before_the_envelope_is_stepped_over(tmp_path: Path) -> None:
 def test_a_hanging_upstream_becomes_e_timeout(tmp_path: Path) -> None:
     """Exercised below the command, because the command's own timeout is half an
     hour and this has to be a test, not a coffee break. The path under test is
-    the real one: the ERC `sch audit` runs, same stub, same envelope."""
+    the real one: the DRC `board drc` runs, same stub, same envelope."""
     env = fake_upstream.env(tmp_path, "hang")
     script = (
-        "import sys\n"
-        "from pathlib import Path\n"
-        "from kicad_cli.commands import erc\n"
-        "erc._run_erc(Path(sys.argv[1]), timeout=3)\n"
+        "import sys\nfrom kicad_cli import kicad_env\nkicad_env.run_drc(sys.argv[1], timeout=3)\n"
     )
     proc = subprocess.run(
-        [sys.executable, "-c", script, str(MINI.with_suffix(".kicad_sch"))],
+        [sys.executable, "-c", script, str(MINI)],
         capture_output=True,
         cwd=REPO,
         env=env,

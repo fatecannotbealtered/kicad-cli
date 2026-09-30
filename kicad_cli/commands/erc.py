@@ -7,27 +7,28 @@ global label appears exactly once in the whole design -- which is what a typo
 in a label looks like. On a design whose sheets talk to each other mainly
 through global labels, shipping with that rule off is not a neutral default.
 
-So this command does not stop at reading the configuration. It copies the
-project somewhere disposable, turns the silenced rules back on, and runs ERC
-again. The answer to "what is being hidden" is then a measurement rather than
-an inference.
+So this command does not stop at reading the configuration. It checks the
+design once with every rule on -- this tool's own ERC (`fileformat/erc.py`),
+which finds what KiCad's finds on KiCad's own demo projects -- and reports
+what the silenced rules find beside what the configured ones do. The answer
+to "what is being hidden" is then a measurement rather than an inference, and
+no KiCad runs for it: the library rules read its installed libraries as
+files, and are left out, and said to be, where it is not installed.
 """
 
 from __future__ import annotations
 
 import fnmatch
 import json
-import os
 import re
-import shutil
-import subprocess
-import tempfile
-import time
 from collections import Counter
 from pathlib import Path
 from typing import Any
 
 from .. import envelope, kicad_env, sexpr
+from ..fileformat import erc as rules
+from ..fileformat.schematic import SchematicError
+from ..fileformat.sexpr import SexprError
 
 # The rules a freshly created KiCad 10 project has switched off. Measured, not
 # assumed: 9 of the 17 projects KiCad ships have exactly this set and no other
@@ -55,104 +56,6 @@ WHY_IT_MATTERS = {
     "pin_to_pin": "pin type conflicts, e.g. two outputs driving each other",
     "footprint_link_issues": "the symbol points at a footprint that cannot be resolved",
 }
-
-
-_CONFIG_HOME: str | None = None
-
-
-def _isolated_env() -> dict[str, str]:
-    """Run KiCad's CLI against a throwaway config directory.
-
-    Every invocation rewrites ``kicad_common.json`` -- it stores the caller's
-    working directory there. That is a write into the user's KiCad settings,
-    and if the GUI is open at the time, two processes are writing the same
-    file. A read-only command has no business causing that, so we point
-    KICAD_CONFIG_HOME somewhere disposable.
-
-    One directory per process, not per call: pointing KiCad at an empty config
-    makes it rebuild its defaults, and doing that on every invocation is both
-    slow and a source of intermittent failures.
-    """
-    global _CONFIG_HOME
-    if _CONFIG_HOME is None:
-        _CONFIG_HOME = tempfile.mkdtemp(prefix="kicadcli-cfg-")
-        real = Path(os.environ.get("APPDATA", "")) / "kicad"
-        if real.is_dir():
-            # Seed from the user's own settings so library tables and paths
-            # resolve as they normally would; we only want the *writes* to land
-            # somewhere else. KICAD_CONFIG_HOME is used as the root itself --
-            # the version directory sits directly inside it -- so the contents
-            # are copied, not the directory. Getting this wrong is silent: KiCad
-            # simply rebuilds its defaults and the library tables go missing.
-            try:
-                shutil.copytree(real, _CONFIG_HOME, dirs_exist_ok=True)
-            except (OSError, shutil.Error):
-                pass  # falling back to KiCad's defaults is acceptable here
-    env = dict(os.environ)
-    env["KICAD_CONFIG_HOME"] = _CONFIG_HOME
-    return env
-
-
-def _run_erc(
-    schematic: Path, env: dict[str, str] | None = None, timeout: int = 1800
-) -> dict[str, Any]:
-    """Run ERC, retrying a launch that fails.
-
-    A process launch on Windows fails now and then with an empty stderr and no
-    output file, for reasons that have nothing to do with the schematic. It
-    went unhandled here, and `sch audit`
-    runs ERC twice per call, so it had two chances per invocation to report a
-    healthy schematic as E_IO. It flaked one full test run in three that way.
-
-    If all three attempts fail the error carries each one's returncode and
-    stderr, because a bare "could not run ERC" gives whoever hits it next
-    nothing to go on.
-    """
-    exe = kicad_env.find_official_cli()
-    attempts: list[dict[str, Any]] = []
-    for _ in range(3):
-        tmp = Path(tempfile.mkdtemp(prefix="kicadcli-erc-"))
-        out = tmp / "erc.json"
-        try:
-            proc = subprocess.run(  # noqa: S603
-                [
-                    str(exe),
-                    "sch",
-                    "erc",
-                    "--severity-all",
-                    "--format",
-                    "json",
-                    "-o",
-                    str(out),
-                    str(schematic),
-                ],
-                capture_output=True,
-                timeout=timeout,
-                env=env or _isolated_env(),
-            )
-        except subprocess.TimeoutExpired:
-            shutil.rmtree(tmp, ignore_errors=True)
-            envelope.fail("E_TIMEOUT", "ERC timed out")
-        if out.exists():
-            try:
-                return json.loads(out.read_text(encoding="utf-8"))
-            finally:
-                shutil.rmtree(tmp, ignore_errors=True)
-        attempts.append(
-            {
-                "returncode": proc.returncode,
-                "stderr": proc.stderr.decode("utf-8", "replace").strip()[-300:],
-            }
-        )
-        shutil.rmtree(tmp, ignore_errors=True)
-        time.sleep(0.4)
-
-    envelope.fail(
-        "E_IO",
-        "KiCad could not run ERC on this schematic",
-        {"schematic": str(schematic), "attempts": attempts},
-    )
-    raise AssertionError("unreachable")  # pragma: no cover
 
 
 def _sample(rows: list[dict[str, Any]], per_type: int = 4) -> list[dict[str, Any]]:
@@ -200,28 +103,11 @@ def _patterns(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
     )
 
 
-def _violations(report: dict[str, Any]) -> list[dict[str, Any]]:
-    rows = []
-    for sheet in report.get("sheets", []):
-        for v in sheet.get("violations", []):
-            rows.append(
-                {
-                    "type": v.get("type"),
-                    "severity": v.get("severity"),
-                    "description": v.get("description", ""),
-                    "sheet": sheet.get("path", ""),
-                }
-            )
-    return rows
-
-
-def _unmute(project: Path, rules: list[str]) -> None:
-    """Raise the given rules to ``warning`` in a copy of the project file."""
-    data = json.loads(project.read_text(encoding="utf-8"))
-    sev = data.setdefault("erc", {}).setdefault("rule_severities", {})
-    for r in rules:
-        sev[r] = "warning"
-    project.write_text(json.dumps(data, indent=2), encoding="utf-8")
+def _rows(found: list[rules.Violation]) -> list[dict[str, Any]]:
+    return [
+        {"type": v.rule, "severity": v.severity, "description": v.message, "sheet": v.sheet}
+        for v in found
+    ]
 
 
 def _label_census(sheets: list[Path]) -> dict[str, Any]:
@@ -342,44 +228,37 @@ def audit(args: dict[str, Any]) -> None:
         envelope.fail("E_NOT_FOUND", "schematic file does not exist", {"path": str(schematic)})
     project = schematic.with_suffix(".kicad_pro")
 
-    configured: dict[str, str] = {}
-    if project.exists():
-        try:
-            configured = (
-                json.loads(project.read_text(encoding="utf-8"))
-                .get("erc", {})
-                .get("rule_severities", {})
-            )
-        except (OSError, ValueError):
-            configured = {}
-
-    silenced = sorted(k for k, v in configured.items() if v == "ignore")
+    # As the project has its rules, KiCad's defaults where it says nothing:
+    # a project that never mentions single_global_label has it off.
+    settings = rules.Settings.of(project)
+    silenced = sorted(k for k, v in settings.severities.items() if v == "ignore")
     shipped_off = [r for r in silenced if r in KICAD_DEFAULT_IGNORED]
     turned_off_here = [r for r in silenced if r not in KICAD_DEFAULT_IGNORED]
-    downgraded = sorted(k for k, v in configured.items() if v == "warning")
+    explicit = _explicit(project)
+    downgraded = sorted(
+        k for k, v in settings.severities.items() if v == "warning" and k in explicit
+    )
 
-    baseline = _run_erc(schematic)
-    as_configured = _violations(baseline)
-
-    # Now the part that cannot be inferred: run it again with nothing muted.
-    hidden: list[dict[str, Any]] = []
-    unmuted_ok = False
-    if silenced and project.exists():
-        work = Path(tempfile.mkdtemp(prefix="kicadcli-unmute-"))
-        try:
-            shutil.copytree(schematic.parent, work / "p")
-            copy_sch = work / "p" / schematic.name
-            copy_pro = work / "p" / project.name
-            if copy_pro.exists():
-                _unmute(copy_pro, silenced)
-                loud = _violations(_run_erc(copy_sch))
-                seen = {(v["type"], v["description"]) for v in as_configured}
-                hidden = [v for v in loud if (v["type"], v["description"]) not in seen]
-                unmuted_ok = True
-        except (OSError, shutil.Error):
-            unmuted_ok = False
-        finally:
-            shutil.rmtree(work, ignore_errors=True)
+    # The part that cannot be inferred: every rule on, the silenced ones at
+    # "warning", in one check. What a silenced rule finds is what is hidden.
+    everything = rules.Settings(
+        {k: ("warning" if v == "ignore" else v) for k, v in settings.severities.items()},
+        settings.pin_map,
+        settings.grid,
+    )
+    kicad_root = kicad_env.find_kicad_root()
+    try:
+        found = rules.check(schematic, everything, kicad_root)
+    except (SchematicError, SexprError, UnicodeDecodeError, OSError) as exc:
+        envelope.fail(
+            "E_VALIDATION",
+            "the schematic could not be read",
+            {"schematic": str(schematic), "reason": str(exc)[:300]},
+        )
+        raise AssertionError("unreachable") from exc
+    rows = _rows(found)
+    as_configured = [r for r in rows if r["type"] not in silenced]
+    hidden = [r for r in rows if r["type"] in silenced]
 
     sheets, _root = _sheet_files(schematic)
     labels = _label_census(sheets)
@@ -393,11 +272,11 @@ def audit(args: dict[str, Any]) -> None:
         findings.append(
             {
                 "id": "A1-hidden-violations",
-                "severity": "error" if any(v["type"] in configured for v in hidden) else "warn",
+                "severity": "error" if any(v["type"] in explicit for v in hidden) else "warn",
                 "title": "ERC is clean only because some rules are switched off",
-                "detail": f"Turning the {len(silenced)} silenced rules back on and running ERC "
-                f"again surfaces {len(hidden)} violations that the configured run does not "
-                "report. These are not predictions; KiCad produced them.",
+                "detail": f"With the {len(silenced)} silenced rules back on, ERC finds "
+                f"{len(hidden)} violations that the configured rules do not report. These are "
+                "not predictions: the check that found them finds what KiCad's does.",
                 "evidence": {
                     "as_configured": len(as_configured),
                     "with_rules_enabled": len(as_configured) + len(hidden),
@@ -488,7 +367,7 @@ def audit(args: dict[str, Any]) -> None:
                 "why_they_matter": {r: WHY_IT_MATTERS.get(r, "") for r in silenced},
             },
             "with_rules_enabled": {
-                "ran": unmuted_ok,
+                "ran": True,
                 "additional_violations": len(hidden),
                 "by_type": dict(by_type_hidden),
                 # Grouped first, then a few of each kind. The counts are exact;
@@ -500,18 +379,45 @@ def audit(args: dict[str, Any]) -> None:
             "footprint_filters": filters,
             "findings": findings,
             "status": "PASS" if not (as_configured or hidden) else "FAIL",
-            "not_checked": [
-                "the pin-type conflict matrix was read but not second-guessed; a project "
-                "may legitimately relax it",
-                "ERC excludes recorded in the project file are honoured as written, not "
-                "re-examined",
-                "silenced rules were re-run at 'warning' severity; a rule whose default is "
-                "'error' will therefore appear here as a warning",
-                "this reports what ERC can see; it says nothing about whether the circuit "
-                "is correct",
-            ],
+            "not_checked": _not_checked(kicad_root),
         }
     )
+
+
+def _explicit(project: Path) -> set[str]:
+    """The rules a project file sets, whatever to."""
+    try:
+        data = json.loads(project.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return set()
+    return set((data.get("erc") or {}).get("rule_severities") or {})
+
+
+def _not_checked(kicad_root: str | None) -> list[str]:
+    out = [
+        "the pin-type conflict matrix was read but not second-guessed; a project may "
+        "legitimately relax it",
+        "ERC exclusions recorded in the project are not applied: an excluded violation is "
+        "reported like any other",
+        "silenced rules were checked at 'warning' severity; a rule whose default is 'error' "
+        "will therefore appear here as a warning",
+    ]
+    reasons: dict[str, list[str]] = {}
+    for rule, reason in rules.NOT_CHECKED.items():
+        reasons.setdefault(reason, []).append(rule)
+    out += [
+        f"KiCad's {', '.join(sorted(names))}: not checked here ({reason})"
+        for reason, names in sorted(reasons.items())
+    ]
+    if kicad_root is None:
+        out.append(
+            f"KiCad's {', '.join(rules.LIBRARY)}: not checked, as KiCad's installation was "
+            "not found -- its library tables name their libraries relative to it"
+        )
+    out.append(
+        "this reports what ERC can see; it says nothing about whether the circuit is correct"
+    )
+    return out
 
 
 def _sheet_files(schematic: Path) -> tuple[list[Path], str | None]:
