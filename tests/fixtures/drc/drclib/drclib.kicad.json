@@ -1,0 +1,601 @@
+{
+ "kicad_version": "10.0.6",
+ "violations": [
+  {
+   "type": "lib_footprint_issues",
+   "severity": "warning",
+   "items": [
+    "1cfa1732-f8dc-561f-bdb2-77c745c1fb77"
+   ]
+  },
+  {
+   "type": "lib_footprint_issues",
+   "severity": "warning",
+   "items": [
+    "20a80711-eadb-54fa-88aa-32da84c21097"
+   ]
+  },
+  {
+   "type": "lib_footprint_issues",
+   "severity": "warning",
+   "items": [
+    "e23ba1a7-01b6-5486-aca1-73dcf6705edb"
+   ]
+  },
+  {
+   "type": "lib_footprint_issues",
+   "severity": "warning",
+   "items": [
+    "f74547b2-4606-5858-bded-41c80487a092"
+   ]
+  },
+  {
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "items": [
+    "0b8c1545-f84e-5452-b65a-e0391da544d6"
+   ]
+  },
+  {
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "items": [
+    "11b2c60a-530c-567b-bb34-04f9f5579cda"
+   ]
+  },
+  {
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "items": [
+    "12ec7d7b-472e-5476-b494-7a726a9ebdc5"
+   ]
+  },
+  {
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "items": [
+    "169dca9d-67e4-5cbe-a347-35c3400ab9b3"
+   ]
+  },
+  {
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "items": [
+    "1ab9e1c7-c723-57e0-a210-63e90f9ccfe4"
+   ]
+  },
+  {
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "items": [
+    "1c20adad-2219-59c0-a170-f9d50ed080cd"
+   ]
+  },
+  {
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "items": [
+    "1cd141a9-98ee-51a1-99cf-c07247737fbb"
+   ]
+  },
+  {
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "items": [
+    "2456638d-cadf-53d2-b6c7-945c79ab407b"
+   ]
+  },
+  {
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "items": [
+    "284c3e75-afc5-57d4-8d3c-d89ef4c42193"
+   ]
+  },
+  {
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "items": [
+    "2a4332a2-dfcf-5328-91f5-2ab3ccc4c57d"
+   ]
+  },
+  {
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "items": [
+    "2e4bccaa-a392-5728-a917-bf5e122f0b80"
+   ]
+  },
+  {
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "items": [
+    "2f864fee-c9ad-5b07-be0a-802e2956294b"
+   ]
+  },
+  {
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "items": [
+    "327a720f-b23e-5af7-88b5-ca04a2edb894"
+   ]
+  },
+  {
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "items": [
+    "356d0279-9118-5e18-952b-9b7721f10c38"
+   ]
+  },
+  {
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "items": [
+    "376ffa8f-49d6-5cd9-8e31-d7f17ef890a0"
+   ]
+  },
+  {
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "items": [
+    "39db5953-2960-5305-8ba7-a76619360ba1"
+   ]
+  },
+  {
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "items": [
+    "3ddb89e6-fdd2-52f6-8378-8335f9bbdf41"
+   ]
+  },
+  {
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "items": [
+    "409d5b2a-71cc-58ed-bc1e-0c5fc6d76522"
+   ]
+  },
+  {
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "items": [
+    "457edaad-5171-5b49-b9fa-2a54e7de827c"
+   ]
+  },
+  {
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "items": [
+    "46348a34-73ff-5dc1-95a3-c884d664ef28"
+   ]
+  },
+  {
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "items": [
+    "4891845d-bd6a-578e-903a-ca8c14f3f8ca"
+   ]
+  },
+  {
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "items": [
+    "49899b2a-db3a-5a46-8af7-a204cb371344"
+   ]
+  },
+  {
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "items": [
+    "4bdc286f-60ed-549a-b753-e808602569b4"
+   ]
+  },
+  {
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "items": [
+    "4c6ce9e3-0405-50d9-9435-889c356192e7"
+   ]
+  },
+  {
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "items": [
+    "4e22eadc-48a6-50ae-b7a8-509cc7e5b8d9"
+   ]
+  },
+  {
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "items": [
+    "50aa4452-40b2-5ee4-b40e-a12fe4e5a2e0"
+   ]
+  },
+  {
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "items": [
+    "55013d53-0bfd-53c6-b537-c712550ad0e8"
+   ]
+  },
+  {
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "items": [
+    "5c3c3da8-b920-5502-b1c8-b36089af40e1"
+   ]
+  },
+  {
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "items": [
+    "5c66574f-c88a-520a-b4ed-6180b396d2e6"
+   ]
+  },
+  {
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "items": [
+    "5c78343e-809e-5ab7-819a-0e78ce304557"
+   ]
+  },
+  {
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "items": [
+    "5cc1ece3-b14c-5f0a-b31b-a7b85ef0ff87"
+   ]
+  },
+  {
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "items": [
+    "5f33626c-9981-541e-bb2d-e034c5a576b8"
+   ]
+  },
+  {
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "items": [
+    "5fad1689-bff0-5dcd-b649-1a5e2cfc27e5"
+   ]
+  },
+  {
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "items": [
+    "61a92a76-5ef7-54de-a4cd-5fe0e2c9fb49"
+   ]
+  },
+  {
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "items": [
+    "691967fd-8376-589b-9ec4-86175496be7a"
+   ]
+  },
+  {
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "items": [
+    "6eccff65-eeb8-578e-bd8a-d28c851ff4c1"
+   ]
+  },
+  {
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "items": [
+    "7638f640-09cd-5750-9723-c9bc414b631b"
+   ]
+  },
+  {
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "items": [
+    "7757beb7-c215-5bdf-b94f-4e39d9b681bb"
+   ]
+  },
+  {
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "items": [
+    "7e4e3fb4-ed37-5fd3-90d8-5360163762aa"
+   ]
+  },
+  {
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "items": [
+    "7e68b7a4-8622-5fff-955f-4a869479d383"
+   ]
+  },
+  {
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "items": [
+    "80daeae3-81a9-5096-abc6-8b04771b2162"
+   ]
+  },
+  {
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "items": [
+    "813337de-974f-5698-a9b7-7460f692bdea"
+   ]
+  },
+  {
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "items": [
+    "8399dbf1-cd4e-56cc-a4b0-65f59cbf210a"
+   ]
+  },
+  {
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "items": [
+    "88774e6c-5d43-5e8f-b89d-c1447d086896"
+   ]
+  },
+  {
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "items": [
+    "8ff3d9d9-f1b5-57b1-beb7-2a1ed643abae"
+   ]
+  },
+  {
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "items": [
+    "9379c453-2f36-5af6-969b-c6f160f84039"
+   ]
+  },
+  {
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "items": [
+    "991c5f10-f1f2-543d-a647-80e22f0c014f"
+   ]
+  },
+  {
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "items": [
+    "a01a6236-e0e6-5167-83dc-509cb1671c55"
+   ]
+  },
+  {
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "items": [
+    "a427f7fd-a6cf-5d19-95dd-4414ca362e6e"
+   ]
+  },
+  {
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "items": [
+    "a5f46e12-76a8-5a2b-a0bf-ac979c90d481"
+   ]
+  },
+  {
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "items": [
+    "a7acacf2-e54b-559d-9347-171265cc2072"
+   ]
+  },
+  {
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "items": [
+    "a89fd109-03ef-586c-ac26-0c59f54fcfd1"
+   ]
+  },
+  {
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "items": [
+    "aa9cf4ba-3f50-5d59-a394-a513cc86ceae"
+   ]
+  },
+  {
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "items": [
+    "ab0d67a8-49b9-58c3-ad10-116699ce92b9"
+   ]
+  },
+  {
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "items": [
+    "af26fec7-6603-5486-a8ed-6e18a9732915"
+   ]
+  },
+  {
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "items": [
+    "afbce4a7-b563-5e81-916f-e0201146e668"
+   ]
+  },
+  {
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "items": [
+    "b401a62b-e92e-5327-9bbc-e7258b352c84"
+   ]
+  },
+  {
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "items": [
+    "b7c192a6-f49c-5a73-856f-f014a9f78031"
+   ]
+  },
+  {
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "items": [
+    "bd3e96ff-a8bc-5046-9481-229f97c8d3ef"
+   ]
+  },
+  {
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "items": [
+    "bdc8038a-c3e3-5a5b-aa19-bda91bdc6650"
+   ]
+  },
+  {
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "items": [
+    "bfc5ca12-ae28-55ca-ac9b-d94082c5449c"
+   ]
+  },
+  {
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "items": [
+    "c75a99cd-3c3f-58cb-91fc-e08747a744a4"
+   ]
+  },
+  {
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "items": [
+    "cd7da03c-d1cc-59c8-a24c-b362a7c28fc4"
+   ]
+  },
+  {
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "items": [
+    "cecb5e1d-39b0-5b69-acda-dddfbaa8c662"
+   ]
+  },
+  {
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "items": [
+    "d34e5266-fa53-552c-bc5f-ac971920e200"
+   ]
+  },
+  {
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "items": [
+    "d57670cb-35aa-5c52-8b29-30426a5f5557"
+   ]
+  },
+  {
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "items": [
+    "d5df16b7-fdab-57ac-b670-5ae850c4fc03"
+   ]
+  },
+  {
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "items": [
+    "e0554bf3-ee19-599b-8415-7d5984af6a3c"
+   ]
+  },
+  {
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "items": [
+    "e33b1cc8-8a55-5551-b504-f461501af10c"
+   ]
+  },
+  {
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "items": [
+    "ea17abf5-69b9-504c-93e5-0ed65dd33a38"
+   ]
+  },
+  {
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "items": [
+    "ee1f2e3f-661f-570d-9279-cdab1f0765eb"
+   ]
+  },
+  {
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "items": [
+    "efc61de5-1360-54d4-92df-7dd946272c2e"
+   ]
+  },
+  {
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "items": [
+    "f1b777cc-ce9c-59bf-adb3-14a54a63aa1b"
+   ]
+  },
+  {
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "items": [
+    "f23ecdfe-41e7-5891-8b2e-80f85e6741e8"
+   ]
+  },
+  {
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "items": [
+    "f3a0a6a9-9034-51b0-bfa3-4af14426c1d2"
+   ]
+  },
+  {
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "items": [
+    "f3daa063-6c86-51ac-b1fa-d7274f668bc6"
+   ]
+  },
+  {
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "items": [
+    "f5650e66-c635-5179-8b1e-2132de9a0aba"
+   ]
+  },
+  {
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "items": [
+    "fbfec269-cfde-5626-9097-d7816142b7be"
+   ]
+  },
+  {
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "items": [
+    "fda19736-b8a8-50a9-ab24-6f4a7dd3676b"
+   ]
+  },
+  {
+   "type": "malformed_courtyard",
+   "severity": "error",
+   "items": [
+    "0b8c1545-f84e-5452-b65a-e0391da544d6"
+   ]
+  },
+  {
+   "type": "malformed_courtyard",
+   "severity": "error",
+   "items": [
+    "0b8c1545-f84e-5452-b65a-e0391da544d6"
+   ]
+  }
+ ],
+ "unconnected_items": []
+}

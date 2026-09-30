@@ -10,9 +10,11 @@ short, how far copper keeps from holes and from the board's edge. `drc3`
 asks about rule areas, text variables, a plated pad with no hole and copper
 on a layer the board has not got. `drc4` and `drc5` ask about the solder
 mask: which openings bridge nets, under a margin, a minimum web and a
-clearance to copper, and with all of them 0. The `*.kicad.json` beside each
-is KiCad 10's answer, violation by violation, so the comparison runs
-anywhere; with
+clearance to copper, and with all of them 0. `drclib` asks about footprint
+libraries, from a library of its own: which changes to a footprint make it
+unlike its library's copy, and what KiCad says of a library it cannot find.
+The `*.kicad.json` beside each is KiCad 10's answer, violation by
+violation, so the comparison runs anywhere; with
 KiCad installed it is asked again, and every demo board KiCad ships is
 checked both ways too. The board's outline, of which a board has one, is
 asked about on boards of its own (`outline/`).
@@ -56,6 +58,7 @@ from test_fileformat_circuit import needs_kicad, official_cli
 REPO = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO))
 
+from kicad_cli import kicad_env  # noqa: E402
 from kicad_cli.fileformat import drc  # noqa: E402
 from kicad_cli.fileformat.board import Board  # noqa: E402
 from kicad_cli.fileformat.drc import settings as drc_settings  # noqa: E402
@@ -66,8 +69,12 @@ FIXTURE = FIXTURES / "drc1"
 BOARD = FIXTURE / "drc1.kicad_pcb"
 RECORDED = FIXTURE / "drc1.kicad.json"
 BOARDS = {
-    name: FIXTURES / name / f"{name}.kicad_pcb" for name in ("drc1", "drc2", "drc3", "drc4", "drc5")
+    name: FIXTURES / name / f"{name}.kicad_pcb"
+    for name in ("drc1", "drc2", "drc3", "drc4", "drc5", "drclib")
 }
+# KiCad's installation, for the libraries the tables of a demo board name;
+# the fixtures name only their own, so any folder stands in without KiCad.
+KICAD_ROOT = kicad_env.find_kicad_root() or str(REPO)
 OUTLINES = FIXTURES / "outline"
 # The rules whose findings are copper touching or too near copper: which of
 # them KiCad names for a touch is compared as one.
@@ -132,7 +139,7 @@ def _by_opening(board: Path, found: set) -> set:
 
 def differences(board: Path, report: dict) -> list[str]:
     """Where this tool and KiCad disagree on a board, rule by rule."""
-    ours = drc.check(board)
+    ours = drc.check(board, kicad_root=KICAD_ROOT)
     found, listed, unconnected = theirs(report)
     mine: dict[str, set] = defaultdict(set)
     tracks = set()
@@ -266,6 +273,26 @@ def test_a_track_from_a_pad_of_another_net_is_named_with_that_net():
     assert not any("[C10c]" in name for name in names)
 
 
+def test_a_library_it_cannot_use_is_named_as_kicad_names_it():
+    """drclib: a library no table names, one switched off, one whose folder
+    is gone -- KiCad calls that one switched off too -- and one without the
+    footprint."""
+    report = drc.check(BOARDS["drclib"], kicad_root=KICAD_ROOT)
+    said = sorted(v.message for v in report.violations if v.rule == "lib_footprint_issues")
+    assert said == [
+        "Footprint 'Missing' not found in library 'drclib'",
+        "The current configuration does not include the footprint library 'drcnowhere'",
+        "The footprint library 'drcgone' is not enabled in the current configuration",
+        "The footprint library 'drcoff' is not enabled in the current configuration",
+    ]
+
+
+def test_without_kicad_the_libraries_are_listed_as_not_checked():
+    report = drc.check(BOARDS["drclib"])
+    assert not [v for v in report.violations if v.rule.startswith("lib_footprint")]
+    assert {"lib_footprint_issues", "lib_footprint_mismatch"} <= set(report.not_checked)
+
+
 def test_the_two_nets_of_a_differential_pair_are_held_to_its_gap():
     from kicad_cli.fileformat.drc.clearance import coupled  # noqa: PLC0415
 
@@ -393,9 +420,9 @@ def kicad_drc(board: Path) -> dict:
         if DEMOS.exists() and DEMOS.resolve() in board.resolve().parents:
             copy_demo(board.parent, folder, whole=False)
         else:
-            folder.mkdir()
-            for f in board.parent.glob(f"{board.stem}.kicad_*"):
-                shutil.copy(f, folder)
+            # The fixture's folder whole: a project's own library table and
+            # libraries are beside it.
+            shutil.copytree(board.parent, folder)
         out = Path(tmp) / "report.json"
         for _ in range(3):
             subprocess.run(

@@ -69,9 +69,12 @@ class Report:
 class Run:
     """One check of one board: the board, its settings, what was found."""
 
-    def __init__(self, board: Board, settings: Settings) -> None:
+    def __init__(self, board: Board, settings: Settings, kicad_root=None) -> None:
         self.board = board
         self.settings = settings
+        # KiCad's installation: the library tables name its libraries
+        self.kicad_root = kicad_root
+        self.path: Path | None = board.path
         self.found: list[Violation] = []
         self.unconnected: list[Violation] = []
         self._seen: set[tuple[str, frozenset[str], str]] = set()
@@ -137,6 +140,7 @@ def _checks():
         connections,
         courtyards,
         holes,
+        library,
         local,
         mask,
         outline,
@@ -158,6 +162,7 @@ def _checks():
         zones.intersecting,
         connections.check,
         courtyards.check,
+        library.check,
     )
 
 
@@ -172,8 +177,12 @@ CHECKED = (
     "npth_inside_courtyard", "clearance", "shorting_items", "tracks_crossing", "hole_clearance",
     "copper_edge_clearance", "items_not_allowed", "invalid_outline", "item_on_disabled_layer",
     "through_hole_pad_without_hole", "unresolved_variable", "generic_error", "generic_warning",
-    "solder_mask_bridge",
+    "solder_mask_bridge", "lib_footprint_issues", "lib_footprint_mismatch",
 )  # fmt: skip
+
+# Checked only when KiCad's installation is known: the library tables name
+# their libraries by paths in it.
+LIBRARY = ("lib_footprint_issues", "lib_footprint_mismatch")
 
 # Rules checked, but not everything they cover: rule -> what is left out.
 PARTIAL = {
@@ -192,8 +201,6 @@ NOT_CHECKED = {
     "silk_overlap": "silkscreen needs the stroke font, which this tool does not have yet",
     "silk_over_copper": "silkscreen needs the stroke font, which this tool does not have yet",
     "silk_edge_clearance": "silkscreen needs the stroke font, which this tool does not have yet",
-    "lib_footprint_issues": "footprint libraries are not checked yet",
-    "lib_footprint_mismatch": "footprint libraries are not checked yet",
     "length_out_of_range": "custom rules (.kicad_dru) are not read yet",
     "skew_out_of_range": "custom rules (.kicad_dru) are not read yet",
     "diff_pair_gap_out_of_range": "custom rules (.kicad_dru) are not read yet",
@@ -218,17 +225,32 @@ NOT_CHECKED = {
 }  # fmt: skip
 
 
-def check(path: str | Path, settings: Settings | None = None, board: Board | None = None) -> Report:
+def check(
+    path: str | Path,
+    settings: Settings | None = None,
+    board: Board | None = None,
+    kicad_root: str | Path | None = None,
+) -> Report:
     """Every violation of the board at `path`, by the rules of its project.
-    A board already read -- an edit not yet written -- is checked as it is."""
+    A board already read -- an edit not yet written -- is checked as it is.
+    The footprint library rules are checked when `kicad_root`, KiCad's
+    installation, is given."""
     path = Path(path)
     board = board if board is not None else Board.load(path)
     if settings is None:
         settings = Settings.of(path.with_suffix(".kicad_pro"))
-    run = Run(board, settings)
+    run = Run(board, settings, kicad_root)
+    run.path = path
     for step in _checks():
         step(run)
     not_checked = {rule: why for rule, why in NOT_CHECKED.items() if run.enabled(rule)}
+    if kicad_root is None:
+        for rule in LIBRARY:
+            if run.enabled(rule):
+                not_checked[rule] = (
+                    "KiCad's installation was not found, and the library tables name "
+                    "their libraries by paths in it"
+                )
     for rule, name in settings.custom.items():
         if run.enabled(rule) and rule not in not_checked:
             not_checked[rule] = (
