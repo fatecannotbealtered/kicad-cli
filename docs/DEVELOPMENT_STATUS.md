@@ -139,6 +139,19 @@ before writing it. `board update` carries a schematic change onto a
 routed board, as KiCad's Update PCB from Schematic does, and KiCad's own
 schematic-parity check finds the result true to the schematic.
 
+Step 4 has begun: `kicad_cli/fileformat/drc/` is DRC of this tool's own,
+not yet behind `board drc`. It checks 24 of KiCad 10's rules so far --
+track widths, vias, annular rings, hole sizes, padstacks, footprint types,
+text size and mirroring, holes crowding each other, zones overlapping,
+missing connections, dangling tracks and vias, courtyards -- measured on a
+board drawn to ask KiCad's DRC one question per case
+(`tests/fixtures/drc/drc1`) and held to it on KiCad's demo boards: every
+finding KiCad makes there under those rules, and nothing else. What it does
+not check yet -- copper clearance, the silkscreen, solder mask, zone fills,
+the footprint libraries, custom rules -- it says it does not
+(`drc.NOT_CHECKED`); a check a project's custom rules decide is not made
+until those rules are read.
+
 Progress. Step 1 is in (`bench/`). Step 2 is in for boards:
 `kicad_cli/fileformat/sexpr.py` reads and writes KiCad's S-expressions
 losslessly, held to KiCad's own files by `tests/test_fileformat_conformance.py`;

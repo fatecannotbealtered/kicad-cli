@@ -226,6 +226,7 @@ class Item:
     path: list[tuple[int, int]] | None = None  # a centre line, if it has one
     radius: float = 0.0  # half the width around that line, or a via's radius
     label: str = ""
+    owner: object = None  # what on the board it is: a (footprint, pad), a track, a via, a zone
 
 
 def _overlap(a: Item, b: Item) -> bool:
@@ -249,7 +250,7 @@ def _overlap(a: Item, b: Item) -> bool:
 # -- items --------------------------------------------------------------------------
 
 
-def _pad_item(pad: Pad, reference: str, copper: set[str]) -> Item:
+def _pad_item(pad: Pad, reference: str, copper: set[str], owner=None) -> Item:
     layers = tuple(layer for layer in pad.layers if layer in copper)
     points = pad.polygon()
     if points is None:  # a custom pad: its outline box stands in for its shape
@@ -257,7 +258,7 @@ def _pad_item(pad: Pad, reference: str, copper: set[str]) -> Item:
         points = [(x1, y1), (x2, y1), (x2, y2), (x1, y2)]
     polygon = Polygon(points)
     label = f"{reference}.{pad.number}@{pad.position[0]},{pad.position[1]}"
-    return Item("pad", pad.net, layers, polygon.bbox, polygon=polygon, label=label)
+    return Item("pad", pad.net, layers, polygon.bbox, polygon=polygon, label=label, owner=owner)
 
 
 def _copper_shape(board: Board, node, copper: set[str]) -> Item | None:
@@ -277,7 +278,7 @@ def _copper_shape(board: Board, node, copper: set[str]) -> Item | None:
     path = points + [points[0]] if closed and len(points) > 2 else points
     polygon = Polygon(points) if filled and len(points) >= 3 else None
     return Item("shape", net, (layer.value(1),), _box_of(points, radius), polygon=polygon,
-                path=path, radius=radius)  # fmt: skip
+                path=path, radius=radius, owner=node)  # fmt: skip
 
 
 def items_of(board: Board) -> list[Item]:
@@ -285,7 +286,7 @@ def items_of(board: Board) -> list[Item]:
     items: list[Item] = []
     for fp in board.footprints:
         for pad in fp.pads:
-            item = _pad_item(pad, fp.reference, copper)
+            item = _pad_item(pad, fp.reference, copper, (fp, pad))
             if item.layers:
                 items.append(item)
     for track in board.tracks:
@@ -296,13 +297,21 @@ def items_of(board: Board) -> list[Item]:
             path = [track.start, track.end]
         r = track.width / 2
         items.append(
-            Item(track.kind, track.net, (track.layer,), _box_of(path, r), path=path, radius=r)
+            Item(
+                track.kind,
+                track.net,
+                (track.layer,),
+                _box_of(path, r),
+                path=path,
+                radius=r,
+                owner=track,
+            )
         )
     for via in board.vias:
         r = via.diameter / 2
         items.append(
             Item("via", via.net, tuple(via.layers), _box_of([via.position], r),
-                 path=[via.position], radius=r)
+                 path=[via.position], radius=r, owner=via)
         )  # fmt: skip
     for zone in board.zones:
         if zone.rule_area:
@@ -313,7 +322,9 @@ def items_of(board: Board) -> list[Item]:
             for points in polygons:
                 if len(points) >= 3:
                     polygon = Polygon(points)
-                    items.append(Item("fill", zone.net, (layer,), polygon.bbox, polygon=polygon))
+                    items.append(
+                        Item("fill", zone.net, (layer,), polygon.bbox, polygon=polygon, owner=zone)
+                    )
     for node in board.root.lists():
         if node.head in ("gr_line", "gr_arc", "gr_circle", "gr_rect", "gr_poly"):
             item = _copper_shape(board, node, copper)
