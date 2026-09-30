@@ -50,6 +50,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   size the parts needed.
 
 ### Added
+- `kicad_cli/fileformat/erc.py` checks 16 more of KiCad's rules, 35 of 44
+  now: references (not numbered, numbered twice, units of different value,
+  a unit the part lacks), parts of several units (a unit not placed -- with
+  inputs, bidirectional or power pins -- different footprints, a shared pin
+  on different nets), the hierarchy (a sheet pin with no label inside and
+  the reverse, two sheets of one name), buses (a net label on a bus, a bus
+  label on a wire, a wire joined to a bus, a net off a bus that is not its
+  member, two names on one bus), text variables nothing defines and net
+  classes the project lacks. Measured on a second design drawn for them,
+  40 cases, with a child sheet placed twice, and held to KiCad's 35 demo
+  projects as before: no new finding KiCad does not make.
+
+  Measured on the way: KiCad's command-line ERC does not run the annotation
+  check -- its editor does, before ERC -- so the four reference rules are
+  held to what makes KiCad's netlist export warn instead. Power symbols
+  wired only to each other, on a net with no part anywhere, are one finding
+  between them, not one each. A net class flag (`netclass_flag`, as older
+  files have it) is read as a directive label, and connects nothing. A KiCad
+  10 project's own bus aliases (`schematic.bus_aliases`) are read beside the
+  sheets'. Four rules KiCad has were never reported by its ERC on any
+  drawing tried for them, and are listed as not checked.
 - `kicad_cli/fileformat/erc.py` checks a design's electrical rules as
   KiCad's ERC does, for 19 of KiCad 10's 44 rules: unconnected pins, nets
   nothing drives, conflicting pin types, no-connect flags, dangling and

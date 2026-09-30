@@ -192,6 +192,16 @@ class Sheet:
 
 
 @dataclass(slots=True)
+class Text:
+    """Free text on a sheet: a text or a text box."""
+
+    text: str
+    position: Point
+    kind: str  # text or text_box
+    node: List | None = field(default=None, repr=False)
+
+
+@dataclass(slots=True)
 class BusEntry:
     position: Point
     size: Point
@@ -278,7 +288,14 @@ class Schematic:
     def labels(self) -> list[Label]:
         out = []
         for node in self.root.lists():
-            if node.head in ("label", "global_label", "hierarchical_label", "directive_label"):
+            # A net class flag is KiCad's older word for a directive label.
+            if node.head in (
+                "label",
+                "global_label",
+                "hierarchical_label",
+                "directive_label",
+                "netclass_flag",
+            ):
                 at = node.find("at")
                 shape = node.find("shape")
                 out.append(
@@ -286,7 +303,7 @@ class Schematic:
                         text=node.value(1) or "",
                         position=(nm(at.atom(1)), nm(at.atom(2))),
                         angle=float(at.atom(3) or 0),
-                        kind=node.head,
+                        kind="directive_label" if node.head == "netclass_flag" else node.head,
                         shape=shape.atom(1) if shape is not None else None,
                         node=node,
                     )
@@ -315,6 +332,16 @@ class Schematic:
                     pages=_pages(node),
                 )
             )
+        return out
+
+    @property
+    def texts(self) -> list[Text]:
+        out = []
+        for node in self.root.lists():
+            if node.head in ("text", "text_box"):
+                at = node.find("at")
+                position = (nm(at.atom(1)), nm(at.atom(2))) if at is not None else (0, 0)
+                out.append(Text(node.value(1) or "", position, node.head, node))
         return out
 
     @property
@@ -508,6 +535,7 @@ __all__ = [
     "Sheet",
     "SheetPin",
     "Symbol",
+    "Text",
     "Wire",
     "text",
     "uuid_of",
