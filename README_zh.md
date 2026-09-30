@@ -53,7 +53,7 @@ kicad-cli reference --compact
 
 | 领域 | 命令 | Agent 用法 |
 |------|------|------------|
-| 板级分析 | `board audit`、`board plane`、`board parity` | 载流与线宽达标度；每段走线下方的铜与跨越平面分割的位置；板与原理图的器件、网络比对。 |
+| 板级分析 | `board drc`、`board audit`、`board plane`、`board parity` | 设计规则检查，给出 `ok_to_fabricate`——本工具自己的 DRC，还没检查的规则逐条列出；载流与线宽达标度；每段走线下方的铜与跨越平面分割的位置；板与原理图的器件、网络比对。 |
 | 从零构建 | `sch create`、`board from-netlist` | 一份 JSON 电路规格变成原理图和网表，网表再变成摆好封装、连好焊盘的板子。布局是按位号排的网格，不是真正的布局。 |
 | 原理图修改 | `sch edit` | 按一份 JSON 修改清单改已有原理图：器件的字段和标志、网络的名字、引脚接在哪个网络上、从库里加器件和删器件——跨图纸，也包括被放置了两次的图纸。写盘前先把改后的设计读回来核对：每个网络连的引脚必须和原来一样，并在改前改后各跑一次 ERC。 |
 | 原理图同步到板 | `board update` | 像 KiCad 的「从原理图更新 PCB」那样把原理图改动带到已布好的板上：值、字段、原位换封装、焊盘网络，改名网络的走线过孔铺铜跟着改名——写盘前先读回核对。 |
@@ -113,7 +113,7 @@ DRC 执行边界现已隔离报告并校验上游结果；这不代表写事务�
 |------|------|
 | `KICAD_CLI_ROOT` | KiCad 的安装目录。KiCad 装在非标准位置时设这一个就够，下面两个就不必了 |
 | `KICAD_CLI_PYTHON` | 能 `import pcbnew` 的 Python 解释器路径——KiCad 自带那个，不是系统的 |
-| `KICAD_CLI_OFFICIAL` | KiCad 官方 `kicad-cli` 二进制的路径，用作 DRC 与 ERC 的裁判 |
+| `KICAD_CLI_OFFICIAL` | KiCad 官方 `kicad-cli` 二进制的路径，走 `pcbnew` 的写命令用它自验写入 |
 | `KICAD_CLI_STATE` | 待确认记录的存放目录。默认取平台状态目录；删掉它的代价最多是重跑一次 `--dry-run` |
 
 `kicad-cli context` 会报告解析到了什么、以及这几个变量当前设了哪些，设之前先看一眼。

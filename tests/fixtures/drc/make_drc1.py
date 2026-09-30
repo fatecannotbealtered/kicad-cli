@@ -15,186 +15,34 @@ result (`kicad-cli pcb drc --severity-all --format json drc1.kicad_pcb`, in
 English) and record the answers again.
 """
 
-import json
 import sys
 import uuid
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[3]))
-from kicad_cli.fileformat import new_board, new_project  # noqa: E402
-from kicad_cli.fileformat.sexpr import Document  # noqa: E402
+HERE = Path(__file__).resolve().parent
+sys.path.insert(0, str(HERE))
+from boardgen import (  # noqa: E402
+    add,
+    arc,
+    cell,
+    font,
+    footprint,
+    npth,
+    pad,
+    rect,
+    segment,
+    smd,
+    start,
+    text,
+    tht,
+    uid,
+    via,
+    write,
+    xy,
+    zone,
+)  # fmt: skip
 
-OUT = Path(__file__).resolve().parent / "drc1"
-NS = uuid.UUID("7a1c5d2e-0000-4000-8000-0000000d4c01")
-NAME = "drc1"
-PITCH = 10
-
-
-def uid(*parts) -> str:
-    return str(uuid.uuid5(NS, "/".join(str(p) for p in parts)))
-
-
-def num(v: float) -> str:
-    s = f"{v:.6f}".rstrip("0").rstrip(".")
-    return "0" if s in ("", "-0") else s
-
-
-def xy(p) -> str:
-    return f"{num(p[0])} {num(p[1])}"
-
-
-FONT = "(effects (font (size 1 1) (thickness 0.15)))"
-
-
-def font(h=1.0, w=None, t=0.15, mirror=False, extra=""):
-    w = h if w is None else w
-    justify = " (justify mirror)" if mirror else ""
-    return f"(effects (font (size {num(h)} {num(w)}) (thickness {num(t)}){extra}){justify})"
-
-
-class Board:
-    def __init__(self) -> None:
-        self.items: list[str] = []
-        self.footprint_extents: list[tuple[float, float, float, float]] = []
-
-    def add(self, text: str) -> None:
-        self.items.append(text)
-
-
-board = Board()
-
-
-def cell(col: int, row: int) -> tuple[float, float]:
-    return (20 + PITCH * col, 20 + PITCH * row)
-
-
-def pad(key, number, kind, shape, at, size, layers, net=None, drill=None, extra=""):
-    net_text = f' (net "{net}")' if net else ""
-    drill_text = f" (drill {drill})" if drill is not None else ""
-    layers_text = " ".join(f'"{layer}"' for layer in layers)
-    angle = f" {num(at[2])}" if len(at) > 2 else ""
-    return (
-        f'(pad "{number}" {kind} {shape} (at {xy(at)}{angle}) (size {xy(size)}){drill_text}'
-        f' (layers {layers_text}){extra}{net_text} (uuid "{uid(key, "pad", number, at)}"))'
-    )
-
-
-def smd(key, number, at, size, net=None, layers=("F.Cu", "F.Mask", "F.Paste"), shape="rect",
-        extra=""):  # fmt: skip
-    return pad(key, number, "smd", shape, at, size, layers, net, extra=extra)
-
-
-def tht(key, number, at, size, drill, net=None, shape="circle", extra="",
-        layers=("*.Cu", "*.Mask")):  # fmt: skip
-    return pad(key, number, "thru_hole", shape, at, size, layers, net, drill,
-               " (remove_unused_layers no)" + extra)  # fmt: skip
-
-
-def npth(key, number, at, drill, extra=""):
-    return pad(key, number, "np_thru_hole", "circle", at, (drill, drill), ("*.Cu", "*.Mask"),
-               None, drill, extra)  # fmt: skip
-
-
-def footprint(ref, at, pads, *, attr="smd", layer="F.Cu", courtyard="auto", body="",
-              reference=None, value=None):  # fmt: skip
-    """A footprint of its own: a rectangle of courtyard around its pads
-    unless `courtyard` says otherwise ("none", or the text of one)."""
-    side = "B" if layer == "B.Cu" else "F"
-    ref_text = reference or (
-        f'(property "Reference" "{ref}" (at 0 -3 0) (layer "{side}.SilkS")'
-        f' (uuid "{uid(ref, "reference")}") {font(1, mirror=side == "B")})'
-    )
-    value_text = value or (
-        f'(property "Value" "{ref}" (at 0 3 0) (layer "{side}.Fab")'
-        f' (uuid "{uid(ref, "value")}") {font(1, mirror=side == "B")})'
-    )
-    if courtyard == "auto":
-        extents = []
-        for text in pads:
-            doc = Document.parse(text, lazy=False).root
-            p = doc.find("at")
-            s = doc.find("size")
-            px, py = float(p.atom(1)), float(p.atom(2))
-            half = max(float(s.atom(1)), float(s.atom(2))) / 2
-            extents.append((px - half, py - half, px + half, py + half))
-        if extents:
-            x1 = min(e[0] for e in extents) - 0.25
-            y1 = min(e[1] for e in extents) - 0.25
-            x2 = max(e[2] for e in extents) + 0.25
-            y2 = max(e[3] for e in extents) + 0.25
-        else:
-            x1, y1, x2, y2 = -1, -1, 1, 1
-        courtyard = (
-            f"(fp_rect (start {xy((x1, y1))}) (end {xy((x2, y2))})"
-            f' (stroke (width 0.05) (type solid)) (fill no) (layer "{side}.CrtYd")'
-            f' (uuid "{uid(ref, "courtyard")}"))'
-        )
-    elif courtyard == "none":
-        courtyard = ""
-    attr_text = f"(attr {attr})" if attr else ""
-    body_text = " ".join(pads)
-    board.add(
-        f'(footprint "{NAME}:{ref}" (layer "{layer}") (uuid "{uid(ref, "footprint")}")'
-        f" (at {xy(at)}) {ref_text} {value_text} {attr_text} {courtyard} {body}"
-        f" {body_text} (embedded_fonts no))"
-    )
-
-
-def segment(key, a, b, width, layer, net):
-    board.add(
-        f'(segment (start {xy(a)}) (end {xy(b)}) (width {num(width)}) (layer "{layer}")'
-        f' (net "{net}") (uuid "{uid(key, "segment", a, b, layer)}"))'
-    )
-
-
-def arc(key, a, m, b, width, layer, net):
-    board.add(
-        f"(arc (start {xy(a)}) (mid {xy(m)}) (end {xy(b)}) (width {num(width)})"
-        f' (layer "{layer}") (net "{net}") (uuid "{uid(key, "arc", a, b)}"))'
-    )
-
-
-def via(key, at, size, drill, net, layers=("F.Cu", "B.Cu"), kind="", n=0):
-    kind_text = f" {kind}" if kind else ""
-    layers_text = " ".join(f'"{layer}"' for layer in layers)
-    board.add(
-        f"(via{kind_text} (at {xy(at)}) (size {num(size)}) (drill {num(drill)})"
-        f' (layers {layers_text}) (net "{net}") (uuid "{uid(key, "via", at, n)}"))'
-    )
-
-
-def text(key, value, at, layer, effects, knockout=False):
-    ko = " knockout" if knockout else ""
-    board.add(
-        f'(gr_text "{value}" (at {xy(at)} 0) (layer "{layer}"{ko}) (uuid "{uid(key, "text")}")'
-        f" {effects})"
-    )
-
-
-def zone(key, net, layers, points, priority=0, keepout=False):
-    net_text = f'(net "{net}")' if net else ""
-    layer_text = (
-        f'(layer "{layers[0]}")' if len(layers) == 1
-        else "(layers " + " ".join(f'"{layer}"' for layer in layers) + ")"
-    )  # fmt: skip
-    pts = " ".join(f"(xy {xy(p)})" for p in points)
-    rules = (
-        "(keepout (tracks not_allowed) (vias not_allowed) (pads allowed)"
-        " (copperpour not_allowed) (footprints allowed))"
-        if keepout
-        else ""
-    )
-    priority_text = f"(priority {priority})" if priority else ""
-    board.add(
-        f'(zone {net_text} {layer_text} (uuid "{uid(key, "zone")}") (hatch edge 0.5)'
-        f" {priority_text} (connect_pads (clearance 0.5)) (min_thickness 0.25)"
-        f" (filled_areas_thickness no) {rules}"
-        f" (fill (thermal_gap 0.5) (thermal_bridge_width 0.5)) (polygon (pts {pts})))"
-    )
-
-
-def rect(x, y, w, h):
-    return [(x, y), (x + w, y), (x + w, y + h), (x, y + h)]
+start("drc1", uuid.UUID("7a1c5d2e-0000-4000-8000-0000000d4c01"))
 
 
 # -- row 0: tracks and vias between two pads of their own net ---------------------------
@@ -477,7 +325,7 @@ footprint("TF2", (x, y), [smd("TF2", "1", (0, 0), (0.8, 0.8), "TF2",
           reference=f'(property "Reference" "TF2" (at 0 -2 0) (layer "B.SilkS")'
                     f' (uuid "{uid("TF2", "reference")}") {font(1)})')  # fmt: skip
 x, y = cell(2, 6)  # a text box
-board.add(
+add(
     f'(gr_text_box "box" (start {xy((x - 2, y - 1))}) (end {xy((x + 2, y + 1))})'
     f' (margins 0.25 0.25 0.25 0.25) (layer "F.SilkS") (uuid "{uid("TB1", "box")}")'
     f" {font(0.5, t=0.05)} (border yes) (stroke (width 0.1) (type solid)))"
@@ -630,7 +478,7 @@ footprint("PM8", (x, y), [smd("PM8", "1", (0, 0), (0.8, 0.8), "PM8")],
 
 def filled_zone(key, net, points, layer="F.Cu"):
     pts = " ".join(f"(xy {xy(p)})" for p in points)
-    board.add(
+    add(
         f'(zone (net "{net}") (layer "{layer}") (uuid "{uid(key, "zone")}") (hatch edge 0.5)'
         f" (connect_pads (clearance 0.5)) (min_thickness 0.25) (filled_areas_thickness no)"
         f" (fill yes (thermal_gap 0.5) (thermal_bridge_width 0.5))"
@@ -683,29 +531,14 @@ segment("DE9", (x + 0.1, y + 0.1), (x + 3, y), 0.3, "F.Cu", "DE9")
 
 # -- the board -----------------------------------------------------------------------------
 
-COLS, ROWS = 16, 12
-x1, y1 = 10, 10
-x2, y2 = 20 + PITCH * COLS, 20 + PITCH * ROWS
-board.add(
-    f"(gr_rect (start {xy((x1, y1))}) (end {xy((x2, y2))}) (stroke (width 0.1) (type solid))"
-    f' (fill no) (layer "Edge.Cuts") (uuid "{uid("outline")}"))'
+write(
+    HERE / "drc1",
+    16,
+    12,
+    severities={
+        "footprint_type_mismatch": "warning",
+        "missing_courtyard": "warning",
+        "lib_footprint_issues": "ignore",
+        "lib_footprint_mismatch": "ignore",
+    },
 )
-head = new_board.EMPTY.replace(
-    '\t\t(0 "F.Cu" signal)\n',
-    '\t\t(0 "F.Cu" signal)\n\t\t(4 "In1.Cu" signal)\n\t\t(6 "In2.Cu" signal)\n',
-)
-tail = "\t(embedded_fonts no)\n)\n"
-assert head.endswith(tail)
-text_out = head[: -len(tail)] + "".join(f"\t{item}\n" for item in board.items) + tail
-document = Document.parse(text_out)
-OUT.mkdir(exist_ok=True)
-(OUT / f"{NAME}.kicad_pcb").write_bytes(document.dumps().encode("utf-8"))
-
-project = json.loads(new_project.project(NAME))
-severities = project["board"]["design_settings"]["rule_severities"]
-severities["footprint_type_mismatch"] = "warning"
-severities["missing_courtyard"] = "warning"
-severities["lib_footprint_issues"] = "ignore"
-severities["lib_footprint_mismatch"] = "ignore"
-(OUT / f"{NAME}.kicad_pro").write_bytes((json.dumps(project, indent=2) + "\n").encode("utf-8"))
-print("written", len(board.items), "items")

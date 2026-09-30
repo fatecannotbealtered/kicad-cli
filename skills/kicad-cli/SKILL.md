@@ -116,7 +116,7 @@ ones apart:
 
 | Task | Command | Not this |
 |---|---|---|
-| Is this board manufacturable? | `board drc` — read `ok_to_fabricate`, not the exit code | `board audit` does not run DRC; it reports design quality |
+| Is this board manufacturable? | `board drc` — read `ok_to_fabricate`, not the exit code, and `not_checked` | `board audit` does not run DRC; it reports design quality |
 | Does the board still match the schematic? | `board parity` (components and nets) | — |
 | Make a board from a requirement (no design exists yet) | `sch create` → `board from-netlist` → `board place` → `board pour` → `board route` → `board netclass`/`board rewidth` → `board silkscreen` → `board drc` → `fab *` | see "Building a board from nothing" below; do not hand-write a `.kicad_sch` |
 | Turn an existing schematic into a board | KiCad's own `sch export netlist`, then `board from-netlist` | this creates a *new* board; it does not update one that already has a layout |
@@ -203,6 +203,8 @@ kicad-cli board silkscreen --board build/circuit.kicad_pcb --confirm ct_xxx --co
 # 8. Check it before plotting. Exit is 0 even when DRC finds problems.
 kicad-cli board drc --board build/circuit.kicad_pcb --compact
 #    ok_to_fabricate false => errors or missing connections remain. Fix, re-check.
+#    The check is this tool's own; not_checked lists the rules it does not
+#    check yet, and ok_to_fabricate says nothing about those.
 
 # 9. Manufacturing output.
 kicad-cli fab gerber --board build/circuit.kicad_pcb --out build/fab --confirm ct_xxx --compact

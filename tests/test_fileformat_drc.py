@@ -1,18 +1,33 @@
 """This tool's design rules check, held to KiCad's own.
 
-`tests/fixtures/drc/drc1` is a board drawn to ask KiCad's DRC one question
-per case: how wide a track or a via must be, when a padstack is questioned,
-which text is too small or reads the wrong way, when holes crowd each other,
-when zones overlap, which track ends dangle, which courtyards collide.
-`drc1.kicad.json` is KiCad 10's answer, violation by violation, so the
-comparison runs anywhere; with KiCad installed it is asked again, and every
-demo board KiCad ships is checked both ways too.
+Two boards are drawn to ask KiCad's DRC one question per case.
+`tests/fixtures/drc/drc1` asks about single items and their holes: how wide
+a track or a via must be, when a padstack is questioned, which text is too
+small or reads the wrong way, when holes crowd each other, when zones
+overlap, which track ends dangle, which courtyards collide. `drc2` asks
+about clearance: which clearance two items are held to, when touching is a
+short, how far copper keeps from holes and from the board's edge. The
+`*.kicad.json` beside each is KiCad 10's answer, violation by violation, so
+the comparison runs anywhere; with KiCad installed it is asked again, and
+every demo board KiCad ships is checked both ways too.
 
-A violation matches when its rule and its items are the same. KiCad names a
-few twice, from two of its checks; this names each once, so answers are
-compared as sets. Missing connections are compared net by net: of several
-equally near items, which one KiCad names for a connection follows an order
-of its own, which is not reproduced.
+A violation matches when its rule and its items are the same, with these
+allowances for what KiCad does its own way:
+
+- KiCad names a few twice, from two of its checks; this names each once, so
+  answers are compared as sets.
+- Copper touching copper is a clearance, a short or a crossing; which of
+  the three KiCad calls a few odd touches -- a footprint's own copper over
+  its pads -- follows its order of checking, so the three are compared as
+  one.
+- KiCad reports one clearance violation for a track, the first it finds; a
+  violation of this tool's is not an extra when its track is one KiCad
+  flags too.
+- Of edges equally near, which one KiCad names for copper too near the
+  board's edge is its own; that rule is compared by the copper.
+- Missing connections are compared net by net: of several equally near
+  items, which one KiCad names for a connection follows an order of its
+  own, which is not reproduced.
 """
 
 from __future__ import annotations
@@ -37,9 +52,16 @@ from kicad_cli.fileformat.board import Board  # noqa: E402
 from kicad_cli.fileformat.drc import settings as drc_settings  # noqa: E402
 from kicad_cli.fileformat.drc.items import uuid_of  # noqa: E402
 
-FIXTURE = REPO / "tests" / "fixtures" / "drc" / "drc1"
+FIXTURES = REPO / "tests" / "fixtures" / "drc"
+FIXTURE = FIXTURES / "drc1"
 BOARD = FIXTURE / "drc1.kicad_pcb"
 RECORDED = FIXTURE / "drc1.kicad.json"
+BOARDS = {name: FIXTURES / name / f"{name}.kicad_pcb" for name in ("drc1", "drc2")}
+# The rules whose findings are copper touching or too near copper: which of
+# them KiCad names for a touch is compared as one.
+COPPER = ("clearance", "shorting_items", "tracks_crossing")
+# The rules KiCad reports once per track it tests.
+ONCE_PER_TRACK = (*COPPER, "hole_clearance")
 # KiCad lists at most this many violations of one kind; past it, its list is
 # a sample, and this tool's must include it rather than equal it.
 KICADS_LIMIT = 199
@@ -73,13 +95,37 @@ def theirs(report: dict) -> tuple[dict[str, set], Counter, Counter]:
     return found, listed, unconnected
 
 
+def _as_one(found: dict[str, set], rules) -> None:
+    """The rules' findings, each rule's set holding all of theirs."""
+    union = set().union(*(found.get(rule, set()) for rule in rules))
+    for rule in rules:
+        found[rule] = union
+
+
+def _by_copper(board: Path, found: set) -> set:
+    """Edge clearance findings, by their copper item alone."""
+    edges = {uuid_of(node) for node in Board.load(board).edge_shapes()}
+    return {frozenset(u for u in key if u not in edges) or key for key in found}
+
+
 def differences(board: Path, report: dict) -> list[str]:
     """Where this tool and KiCad disagree on a board, rule by rule."""
     ours = drc.check(board)
     found, listed, unconnected = theirs(report)
     mine: dict[str, set] = defaultdict(set)
+    tracks = set()
     for v in ours.violations:
         mine[v.rule].add(v.uuids())
+        tracks |= {i.uuid for i in v.items if i.kind == "track"}
+    checked = [r for r in COPPER if r not in ours.not_checked]
+    _as_one(found, checked)
+    _as_one(mine, checked)
+    flagged = set().union(*(found.get(rule, set()) for rule in ONCE_PER_TRACK))
+    flagged = set().union(*flagged) if flagged else set()
+    edge = "copper_edge_clearance"
+    if edge not in ours.not_checked:
+        found[edge] = _by_copper(board, found.get(edge, set()))
+        mine[edge] = _by_copper(board, mine.get(edge, set()))
     out = []
     for rule in drc.CHECKED:
         if rule == "unconnected_items" or rule in ours.not_checked:
@@ -92,6 +138,8 @@ def differences(board: Path, report: dict) -> list[str]:
         extra = mine.get(rule, set()) - found.get(rule, set())
         if listed[rule] >= KICADS_LIMIT:
             extra = set()
+        if rule in ONCE_PER_TRACK:
+            extra = {key for key in extra if not key & tracks & flagged}
         fields = [
             v for v in ours.violations
             if v.rule == rule and v.uuids() in extra and v.items and v.items[0].kind == "field"
@@ -110,18 +158,50 @@ def differences(board: Path, report: dict) -> list[str]:
     return out
 
 
-def test_the_fixture_is_checked_as_kicad_checks_it():
-    recorded = json.loads(RECORDED.read_text(encoding="utf-8"))
-    assert differences(BOARD, recorded) == []
+def recorded(name: str) -> dict:
+    return json.loads(BOARDS[name].with_suffix(".kicad.json").read_text(encoding="utf-8"))
 
 
-def test_the_fixture_asks_every_question_it_says_it_asks():
-    recorded = json.loads(RECORDED.read_text(encoding="utf-8"))
-    rules = Counter(v["type"] for v in recorded["violations"])
+@pytest.mark.parametrize("name", BOARDS)
+def test_the_fixture_is_checked_as_kicad_checks_it(name):
+    assert differences(BOARDS[name], recorded(name)) == []
+
+
+def test_the_fixtures_ask_every_question_they_say_they_ask():
+    rules = Counter(v["type"] for name in BOARDS for v in recorded(name)["violations"])
     for rule in drc.CHECKED:
         if rule != "unconnected_items":
-            assert rules[rule], f"the fixture asks nothing about {rule}"
-    assert recorded["unconnected_items"]
+            assert rules[rule], f"no fixture asks about {rule}"
+    assert recorded("drc1")["unconnected_items"]
+
+
+def _messages(name: str) -> dict[frozenset, str]:
+    return {v.uuids(): v.message for v in drc.check(BOARDS[name]).violations}
+
+
+def test_a_clearance_names_what_set_it_as_kicad_names_it():
+    """drc2: the net classes' larger, the board's minimum, a pad's or a
+    footprint's own even when smaller, a zone's."""
+    messages = list(_messages("drc2").values())
+    for expected in (
+        "Clearance violation (netclass 'Default' clearance 0.2000 mm; actual 0.1500 mm)",
+        "Clearance violation (netclass 'Wide' clearance 0.4000 mm; actual 0.3000 mm)",
+        "Clearance violation (board minimum clearance 0.1200 mm; actual 0.1100 mm)",
+        "Clearance violation (pad clearance 0.5000 mm; actual 0.3000 mm)",
+        "Clearance violation (footprint PA4 clearance 0.5000 mm; actual 0.3000 mm)",
+        "Clearance violation (zone clearance 0.5000 mm; actual 0.3000 mm)",
+        "Clearance violation (netclass 'Default' clearance 0.2000 mm; actual 0.1994 mm)",
+    ):
+        assert expected in messages
+    assert not any("actual 0.1995 mm" in m for m in messages)  # within KiCad's 0.5 um
+
+
+def test_the_two_nets_of_a_differential_pair_are_held_to_its_gap():
+    from kicad_cli.fileformat.drc.clearance import coupled  # noqa: PLC0415
+
+    assert coupled("/PCIE.TX_P", "/PCIE.TX_N") and coupled("usb_d+", "usb_d-")
+    assert not coupled("/PCIE.TX_P", "/PCIE.RX_N") and not coupled("CLK", "CLKN")
+    assert not coupled("/usb_dp", "/usb_dn")  # lower case is not a pair
 
 
 def test_every_rule_kicad_has_is_either_checked_or_listed_as_not():
@@ -259,14 +339,14 @@ def kicad_drc(board: Path) -> dict:
 
 
 @needs_kicad
-def test_kicad_still_says_what_was_recorded():
-    recorded = json.loads(RECORDED.read_text(encoding="utf-8"))
-    asked = kicad_drc(BOARD)
+@pytest.mark.parametrize("name", BOARDS)
+def test_kicad_still_says_what_was_recorded(name):
+    asked = kicad_drc(BOARDS[name])
     rules = set(drc.CHECKED)
     assert {v["type"] for v in asked["violations"] if v["type"] in rules} == {
-        v["type"] for v in recorded["violations"] if v["type"] in rules
+        v["type"] for v in recorded(name)["violations"] if v["type"] in rules
     }
-    assert differences(BOARD, asked) == []
+    assert differences(BOARDS[name], asked) == []
 
 
 @needs_kicad

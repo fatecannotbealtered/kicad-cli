@@ -79,6 +79,9 @@ class NetClass:
 
     name: str
     values: dict[str, int] = field(hash=False, compare=False)
+    # which class each value came from: "Wide" for the clearance of a net in
+    # "Wide,Default" when Wide sets it
+    sources: dict[str, str] = field(default_factory=dict, hash=False, compare=False)
 
     def nm(self, key: str) -> int:
         return self.values[key]
@@ -114,16 +117,18 @@ class NetClasses:
         matched = [c for c in dict.fromkeys(matched) if c != "Default" and c in self.classes]
         matched.sort(key=lambda c: self.classes[c].get("priority", 0))
         values: dict[str, int] = {}
+        sources: dict[str, str] = {}
         chain = [self.classes[c] for c in matched] + [self.classes.get("Default", {})]
         for key, fallback in DEFAULT_CLASS.items():
-            value = next((c[key] for c in chain if isinstance(c.get(key), (int, float))), fallback)
-            values[key] = round(value * NM)
+            given = next((c for c in chain if isinstance(c.get(key), (int, float))), None)
+            values[key] = round((given[key] if given is not None else fallback) * NM)
+            sources[key] = (given or {}).get("name", "Default")
         undefined = any(
             not any(isinstance(self.classes[c].get(k), (int, float)) for c in matched)
             for k in DEFAULT_CLASS
         )
         names = matched + (["Default"] if not matched or undefined else [])
-        return NetClass(",".join(names), values)
+        return NetClass(",".join(names), values, sources)
 
 
 def _matches(pattern: str, net: str) -> bool:

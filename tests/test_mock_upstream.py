@@ -71,11 +71,15 @@ def test_the_fixture_board_needs_no_kicad() -> None:
 # --- success and schema -----------------------------------------------------
 
 
-@pytest.mark.parametrize("command", [["board", "audit"], ["board", "plane"], ["sch", "audit"]])
+@pytest.mark.parametrize(
+    "command",
+    [["board", "audit"], ["board", "plane"], ["sch", "audit"], ["board", "drc"]],
+)
 def test_a_native_command_runs_without_kicad(command: list[str], tmp_path: Path) -> None:
     """These read the file themselves now. Both of KiCad's boundaries are
     replaced by stubs that fail when called, and the command must neither
-    call them nor need them. `sch audit` checks the rules itself."""
+    call them nor need them. `sch audit` and `board drc` check the rules
+    themselves."""
     doc, exit_code, _ = run(
         [*command, "--board", str(MINI)],
         fake_upstream.env(tmp_path, "launch_fail"),
@@ -172,15 +176,21 @@ def test_strict_mode_rejects_a_payload_that_does_not_match_its_schema(tmp_path: 
 @pytest.mark.parametrize("behaviour", ["launch_fail", "no_output"])
 def test_an_unusable_official_binary_is_e_io(behaviour: str, tmp_path: Path) -> None:
     """`no_output` is the observed Windows transient: exit 0, no file, empty
-    stderr. It cannot be provoked on a real KiCad. `board drc` is the command
-    left that launches KiCad's binary, and it launches it once: a failure is
-    reported with its evidence, never read as a clean board."""
-    doc, exit_code, _ = run(
-        ["board", "drc", "--board", str(MINI)],
-        fake_upstream.env(tmp_path, behaviour),
+    stderr. It cannot be provoked on a real KiCad. The write commands'
+    verification is what launches KiCad's binary now, through the runner
+    the payloads share; it launches it once, and a failure is reported with
+    its evidence, never read as a clean board."""
+    script = "import sys\nfrom kicad_cli.payload import kicad_lib\nkicad_lib.run_drc(sys.argv[1])\n"
+    proc = subprocess.run(
+        [sys.executable, "-c", script, str(MINI)],
+        capture_output=True,
+        cwd=REPO,
+        env=fake_upstream.env(tmp_path, behaviour),
+        timeout=300,
     )
+    doc = json.loads(proc.stdout.decode("utf-8", "replace").splitlines()[-1])
     assert code_of(doc) == "E_IO"
-    assert exit_code == 1
+    assert proc.returncode == 1
     assert fake_upstream.attempts(tmp_path) == 1
 
 
@@ -209,14 +219,25 @@ def test_noise_before_the_envelope_is_stepped_over(tmp_path: Path) -> None:
     assert exit_code == 0
 
 
-def test_a_hanging_upstream_becomes_e_timeout(tmp_path: Path) -> None:
+@pytest.mark.parametrize(
+    "script",
+    [
+        # KiCad's interpreter, as every pcbnew command starts it
+        "import sys\nfrom kicad_cli import kicad_env\n"
+        "kicad_env.run_payload('pcb_route', ['--board', sys.argv[1]], timeout=3)\n",
+        # KiCad's binary, as those commands verify their writes with it
+        "import sys\nfrom kicad_cli.payload import kicad_lib\n"
+        "kicad_lib.run_drc(sys.argv[1], timeout=3)\n",
+    ],
+    ids=["interpreter", "binary"],
+)
+def test_a_hanging_upstream_becomes_e_timeout(script: str, tmp_path: Path) -> None:
     """Exercised below the command, because the command's own timeout is half an
-    hour and this has to be a test, not a coffee break. The path under test is
-    the real one: the DRC `board drc` runs, same stub, same envelope."""
+    hour and this has to be a test, not a coffee break. The paths under test
+    are the real ones -- the boundary into KiCad's interpreter the pcbnew
+    commands cross, and the DRC they verify with -- same stubs, same
+    envelope."""
     env = fake_upstream.env(tmp_path, "hang")
-    script = (
-        "import sys\nfrom kicad_cli import kicad_env\nkicad_env.run_drc(sys.argv[1], timeout=3)\n"
-    )
     proc = subprocess.run(
         [sys.executable, "-c", script, str(MINI)],
         capture_output=True,

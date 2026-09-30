@@ -42,7 +42,7 @@ def check(run) -> None:
     rules = ("unconnected_items", "track_dangling", "via_dangling")
     if not any(run.on(rule) for rule in rules):
         return
-    joined = connectivity.connect(run.board)
+    joined = run.connectivity()
     grid = _grid(joined.items)
     if run.on("unconnected_items"):
         _unconnected(run, joined)

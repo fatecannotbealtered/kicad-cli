@@ -54,7 +54,7 @@ Worst-case risk tier: **T1** - writes local PCB design files; no credentials, no
 
 | Area | Commands | Agent use |
 |------|----------|-----------|
-| Board analysis | `board drc`, `board audit`, `board plane`, `board parity` | Design rule check with `ok_to_fabricate`, ampacity and width compliance and total routed copper, copper under every track and plane-split crossings, board-vs-schematic component and net comparison. |
+| Board analysis | `board drc`, `board audit`, `board plane`, `board parity` | Design rule check with `ok_to_fabricate` -- this tool's own, with the rules it does not check yet listed -- ampacity and width compliance and total routed copper, copper under every track and plane-split crossings, board-vs-schematic component and net comparison. |
 | Build from nothing | `sch create`, `board from-netlist`, `board place` | A JSON circuit specification becomes a schematic and a netlist; the netlist becomes a board with footprints placed and pads joined; `board place` then rearranges by connectivity, reporting wirelength before and after and refusing to write when it found nothing shorter. |
 | Schematic editing | `sch edit` | Change an existing schematic from a JSON list of changes: a part's fields and flags, a net's name, which net a pin is on, parts added from the libraries and removed -- across sheets, and on a sheet placed twice. The edit is read back before anything is written: every net must join the same pins as before, and ERC is run before and after. |
 | Board from schematic | `board update` | Carry schematic changes onto a laid-out board as KiCad's Update PCB from Schematic does: values, fields, footprints swapped in place, pads' nets, and a renamed net's copper -- read back before it is written. |
@@ -116,7 +116,7 @@ There is no configuration file and nothing to authenticate. `kicad-cli` finds Ki
 |----------|---------|
 | `KICAD_CLI_ROOT` | The KiCad installation directory. Set this one if KiCad is somewhere non-standard; the two below are then unnecessary |
 | `KICAD_CLI_PYTHON` | Path to the Python interpreter that can `import pcbnew` — KiCad's own, not the system one |
-| `KICAD_CLI_OFFICIAL` | Path to KiCad's `kicad-cli` binary, used as the DRC and ERC oracle |
+| `KICAD_CLI_OFFICIAL` | Path to KiCad's `kicad-cli` binary, which the `pcbnew` write commands verify their writes with |
 | `KICAD_CLI_STATE` | Where pending confirmation records are kept. Defaults to the platform state directory; deleting it costs at most one re-run of `--dry-run` |
 
 `kicad-cli context` reports what it resolved and which of these are set, so check that before setting any of them.
