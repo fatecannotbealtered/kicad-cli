@@ -148,6 +148,12 @@ SCHEMAS: dict[str, dict[str, Any]] = {
         # a name KiCad has, and a value is whatever the spec said.
         "untrusted_fields": ["title", "parts", "nets", "unconnected_parts"],
     },
+    "sch_edit": {
+        "shape": "object",
+        "fields": ["schematic", "changes", "files", "verified", "erc", "status", "not_checked"],
+        # Field values, net names and ERC's item descriptions are the design's text.
+        "untrusted_fields": ["changes", "verified", "erc"],
+    },
     "sch_relink": {
         "shape": "object",
         "fields": [
@@ -503,6 +509,7 @@ SCHEMAS: dict[str, dict[str, Any]] = {
 
 
 for _name, _values in {
+    "sch_edit": ["PASS", "NOOP"],
     "sch_link": ["PASS", "FAIL"],
     "sch_audit": ["PASS", "FAIL"],
     "board_plane": ["PASS", "FAIL"],
@@ -769,6 +776,47 @@ def build() -> list[dict[str, Any]]:
                 "kicad-cli sch create --spec circuit.json --out build --confirm ct_xxx --compact",
             ],
             sch.create,
+        ),
+        _cmd(
+            "sch edit",
+            "write",
+            "Change an existing schematic from a JSON list of changes: set a part's fields "
+            "and flags, rename a net. The edit is made in memory and read back through this "
+            "tool's own connectivity before anything is written -- every net joining the same "
+            "pins, each change as asked -- and ERC is run before and after.",
+            [
+                {
+                    "name": "schematic",
+                    "type": "string",
+                    "required": True,
+                    "multiple": False,
+                    "default": None,
+                    "description": "The root schematic of the design.",
+                },
+                {
+                    "name": "changes",
+                    "type": "string",
+                    "required": True,
+                    "multiple": False,
+                    "default": None,
+                    "description": "Path to the JSON changes file.",
+                },
+                {
+                    "name": "ignore-lock",
+                    "type": "boolean",
+                    "required": False,
+                    "multiple": False,
+                    "default": False,
+                },
+            ],
+            "sch_edit",
+            [
+                "kicad-cli sch edit --schematic design.kicad_sch --changes changes.json --dry-run "
+                "--compact",
+                "kicad-cli sch edit --schematic design.kicad_sch --changes changes.json "
+                "--confirm ct_xxx --compact",
+            ],
+            sch.edit,
         ),
         _cmd(
             "sch relink",

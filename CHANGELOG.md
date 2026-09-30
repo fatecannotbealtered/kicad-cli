@@ -7,6 +7,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- `sch edit` changes an existing schematic from a JSON list of changes, in
+  this process: `set` gives a part's fields and flags -- value, footprint,
+  any field, DNP, BOM, board, simulation -- on every unit of it; `rename`
+  renames a net wherever it is drawn: every local label of the name on its
+  sheet, every global label and power symbol of it, or a hierarchical label
+  together with the sheet pins that meet it on every sheet symbol placing
+  its file. A sheet placed twice is one drawing, and the command says which
+  other references and nets change with it.
+
+  The edit is made in the files' own text -- only the items changed are
+  rewritten -- and read back as a design before anything is written: every
+  net must join the same pins as before, a renamed net must carry the new
+  name and no other net a new one, and every field must read back as set.
+  A rename that would join two nets is refused (`E_CONFLICT`), and every
+  problem in a list of changes is reported together (`E_VALIDATION`). ERC,
+  this tool's own, is run before and after, and what the edit adds to it or
+  clears is reported. On KiCad's demo projects, KiCad's own netlist of the
+  edited copies names the nets and values as this tool's does. Renaming up
+  to six nets of each kind on every one of the 35 demos, 245 renames read
+  back as asked; the other 37 were refused before anything was drawn, each
+  saying why -- a bus member, whose name is the bus's, and a net a part's
+  hidden supply pin names.
+
 ### Changed
 - `sch audit` needs no KiCad. It checks the design with this tool's own ERC,
   once, with every rule on, where it ran KiCad's binary twice -- the second

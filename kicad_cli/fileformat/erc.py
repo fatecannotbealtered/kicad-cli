@@ -1437,12 +1437,16 @@ def _bare(name: str) -> str:
 
 
 def check(
-    root: str | Path, settings: Settings | None = None, kicad_root: str | Path | None = None
+    root: str | Path,
+    settings: Settings | None = None,
+    kicad_root: str | Path | None = None,
+    design: Design | None = None,
 ) -> list[Violation]:
     """Every violation of the design whose root schematic is `root`. The
     library rules are checked when `kicad_root`, KiCad's installation, is
-    given: the library tables name their libraries relative to it."""
-    design = Design(root)
+    given: the library tables name their libraries relative to it. A design
+    already read -- an edit not yet written -- is checked as it is."""
+    design = design if design is not None else Design(root)
     if settings is None:
         settings = Settings.of(Path(root).with_suffix(".kicad_pro"))
     run = _Check(design, settings)

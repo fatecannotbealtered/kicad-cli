@@ -12,11 +12,13 @@ import time
 from pathlib import Path
 from typing import Any
 
-from .. import envelope, netlist, schematic, sexpr
+from .. import envelope, kicad_env, netlist, schematic, sexpr
 from ..fileformat.board import BoardError
 from ..fileformat.sexpr import SexprError
-from ..native import links
+from ..native import links, sch_edit
 from ..native import sch_create as native_sch
+from ..native import write as native_write
+from . import layout
 
 
 def _find_schematics(board: Path) -> tuple[list[Path], str | None]:
@@ -687,6 +689,66 @@ def relink(args: dict[str, Any]) -> None:
             ],
         }
     )
+
+
+def edit(args: dict[str, Any]) -> None:
+    """Change an existing schematic, as a JSON list of changes describes.
+
+    Made in memory and read back before anything is written: an edit that
+    would join or split a net, or not read back as asked, is refused. The
+    preview carries every file's hash, so a token cannot be spent on a design
+    that has moved on since the dry run.
+    """
+    schematic = Path(str(args.get("schematic"))).expanduser()
+    if schematic.suffix != ".kicad_sch" or not schematic.is_file():
+        envelope.fail("E_NOT_FOUND", "no schematic at that path", {"schematic": str(schematic)})
+    changes = sch_edit.load_changes(str(args.get("changes")))
+    layout._guard(str(schematic), args)
+    report, sources = sch_edit.run(schematic, changes)
+    kicad_root = kicad_env.find_kicad_root()
+    result = {
+        "schematic": report["schematic"],
+        "changes": report["changes"],
+        "files": report["files"],
+        "verified": report["verified"],
+        "erc": report["erc"],
+    }
+    if not sources:
+        envelope.ok({**result, "status": "NOOP", "not_checked": sch_edit.not_checked(kicad_root)})
+    verified = report["verified"]
+    if not all(
+        verified[k]
+        for k in ("nets_join_the_same_pins", "nets_renamed_as_asked", "no_other_net_renamed")
+    ):
+        envelope.fail(
+            "E_CONFLICT",
+            "the changes would join, split or misname nets; nothing was written",
+            {"verified": verified, "changes": report["changes"]},
+        )
+    if not sch_edit.passed(verified):
+        envelope.fail(
+            "E_INTEGRITY",
+            "the edited schematic does not read back as asked; nothing was written",
+            {"verified": verified, "changes": report["changes"]},
+        )
+    preview = {
+        **report,
+        "will": f"rewrite {len(sources)} schematic file(s) in place; only the items changed "
+        "are rewritten, the rest of each file stays byte for byte",
+    }
+    envelope.check_confirm(
+        args.get("confirm"), f"sch edit:{schematic.name}", preview, str(schematic)
+    )
+
+    native_write.start()
+    for path, text in sources.items():
+        native_write.begin(path)
+        path.write_bytes(text.encode("utf-8"))
+    # What is on disk now is what was checked.
+    unequal = [str(p) for p, text in sources.items() if p.read_bytes() != text.encode("utf-8")]
+    if unequal:
+        envelope.fail("E_INTEGRITY", "a file does not read back as written", {"files": unequal})
+    native_write.done({**result, "status": "PASS", "not_checked": sch_edit.not_checked(kicad_root)})
 
 
 def create(args: dict[str, Any]) -> None:
