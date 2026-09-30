@@ -149,9 +149,11 @@ class Settings:
     exclusions: dict[tuple[str, frozenset[str]], str]
     netclasses: NetClasses
     project: Path | None = None
-    # Checks the project's custom rules decide: check -> the first rule that
-    # does (`rules.py`). Not made until the rules are read.
+    # Checks the project's custom rules decide and this does not take from
+    # them: check -> the first rule that does (`rules.py`). Not made.
     custom: dict[str, str] = field(default_factory=dict)
+    # The project's custom rules, read (`rules.py`).
+    dru: object = None
 
     @classmethod
     def of(cls, project: Path | None) -> Settings:
@@ -176,6 +178,7 @@ class Settings:
             netclasses=NetClasses(data.get("net_settings") or {}),
             project=project,
             custom=custom_rules.constrained(project),
+            dru=custom_rules.load(project),
         )
 
     def nm(self, rule: str) -> int:

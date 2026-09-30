@@ -50,63 +50,112 @@ from .shapes import Shape, covers, depth, distance, hole, pad_copper, ring, via_
 NO_HOLE = 4
 
 
+BOARD = "board setup constraints"
+
+
+def limits(run, kind: str, subject, layer: str | None, least: int | None):
+    """What an item is held to for a kind of constraint: ((min, who says
+    so), (max, who says so)) -- each bound the last custom rule to set it
+    (`rules.py`), else the board's minimum and no maximum."""
+    low, high = (least, BOARD, None), (None, BOARD, None)
+    rules = run.settings.dru
+    if rules is not None and rules.rules and subject is not None:
+        found = rules.find(kind, subject, layer=layer, bound="min")
+        if found is not None:
+            low = (found[1].min, f"rule '{found[0].name}'", found[0].severity)
+        found = rules.find(kind, subject, layer=layer, bound="max")
+        if found is not None:
+            high = (found[1].max, f"rule '{found[0].name}'", found[0].severity)
+    return low, high
+
+
+def _out_of(value: int, limit) -> tuple[str, int, str, str | None] | None:
+    """Which bound a value breaks: ("min" or "max", the bound, who set it,
+    the severity its rule gives)."""
+    (least, low_who, low_severity), (most, high_who, high_severity) = limit
+    if least is not None and value < least:
+        return "min", least, low_who, low_severity
+    if most is not None and value > most:
+        return "max", most, high_who, high_severity
+    return None
+
+
 def tracks(run) -> None:
     if not run.on("track_width"):
         return
     board, least = run.board, run.settings.nm("min_track_width")
+    rules = run.settings.dru
     for track in board.tracks:
-        if track.width < least:
+        subject = None
+        if rules is not None and rules.rules:
+            from . import subjects  # noqa: PLC0415
+            from .copper import arc_chords  # noqa: PLC0415
+            from .shapes import Shape  # noqa: PLC0415
+
+            pieces = (
+                arc_chords(track.start, track.mid, track.end, track.width)
+                if track.kind == "arc" and track.mid is not None
+                else [Shape((track.start, track.end), track.width / 2)]
+            )  # fmt: skip
+            subject = subjects.of_track(run, track, pieces)
+        broken = _out_of(track.width, limits(run, "track_width", subject, track.layer, least))
+        if broken is not None:
+            bound, value, who, severity = broken
             run.report(
                 "track_width",
-                f"Track width (board setup constraints min width {mm(least)}; "
-                f"actual {mm(track.width)})",
+                f"Track width ({who} {bound} width {mm(value)}; actual {mm(track.width)})",
                 [describe.track(board, track)],
+                severity=severity,
             )
 
 
 def vias(run) -> None:
     board, settings = run.board, run.settings
+    rules = settings.dru
     for via in board.vias:
         item = describe.via(board, via)
         micro = via.kind == "micro"
+        subject = None
+        if rules is not None and rules.rules:
+            from . import subjects  # noqa: PLC0415
+
+            subject = subjects.of_via(run, via)
         least = (
             settings.netclasses.of(via.net).nm("microvia_diameter") if micro
             else settings.nm("min_via_diameter")
         )  # fmt: skip
-        if via.diameter < least:
+        broken = _out_of(via.diameter, limits(run, "via_diameter", subject, None, least))
+        if broken is not None:
+            bound, value, who, severity = broken
             run.report(
                 "via_diameter",
-                f"Via diameter (board setup constraints min diameter {mm(least)}; "
-                f"actual {mm(via.diameter)})",
+                f"Via diameter ({who} {bound} diameter {mm(value)}; actual {mm(via.diameter)})",
                 [item],
+                severity=severity,
             )
         annular = (via.diameter - via.drill) // 2
         least = settings.nm("min_via_annular_width")
-        if annular < least:
+        broken = _out_of(annular, limits(run, "annular_width", subject, None, least))
+        if broken is not None:
+            bound, value, who, severity = broken
             run.report(
                 "annular_width",
-                f"Annular width (board setup constraints min annular width {mm(least)}; "
-                f"actual {mm(annular)})",
+                f"Annular width ({who} {bound} annular width {mm(value)}; actual {mm(annular)})",
                 [item],
+                severity=severity,
             )
-        if micro:
-            least = settings.nm("min_microvia_drill")
-            if via.drill < least:
-                run.report(
-                    "microvia_drill_out_of_range",
-                    f"Micro via hole size out of range (board setup constraints min hole "
-                    f"{mm(least)}; actual {mm(via.drill)})",
-                    [item],
-                )
-        else:
-            least = settings.nm("min_through_hole_diameter")
-            if via.drill < least:
-                run.report(
-                    "drill_out_of_range",
-                    f"Hole size out of range (board setup constraints min hole {mm(least)}; "
-                    f"actual {mm(via.drill)})",
-                    [item],
-                )
+        least = settings.nm("min_microvia_drill" if micro else "min_through_hole_diameter")
+        broken = _out_of(via.drill, limits(run, "hole_size", subject, None, least))
+        if broken is not None:
+            bound, value, who, severity = broken
+            rule = "microvia_drill_out_of_range" if micro else "drill_out_of_range"
+            what = "Micro via hole size" if micro else "Hole size"
+            run.report(
+                rule,
+                f"{what} out of range ({who} {bound} hole {mm(value)}; actual {mm(via.drill)})",
+                [item],
+                severity=severity,
+            )
 
 
 # -- pads -----------------------------------------------------------------------------------
@@ -197,6 +246,7 @@ def pads(run) -> None:
     holes = _holes(board) if run.on("annular_width") else {}
     least_hole = settings.nm("min_through_hole_diameter")
     least_ring = settings.nm("min_via_annular_width")
+    rules = settings.dru
     for fp in board.footprints:
         for pad in fp.pads:
             item = describe.pad(board, fp, pad)
@@ -204,21 +254,30 @@ def pads(run) -> None:
                 run.report("through_hole_pad_without_hole", "Through hole pad has no hole", [item])
                 _padstack(run, pad, item)
                 continue
+            subject = None
+            if rules is not None and rules.rules and pad.kind in ("thru_hole", "np_thru_hole"):
+                from . import subjects  # noqa: PLC0415
+
+                subject = subjects.of_pad(run, fp, pad)
             if pad.kind in ("thru_hole", "np_thru_hole"):
                 size = min(pad.drill) if pad.drill is not None else 0
-                if size < least_hole:
+                broken = _out_of(size, limits(run, "hole_size", subject, None, least_hole))
+                if broken is not None:
+                    bound, value, who, severity = broken
                     run.report(
                         "drill_out_of_range",
-                        f"Hole size out of range (board setup constraints min hole "
-                        f"{mm(least_hole)}; actual {mm(size)})",
+                        f"Hole size out of range ({who} {bound} hole {mm(value)}; "
+                        f"actual {mm(size)})",
                         [item],
+                        severity=severity,
                     )
             if pad.kind == "thru_hole":
-                _plated(run, fp, pad, item, holes, least_ring)
+                _plated(run, fp, pad, item, holes, limits(run, "annular_width", subject, None,
+                                                          least_ring))  # fmt: skip
             _padstack(run, pad, item)
 
 
-def _plated(run, fp: Footprint, pad: Pad, item, holes, least_ring: int) -> None:
+def _plated(run, fp: Footprint, pad: Pad, item, holes, ring_limits) -> None:
     own = hole(pad)
     if own is None or (pad.drill is not None and min(pad.drill) <= NO_HOLE):
         run.report(
@@ -233,12 +292,16 @@ def _plated(run, fp: Footprint, pad: Pad, item, holes, least_ring: int) -> None:
     if not run.on("annular_width"):
         return
     annular = _annular(pad, own, copper, holes)
-    if annular is not None and annular < least_ring:
+    if annular is None:
+        return
+    broken = _out_of(round(annular), ring_limits)
+    if broken is not None and (broken[0] == "max" or annular < broken[1]):
+        bound, value, who, severity = broken
         run.report(
             "annular_width",
-            f"Annular width (board setup constraints min annular width {mm(least_ring)}; "
-            f"actual {mm(round(annular))})",
+            f"Annular width ({who} {bound} annular width {mm(value)}; actual {mm(round(annular))})",
             [item],
+            severity=severity,
         )
 
 

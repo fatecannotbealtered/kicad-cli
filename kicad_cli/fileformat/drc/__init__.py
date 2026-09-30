@@ -106,10 +106,13 @@ class Run:
     def enabled(self, rule: str) -> bool:
         return self.settings.severities.get(rule, SEVERITIES.get(rule, "error")) != "ignore"
 
-    def report(self, rule: str, message: str, items: list[Item]) -> None:
+    def report(
+        self, rule: str, message: str, items: list[Item], severity: str | None = None
+    ) -> None:
         """One violation, once: KiCad names some twice, from two of its
-        checks; this names each once."""
-        if not self.on(rule):
+        checks; this names each once. `severity` is the custom rule's own,
+        where the rule deciding it gives one -- "ignore" reports nothing."""
+        if not self.on(rule) or severity == "ignore":
             return
         uuids = frozenset(i.uuid for i in items if i.uuid)
         key = (rule, uuids, message)
@@ -117,9 +120,11 @@ class Run:
             return
         self._seen.add(key)
         comment = self.settings.exclusions.get((rule, uuids))
+        if severity == "exclusion":
+            severity, comment = None, comment or ""
         violation = Violation(
             rule,
-            self.settings.severities.get(rule, SEVERITIES.get(rule, "error")),
+            severity or self.settings.severities.get(rule, SEVERITIES.get(rule, "error")),
             message,
             items,
             excluded=comment is not None,
@@ -201,14 +206,14 @@ NOT_CHECKED = {
     "silk_overlap": "silkscreen needs the stroke font, which this tool does not have yet",
     "silk_over_copper": "silkscreen needs the stroke font, which this tool does not have yet",
     "silk_edge_clearance": "silkscreen needs the stroke font, which this tool does not have yet",
-    "length_out_of_range": "custom rules (.kicad_dru) are not read yet",
-    "skew_out_of_range": "custom rules (.kicad_dru) are not read yet",
-    "diff_pair_gap_out_of_range": "custom rules (.kicad_dru) are not read yet",
-    "diff_pair_uncoupled_length_too_long": "custom rules (.kicad_dru) are not read yet",
-    "too_many_vias": "custom rules (.kicad_dru) are not read yet",
-    "track_angle": "custom rules (.kicad_dru) are not read yet",
-    "track_segment_length": "custom rules (.kicad_dru) are not read yet",
-    "creepage": "custom rules (.kicad_dru) are not read yet",
+    "length_out_of_range": "the lengths of nets are not measured yet",
+    "skew_out_of_range": "the lengths of nets are not measured yet",
+    "diff_pair_gap_out_of_range": "differential pairs' coupling is not measured yet",
+    "diff_pair_uncoupled_length_too_long": "differential pairs' coupling is not measured yet",
+    "too_many_vias": "vias are not counted net by net yet",
+    "track_angle": "track angles are not checked yet",
+    "track_segment_length": "track segment lengths are not checked yet",
+    "creepage": "creepage is not measured yet",
     "track_on_post_machined_layer": "not checked yet",
     "track_not_centered_on_via": "not checked yet",
     "footprint": "not checked yet",
@@ -251,12 +256,9 @@ def check(
                     "KiCad's installation was not found, and the library tables name "
                     "their libraries by paths in it"
                 )
-    for rule, name in settings.custom.items():
+    for rule, why in settings.custom.items():
         if run.enabled(rule) and rule not in not_checked:
-            not_checked[rule] = (
-                f"the project's custom rules decide it (rule '{name}' in its .kicad_dru), "
-                "and they are not read yet"
-            )
+            not_checked[rule] = why
     ignored = sorted(rule for rule in settings.severities if not run.enabled(rule))
     partial = {rule: why for rule, why in PARTIAL.items() if run.on(rule)}
     return Report(run.found, run.unconnected, not_checked, ignored, partial)

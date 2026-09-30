@@ -13,6 +13,10 @@ mask: which openings bridge nets, under a margin, a minimum web and a
 clearance to copper, and with all of them 0. `drclib` asks about footprint
 libraries, from a library of its own: which changes to a footprint make it
 unlike its library's copy, and what KiCad says of a library it cannot find.
+`drcrules` asks about custom rules, from a `.kicad_dru` of its own: which
+rule decides a track's width, a via, a hole or a clearance, against the
+board's minimums, the net classes and a pad's own clearance, and what a
+condition matches.
 The `*.kicad.json` beside each is KiCad 10's answer, violation by
 violation, so the comparison runs anywhere; with
 KiCad installed it is asked again, and every demo board KiCad ships is
@@ -70,7 +74,7 @@ BOARD = FIXTURE / "drc1.kicad_pcb"
 RECORDED = FIXTURE / "drc1.kicad.json"
 BOARDS = {
     name: FIXTURES / name / f"{name}.kicad_pcb"
-    for name in ("drc1", "drc2", "drc3", "drc4", "drc5", "drclib")
+    for name in ("drc1", "drc2", "drc3", "drc4", "drc5", "drclib", "drcrules")
 }
 # KiCad's installation, for the libraries the tables of a demo board name;
 # the fixtures name only their own, so any folder stands in without KiCad.
@@ -169,7 +173,9 @@ def differences(board: Path, report: dict) -> list[str]:
         blank = sum(1 for m in missing if not m)
         missing = {m for m in missing if m}
         extra = mine.get(rule, set()) - found.get(rule, set())
-        if listed[rule] >= KICADS_LIMIT:
+        # A family compared as one is a sample when any of its lists is.
+        family = checked if rule in checked else [rule]
+        if any(listed[r] >= KICADS_LIMIT for r in family):
             extra = set()
         if rule in ONCE_PER_TRACK:
             extra = {key for key in extra if not key & tracks & flagged}
@@ -293,6 +299,75 @@ def test_without_kicad_the_libraries_are_listed_as_not_checked():
     assert {"lib_footprint_issues", "lib_footprint_mismatch"} <= set(report.not_checked)
 
 
+def test_a_custom_rule_is_named_in_its_message():
+    """drcrules: the rule that set the limit, as KiCad names it."""
+    messages = set(_messages("drcrules").values())
+    for expected in (
+        "Track width (rule 'wide_min' min width 0.3000 mm; actual 0.2500 mm)",
+        "Track width (rule 'wide_max' max width 0.4000 mm; actual 0.5000 mm)",
+        "Track width (board setup constraints min width 0.2000 mm; actual 0.1000 mm)",
+        "Clearance violation (rule 'z_zone' clearance 1.0000 mm; actual 0.5000 mm)",
+        "Via diameter (rule 'via_b' max diameter 0.8000 mm; actual 0.9000 mm)",
+        "Annular width (rule 'via_c' max annular width 0.1500 mm; actual 0.2000 mm)",
+        "Hole size out of range (rule 'pad_hole' min hole 0.6000 mm; actual 0.5000 mm)",
+        "Hole clearance violation (rule 'npth_far' clearance 0.5000 mm; actual 0.3000 mm)",
+        "Drilled hole too close to other hole (rule 'holes_far' min 1.0000 mm; actual 0.9000 mm)",
+        "Board edge clearance violation (rule 'edge_far' clearance 1.0000 mm; actual 0.7000 mm)",
+    ):
+        assert expected in messages
+
+
+def test_a_custom_rule_gives_its_own_severity():
+    found = {
+        v.items[0].description.split(" ")[1]: v.severity
+        for v in drc.check(BOARDS["drcrules"]).violations if v.rule == "track_width"
+    }  # fmt: skip
+    assert found["[SV]"] == "warning" and "[SI]" not in found
+
+
+def test_a_rule_this_cannot_read_leaves_its_checks_unmade(tmp_path):
+    """A condition asking what this does not know decides nothing here: the
+    checks it would decide are said not to be made."""
+    for f in BOARDS["drcrules"].parent.glob("drcrules.kicad_p*"):
+        shutil.copy(f, tmp_path)
+    (tmp_path / "drcrules.kicad_dru").write_bytes(
+        b'(version 1)\n(rule "odd" (condition "A.Pad_Count > 2")'
+        b" (constraint track_width (min 0.3mm)))\n"
+    )
+    report = drc.check(tmp_path / "drcrules.kicad_pcb")
+    assert "track_width" in report.not_checked
+    assert not [v for v in report.violations if v.rule == "track_width"]
+
+
+@pytest.mark.parametrize(
+    ("text", "expected"),
+    [
+        ("A.NetName == 'VCC'", True),
+        ("A.NetName == 'vcc'", True),  # letter case aside
+        ("A.NetName == 'V*'", True),
+        ("A.NetName != '*CC'", False),
+        ("A.NetName == 'GND' || A.Width > 0.1mm", True),
+        ("A.NetName == 'GND' || A.Width > 0.3mm", False),
+        ("!(A.NetName == 'GND') && A.Width >= 7mil", True),  # 7 mil is 0.1778 mm
+        ("A.Width == 0.2mm", True),
+        ("A.NetClass == 'Power'", True),
+    ],
+)
+def test_an_expression_is_evaluated_as_kicad_evaluates_it(text, expected):
+    from kicad_cli.fileformat.drc import expression  # noqa: PLC0415
+
+    class Item:
+        def get(self, name):
+            return {"NetName": "VCC", "Width": 200_000, "NetClass": ["Power"]}[name]
+
+        def call(self, name, args):
+            raise expression.Unknown(name)
+
+    item = Item()
+    value = expression.evaluate(expression.parse(text), lambda name: item if name == "A" else None)
+    assert bool(value) is expected
+
+
 def test_the_two_nets_of_a_differential_pair_are_held_to_its_gap():
     from kicad_cli.fileformat.drc.clearance import coupled  # noqa: PLC0415
 
@@ -368,17 +443,21 @@ def test_what_a_project_leaves_out_is_a_new_projects(tmp_path):
 
 
 def test_checks_the_projects_custom_rules_decide_are_held_back_and_said_to_be(tmp_path):
+    """A kind of constraint not read yet -- a courtyard's clearance -- holds
+    its check back; one that is read -- a hole's size -- does not."""
     for f in FIXTURE.glob("drc1.kicad_p*"):
         shutil.copy(f, tmp_path)
     (tmp_path / "drc1.kicad_dru").write_bytes(
         b"(version 1)\n# a comment (with brackets\n"
-        b'(rule "under the FPGA"\n\t(constraint hole_size (min 0.2mm))\n'
+        b'(rule "under the FPGA"\n\t(constraint courtyard_clearance (min 0.2mm))\n'
+        b"\t(constraint hole_size (min 0.2mm))\n"
         b"\t(condition \"A.intersectsArea('FPGA')\"))\n"
     )
     report = drc.check(tmp_path / "drc1.kicad_pcb")
     rules = {v.rule for v in report.violations}
-    assert "drill_out_of_range" not in rules and "microvia_drill_out_of_range" not in rules
-    assert "under the FPGA" in report.not_checked["drill_out_of_range"]
+    assert "courtyards_overlap" not in rules
+    assert "'under the FPGA'" in report.not_checked["courtyards_overlap"]
+    assert "drill_out_of_range" in rules and "drill_out_of_range" not in report.not_checked
     assert "track_width" in rules  # what the rules do not touch is still checked
 
 

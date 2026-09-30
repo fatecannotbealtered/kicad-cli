@@ -158,9 +158,12 @@ over two of its pads is, which item a drawn solder mask opening is named
 beside (KiCad picks it by chance). The footprint libraries are read where
 KiCad installed them, as files. What it does not check yet -- the
 silkscreen, zone fills' own rules, parity with the schematic, lengths and
-skews, creepage, custom rules, text on copper and on the mask -- it says it
+skews, creepage, text on copper and on the mask -- it says it
 does not (`not_checked`, `partial`); a check a
-project's custom rules decide is not made until those rules are read. The
+project's custom rules decide is made by them where they constrain a
+track's width, a via, a hole or a clearance (`drc/rules.py`,
+`tests/fixtures/drc/drcrules`), and not made where they decide it by a kind
+of constraint not read yet. The
 write commands still on `pcbnew` verify their writes with KiCad's binary
 until they move over.
 

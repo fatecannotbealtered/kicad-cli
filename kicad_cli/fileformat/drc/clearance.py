@@ -40,7 +40,8 @@ from collections import defaultdict
 from .. import geometry
 from ..board import shape_points
 from . import items as describe
-from . import mm
+from . import mm, subjects
+from . import rules as rules_module
 from .copper import ARC_ERROR, Thing
 from .settings import DEFAULT_CLASS, NM
 from .shapes import Shape, core_distance, distance, segments_cross
@@ -81,17 +82,36 @@ def _widest(run, things) -> int:
             values.append(round(value * NM))
     values += [t.override[0] for t in things if t.override]
     values += [t.zone_clearance for t in things if t.zone_clearance]
+    rules = settings.dru
+    if rules is not None:
+        values += [
+            c.min for rule in rules.rules for kind, c in rule.constraints.items()
+            if kind == "clearance" and c.min is not None
+        ]  # fmt: skip
     return max(values)
 
 
-def clearance(run, a: Thing, b: Thing) -> tuple[int, str]:
-    """What two items are held to, and what the message names as setting it."""
+def clearance(run, a: Thing, b: Thing, layer: str | None = None) -> tuple[int, str, str | None]:
+    """What two items are held to, what the message names as setting it,
+    and the severity a custom rule setting it gives."""
     settings = run.settings
     overrides = [t.override for t in (a, b) if t.override is not None]
+    rules = settings.dru
+    found = None
+    if not overrides and rules is not None and rules.rules:
+        from . import subjects  # noqa: PLC0415
+
+        found = rules.find("clearance", subjects.of_thing(run, a), subjects.of_thing(run, b),
+                           layer)  # fmt: skip
     if overrides:
         # A pad's or footprint's own clearance stands instead of everything
-        # else but the board's minimum -- its zone's too.
+        # else but the board's minimum -- its zone's too -- and a custom rule.
         value, name = max(overrides, key=lambda o: o[0])
+    elif found is not None:
+        # A custom rule, loosening as well as tightening: the board's minimum
+        # and the net classes give way to it.
+        rule, constraint = found
+        return (constraint.min or 0), f"rule '{rule.name}'", rule.severity
     else:
         ca = settings.netclasses.of(a.net)
         cb = settings.netclasses.of(b.net)
@@ -109,7 +129,7 @@ def clearance(run, a: Thing, b: Thing) -> tuple[int, str]:
     least = settings.nm("min_clearance")
     if value < least:
         value, name = least, "board minimum"
-    return value, name
+    return value, name, None
 
 
 def coupled(a: str, b: str) -> bool:
@@ -306,7 +326,7 @@ def _report(run, a: Thing, b: Thing, gap: float, layer: str, seen: set) -> None:
     key = (id(a), id(b)) if id(a) < id(b) else (id(b), id(a))
     if key in seen:
         return
-    value, name = clearance(run, a, b)
+    value, name, severity = clearance(run, a, b, layer)
     if gap >= value - EPSILON:
         return
     seen.add(key)
@@ -327,6 +347,7 @@ def _report(run, a: Thing, b: Thing, gap: float, layer: str, seen: set) -> None:
         "clearance",
         f"Clearance violation ({label}clearance {mm(value)}; actual {mm(round(gap))})",
         [a.item, b.item],
+        severity,
     )
 
 
@@ -360,7 +381,7 @@ def _fills(run, things: list[Thing], grid, widest: int) -> None:
                         continue
                     if layer not in b.layers or _apart(polygon.bbox, b.box(layer), widest):
                         continue
-                    value, _ = clearance(run, zone, b)
+                    value = clearance(run, zone, b, layer)[0]
                     gap = _to_fill(b, layer, polygon, value)
                     if gap < value:
                         _report(run, b, zone, gap, layer, seen)
@@ -368,7 +389,7 @@ def _fills(run, things: list[Thing], grid, widest: int) -> None:
         for b in fills[i + 1 :]:
             if _unchecked(a, b):
                 continue
-            value, _ = clearance(run, a, b)
+            value = clearance(run, a, b)[0]
             for layer in set(a.fills) & set(b.fills):
                 gap = min(
                     (fills_distance(p, q, value) for p in a.fills[layer] for q in b.fills[layer]),
@@ -389,20 +410,35 @@ def _hole_layers(copper: set[str], thing: Thing) -> list[str]:
 
 
 def _holes(run, things: list[Thing], grid) -> None:
-    least = run.settings.nm("min_hole_clearance")
+    board_least = run.settings.nm("min_hole_clearance")
+    rules = run.settings.dru
+    reach = max(board_least, rules_module.largest(rules, "hole_clearance"))
     copper = set(run.board.copper_layers)
     seen: set = set()
 
-    def report(a: Thing, b: Thing, gap: float) -> None:
+    def limit(a: Thing, b: Thing, layer: str | None):
+        if rules is None or not rules.rules:
+            return board_least, "board setup constraints hole clearance", None
+        value, who, severity = rules_module.least(
+            rules, "hole_clearance", subjects.of_thing(run, a), subjects.of_thing(run, b), layer,
+            board_least, "board setup constraints hole clearance",
+        )  # fmt: skip
+        who = who if who.startswith("board") else f"{who} clearance"
+        return value, who, severity
+
+    def check(a: Thing, b: Thing, gap: float, layer: str | None) -> None:
         key = (id(a), id(b)) if id(a) < id(b) else (id(b), id(a))
         if key in seen:
+            return
+        value, who, severity = limit(a, b, layer)
+        if gap >= value - EPSILON:
             return
         seen.add(key)
         run.report(
             "hole_clearance",
-            f"Hole clearance violation (board setup constraints hole clearance {mm(least)}; "
-            f"actual {mm(round(max(gap, 0)))})",
+            f"Hole clearance violation ({who} {mm(value)}; actual {mm(round(max(gap, 0)))})",
             [b.item, a.item],
+            severity,
         )
 
     drilled = [t for t in things if t.hole is not None]
@@ -411,7 +447,7 @@ def _holes(run, things: list[Thing], grid) -> None:
         box = hole.bbox()
         for layer in _hole_layers(copper, owner):
             own = owner.pieces.get(layer)
-            for other in _near(grid, layer, box, least):
+            for other in _near(grid, layer, box, reach):
                 b = things[other]
                 if b is owner or (owner.net and owner.net == b.net) or _one_pad(owner, b):
                     continue
@@ -419,17 +455,17 @@ def _holes(run, things: list[Thing], grid) -> None:
                     continue  # its own copper stands between: a clearance, or a short
                 gap = min(
                     [distance(p, hole) for p in b.pieces.get(layer, ())]
-                    + [fill_distance([hole], area, least) for area in b.areas.get(layer, ())]
+                    + [fill_distance([hole], area, reach) for area in b.areas.get(layer, ())]
                 )
-                if gap < least - EPSILON:
-                    report(owner, b, gap)
+                if gap < reach - EPSILON:
+                    check(owner, b, gap, layer)
         if owner.npth is not None:
             for other in drilled:
-                if other.kind != "via" or _apart(box, other.hole.bbox(), least):
+                if other.kind != "via" or _apart(box, other.hole.bbox(), reach):
                     continue
                 gap = min(distance(p, other.hole) for p in owner.npth)
-                if gap < least - EPSILON:
-                    report(owner, other, gap)
+                if gap < reach - EPSILON:
+                    check(owner, other, gap, None)
     for zone in (t for t in things if t.fills):
         for owner in drilled:
             if owner.net and owner.net == zone.net:
@@ -438,9 +474,9 @@ def _holes(run, things: list[Thing], grid) -> None:
                 if owner.pieces.get(layer) is not None:
                     continue
                 for polygon in zone.fills.get(layer, ()):
-                    gap = fill_distance([owner.hole], polygon, least)
-                    if gap < least - EPSILON:
-                        report(owner, zone, gap)
+                    gap = fill_distance([owner.hole], polygon, reach)
+                    if gap < reach - EPSILON:
+                        check(owner, zone, gap, layer)
 
 
 # -- copper against the board's edge --------------------------------------------------------
@@ -481,7 +517,9 @@ def edge_pieces(board) -> list[tuple[describe.Item, list[Shape]]]:
 
 
 def _edges(run, things: list[Thing]) -> None:
-    least = run.settings.nm("min_copper_edge_clearance")
+    board_least = run.settings.nm("min_copper_edge_clearance")
+    rules = run.settings.dru
+    least = max(board_least, rules_module.largest(rules, "edge_clearance"))
     edges = edge_pieces(run.board)
     if not edges:
         return
@@ -509,14 +547,19 @@ def _edges(run, things: list[Thing]) -> None:
                 if gap < best[0]:
                     best = (gap, index)
         gap, index = best
-        if index is None or not (gap <= 0 or gap < least - EPSILON):
+        if index is None:
+            continue
+        value, who, severity = board_least, "board setup constraints edge", None
+        if rules is not None and rules.rules:
+            value, who, severity = rules_module.least(
+                rules, "edge_clearance", subjects.of_thing(run, thing), None, None,
+                board_least, "board setup constraints edge",
+            )  # fmt: skip
+        if not (gap <= 0 or gap < value - EPSILON):
             continue
         actual = mm(round(max(gap, 0)))
-        detail = (
-            f" (board setup constraints edge clearance {mm(least)}; actual {actual})"
-            if least > 0 else ""
-        )  # fmt: skip
+        detail = f" ({who} clearance {mm(value)}; actual {actual})" if value > 0 else ""
         run.report(
             "copper_edge_clearance", f"Board edge clearance violation{detail}",
-            [edges[index][0], thing.item],
+            [edges[index][0], thing.item], severity,
         )  # fmt: skip

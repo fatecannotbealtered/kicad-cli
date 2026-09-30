@@ -18,12 +18,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   text, missing connections, dangling tracks and vias, courtyards,
   footprints against their libraries (read where KiCad installed them; with
   no KiCad installed, those two rules are listed as not checked) -- by the
-  project's rules, severities, net
-  classes and exclusions, and on every demo board KiCad ships it finds what
-  KiCad's own DRC finds under those rules. What it does not check yet is
-  listed in `not_checked` (and what a checked rule leaves out in
-  `partial`); a rule the project's custom rules decide is among them until
-  those rules are read. `ok_to_fabricate` is the verdict of the checks made.
+  project's rules, severities, net classes and exclusions, and by its custom
+  rules (`.kicad_dru`) where they decide a track's width, a via, a hole or
+  a clearance: the last rule to match wins, each bound on its own; a rule
+  may loosen the board's minimums as well as tighten them; its own severity
+  counts. On every demo board KiCad ships it finds what KiCad's own DRC
+  finds under those rules. What it does not check yet is listed in
+  `not_checked` (and what a checked rule leaves out in `partial`), a check
+  a custom rule decides by a kind of constraint not read yet among them.
+  `ok_to_fabricate` is the verdict of the checks made.
   The envelope's `oracle` is `engine` now, and excluded violations are
   listed, marked, and counted apart (`excluded_count`).
 
