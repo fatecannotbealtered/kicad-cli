@@ -37,6 +37,7 @@ What KiCad 10 does, measured on `tests/fixtures/drc/drc1`:
 
 from __future__ import annotations
 
+import re
 from collections import defaultdict
 
 from ..board import Footprint, Pad, nm
@@ -199,6 +200,10 @@ def pads(run) -> None:
     for fp in board.footprints:
         for pad in fp.pads:
             item = describe.pad(board, fp, pad)
+            if pad.kind == "thru_hole" and pad.drill is not None and max(pad.drill) == 0:
+                run.report("through_hole_pad_without_hole", "Through hole pad has no hole", [item])
+                _padstack(run, pad, item)
+                continue
             if pad.kind in ("thru_hole", "np_thru_hole"):
                 size = min(pad.drill) if pad.drill is not None else 0
                 if size < least_hole:
@@ -347,6 +352,34 @@ def footprint_types(run) -> None:
             )
 
 
+# -- layers ---------------------------------------------------------------------------------
+
+
+def layers(run) -> None:
+    """Copper on a copper layer the board has not got."""
+    if not run.on("item_on_disabled_layer"):
+        return
+    board = run.board
+    enabled = {layer.name for layer in board.layers}
+    message = "Item on a disabled copper layer (layer {})"
+    for track in board.tracks:
+        if track.layer.endswith(".Cu") and track.layer not in enabled:
+            run.report("item_on_disabled_layer", message.format(track.layer),
+                       [describe.track(board, track)])  # fmt: skip
+    for zone in board.zones:
+        missing = [la for la in zone.layers if la.endswith(".Cu") and la not in enabled]
+        if missing and not zone.rule_area:
+            run.report("item_on_disabled_layer", message.format(missing[0]),
+                       [describe.zone(board, zone)])  # fmt: skip
+    for node in board.root.lists():
+        if node.head.startswith("gr_"):
+            found = node.find("layer")
+            layer = found.value(1) if found is not None else ""
+            if layer.endswith(".Cu") and layer not in enabled:
+                item = describe.Item("shape", describe.uuid_of(node), node.head, (0, 0))
+                run.report("item_on_disabled_layer", message.format(layer), [item])
+
+
 # -- text -----------------------------------------------------------------------------------
 
 FRONT = {"F.Cu", "F.SilkS", "F.Fab", "F.Mask", "F.Paste", "F.Adhes", "F.CrtYd"}
@@ -390,6 +423,61 @@ def _pen(height: int, width: int, stroke: int, bold: bool) -> int:
     if stroke <= 0:
         stroke = round(height / 5) if bold else round(height / 8)
     return min(stroke, round(min(height, width) * 0.25))
+
+
+# -- text variables -------------------------------------------------------------------------
+
+# What a board resolves without being told (`tests/fixtures/drc/drc3`): its
+# title block, its files, the date, a text's own layer. A cross-reference,
+# ${R1:VALUE}, is never reported, whether R1 or its field is there or not.
+BOARD_VARIABLES = {
+    "TITLE", "REVISION", "COMPANY", "ISSUE_DATE", "FILENAME", "FILEPATH", "PROJECTNAME",
+    "CURRENT_DATE", "LAYER", "VCSHASH", "VCSSHORTHASH", "DRC_ERROR", "DRC_WARNING",
+    *(f"COMMENT{n}" for n in range(1, 10)),
+}  # fmt: skip
+# What a footprint's text resolves besides: the footprint's own fields, by name.
+FOOTPRINT_VARIABLES = {"REFERENCE", "VALUE", "FOOTPRINT_NAME", "FOOTPRINT_LIBRARY"}
+_VARIABLE = re.compile(r"\$\{([^}]*)\}")
+_MARKER = re.compile(r"\$\{DRC_(ERROR|WARNING)(?:\s([^}]*))?\}")
+
+
+def _text_of(node) -> str:
+    head = node.head
+    if head in ("property", "fp_text"):
+        return node.value(2) or ""
+    return node.value(1) or ""
+
+
+class Variables:
+    def __init__(self, run) -> None:
+        import json  # noqa: PLC0415
+
+        project = run.settings.project
+        names: set[str] = set()
+        if project is not None and project.is_file():
+            try:
+                names = set(
+                    json.loads(project.read_text(encoding="utf-8")).get("text_variables") or {}
+                )
+            except (OSError, ValueError):
+                names = set()
+        self.board = BOARD_VARIABLES | names
+
+    def unresolved(self, node) -> bool:
+        head = node.head
+        text = _text_of(node)
+        if head in ("gr_text", "gr_text_box"):
+            known = self.board
+        elif head in ("property", "fp_text", "fp_text_box"):
+            fp = node.parent
+            fields = {p.value(1) for p in fp.find_all("property")} if fp is not None else set()
+            known = self.board | FOOTPRINT_VARIABLES | fields
+        else:
+            return False
+        return any(
+            ":" not in name and name.split(" ", 1)[0] not in known
+            for name in _VARIABLE.findall(text)
+        )
 
 
 def _texts(board):
@@ -451,7 +539,15 @@ def texts(run) -> None:
     settings = run.settings
     least_height = settings.nm("min_text_height")
     least_stroke = settings.nm("min_text_thickness")
+    variables = Variables(run) if run.on("unresolved_variable") else None
     for item, layer, node in _texts(run.board):
+        if variables is not None and variables.unresolved(node):
+            run.report("unresolved_variable", "Unresolved text variable", [item])
+        for kind, said in _MARKER.findall(_text_of(node)):
+            # ${DRC_ERROR} and ${DRC_WARNING} are markers a person puts on
+            # the board for DRC to raise, with what follows as the message.
+            rule = f"generic_{kind.lower()}"
+            run.report(rule, said.strip() or kind.title(), [item])
         if _hidden(node):
             continue
         height, width, stroke, bold, mirrored = _font(node)
