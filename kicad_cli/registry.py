@@ -781,7 +781,8 @@ def build() -> list[dict[str, Any]]:
             "sch edit",
             "write",
             "Change an existing schematic from a JSON list of changes: set a part's fields "
-            "and flags, rename or name a net, connect a free pin to a net, disconnect a pin. "
+            "and flags, rename or name a net, connect a free pin to a net, disconnect a pin, "
+            "add a part from the libraries, remove a part. "
             "The edit is made in memory and read back through this tool's own connectivity "
             "before anything is written -- every net joining the pins asked, each change as "
             "asked -- and ERC is run before and after.",

@@ -62,7 +62,7 @@ from ..fileformat.schematic import LibPin, LibSymbol, Schematic, SchematicError,
 from ..fileformat.sexpr import List, SexprError, copy, quote, symbol
 from . import sch_draw as draw
 
-OPS = ("set", "rename", "connect", "disconnect")
+OPS = ("set", "rename", "connect", "disconnect", "add", "remove")
 # Shorthand for the fields every part has.
 FIELDS = {
     "value": "Value",
@@ -163,14 +163,15 @@ class Step:
     parts: dict[str, _Part]
     net_of: dict[Pin, str]
     canvases: dict[int, draw.Canvas] = field(default_factory=dict)
+    kicad_root: str | None = None
 
     @classmethod
-    def read(cls, root: Path, sources: dict[Path, str]) -> Step:
+    def read(cls, root: Path, sources: dict[Path, str], kicad_root: str | None = None) -> Step:
         design = Design(root, sources)
         found, listed = grouped(design)
         nets = {net.name: (net, keys) for net, keys in listed}
         net_of = {pin: net.name for net, _ in listed for pin in _pins(net)}
-        return cls(design, found, nets, _parts(design), net_of)
+        return cls(design, found, nets, _parts(design), net_of, kicad_root=kicad_root)
 
     def canvas(self, sch: Schematic) -> draw.Canvas:
         if id(sch) not in self.canvases:
@@ -203,6 +204,9 @@ class Edit:
     references: set[int] = field(default_factory=set)
     # Parts a change took away on purpose: a power symbol only a pin had.
     removed: set[str] = field(default_factory=set)
+    # Numbers given to new parts, by prefix.
+    numbers: dict[str, set[int]] = field(default_factory=dict)
+    kicad_root: str | None = None
 
     def touch(self, sch: Schematic) -> None:
         self.touched[sch.path.resolve()] = sch
@@ -223,6 +227,11 @@ class Edit:
         if key is not None:
             self.fresh[key] = number
         return number
+
+    def vanish(self, pin: Pin) -> None:
+        """A pin whose part is gone: on no net."""
+        self.where.pop(pin, None)
+        self.moved.add(pin)
 
     def alone(self, pin: Pin) -> None:
         self.where[pin] = self._new_group()
@@ -297,7 +306,10 @@ def _hidden_template(node: List, version: int) -> List:
 
 
 def _set_field(sch: Schematic, sym: Symbol, name: str, value: str | None) -> None:
-    node = sym.node
+    _set_field_node(sym.node, sch.version, name, value)
+
+
+def _set_field_node(node: List, version: int, name: str, value: str | None) -> None:
     found = [p for p in node.find_all("property") if p.value(1) == name]
     if value is None:
         for prop in found:
@@ -306,7 +318,7 @@ def _set_field(sch: Schematic, sym: Symbol, name: str, value: str | None) -> Non
     if found:
         found[0].set(2, quote(value))
         return
-    new = copy(_hidden_template(node, sch.version))
+    new = copy(_hidden_template(node, version))
     new.set(1, quote(name))
     new.set(2, quote(value))
     at, place = new.find("at"), node.find("at")
@@ -318,7 +330,10 @@ def _set_field(sch: Schematic, sym: Symbol, name: str, value: str | None) -> Non
 
 
 def _set_flag(sym: Symbol, name: str, on: bool) -> None:
-    node = sym.node
+    _set_flag_node(sym.node, name, on)
+
+
+def _set_flag_node(node: List, name: str, on: bool) -> None:
     word = symbol("yes" if on else "no")
     found = node.find(name)
     if found is not None:
@@ -500,7 +515,7 @@ def _namer(step: Step, net: Net, keys: list) -> _Namer:
     kind = _kind(item, namers[0])
     if kind == "hidden_power_pin":
         return _Namer(
-            kind, None, namers,
+            kind, _text_of(item, namers[0]), namers,
             "the net is named by a supply pin a part hides, and a pin's name is its library's",
         )  # fmt: skip
     return _Namer(kind, _text_of(item, namers[0]), namers)
@@ -844,9 +859,21 @@ def _way(step: Step, index: int, wanted: str, sch: Schematic) -> tuple[_Way | No
                     nearest=_nearest(wanted, step.nets),
                 )
             ]
+        # A new supply is drawn as supplies are: a power symbol, the
+        # design's own of that name if it has one, else KiCad's.
+        if draw.POWER_NAME.match(text):
+            found = _power_template(step, text)
+            if found is not None:
+                return _Way("power", text, None, *found), []
         return _Way("label", text, None), []
     net, keys = entry
     namer = _namer(step, net, keys)
+    if namer.kind == "hidden_power_pin":
+        # A supply a hidden pin names is a global name: a power symbol of it
+        # joins it, as it joins every hidden pin of the name.
+        found = _power_template(step, namer.text)
+        if found is not None:
+            return _Way("power", namer.text, name, *found), []
     if namer.problem:
         return None, [_problem(index, namer.problem, net=name)]
     if namer.kind is None:
@@ -885,6 +912,37 @@ def _way(step: Step, index: int, wanted: str, sch: Schematic) -> tuple[_Way | No
             net=name,
         )
     ]
+
+
+def _power_template(step: Step, name: str) -> tuple[List, LibSymbol] | None:
+    """A power symbol for a supply the design does not have yet: one placed
+    elsewhere of that name, else the power library's."""
+    from ..fileformat import lib_tables  # noqa: PLC0415
+    from ..fileformat.schematic import EMPTY_TILDE_BEFORE, _lib_symbol  # noqa: PLC0415
+    from ..fileformat.symbols import Resolved  # noqa: PLC0415
+    from . import sch_create as create  # noqa: PLC0415
+
+    for sch in step.design.schematics.values():
+        for sym in sch.symbols:
+            lib = sch.library.get(sym.library_name)
+            if lib is not None and lib.power and not lib.local_power:
+                if sym.lib_id.partition(":")[2] == name:
+                    return sym.node, lib
+    if step.kicad_root is None:
+        return None
+    tables = lib_tables.Tables.of(step.design.root_path.resolve().parent, Path(step.kicad_root))
+    library = tables.symbols.get("power")
+    found = tables.symbol(library, name) if library is not None else None
+    if found is None:
+        return None
+    node, version = found
+    lib_id = f"power:{name}"
+    lib = _lib_symbol(lib_id, node, {lib_id: node}, version < EMPTY_TILDE_BEFORE)
+    placed = create._symbol_node(
+        Resolved(lib_id, node, lib), "#PWR", name, "", (0, 0), 0, 1, draw.Ids("power"), "",
+        step.design.project, (0, 0), (0, 0), None, hide_ref=True,
+    )  # fmt: skip
+    return placed, lib
 
 
 def _connect(edit: Edit, step: Step, index: int, change: dict) -> list[dict]:
@@ -1128,6 +1186,7 @@ def _cut(
     at: tuple[int, int],
     keep_flag: bool,
     lost: set[str],
+    removing: bool = False,
 ) -> dict[str, int] | str:
     """Take away what joins the pin at `at` to anything, and nothing more.
 
@@ -1164,9 +1223,13 @@ def _cut(
     sheet_pins = [p.position for s in sch.sheets for p in s.pins]
     entries = [e.position for e in sch.bus_entries] + [e.end for e in sch.bus_entries]
     others = pins_at(at)
-    if [o for o in others if not o[1].power] or at in sheet_pins or at in entries:
-        return "the pin touches another pin, a sheet pin or a bus entry directly; move one of them"
     ends = [w for w in wires if at in (w.start, w.end)]
+    shared = [o for o in others if not o[1].power] or at in sheet_pins or at in entries
+    if removing and (shared or len(ends) > 1 or junctions_at(at)):
+        # The part goes; what meets at its pin stays joined without it.
+        return {}
+    if shared:
+        return "the pin touches another pin, a sheet pin or a bus entry directly; move one of them"
     if len(ends) > 1 or junctions_at(at):
         return "other connections meet at this pin; rewire it in KiCad"
     removed: dict[str, int] = defaultdict(int)
@@ -1220,13 +1283,35 @@ def _cut(
             drop(segment.node, "wires")
         for lb in labels:
             if any(on(lb, segment) for segment in chain):
-                drop(lb.node, "labels")
+                # A sheet's own name for a net is gone with it; a name it
+                # shares with the rest of the design -- its interface to the
+                # sheet above, a global label -- stays for what comes next.
+                if lb.kind == "label":
+                    drop(lb.node, "labels")
+                else:
+                    removed[f"{lb.kind}s_kept"] += 1
         for other, _lib in others + pins_at(far):
             if _lib.power:
                 drop(other.node, "power_symbols")
                 lost.update(inst.reference for inst in other.instances)
         for flag in flags_at(far):
             drop(flag, "no_connects")
+    elif (
+        not rest
+        and not through
+        and len(pins_at(far)) == 1
+        and not junctions_at(far)
+        and far not in sheet_pins
+        and far not in entries
+        and not any(on(lb, segment) for lb in labels for segment in chain)
+    ):
+        # A bare wire to one other pin: it joined the two and nothing else,
+        # and left behind it would hang from that pin to nowhere.
+        for segment in chain:
+            drop(segment.node, "wires")
+        for other, _lib in others:
+            drop(other.node, "power_symbols")
+            lost.update(inst.reference for inst in other.instances)
     else:
         first = chain[0]
         meet = first.end if first.start == at else first.start
@@ -1245,6 +1330,462 @@ def _cut(
         for flag in flags_at(at):
             drop(flag, "no_connects")
     return dict(removed)
+
+
+# -- add and remove --------------------------------------------------------------------------
+
+REFERENCE = re.compile(r"\A#?[A-Za-z_]+[A-Za-z_-]*(\d+|\?)\Z")
+
+
+def _free_reference(step: Step, edit: Edit, prefix: str) -> str:
+    """The prefix and the lowest number no part of the design has."""
+    taken = set()
+    for reference in step.parts:
+        match = re.match(rf"\A{re.escape(prefix)}(\d+)\Z", reference)
+        if match:
+            taken.add(int(match.group(1)))
+    taken |= edit.numbers.get(prefix, set())
+    number = 1
+    while number in taken:
+        number += 1
+    edit.numbers.setdefault(prefix, set()).add(number)
+    return f"{prefix}{number}"
+
+
+def _resolve_symbol(step: Step, sch: Schematic, lib_id: str, kicad_root: str | None):
+    """The symbol to place: the sheet's own copy of it if it has one, so the
+    part matches its kin; else the library's, found through the tables."""
+    from ..fileformat import lib_tables  # noqa: PLC0415
+    from ..fileformat.schematic import EMPTY_TILDE_BEFORE, _lib_symbol  # noqa: PLC0415
+    from ..fileformat.symbols import Resolved  # noqa: PLC0415
+
+    own = sch.library.get(lib_id)
+    if own is not None and own.node is not None:
+        return Resolved(lib_id, own.node, own), None
+    nickname, _, name = lib_id.partition(":")
+    if not name:
+        return None, "a symbol is named LIBRARY:NAME, as KiCad's libraries name them"
+    tables = lib_tables.Tables.of(
+        step.design.root_path.resolve().parent, Path(kicad_root) if kicad_root else None
+    )
+    library = tables.symbols.get(nickname)
+    if library is None:
+        return None, f"no symbol library is named {nickname} in this project's tables"
+    found = tables.symbol(library, name)
+    if found is None:
+        return None, f"the library {nickname} has no symbol {name}"
+    node, version = found
+    return Resolved(
+        lib_id, node, _lib_symbol(lib_id, node, {lib_id: node}, version < EMPTY_TILDE_BEFORE)
+    ), None
+
+
+def _add(edit: Edit, step: Step, index: int, change: dict) -> list[dict]:
+    from . import sch_create as create  # noqa: PLC0415
+
+    allowed = {
+        "op",
+        "ref",
+        "symbol",
+        "value",
+        "footprint",
+        "fields",
+        "pins",
+        "sheet",
+        "near",
+        *FLAGS,
+    }
+    problems = _unknown(index, change, allowed, "add")
+    reference, lib_id = change.get("ref"), change.get("symbol")
+    pins_wanted = change.get("pins") or {}
+    if not isinstance(reference, str) or not REFERENCE.match(reference):
+        problems.append(
+            _problem(
+                index,
+                "ref is a reference: letters and a number, or letters "
+                "and ? for the next free number",
+            )
+        )
+    elif not reference.endswith("?") and reference in step.parts:
+        problems.append(_problem(index, "a part already has that reference", ref=reference))
+    if not isinstance(lib_id, str):
+        problems.append(_problem(index, "symbol is LIBRARY:NAME"))
+    if not isinstance(pins_wanted, dict) or not all(
+        isinstance(k, str) and _valid_name(v) for k, v in pins_wanted.items()
+    ):
+        problems.append(_problem(index, "pins is an object: {pin number or name: net}"))
+    # Which sheet: the one asked for, or the one the part it goes near is on.
+    sheet_name, near = change.get("sheet"), change.get("near")
+    instance = step.design.instances[0]
+    if sheet_name is not None:
+        found = [i for i in step.design.instances if i.name == sheet_name]
+        if not found:
+            problems.append(
+                _problem(
+                    index,
+                    "no sheet has that path",
+                    sheet=sheet_name,
+                    sheets=[i.name for i in step.design.instances][:20],
+                )
+            )
+        else:
+            instance = found[0]
+    near_part = None
+    if near is not None:
+        near_part = step.parts.get(near)
+        if near_part is None:
+            problems.append(_problem(index, "no part has the reference near names", near=near))
+        elif sheet_name is None:
+            placed_on = next(
+                (
+                    i
+                    for i in step.design.instances
+                    if near_part.symbols[0][1].instance(i.path) is not None
+                    and _reference(near_part.symbols[0][1], i) == near
+                ),
+                None,
+            )
+            instance = placed_on or instance
+    if problems:
+        return problems
+    sch = instance.schematic
+    resolved, trouble = _resolve_symbol(step, sch, lib_id, edit.kicad_root)
+    if resolved is None:
+        return [_problem(index, trouble, symbol=lib_id)]
+    if resolved.symbol.power:
+        return [
+            _problem(
+                index, "a power symbol names a net: connect a pin to the net instead", symbol=lib_id
+            )
+        ]
+
+    # The references, one per placement of the sheet: the one asked for
+    # where it was asked for, the next free ones elsewhere.
+    prefix = re.sub(r"(\d+|\?)\Z", "", reference)
+    refs: dict[str, str] = {}
+    for inst in step.placements(sch):
+        if inst is instance and not reference.endswith("?"):
+            refs[inst.path] = reference
+        else:
+            refs[inst.path] = _free_reference(step, edit, prefix)
+    first_ref = refs[instance.path]
+
+    # Each pin: the way its net is drawn on this sheet.
+    ways: dict[str, _Way] = {}
+    on: dict[tuple[str, str], str] = {}
+    for wanted, net in pins_wanted.items():
+        matched = [p for p in resolved.symbol.pins if p.number == wanted] or [
+            p for p in resolved.symbol.pins if p.name == wanted
+        ]
+        if not matched:
+            return [
+                _problem(
+                    index,
+                    "the symbol has no such pin",
+                    pin=wanted,
+                    available=sorted({p.name or p.number for p in resolved.symbol.pins})[:40],
+                )
+            ]
+        way, trouble = _way(step, index, net, sch)
+        if trouble:
+            return trouble
+        key = f"{way.kind}:{way.text}"
+        ways[key] = way
+        for pin in matched:
+            on[(first_ref, pin.number)] = key
+    power = {k for k, w in ways.items() if w.kind in ("power", "local_power")}
+    value = change.get("value") or resolved.symbol.properties.get("Value", "")
+    footprint = change.get("footprint") or resolved.symbol.properties.get("Footprint", "")
+    part = create.Part(first_ref, resolved, str(value), str(footprint))
+    units = create._units(part, on)
+    for unit in units:
+        unit.spots = [spot for spot in unit.spots if not spot.pin.hidden]
+        create._plan(unit, power)
+
+    given = change.get("fields") or {}
+    extra = (
+        {k: v for k, v in given.items() if isinstance(v, str)} if isinstance(given, dict) else {}
+    )
+    flags = {k: change[k] for k in FLAGS if isinstance(change.get(k), bool)}
+    canvas = step.canvas(sch)
+    anchor = _anchor(step, canvas, sch, near_part, near, on)
+    placed_report = []
+    for unit in units:
+        origin, crowded = _find_room(canvas, unit, anchor, create)
+        if origin is None:
+            return [
+                _problem(
+                    index,
+                    "there is no room on the sheet for the part: every free "
+                    "place would touch a wire, pin or label",
+                    ref=first_ref,
+                )
+            ]
+        unit.origin = origin
+        _write_unit(edit, step, sch, unit, ways, refs, create, extra, flags)
+        anchor = (create._placed_box(unit)[2] + 2 * draw.GRID, create._placed_box(unit)[1])
+        placed_report.append({"unit": unit.unit, "at_mm": _mm(origin), "overlaps": crowded})
+    table = sch.root.find("lib_symbols")
+    if table is not None and not any(n.value(1) == lib_id for n in table.find_all("symbol")):
+        table.append(copy(resolved.node))
+    edit.touch(sch)
+
+    # What must read back: the fields, and every pin on the net it was put on.
+    wanted_fields: dict[str, str | None] = {"Value": str(value), "Footprint": str(footprint)}
+    wanted_fields.update(extra)
+    joined = []
+    for inst in step.placements(sch):
+        ref = refs[inst.path]
+        edit.fields[ref] = dict(wanted_fields)
+        edit.flags[ref] = dict(flags)
+        for pin in resolved.symbol.pins:
+            if pin.hidden and pin.electrical == "power_in":
+                target = step.nets.get(escape(pin.name))
+                onto = next(iter(_pins(target[0])), None) if target else None
+                edit.join((ref, pin.number), onto, key=("global", pin.name))
+                continue
+            key = on.get((first_ref, pin.number))
+            if key is None:
+                edit.alone((ref, pin.number))
+                continue
+            way = ways[key]
+            name = way.name(inst)
+            target = step.nets.get(
+                name if way.kind in ("label", "local_power") else way.net or name
+            )
+            onto = next(iter(_pins(target[0])), None) if target else None
+            edit.join((ref, pin.number), onto, key=("net", name))
+            edit.expect[(ref, pin.number)] = name
+            joined.append({"pin": f"{ref}.{pin.number}", "net": name})
+    edit.report.append(
+        {
+            "index": index,
+            "op": "add",
+            "ref": first_ref,
+            "symbol": lib_id,
+            "sheet": instance.name,
+            "placed": placed_report,
+            "joined": joined,
+            "also_added": sorted(set(refs.values()) - {first_ref}),
+            "files": [sch.path.name],
+        }
+    )
+    return []
+
+
+def _anchor(step: Step, canvas: draw.Canvas, sch: Schematic, near_part, near, on) -> tuple:
+    """Where to start looking for room: beside the part named, else beside the
+    part on this sheet sharing most nets with the new one, else at the top left."""
+    if near_part is not None:
+        for other_sch, sym in near_part.symbols:
+            if other_sch is sch:
+                lib = sch.library.get(sym.library_name)
+                box = draw._body(sym, lib) if lib is not None else None
+                if box is not None:
+                    return (box[2] + 4 * draw.GRID, box[1])
+    return (canvas.area[0] + 10 * draw.GRID, canvas.area[1] + 10 * draw.GRID)
+
+
+def _find_room(canvas: draw.Canvas, unit, anchor: tuple[int, int], create):
+    """The origin nearest `anchor`, on the grid, where the unit and all it
+    draws take nothing's room and touch nothing: its pins, its wires, its
+    labels. Nearer is better; a little lower or to the right, better still."""
+    grid = draw.GRID
+    box = unit.box
+    pad = grid
+    step_ = 2 * grid
+    area = canvas.area
+    candidates = []
+    for ox in range(area[0] - box[0], area[2] - box[2] + 1, step_):
+        for oy in range(area[1] - box[1], area[3] - box[3] + 1, step_):
+            gx, gy = (ox // grid) * grid, (oy // grid) * grid
+            dx, dy = gx - anchor[0], gy - anchor[1]
+            candidates.append((dx * dx + dy * dy + (abs(dx) if dx < 0 else 0), gx, gy))
+    candidates.sort()
+    for _, ox, oy in candidates:
+        placed = (box[0] + ox - pad, box[1] + oy - pad, box[2] + ox + pad, box[3] + oy + pad)
+        if not canvas.free(placed):
+            continue
+        if not _clear_unit(canvas, unit, (ox, oy), create):
+            continue
+        return (ox, oy), 0
+    return None, 0
+
+
+def _clear_unit(canvas: draw.Canvas, unit, origin, create) -> bool:
+    ox, oy = origin
+
+    def at(p):
+        return (p[0] + ox, p[1] + oy)
+
+    for spot in unit.spots:
+        if canvas.touching(at(spot.at)):
+            return False
+    for item in unit.drawn:
+        if isinstance(item, create.Wire):
+            a, b = at(item.a), at(item.b)
+            if not canvas.clear(a, b) or canvas.touching(b):
+                return False
+        elif isinstance(item, (create.Label, create.Power, create.NoConnect)):
+            if canvas.touching(at(item.at)):
+                return False
+    return True
+
+
+def _write_unit(
+    edit: Edit,
+    step: Step,
+    sch: Schematic,
+    unit,
+    ways: dict,
+    refs: dict,
+    create,
+    extra: dict[str, str],
+    flags: dict[str, bool],
+) -> None:
+    """The unit and what it draws, into the sheet and onto the canvas."""
+    ox, oy = unit.origin
+    canvas = step.canvas(sch)
+    part = unit.part
+
+    def at(p):
+        return (p[0] + ox, p[1] + oy)
+
+    node = create._symbol_node(
+        part.lib,
+        part.ref,
+        part.value,
+        part.footprint,
+        (ox, oy),
+        0,
+        unit.unit,
+        edit.ids,
+        "",
+        edit.project,
+        at(unit.ref_at),
+        at(unit.value_at),
+        unit.fields_justify,
+    )
+    paths = [
+        List.new(
+            "path", quote(path), List.new("reference", quote(ref)), List.new("unit", str(unit.unit))
+        )
+        for path, ref in refs.items()
+    ]
+    node.replace(
+        node.find("instances"),
+        List.new("instances", List.new("project", quote(edit.project), *paths)),
+    )
+    for name, value in extra.items():
+        _set_field_node(node, sch.version, name, value)
+    for name, on in flags.items():
+        _set_flag_node(node, name, on)
+    _append(sch, node)
+    canvas.take_box(create._placed_box(unit))
+    for spot in unit.spots:
+        canvas.take(at(spot.at), "pin")
+    for number, item in enumerate(unit.drawn):
+        key = (part.ref, unit.unit, number)
+        if isinstance(item, create.Wire):
+            _append(sch, draw.wire(at(item.a), at(item.b), edit.ids(*key, "wire")))
+            canvas.take_wire(at(item.a), at(item.b))
+        elif isinstance(item, create.NoConnect):
+            _append(sch, draw.no_connect(at(item.at), edit.ids(*key, "nc")))
+            canvas.take(at(item.at), "no_connect")
+        elif isinstance(item, create.Label):
+            way = ways[item.text]
+            out = {0: (1, 0), 90: (0, -1), 180: (-1, 0), 270: (0, 1)}[item.angle]
+            _append(
+                sch,
+                draw.label(
+                    way.kind, way.text, at(item.at), out, edit.ids(*key, "label"), way.shape
+                ),
+            )
+            canvas.take(at(item.at), "label")
+        elif isinstance(item, create.Power):
+            way = ways[item.net]
+            references = {path: edit.power_reference(step) for path in refs}
+            _append(
+                sch,
+                draw.power_symbol(
+                    way.template,
+                    way.template_lib,
+                    way.text,
+                    at(item.at),
+                    item.out,
+                    edit.ids,
+                    key,
+                    references,
+                    edit.project,
+                ),
+            )
+            _embed(sch, way.template_lib, step)
+            canvas.take(at(item.at), "pin")
+
+
+def _remove(edit: Edit, step: Step, index: int, change: dict) -> list[dict]:
+    problems = _unknown(index, change, {"op", "ref"}, "remove")
+    reference = change.get("ref")
+    part, missing = _part(step, index, reference)
+    if part is None or problems:
+        return problems + missing
+    if any(
+        (lib := sch.library.get(sym.library_name)) is not None and lib.power
+        for sch, sym in part.symbols
+    ):
+        return [
+            _problem(
+                index, "a power symbol names a net: disconnect the pin it is on", ref=reference
+            )
+        ]
+    removed: dict[str, int] = defaultdict(int)
+    refs = set()
+    for sch, sym in part.symbols:
+        lib = sch.library.get(sym.library_name)
+        canvas = step.canvas(sch)
+        for placed in canvas.pins(sym, lib) if lib is not None else []:
+            cut = _cut(sch, step, sym, placed.pin, placed.at, False, edit.removed, removing=True)
+            if isinstance(cut, str):
+                return [_problem(index, cut, pin=f"{reference}.{placed.pin.number}")]
+            for kind, count in cut.items():
+                removed[kind] += count
+        sch.root.remove(sym.node)
+        removed["symbols"] += 1
+        # Its drawing in the sheet's library, if nothing else there uses it.
+        if not any(
+            other is not sym and other.library_name == sym.library_name for other in sch.symbols
+        ):
+            table = sch.root.find("lib_symbols")
+            for node in table.find_all("symbol") if table is not None else []:
+                if node.value(1) == sym.library_name:
+                    table.remove(node)
+        edit.touch(sch)
+        for inst in step.placements(sch):
+            ref = _reference(sym, inst)
+            refs.add(ref)
+            lib_pins = lib.pins_of(sym.unit, sym.body_style) if lib is not None else []
+            for pin in lib_pins:
+                here = (ref, pin.number)
+                name = step.net_of.get(here)
+                left = step.nets.get(name) if name else None
+                edit.vanish(here)
+                if left is not None and _namer(step, *left).kind is not None:
+                    rest = [p for p in _pins(left[0]) if p[0] != ref]
+                    if rest:
+                        edit.expect[rest[0]] = name
+    edit.removed |= refs
+    edit.report.append(
+        {
+            "index": index,
+            "op": "remove",
+            "ref": reference,
+            "units": len(part.symbols),
+            "removed": dict(removed),
+            "also_removes": sorted(refs - {reference}),
+            "files": sorted({sch.path.name for sch, _ in part.symbols}),
+        }
+    )
+    return []
 
 
 # -- checking the edit, before it is written -------------------------------------------
@@ -1361,14 +1902,22 @@ def _project(design: Design) -> str:
     return design.project
 
 
-OPERATIONS = {"set": _set, "rename": _rename, "connect": _connect, "disconnect": _disconnect}
+OPERATIONS = {
+    "set": _set,
+    "rename": _rename,
+    "connect": _connect,
+    "disconnect": _disconnect,
+    "add": _add,
+    "remove": _remove,
+}
 
 
 def run(schematic: Path, changes: list[dict[str, Any]]) -> tuple[dict[str, Any], dict[Path, str]]:
     """Make the changes in memory, one after another, and check them: the
     report, and each changed file's new text. Nothing is written here."""
+    kicad_root = kicad_env.find_kicad_root()
     try:
-        step = Step.read(schematic, {})
+        step = Step.read(schematic, {}, kicad_root)
     except (SchematicError, SexprError, UnicodeDecodeError, OSError) as exc:
         envelope.fail(
             "E_VALIDATION",
@@ -1376,7 +1925,6 @@ def run(schematic: Path, changes: list[dict[str, Any]]) -> tuple[dict[str, Any],
             {"schematic": str(schematic), "reason": str(exc)[:300]},
         )
         raise AssertionError("unreachable") from exc
-    kicad_root = kicad_env.find_kicad_root()
     inputs = {
         str(path): hashlib.sha256(path.read_bytes()).hexdigest() for path in step.design.schematics
     }
@@ -1384,6 +1932,7 @@ def run(schematic: Path, changes: list[dict[str, Any]]) -> tuple[dict[str, Any],
     before = [(n, k) for n, k in step.nets.values()]
     parts_before = step.parts
     edit = Edit(schematic, draw.Ids(next(iter(inputs.values()), "")), _project(step.design))
+    edit.kicad_root = kicad_root
     for number, (net, _) in enumerate(before, start=1):
         for pin in _pins(net):
             edit.where[pin] = number
@@ -1398,7 +1947,7 @@ def run(schematic: Path, changes: list[dict[str, Any]]) -> tuple[dict[str, Any],
         if edit.touched:
             sources.update({p: s.document.dumps() for p, s in edit.touched.items()})
             edit.touched = {}
-            step = Step.read(schematic, sources)
+            step = Step.read(schematic, sources, kicad_root)
     if problems:
         envelope.fail(
             "E_VALIDATION",
