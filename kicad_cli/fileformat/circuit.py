@@ -33,6 +33,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 from .schematic import LibPin, Schematic, Sheet, Symbol
+from .sexpr import Document
 
 Point = tuple[int, int]
 
@@ -102,10 +103,14 @@ class Net:
 
 
 class Design:
-    """A whole design: the root schematic and every sheet instance under it."""
+    """A whole design: the root schematic and every sheet instance under it.
 
-    def __init__(self, root: str | Path) -> None:
+    `sources` gives a file's text in place of what is on disk: an edit is
+    read back as a design before it is written."""
+
+    def __init__(self, root: str | Path, sources: dict[Path, str] | None = None) -> None:
         self.root_path = Path(root)
+        self._sources = {Path(p).resolve(): t for p, t in (sources or {}).items()}
         self._files: dict[Path, Schematic] = {}
         root_schematic = self._schematic(self.root_path)
         self.project = self.root_path.stem
@@ -119,8 +124,16 @@ class Design:
     def _schematic(self, path: Path) -> Schematic:
         key = path.resolve()
         if key not in self._files:
-            self._files[key] = Schematic.load(path)
+            text = self._sources.get(key)
+            self._files[key] = (
+                Schematic(Document.parse(text), path) if text is not None else Schematic.load(path)
+            )
         return self._files[key]
+
+    @property
+    def schematics(self) -> dict[Path, Schematic]:
+        """Every file of the design, once, by its resolved path."""
+        return dict(self._files)
 
     def _walk(self, instance: SheetInstance) -> None:
         self.instances.append(instance)
@@ -266,6 +279,11 @@ def connect(design: Design, keep_empty: bool = False) -> list[Net]:
     nets that have a name and no pins -- a label on a wire to nowhere -- are
     listed too: KiCad numbers them.
     """
+    return [net for net, _ in grouped(design, keep_empty)[1]]
+
+
+def grouped(design: Design, keep_empty: bool = False) -> tuple[Graph, list[tuple[Net, list]]]:
+    """`connect`, each net with the keys of everything on it (`Graph`)."""
     found = graph(design)
     uf, pins_at, names = found.net, found.pins_at, found.names
     groups: dict = defaultdict(list)
@@ -273,6 +291,7 @@ def connect(design: Design, keep_empty: bool = False) -> list[Net]:
         groups[uf.find(key)].append(key)
 
     nets = []
+    keys_of: dict[int, list] = {}
     for keys in groups.values():
         pins = [pins_at[k] for k in keys if k in pins_at and not pins_at[k].power_symbol]
         named = [n for k in keys for n in names.get(k, [])]
@@ -280,6 +299,7 @@ def connect(design: Design, keep_empty: bool = False) -> list[Net]:
             continue
         flagged = any(k[0] == "nc" for k in keys)
         nets.append(Net(name="", pins=pins, names=named, no_connect=flagged))
+        keys_of[id(nets[-1])] = keys
     for net in nets:
         net.name = _name(net)
         # A pin every unit of a part carries -- its supply -- is placed once
@@ -294,7 +314,7 @@ def connect(design: Design, keep_empty: bool = False) -> list[Net]:
         net.pins = unique
     _deduplicate(nets)
     nets.sort(key=lambda n: natural_key(n.name))
-    return nets
+    return found, [(net, keys_of[id(net)]) for net in nets]
 
 
 def graph(design: Design) -> Graph:

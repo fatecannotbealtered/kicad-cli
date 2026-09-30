@@ -41,11 +41,13 @@ Schematic *creation*: `sch create` turns a JSON circuit specification into a
 "design a board for this requirement" a task this Skill covers end to end — see
 "Building a board from nothing".
 
+Schematic *changes*: `sch edit` changes an existing schematic from a JSON list
+of changes -- a part's value, footprint, any field or its DNP/BOM/board flags,
+and a net's name, wherever it is drawn. It does not yet add, remove or rewire
+parts: for that, edit the specification and regenerate, or open KiCad.
+
 **Do not use this Skill for**: authoring symbols or footprints, choosing parts,
-BOM sourcing, or SPICE. It also cannot *edit* an existing schematic: `sch create`
-writes a new one from a specification, and the other `sch *` commands read
-schematics or write a link field back into the *board*. To change a schematic
-that already exists, edit the specification and regenerate, or open KiCad.
+BOM sourcing, or SPICE.
 
 ## First Step
 
@@ -120,6 +122,7 @@ ones apart:
 | Turn an existing schematic into a board | KiCad's own `sch export netlist`, then `board from-netlist` | this creates a *new* board; it does not update one that already has a layout |
 | Will "Update PCB from Schematic" destroy my layout? | `sch link`, then `sch sync-preview` | never `pcb drc --schematic-parity`; it matches by reference designator and is blind to broken links |
 | ERC says zero — is the schematic fine? | `sch audit` (checks the silenced rules too) | `sch link` |
+| Change a part's value, footprint or fields, or rename a net, in a schematic that exists | `sch edit` (see "Changing an existing schematic") | editing the `.kicad_sch` text by hand: a label renamed on one sheet and not its sheet pin splits the net |
 | Power nets are being routed at signal width | `board netclass --name Power --width 0.6 --nets +3V3,VIN`, then `board rewidth` | widening without a netclass: `board widen` and `board rewidth` both read the target *from* a netclass |
 | A trace is too thin | `board widen` first (in place), then `board route --mode rewidth --nets X` | `board rewidth` has no `--nets`; it works by netclass |
 | Connections are missing | `board route --mode repair` (repeat until it stops improving) | `--mode full` clears every existing track first |
@@ -235,10 +238,38 @@ drawing, net for net, before the command returned.
 fails step 2, not step 1 — the schematic does not care and the board cannot be
 built without it. Name footprints when you write the spec.
 
+## Changing an existing schematic
+
+```bash
+# changes.json -- every change in one list, made together or not at all:
+# {"changes": [
+#   {"op": "set", "ref": "R5", "value": "4.7k",
+#    "footprint": "Resistor_SMD:R_0603_1608Metric",
+#    "fields": {"MPN": "RC0603FR-074K7L"}, "dnp": true},
+#   {"op": "rename", "net": "/SDA", "to": "I2C_SDA"}
+# ]}
+kicad-cli sch edit --schematic design.kicad_sch --changes changes.json --dry-run --compact
+kicad-cli sch edit --schematic design.kicad_sch --changes changes.json --confirm ct_xxx --compact
+```
+
+- `ref` is the reference as annotated; every unit of the part changes. A field
+  set to `null` is removed; the five every part has can only be emptied.
+- `net` is the net's name as this tool's netlist gives it -- `/SDA` for a
+  local label on the root sheet, `/sub/SDA` on a child, `SDA` for a global
+  label or a power net. `to` is the text drawn; the sheet's path is kept.
+- Read `changes[].also_changes` and `also_renames`: a sheet placed twice is
+  one drawing, so its other placement changes too.
+- `verified` must be all true for anything to be written. A rename that would
+  join two nets or split one is refused with `E_CONFLICT`; nothing is written.
+- `erc.new` lists findings the edit adds -- a label now differing from another
+  only in case, say. They do not block the write; report them.
+- The drawing is not laid out again, and a board made from the schematic is not
+  changed: carry the change over with KiCad's Update PCB from Schematic.
+
 ## Checkpoints
 
 STOP CHECKPOINT: Ask the user before confirming any write. All of `sch create`,
-`board from-netlist`, `board route`, `board stitch`, `board rewidth`,
+`sch edit`, `board from-netlist`, `board route`, `board stitch`, `board rewidth`,
 `board widen`, `board move`, `board place`, `board netclass`, `board pour`,
 `board silkscreen`, `sch relink` and `fab *` modify files on disk.
 `sch create` and `board from-netlist` replace a file of that name if one exists.

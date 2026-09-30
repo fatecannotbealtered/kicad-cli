@@ -33,6 +33,7 @@ select = ["E", "F", "I", "UP", "B"]
 "tests/fixtures/erc/make_erc.py" = ["E501"]
 "tests/fixtures/erc/make_erc2.py" = ["E501"]
 "tests/fixtures/erc/make_erc3.py" = ["E501"]
+"tests/fixtures/sch_edit/make_edit.py" = ["E501"]
 "kicad_cli/payload/plane.py" = ["UP031"]
 "kicad_cli/payload/router.py" = ["UP031"]
 
