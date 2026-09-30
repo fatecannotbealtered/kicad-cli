@@ -8,6 +8,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Changed
+- `sch audit` needs no KiCad. It checks the design with this tool's own ERC,
+  once, with every rule on, where it ran KiCad's binary twice -- the second
+  time on a copy of the project with the silenced rules switched back on.
+  What a silenced rule finds is what `with_rules_enabled` reports, as
+  before; on CM5_MINIMA_3 that is the same 1 finding as configured and 10
+  hidden, in under a second. It reports the annotation rules too, which
+  KiCad's editor checks before its ERC and its command-line ERC does not.
+  `not_checked` names KiCad's rules this does not check, and the four
+  library rules when KiCad's installation is not found.
+  `cross_sheet_connectivity` and `footprint_filters` are declared untrusted:
+  they carry the design's own label names, references and footprints.
 - `sch sync-preview` and `sch relink` need no KiCad. The parts they hold a
   board up to come from this tool's own netlist, where they asked KiCad's
   binary for its export; on all 35 of KiCad's demo projects the records are

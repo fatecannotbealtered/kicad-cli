@@ -3,13 +3,17 @@
 The checks below are about the reasoning, not the plumbing -- that rules KiCad
 ships disabled are named as such, that turning them back on is a measurement
 rather than a claim, and that a rare finding is not buried under a common one.
+The rules are this tool's own ERC (`tests/test_fileformat_erc.py` holds it to
+KiCad's); what is tested here is how the command splits and reports them.
 """
 
 from __future__ import annotations
 
 import json
+import shutil
 import subprocess
 import sys
+from collections import Counter
 from pathlib import Path
 
 import pytest
@@ -18,13 +22,18 @@ from kicad_demos import DEMOS, SKIP_REASON, copy_demo
 REPO = Path(__file__).resolve().parents[1]
 
 sys.path.insert(0, str(REPO))
+from kicad_cli import kicad_env  # noqa: E402
 from kicad_cli.commands.erc import (  # noqa: E402
     KICAD_DEFAULT_IGNORED,
     _filters_match,
+    _not_checked,
     _patterns,
     _sample,
     _unflatten,
 )
+from kicad_cli.fileformat import erc  # noqa: E402
+
+FIXTURE = REPO / "tests" / "fixtures" / "erc"
 
 
 def run(*argv: str) -> dict:
@@ -126,3 +135,55 @@ def test_the_unmuted_run_never_reports_less(tmp_path: Path) -> None:
     assert d["with_rules_enabled"]["additional_violations"] >= 0
     counted = sum(d["with_rules_enabled"]["by_type"].values())
     assert counted == d["with_rules_enabled"]["additional_violations"]
+
+
+def test_what_a_silenced_rule_finds_is_what_it_hides(tmp_path: Path) -> None:
+    """One check with every rule on, split by the project's own settings: a
+    silenced rule's findings are the hidden ones -- all of them, at
+    "warning" -- and the rest are the configured ones, none counted twice."""
+    work = tmp_path / "erc"
+    work.mkdir()
+    for name in ("erc.kicad_sch", "erc.kicad_pro"):
+        shutil.copy(FIXTURE / name, work / name)
+    project = work / "erc.kicad_pro"
+    data = json.loads(project.read_text(encoding="utf-8"))
+    data["erc"]["rule_severities"]["pin_not_connected"] = "ignore"
+    project.write_text(json.dumps(data, indent=2), encoding="utf-8")
+
+    d = run("sch", "audit", "--schematic", str(work / "erc.kicad_sch"))["data"]
+
+    everything = erc.check(
+        FIXTURE / "erc.kicad_sch",
+        erc.Settings.of(FIXTURE / "erc.kicad_pro"),
+        kicad_env.find_kicad_root(),
+    )
+    rules = Counter(v.rule for v in everything)
+    assert rules["pin_not_connected"] > 0, "the fixture no longer has what this hides"
+    hidden = d["with_rules_enabled"]
+    assert hidden["ran"] is True
+    assert hidden["by_type"] == {"pin_not_connected": rules["pin_not_connected"]}
+    assert hidden["additional_violations"] == rules["pin_not_connected"]
+    assert {r["severity"] for r in hidden["sample"]} == {"warning"}
+    assert d["as_configured"]["violations"] == len(everything) - rules["pin_not_connected"]
+    assert d["silenced_rules"]["disabled_in_this_project"] == ["pin_not_connected"]
+    assert any(f["id"] == "A1-hidden-violations" for f in d["findings"])
+    assert d["status"] == "FAIL"
+
+
+def test_a_rule_the_project_never_mentions_has_kicads_default() -> None:
+    """KiCad writes every rule into a project it saves; an older or
+    hand-made one may not, and a rule it leaves out is as KiCad ships it --
+    single_global_label off."""
+    settings = erc.Settings.of(None)
+    assert {r for r, v in settings.severities.items() if v == "ignore"} == KICAD_DEFAULT_IGNORED
+
+
+def test_what_is_not_checked_is_said() -> None:
+    """Every rule KiCad has that this does not check is named, and the
+    library rules too when KiCad's installation -- which the library tables
+    name their libraries relative to -- is not there."""
+    installed = " ".join(_not_checked("D:/KiCad"))
+    assert all(rule in installed for rule in erc.NOT_CHECKED)
+    assert not any(rule in installed for rule in erc.LIBRARY)
+    missing = " ".join(_not_checked(None))
+    assert all(rule in missing for rule in (*erc.NOT_CHECKED, *erc.LIBRARY))
