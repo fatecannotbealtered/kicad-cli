@@ -133,10 +133,10 @@ The library tables are read as files (`kicad_cli/fileformat/lib_tables.py`).
 Of the other five, one is about simulation and four KiCad's own ERC was
 never seen to report (`erc.NOT_CHECKED`). `sch audit` runs on it, so no
 `sch` command runs KiCad's binary any more. `sch edit` changes an
-existing schematic -- a part's fields, a net's name, across the hierarchy --
-and reads the edit back before writing it. Next on that side: adding,
-removing and rewiring parts, and carrying a schematic change onto a routed
-board.
+existing schematic -- a part's fields, a net's name, which net a pin is on,
+across the hierarchy -- and reads the edit back before writing it. Next on
+that side: adding and removing parts, and carrying a schematic change onto a
+routed board.
 
 Progress. Step 1 is in (`bench/`). Step 2 is in for boards:
 `kicad_cli/fileformat/sexpr.py` reads and writes KiCad's S-expressions

@@ -838,6 +838,178 @@
 		(uuid "b77f389f-988d-5f79-a380-0731400eb763")
 	)
 	(symbol
+		(lib_id "fixture:R")
+		(at 50.8 76.2 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "c806d962-a396-5331-9be1-d73cc9a1d527")
+		(property "Reference" "R4"
+			(at 53.34 74.93 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "1k"
+			(at 53.34 77.47 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 50.8 76.2 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 50.8 76.2 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 50.8 76.2 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "44051a5b-6aaa-5011-ae21-037ae8be3ccf")
+		)
+		(pin "2"
+			(uuid "46e7386d-611f-569c-845d-cd477a9b2cad")
+		)
+		(instances
+			(project "edit"
+				(path "/580ac6fe-81b6-53f3-8b01-c074a56f485a"
+					(reference "R4")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "fixture:R")
+		(at 63.5 76.2 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "e30974d6-f623-587b-956c-47c2908f99c3")
+		(property "Reference" "R5"
+			(at 66.04 74.93 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "1k"
+			(at 66.04 77.47 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 63.5 76.2 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 63.5 76.2 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 63.5 76.2 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "0c4250ec-a212-55e4-9f17-d0ba94962453")
+		)
+		(pin "2"
+			(uuid "140f350a-5d9b-559e-8726-de60319dd473")
+		)
+		(instances
+			(project "edit"
+				(path "/580ac6fe-81b6-53f3-8b01-c074a56f485a"
+					(reference "R5")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(no_connect
+		(at 50.8 72.39)
+		(uuid "5b19b6ac-7a90-5bcb-a2b7-3ff756cb4b44")
+	)
+	(no_connect
+		(at 63.5 72.39)
+		(uuid "30a68563-3855-5384-ab0c-a3631c748344")
+	)
+	(wire
+		(pts
+			(xy 50.8 80.01) (xy 50.8 82.55)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "57f22d9e-8af8-5eda-af48-06e98c9e701a")
+	)
+	(wire
+		(pts
+			(xy 50.8 82.55) (xy 63.5 82.55)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1a7e943c-1dbd-5adb-9b96-7571253d3b9a")
+	)
+	(wire
+		(pts
+			(xy 63.5 82.55) (xy 63.5 80.01)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "06e228c4-793e-5397-a250-cba89a8248ef")
+	)
+	(symbol
 		(lib_id "fixture:DUAL")
 		(at 101.6 76.2 0)
 		(unit 2)

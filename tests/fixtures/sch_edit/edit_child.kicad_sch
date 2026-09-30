@@ -320,6 +320,85 @@
 		)
 		(uuid "8ee20cf5-4e1e-5f6e-ab91-b76a0c5bb107")
 	)
+	(symbol
+		(lib_id "fixture:R")
+		(at 88.9 50.8 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "1c3bb296-a740-519e-927b-aaa55a07abcb")
+		(property "Reference" "R11"
+			(at 91.44 49.53 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "10k"
+			(at 91.44 52.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 88.9 50.8 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 88.9 50.8 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 88.9 50.8 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "d92c8ab8-28e9-5cfd-84d0-dbd675c3a813")
+		)
+		(pin "2"
+			(uuid "4a583ec2-178d-58a8-9ce4-2d60c37c5050")
+		)
+		(instances
+			(project "edit"
+				(path "/580ac6fe-81b6-53f3-8b01-c074a56f485a/43040844-219b-5afe-956b-f02b17d3693a"
+					(reference "R11")
+					(unit 1)
+				)
+				(path "/580ac6fe-81b6-53f3-8b01-c074a56f485a/cc4316f9-1336-533b-887c-887029e43744"
+					(reference "R21")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(no_connect
+		(at 88.9 46.99)
+		(uuid "f2c9ca86-4cd8-51ac-adc6-b4a413ea9380")
+	)
+	(no_connect
+		(at 88.9 54.61)
+		(uuid "214902cc-f957-545d-9213-a7f23d7cc1e1")
+	)
 	(embedded_fonts no)
 )
 
