@@ -154,6 +154,21 @@ SCHEMAS: dict[str, dict[str, Any]] = {
         # Field values, net names and ERC's item descriptions are the design's text.
         "untrusted_fields": ["changes", "verified", "erc"],
     },
+    "board_update": {
+        "shape": "object",
+        "fields": [
+            "board",
+            "schematic",
+            "counts",
+            "changes",
+            "skipped",
+            "verified",
+            "status",
+            "not_checked",
+        ],
+        # References, values, fields and net names are the design's own text.
+        "untrusted_fields": ["changes", "skipped", "verified"],
+    },
     "sch_relink": {
         "shape": "object",
         "fields": [
@@ -509,6 +524,7 @@ SCHEMAS: dict[str, dict[str, Any]] = {
 
 
 for _name, _values in {
+    "board_update": ["PASS", "PARTIAL", "NOOP"],
     "sch_edit": ["PASS", "NOOP"],
     "sch_link": ["PASS", "FAIL"],
     "sch_audit": ["PASS", "FAIL"],
@@ -1169,6 +1185,39 @@ def build() -> list[dict[str, Any]]:
                 "kicad-cli board widen --board board.kicad_pcb --confirm ct_xxx --compact",
             ],
             layout.widen,
+        ),
+        _cmd(
+            "board update",
+            "write",
+            "Carry the schematic onto its board, as KiCad's Update PCB from Schematic does with "
+            "the options its dialog opens with, in this process: references, values, fields, "
+            "DNP and BOM marks, footprints the parts name, every pad's net, and the copper of a "
+            "renamed net. New parts are placed beside the board; nothing is deleted. The board "
+            "is read back against the schematic before anything is written.",
+            [
+                _board_param(),
+                {
+                    "name": "schematic",
+                    "type": "string",
+                    "required": False,
+                    "multiple": False,
+                    "default_from": "<board>.kicad_sch",
+                    "default": None,
+                },
+                {
+                    "name": "ignore-lock",
+                    "type": "boolean",
+                    "required": False,
+                    "multiple": False,
+                    "default": False,
+                },
+            ],
+            "board_update",
+            [
+                "kicad-cli board update --board board.kicad_pcb --dry-run --compact",
+                "kicad-cli board update --board board.kicad_pcb --confirm ct_xxx --compact",
+            ],
+            board.update,
         ),
         _cmd(
             "board move",

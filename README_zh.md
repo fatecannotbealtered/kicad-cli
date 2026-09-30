@@ -56,6 +56,7 @@ kicad-cli reference --compact
 | 板级分析 | `board audit`、`board plane`、`board parity` | 载流与线宽达标度；每段走线下方的铜与跨越平面分割的位置；板与原理图的器件、网络比对。 |
 | 从零构建 | `sch create`、`board from-netlist` | 一份 JSON 电路规格变成原理图和网表，网表再变成摆好封装、连好焊盘的板子。布局是按位号排的网格，不是真正的布局。 |
 | 原理图修改 | `sch edit` | 按一份 JSON 修改清单改已有原理图：器件的字段和标志、网络的名字、引脚接在哪个网络上、从库里加器件和删器件——跨图纸，也包括被放置了两次的图纸。写盘前先把改后的设计读回来核对：每个网络连的引脚必须和原来一样，并在改前改后各跑一次 ERC。 |
+| 原理图同步到板 | `board update` | 像 KiCad 的「从原理图更新 PCB」那样把原理图改动带到已布好的板上：值、字段、原位换封装、焊盘网络，改名网络的走线过孔铺铜跟着改名——写盘前先读回核对。 |
 | 原理图链接 | `sch link`、`sch relink`、`sch sync-preview`、`sch audit` | 封装是否还带着符号 uuid、如何修回去、「Update PCB from Schematic」会做什么，以及被静默的 ERC 规则藏了什么。 |
 | 板级写入 | `board route`、`board rewidth`、`board widen`、`board stitch`、`board move` | 布线、加宽、铺铜缝合与器件移动，均有确认入口；验证与回退因操作和模式而异，尚不是统一安全保证。 |
 | 生产输出 | `fab gerber`、`fab drill`、`fab pdf`、`fab svg`、`fab dxf` | 光绘与钻孔输出；钻孔计数与 KiCad 报告对账。生成文件不等于完成制造签核。 |

@@ -117,7 +117,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "fixture:R_0805"
 			(at 50.8 50.8 0)
 			(hide yes)
 			(effects
@@ -231,7 +231,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "fixture:R_0805"
 			(at 63.5 50.8 0)
 			(hide yes)
 			(effects
@@ -345,7 +345,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "fixture:R_0805"
 			(at 88.9 50.8 0)
 			(hide yes)
 			(effects

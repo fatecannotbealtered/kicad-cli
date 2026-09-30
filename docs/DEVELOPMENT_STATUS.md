@@ -135,8 +135,9 @@ never seen to report (`erc.NOT_CHECKED`). `sch audit` runs on it, so no
 `sch` command runs KiCad's binary any more. `sch edit` changes an
 existing schematic -- a part's fields, a net's name, which net a pin is on,
 parts added and removed, across the hierarchy -- and reads the edit back
-before writing it. Next on that side: carrying a schematic change onto a
-routed board.
+before writing it. `board update` carries a schematic change onto a
+routed board, as KiCad's Update PCB from Schematic does, and KiCad's own
+schematic-parity check finds the result true to the schematic.
 
 Progress. Step 1 is in (`bench/`). Step 2 is in for boards:
 `kicad_cli/fileformat/sexpr.py` reads and writes KiCad's S-expressions

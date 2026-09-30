@@ -153,3 +153,59 @@ def from_netlist(args: dict[str, Any]) -> None:
     )
 
     native_from_netlist.run(plan, str(out), str(netlist), args.get("confirm"))
+
+
+def update(args: dict[str, Any]) -> None:
+    """Carry the schematic onto its board, as KiCad's Update PCB from
+    Schematic does with the options its dialog opens with -- in this process.
+
+    The board is updated in memory and read back before anything is written:
+    every part's footprint with its reference, value and footprint, every pad
+    on its pin's net, the copper as it was but for nets renamed. The preview
+    carries the board's hash and every sheet's, so a token cannot be spent on
+    a design that has moved on since the dry run.
+    """
+    from ..native import board_update  # noqa: PLC0415
+    from ..native import write as native_write  # noqa: PLC0415
+    from . import layout  # noqa: PLC0415
+
+    board = Path(_board_arg(args))
+    schematic = (
+        Path(str(args["schematic"])).expanduser()
+        if args.get("schematic")
+        else board.with_suffix(".kicad_sch")
+    )
+    layout._guard(str(board), args)
+    report, text = board_update.run(board, schematic)
+    result = {
+        "board": report["board"],
+        "schematic": report["schematic"],
+        "counts": report["counts"],
+        "changes": report["changes"],
+        "verified": report["verified"],
+    }
+    # What cannot be made -- a footprint no library has -- is passed over, as
+    # KiCad's dialog passes over it, and said to be.
+    result["skipped"] = report["problems"]
+    status = "PARTIAL" if report["problems"] else "PASS"
+    if text is None:
+        envelope.ok(
+            {**result, "status": "NOOP" if status == "PASS" else status,
+             "not_checked": board_update.not_checked()}
+        )  # fmt: skip
+    if not board_update.passed(report["verified"]):
+        envelope.fail(
+            "E_INTEGRITY",
+            "the updated board does not read back as the schematic says; nothing was written",
+            {"verified": report["verified"]},
+        )
+    preview = {
+        **report,
+        "will": "rewrite the board: footprints, their fields and pads' nets as the schematic "
+        "says, the copper of renamed nets renamed; nothing is deleted",
+    }
+    envelope.check_confirm(args.get("confirm"), f"board update:{board.name}", preview, str(board))
+    native_write.start()
+    native_write.begin(board)
+    board.write_bytes(text.encode("utf-8"))
+    native_write.done({**result, "status": status, "not_checked": board_update.not_checked()})
