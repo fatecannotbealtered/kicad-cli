@@ -1,0 +1,202 @@
+"""The design rules check, as KiCad's DRC checks a board -- in this process.
+
+Each check was measured, not assumed: `tests/fixtures/drc/` holds boards
+drawn to ask KiCad's own DRC one question per case, and its answers are
+recorded beside them; the demo boards KiCad installs are the rest of the
+evidence. What each check found is written where it is made (`local.py`,
+`holes.py`, `zones.py`, `connections.py`, `courtyards.py`).
+
+The rules and their severities are the project's (`settings.py`): what it
+leaves out, a new KiCad 10 project supplies. A check at "ignore" is not run.
+An excluded violation is still reported, marked excluded, as KiCad's report
+marks it.
+
+What is not checked here is said to be, per check, in `not_checked()` --
+never silently passed.
+"""
+
+from __future__ import annotations
+
+from dataclasses import dataclass, field
+from pathlib import Path
+
+from ..board import Board
+from .items import Item
+from .settings import SEVERITIES, Settings
+
+__all__ = ["CHECKED", "NOT_CHECKED", "Item", "Report", "Settings", "Violation", "check"]
+
+NM = 1_000_000
+
+
+@dataclass
+class Violation:
+    rule: str
+    severity: str
+    message: str
+    items: list[Item] = field(default_factory=list)
+    excluded: bool = False
+    comment: str = ""
+
+    def uuids(self) -> frozenset[str]:
+        return frozenset(i.uuid for i in self.items if i.uuid)
+
+    def to_dict(self) -> dict:
+        out = {
+            "rule": self.rule,
+            "severity": self.severity,
+            "message": self.message,
+            "items": [i.to_dict() for i in self.items],
+        }
+        if self.excluded:
+            out["excluded"] = True
+            if self.comment:
+                out["comment"] = self.comment
+        return out
+
+
+@dataclass
+class Report:
+    violations: list[Violation]
+    unconnected: list[Violation]
+    not_checked: dict[str, str]  # rule -> why
+    ignored: list[str]  # rules the project turned off
+
+
+class Run:
+    """One check of one board: the board, its settings, what was found."""
+
+    def __init__(self, board: Board, settings: Settings) -> None:
+        self.board = board
+        self.settings = settings
+        self.found: list[Violation] = []
+        self.unconnected: list[Violation] = []
+        self._seen: set[tuple[str, frozenset[str], str]] = set()
+
+    def on(self, rule: str) -> bool:
+        """Whether a check is made: the project has not turned it off, and
+        no custom rule of its decides it."""
+        return self.enabled(rule) and rule not in self.settings.custom
+
+    def enabled(self, rule: str) -> bool:
+        return self.settings.severities.get(rule, SEVERITIES.get(rule, "error")) != "ignore"
+
+    def report(self, rule: str, message: str, items: list[Item]) -> None:
+        """One violation, once: KiCad names some twice, from two of its
+        checks; this names each once."""
+        if not self.on(rule):
+            return
+        uuids = frozenset(i.uuid for i in items if i.uuid)
+        key = (rule, uuids, message)
+        if key in self._seen:
+            return
+        self._seen.add(key)
+        comment = self.settings.exclusions.get((rule, uuids))
+        violation = Violation(
+            rule,
+            self.settings.severities.get(rule, SEVERITIES.get(rule, "error")),
+            message,
+            items,
+            excluded=comment is not None,
+            comment=comment or "",
+        )
+        (self.unconnected if rule == "unconnected_items" else self.found).append(violation)
+
+
+def mm(value: float) -> str:
+    """A length in a message, as KiCad writes it: millimetres, four places."""
+    return f"{value / NM:.4f} mm"
+
+
+def _checks():
+    from . import connections, courtyards, holes, local, zones  # noqa: PLC0415
+
+    return (
+        local.tracks,
+        local.vias,
+        local.pads,
+        local.footprint_types,
+        local.texts,
+        holes.check,
+        zones.intersecting,
+        connections.check,
+        courtyards.check,
+    )
+
+
+# The rules checked here.
+CHECKED = (
+    "track_width", "via_diameter", "annular_width", "drill_out_of_range",
+    "microvia_drill_out_of_range", "padstack", "padstack_invalid", "footprint_type_mismatch",
+    "text_height", "text_thickness", "mirrored_text_on_front_layer",
+    "nonmirrored_text_on_back_layer", "text_on_edge_cuts", "hole_to_hole", "holes_co_located",
+    "zones_intersect", "unconnected_items", "track_dangling", "via_dangling",
+    "courtyards_overlap", "malformed_courtyard", "missing_courtyard", "pth_inside_courtyard",
+    "npth_inside_courtyard",
+)  # fmt: skip
+
+# The rules KiCad has and this does not check yet, and why.
+NOT_CHECKED = {
+    "clearance": "copper clearance is not checked yet",
+    "shorting_items": "copper clearance is not checked yet",
+    "hole_clearance": "copper clearance is not checked yet",
+    "copper_edge_clearance": "copper clearance is not checked yet",
+    "tracks_crossing": "copper clearance is not checked yet",
+    "items_not_allowed": "rule areas are not checked yet",
+    "invalid_outline": "the board outline is not checked yet",
+    "item_on_disabled_layer": "not checked yet",
+    "isolated_copper": "zone fills are not checked yet",
+    "starved_thermal": "zone fills are not checked yet",
+    "connection_width": "zone fills are not checked yet",
+    "copper_sliver": "zone fills are not checked yet",
+    "solder_mask_bridge": "solder mask is not checked yet",
+    "silk_overlap": "silkscreen needs the stroke font, which this tool does not have yet",
+    "silk_over_copper": "silkscreen needs the stroke font, which this tool does not have yet",
+    "silk_edge_clearance": "silkscreen needs the stroke font, which this tool does not have yet",
+    "lib_footprint_issues": "footprint libraries are not checked yet",
+    "lib_footprint_mismatch": "footprint libraries are not checked yet",
+    "length_out_of_range": "custom rules (.kicad_dru) are not read yet",
+    "skew_out_of_range": "custom rules (.kicad_dru) are not read yet",
+    "diff_pair_gap_out_of_range": "custom rules (.kicad_dru) are not read yet",
+    "diff_pair_uncoupled_length_too_long": "custom rules (.kicad_dru) are not read yet",
+    "too_many_vias": "custom rules (.kicad_dru) are not read yet",
+    "track_angle": "custom rules (.kicad_dru) are not read yet",
+    "track_segment_length": "custom rules (.kicad_dru) are not read yet",
+    "creepage": "custom rules (.kicad_dru) are not read yet",
+    "unresolved_variable": "not checked yet",
+    "through_hole_pad_without_hole": "not checked yet",
+    "track_on_post_machined_layer": "not checked yet",
+    "track_not_centered_on_via": "not checked yet",
+    "footprint": "not checked yet",
+    "missing_tuning_profile": "not checked yet",
+    "tuning_profile_track_geometries": "not checked yet",
+    # Schematic parity is `board parity`'s, as it is KiCad's --schematic-parity.
+    "duplicate_footprints": "schematic parity: `board parity`",
+    "extra_footprint": "schematic parity: `board parity`",
+    "missing_footprint": "schematic parity: `board parity`",
+    "net_conflict": "schematic parity: `board parity`",
+    "footprint_symbol_mismatch": "schematic parity: `board parity`",
+    "footprint_filters_mismatch": "schematic parity: `board parity`",
+    "footprint_symbol_field_mismatch": "schematic parity: `board parity`",
+}  # fmt: skip
+
+
+def check(path: str | Path, settings: Settings | None = None, board: Board | None = None) -> Report:
+    """Every violation of the board at `path`, by the rules of its project.
+    A board already read -- an edit not yet written -- is checked as it is."""
+    path = Path(path)
+    board = board if board is not None else Board.load(path)
+    if settings is None:
+        settings = Settings.of(path.with_suffix(".kicad_pro"))
+    run = Run(board, settings)
+    for step in _checks():
+        step(run)
+    not_checked = {rule: why for rule, why in NOT_CHECKED.items() if run.enabled(rule)}
+    for rule, name in settings.custom.items():
+        if run.enabled(rule) and rule not in not_checked:
+            not_checked[rule] = (
+                f"the project's custom rules decide it (rule '{name}' in its .kicad_dru), "
+                "and they are not read yet"
+            )
+    ignored = sorted(rule for rule in settings.severities if not run.enabled(rule))
+    return Report(run.found, run.unconnected, not_checked, ignored)
