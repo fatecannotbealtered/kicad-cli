@@ -29,6 +29,12 @@ What was found, in short:
 - What only the drawing decides -- a wire's end joined to nothing -- is
   reported once per sheet file, however many times the sheet is placed; an
   end off the grid is reported for every placement.
+- The libraries are judged once per sheet file too. A sheet's copy of a
+  symbol is still its library's while the library's pins are where the copy
+  has them, its fields have the copy's values, and the drawing, the units,
+  being a power symbol and the pin-name offset are the same; nothing else
+  counts (`_Drawn`). No footprint at all is one a symbol's filters do not
+  allow.
 - A violation names at most two items, as KiCad's do.
 
 Which of several equivalent items KiCad names -- two of a junction's four
@@ -39,6 +45,7 @@ could stand in their place.
 
 from __future__ import annotations
 
+import fnmatch
 import json
 import os
 import re
@@ -46,9 +53,9 @@ from collections import defaultdict
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from . import annotation
+from . import annotation, lib_tables
 from .circuit import Design, Graph, PlacedPin, _on_segment, bus_members, graph, natural_key
-from .schematic import Label, Wire, uuid_of
+from .schematic import EMPTY_TILDE_BEFORE, Label, Wire, _lib_symbol, _unit_style, uuid_of
 
 Point = tuple[int, int]
 NM = 1_000_000
@@ -123,7 +130,12 @@ CHECKED = (
     "different_unit_footprint", "different_unit_net", "hier_label_mismatch",
     "duplicate_sheet_names", "bus_to_net_conflict", "net_not_bus_member",
     "unresolved_variable", "undefined_netclass",
+    "lib_symbol_issues", "lib_symbol_mismatch", "footprint_link_issues", "footprint_filter",
 )  # fmt: skip
+
+# Checked only when KiCad's installation is known: its library tables name
+# their libraries by paths relative to it.
+LIBRARY = ("lib_symbol_issues", "lib_symbol_mismatch", "footprint_link_issues", "footprint_filter")
 
 # Checked here, and not by KiCad's command-line ERC, which does not run the
 # annotation check its editor runs first. What counts as an annotation error
@@ -133,9 +145,7 @@ ANNOTATION = ("unannotated", "duplicate_reference", "extra_units", "unit_value_m
 
 # The rules KiCad has and this does not check, and why.
 NOT_CHECKED = {
-    "lib_symbol_issues": "the symbol libraries", "lib_symbol_mismatch": "the symbol libraries",
-    "footprint_link_issues": "the footprint libraries",
-    "footprint_filter": "the footprint libraries", "simulation_model_issue": "simulation",
+    "simulation_model_issue": "simulation",
     # Not reported by KiCad 10's own ERC on any drawing tried for them: a wire
     # on a bus with and without a junction, buses of different members
     # joined directly and through a sheet, one alias defined two ways, global
@@ -283,6 +293,10 @@ class _Check:
         # What only the drawing decides is reported once per sheet file, however
         # many times the sheet is placed; KiCad does.
         self.screens: set = set()
+        # Symbols as `_Drawn` has them: a library's, by its file and name; a
+        # sheet file's copies, by the file and the copy's name.
+        self.drawn_libraries: dict = {}
+        self.drawn_copies: dict = {}
         try:
             self.project = json.loads(
                 design.root_path.with_suffix(".kicad_pro").read_text(encoding="utf-8")
@@ -1160,6 +1174,104 @@ class _Check:
                         self.report("unresolved_variable", "Unresolved text variable",
                                     instance.path, item)  # fmt: skip
 
+    # -- libraries ------------------------------------------------------------------------
+
+    def libraries(self, tables: lib_tables.Tables) -> None:
+        """Each part's symbol and footprint found where its nickname says, and
+        its footprint one its symbol's filters allow. Once a part, however
+        many times its sheet is placed."""
+        for instance in self.design.instances:
+            for symbol in instance.schematic.symbols:
+                inst = symbol.instance(instance.path)
+                reference = inst.reference if inst else symbol.properties.get("Reference", "")
+                item = _symbol_item(symbol, reference, instance.path)
+                if not self.once_per_screen("libraries", instance.path, item):
+                    continue
+                self._symbol_link(tables, symbol, item, instance)
+                self._footprint_link(tables, symbol, item, instance.path)
+                library = instance.schematic.library.get(symbol.library_name)
+                if library is not None:
+                    self._footprint_filter(library, symbol, item, instance.path)
+
+    def _symbol_link(self, tables, symbol, item: Item, instance) -> None:
+        nickname, _, name = symbol.lib_id.partition(":")
+        if not name:
+            return
+        library = tables.symbols.get(nickname)
+        if library is None:
+            message = f"The current configuration does not include the symbol library '{nickname}'"
+        elif library.kind == "KiCad" and not library.path.is_file():
+            message = f"The symbol library '{nickname}' was not found at '{library.location}'"
+        else:
+            names = tables.symbol_names(library)
+            if names is None:
+                return
+            if name in names:
+                if self._differs(tables, library, name, instance.schematic, symbol.library_name):
+                    self.report(
+                        "lib_symbol_mismatch",
+                        f"Symbol '{name}' doesn't match copy in library '{nickname}'",
+                        instance.path,
+                        item,
+                    )
+                return
+            message = f"Symbol '{name}' not found in symbol library '{nickname}'"
+        self.report("lib_symbol_issues", message, instance.path, item)
+
+    def _differs(self, tables, library, name: str, schematic, copy_name: str) -> bool:
+        """Whether a sheet's copy of a symbol is not its library's."""
+        copy = schematic.library.get(copy_name)
+        if copy is None or copy.node is None:
+            return False
+        if (library.path, name) not in self.drawn_libraries:
+            found = tables.symbol(library, name)
+            self.drawn_libraries[library.path, name] = _drawn(*found) if found else None
+        theirs = self.drawn_libraries[library.path, name]
+        if theirs is None:
+            return False
+        if (schematic.path, copy_name) not in self.drawn_copies:
+            self.drawn_copies[schematic.path, copy_name] = _drawn(copy.node, schematic.version)
+        return not self.drawn_copies[schematic.path, copy_name].matches(theirs)
+
+    def _footprint_link(self, tables, symbol, item: Item, path: str) -> None:
+        nickname, _, name = symbol.properties.get("Footprint", "").partition(":")
+        if not name:
+            return
+        library = tables.footprints.get(nickname)
+        # A library whose folder is not there is not loaded, and KiCad says
+        # so as of one it does not know.
+        if library is None or (library.kind == "KiCad" and not library.path.is_dir()):
+            message = (
+                f"The current configuration does not include the footprint library '{nickname}'"
+            )
+        elif library.kind == "KiCad" and not (library.path / f"{name}.kicad_mod").is_file():
+            message = f"Footprint '{name}' not found in library '{nickname}'"
+        else:
+            return
+        self.report("footprint_link_issues", message, path, item)
+
+    def _footprint_filter(self, library, symbol, item: Item, path: str) -> None:
+        filters = library.properties.get("ki_fp_filters", "").split()
+        assigned = symbol.properties.get("Footprint", "")
+        # No footprint at all is one the filters do not allow, too.
+        if not filters:
+            return
+        name = assigned.partition(":")[2] or assigned
+        # As KiCad matches: without case, a filter with a colon against the
+        # whole name, one without against the footprint's own.
+        if any(
+            fnmatch.fnmatchcase((assigned if ":" in f else name).lower(), f.lower())
+            for f in filters
+        ):
+            return
+        self.report(
+            "footprint_filter",
+            f"Assigned footprint ({name.lower()}) doesn't match footprint filters "
+            f"({' '.join(filters)})",
+            path,
+            item,
+        )
+
     def net_classes(self) -> None:
         """A directive label naming a net class the project does not have."""
         settings = self.project.get("net_settings") or {}
@@ -1212,6 +1324,103 @@ def _unresolved(text: str, fields: set[str], project: set[str]) -> bool:
     return False
 
 
+@dataclass(frozen=True)
+class _Drawn:
+    """A symbol as KiCad compares a sheet's copy of it with its library's.
+
+    Asked of KiCad one difference at a time (`tests/fixtures/erc/erc3`) and
+    checked against its verdict on the 3200 parts of its demo projects whose
+    library is installed. What counts, the library's side against the copy:
+    each of the library's pins -- by unit, body style and number -- where the
+    copy has it; each of its fields' values, a field the copy lacks being
+    empty; and, both ways, the drawing -- every line, shape and fill, an arc
+    either way round the same -- the units, their names, being a power
+    symbol, and how far in the pin names sit. What does not: a pin's length,
+    direction, type, shape, name or being hidden; pins or fields only the
+    copy has; text; line colour; where fields sit; the BOM and board flags.
+    """
+
+    pins: frozenset
+    drawing: tuple
+    units: tuple
+    power: tuple
+    pin_name_offset: int
+    fields: dict
+
+    def matches(self, library: _Drawn) -> bool:
+        return (
+            library.pins <= self.pins
+            and (self.drawing, self.units, self.power, self.pin_name_offset)
+            == (library.drawing, library.units, library.power, library.pin_name_offset)
+            and all(self.fields.get(name, "") == value for name, value in library.fields.items())
+        )
+
+
+# KiCad's pin-name offset where a symbol does not give one: 20 mil.
+PIN_NAME_OFFSET = 508_000
+
+
+def _drawn(node, version: int) -> _Drawn:
+    symbol = _lib_symbol(node.value(1) or "", node, {node.value(1): node},
+                         version < EMPTY_TILDE_BEFORE)  # fmt: skip
+    own_name = node.value(1) or ""
+    drawing = []
+    names = []
+    for unit in node.find_all("symbol"):
+        which = _unit_style(unit.value(1) or "", own_name)
+        for item in unit.lists():
+            if item.head == "unit_name":
+                names.append((which, item.value(1) or ""))
+            if item.head in ("pin", "unit_name", "text", "text_box"):
+                continue
+            geometry = [_xy(item.find(part)) for part in ("start", "end", "center", "mid")
+                        if item.find(part) is not None]  # fmt: skip
+            if item.head == "arc":
+                geometry = sorted(geometry[:2]) + geometry[2:]
+            radius = item.find("radius")
+            if radius is not None:
+                geometry.append(_nm(radius.atom(1)))
+            points = item.find("pts")
+            if points is not None:
+                geometry.append(tuple(_xy(p) for p in points.lists()))
+            stroke = item.find("stroke")
+            width = stroke.find("width") if stroke is not None else None
+            line = stroke.find("type") if stroke is not None else None
+            fill = item.find("fill")
+            filled = fill.find("type") if fill is not None else None
+            drawing.append(
+                (
+                    which,
+                    item.head,
+                    tuple(geometry),
+                    _nm(width.atom(1)) if width is not None else 0,
+                    line.atom(1) if line is not None else "default",
+                    filled.atom(1) if filled is not None else "none",
+                )
+            )
+    pin_names = node.find("pin_names")
+    offset = pin_names.find("offset") if pin_names is not None else None
+    return _Drawn(
+        pins=frozenset((p.unit, p.body_style, p.number, p.position) for p in symbol.pins),
+        drawing=tuple(sorted(drawing, key=repr)),
+        units=(symbol.unit_count, tuple(sorted(names))),
+        power=(symbol.power, symbol.local_power),
+        pin_name_offset=_nm(offset.atom(1)) if offset is not None else PIN_NAME_OFFSET,
+        fields=symbol.properties,
+    )
+
+
+def _nm(atom) -> int:
+    try:
+        return round(float(atom) * NM)
+    except (TypeError, ValueError):
+        return 0
+
+
+def _xy(node) -> tuple[int, ...]:
+    return tuple(_nm(a) for a in node.values()[:2])
+
+
 def _symbol_item(symbol, reference: str, _path: str) -> Item:
     value = symbol.properties.get("Value", "")
     return Item("symbol", symbol.uuid, f"Symbol {reference} [{value}]", symbol.position)
@@ -1227,8 +1436,12 @@ def _bare(name: str) -> str:
     return name.rsplit("/", 1)[-1] if name.startswith("/") else name
 
 
-def check(root: str | Path, settings: Settings | None = None) -> list[Violation]:
-    """Every violation of the design whose root schematic is `root`."""
+def check(
+    root: str | Path, settings: Settings | None = None, kicad_root: str | Path | None = None
+) -> list[Violation]:
+    """Every violation of the design whose root schematic is `root`. The
+    library rules are checked when `kicad_root`, KiCad's installation, is
+    given: the library tables name their libraries relative to it."""
     design = Design(root)
     if settings is None:
         settings = Settings.of(Path(root).with_suffix(".kicad_pro"))
@@ -1251,4 +1464,6 @@ def check(root: str | Path, settings: Settings | None = None) -> list[Violation]
     run.sheets()
     run.text_variables()
     run.net_classes()
+    if kicad_root is not None:
+        run.libraries(lib_tables.Tables.of(Path(root).resolve().parent, Path(kicad_root)))
     return run.found

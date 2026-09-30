@@ -1,0 +1,234 @@
+{
+ "questions": {
+  "same": "a copy as the library has it",
+  "pin_moved": "a pin moved",
+  "pin_longer": "a pin longer",
+  "pin_turned": "a pin pointing another way",
+  "pin_renumbered": "a pin numbered otherwise",
+  "pin_renamed": "a pin named otherwise",
+  "pin_hidden": "a pin hidden",
+  "pin_type": "a pin of another electrical type",
+  "pin_shape": "a pin of another shape",
+  "pin_numbers_shown": "pin numbers shown",
+  "arc_reversed": "an arc drawn the other way round",
+  "line_width": "a line wider",
+  "line_solid": "a line solid, not default",
+  "line_dashed": "a line dashed",
+  "fill": "a shape filled",
+  "line_color": "a line coloured",
+  "text_moved": "a text elsewhere",
+  "text_changed": "a text saying otherwise",
+  "text_bigger": "a text bigger",
+  "text_added": "a text more",
+  "text_box_moved": "a text box elsewhere",
+  "text_box_changed": "a text box saying otherwise",
+  "shape_moved": "a shape bigger",
+  "field_moved": "a field elsewhere and shown",
+  "field_value": "a field's value otherwise",
+  "field_tilde": "an empty field as \"\", the library's as \"~\"",
+  "field_missing_empty": "a field the library has empty missing",
+  "field_missing": "a field the library has a value for missing",
+  "field_added_empty": "an empty field the library lacks",
+  "field_added": "a field the library lacks",
+  "flags": "left out of the BOM and the board",
+  "unit_added": "a unit more",
+  "pin_added": "a pin more",
+  "pin_removed": "a pin fewer",
+  "shape_added": "a line more",
+  "shape_removed": "a shape fewer",
+  "power": "a power symbol",
+  "pin_names_offset": "pin names further in",
+  "pin_names_hidden": "pin names hidden",
+  "unit_named": "a unit named",
+  "lib_name_same": "a second copy, by lib_name, as the library has it",
+  "lib_name_changed": "a second copy, by lib_name, a pin moved",
+  "derived_same": "a derived symbol as the library has it",
+  "derived_changed": "a derived symbol, a field's value otherwise",
+  "symbol_not_in_library": "a symbol its library does not have",
+  "library_unknown": "a symbol library no table names",
+  "library_file_gone": "a symbol library whose file is not there",
+  "library_disabled": "a symbol library the table disables",
+  "footprint_found": "a footprint found",
+  "footprint_not_in_library": "a footprint its library does not have",
+  "footprint_library_unknown": "a footprint library no table names",
+  "footprint_library_gone": "a footprint library whose folder is not there",
+  "filter_mismatch": "a footprint the symbol's filters do not allow",
+  "filter_with_library": "a filter naming the library, matched",
+  "filter_with_library_other": "a filter naming the library, another library's footprint",
+  "no_filters": "a symbol with no filters",
+  "no_footprint": "no footprint"
+ },
+ "items": {
+  "same": [
+   "92a4552a-90a4-5e10-ba47-6bdc5f766a35"
+  ],
+  "pin_moved": [
+   "6cf65700-de87-5c1a-b970-690d848904cc"
+  ],
+  "pin_longer": [
+   "17d953e1-32f1-50e8-8e2c-449883801c28"
+  ],
+  "pin_turned": [
+   "66e3c87b-361d-51df-a8a2-fe7295c74c6a"
+  ],
+  "pin_renumbered": [
+   "e82e5e07-7bdc-56bb-bbf5-3255beb1b9a0"
+  ],
+  "pin_renamed": [
+   "da9339ec-2332-55eb-babd-9600fc636bda"
+  ],
+  "pin_hidden": [
+   "07b850c3-fe54-5484-ad3b-9000699d00e7"
+  ],
+  "pin_type": [
+   "b073e70f-2816-58c3-a7fd-95d66407e156"
+  ],
+  "pin_shape": [
+   "d8df0a69-d054-52c0-a71a-bb3fc0ba97d3"
+  ],
+  "pin_numbers_shown": [
+   "1d07e5bc-0c56-51c0-a53e-f6b969754ddf"
+  ],
+  "arc_reversed": [
+   "9fadc7a3-cfdc-5967-b74d-52b1b252cfc2"
+  ],
+  "line_width": [
+   "993fcb9d-fdf7-5e5d-808b-e898101adad9"
+  ],
+  "line_solid": [
+   "5d8609ba-20c3-55b5-8337-d7a9a18d3982"
+  ],
+  "line_dashed": [
+   "2b7fe5d8-6159-50b3-bf15-3244280b7171"
+  ],
+  "fill": [
+   "33e02129-9ff3-58a4-bbe9-087fe531fc19"
+  ],
+  "line_color": [
+   "d9ddc54f-48db-5ccb-9c54-fb5729d3f6b0"
+  ],
+  "text_moved": [
+   "1f3e8334-9e8d-5f66-a0c7-1af75dec9587"
+  ],
+  "text_changed": [
+   "8f91cdc3-b692-53a5-abad-390c7976acf4"
+  ],
+  "text_bigger": [
+   "cdae332d-7857-5ff2-b454-6435eb8c83f2"
+  ],
+  "text_added": [
+   "b5736341-e89b-5150-b7fe-dc0cbded1f71"
+  ],
+  "text_box_moved": [
+   "1415c982-f1f6-526c-9aff-ad064c3095ea"
+  ],
+  "text_box_changed": [
+   "3e5d4ae7-0bd6-5290-bdd5-8f66b45b2313"
+  ],
+  "shape_moved": [
+   "6931a546-28e2-5b8f-ab78-99dba182f434"
+  ],
+  "field_moved": [
+   "dfce9a22-5703-5776-b2f7-fd50fa3bd58e"
+  ],
+  "field_value": [
+   "331f222e-0959-51ad-839a-67d651e26886"
+  ],
+  "field_tilde": [
+   "1eb460c2-9d52-544c-bcee-b5861b675c6a"
+  ],
+  "field_missing_empty": [
+   "61889f43-b3f9-5bc9-8ef6-82a2a3345876"
+  ],
+  "field_missing": [
+   "20466da2-1b64-5e9d-b06f-8b915fb53e43"
+  ],
+  "field_added_empty": [
+   "fbb43126-b3f1-5e0e-bcab-c7ea80165fa4"
+  ],
+  "field_added": [
+   "192c2cef-843a-5bac-b159-a7d06d167eb3"
+  ],
+  "flags": [
+   "73ae8208-a5f3-5595-be32-ea5f44c10d7f"
+  ],
+  "unit_added": [
+   "23660762-cc8f-5616-96ea-7442ed00c72c"
+  ],
+  "pin_added": [
+   "24328a1f-b92e-5fe1-ba6d-87dd0b7d5d10"
+  ],
+  "pin_removed": [
+   "c656d169-625c-5bc0-94a4-a63218f3060a"
+  ],
+  "shape_added": [
+   "289972ba-2723-5d67-85fb-17e78b1c1aac"
+  ],
+  "shape_removed": [
+   "20a8733b-2c80-5b53-b1e6-5c189be53df2"
+  ],
+  "power": [
+   "c3ea27c8-21db-59a1-ac66-fb115c11bf08"
+  ],
+  "pin_names_offset": [
+   "a0130708-9c0d-57ee-8848-f9bb568697ac"
+  ],
+  "pin_names_hidden": [
+   "86b09c1b-b3e5-5e9f-bb37-f65eb2cf13ff"
+  ],
+  "unit_named": [
+   "494b29af-de4c-51aa-9a35-17c75484a9d6"
+  ],
+  "lib_name_same": [
+   "93861711-8e1e-5ed2-b5d2-64b491700d32"
+  ],
+  "lib_name_changed": [
+   "da2a8bb3-0714-570a-894a-73cc970e6951"
+  ],
+  "derived_same": [
+   "1892a66f-cc9d-52a9-9ea4-7d081445288a"
+  ],
+  "derived_changed": [
+   "ac8c4e4a-a6e9-594c-80a9-1c1e7cb3a8fd"
+  ],
+  "symbol_not_in_library": [
+   "8dfa329c-7084-5f94-bbb2-4da35ae0b23c"
+  ],
+  "library_unknown": [
+   "c3e59a59-fa92-5579-995d-612d8df9c43d"
+  ],
+  "library_file_gone": [
+   "daf787fb-a5e9-576d-a6ad-cfe6cbb79cac"
+  ],
+  "library_disabled": [
+   "5476fb69-dae4-568c-9a4e-546869153d2d"
+  ],
+  "footprint_found": [
+   "57b4a5f2-5ec1-5cb5-86b2-349ac454019e"
+  ],
+  "footprint_not_in_library": [
+   "ae808101-3113-5baa-b456-411f456c50c0"
+  ],
+  "footprint_library_unknown": [
+   "55a4ad8f-c082-5a52-968b-008e0663b4c7"
+  ],
+  "footprint_library_gone": [
+   "24f02e30-badc-5c5c-a788-10679540e7c7"
+  ],
+  "filter_mismatch": [
+   "2c9161f2-55cb-5850-bd83-00c98621d32b"
+  ],
+  "filter_with_library": [
+   "d517e7fc-1782-56da-80a1-bdbbec612e41"
+  ],
+  "filter_with_library_other": [
+   "6f790c51-279c-5de2-9134-cf2a96163d8a"
+  ],
+  "no_filters": [
+   "8191dce8-6fac-56d8-addc-dbe50269dfb7"
+  ],
+  "no_footprint": [
+   "55934e52-1369-5b05-a6ed-13808d0bb5bf"
+  ]
+ }
+}

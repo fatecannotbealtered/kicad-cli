@@ -1,14 +1,18 @@
 """This tool's electrical rules check, held to KiCad's own.
 
-Two designs are drawn to ask KiCad's ERC one question per case, with every
-rule switched on. `tests/fixtures/erc/erc.kicad_sch` asks 169: when a pin
-counts as connected, which pin stands for a net nothing drives, which pair of
-conflicting pins is named, when a label is dangling. `erc2.kicad_sch` and its
-sheets ask 40 more, about parts of several units, the hierarchy, buses, text
-variables and net classes. `erc.kicad.json` and `erc2.kicad.json` are KiCad
-10's answers, violation by violation, so the comparison runs anywhere; with
-KiCad installed it is asked again, and every demo project KiCad ships is
-checked both ways too.
+Three designs are drawn to ask KiCad's ERC one question per case.
+`tests/fixtures/erc/erc.kicad_sch` asks 169, with every rule switched on:
+when a pin counts as connected, which pin stands for a net nothing drives,
+which pair of conflicting pins is named, when a label is dangling.
+`erc2.kicad_sch` and its sheets ask 40 more, about parts of several units, the
+hierarchy, buses, text variables and net classes. `erc3/erc3.kicad_sch` asks
+57 about the libraries, with only their rules on: a symbol or footprint not
+where its nickname says, which differences between a sheet's copy of a symbol
+and its library's count, a footprint its symbol's filters do not allow. Its
+libraries are its project's own, so the answers do not depend on the machine.
+The `*.kicad.json` files are KiCad 10's answers, violation by violation, so
+the comparison runs anywhere; with KiCad installed it is asked again, and
+every demo project KiCad ships is checked both ways too.
 
 A violation matches when the rule is the same and so are its items. Where
 KiCad names one of several equivalent items -- two of a junction's four
@@ -16,12 +20,13 @@ wires, one of two equally near pins -- it goes by the order of its spatial
 index, which is not reproduced; there, KiCad's items must be among the ones
 this tool says could stand in their place.
 
-Two kinds of rule are left out of the comparison. The library rules, because
-whether a symbol's library is found depends on the machine's library tables,
-and this tool does not check them yet (`erc.NOT_CHECKED`). And the
-annotation rules, because KiCad's command-line ERC does not run the
-annotation check at all; they are held here to the cases drawn for them,
-which are what makes KiCad's netlist export warn.
+The library rules are checked only where KiCad's installation is known --
+the tables name their libraries relative to it -- and are held to the third
+design and the demos; on the first two, drawn with symbols of no library,
+they are left out. The annotation rules are left out of every comparison,
+because KiCad's command-line ERC does not run the annotation check at all;
+they are held here to the cases drawn for them, which are what makes KiCad's
+netlist export warn.
 """
 
 from __future__ import annotations
@@ -40,6 +45,7 @@ from test_fileformat_circuit import demo_roots, needs_kicad, official_cli
 REPO = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO))
 
+from kicad_cli import kicad_env  # noqa: E402
 from kicad_cli.fileformat import erc  # noqa: E402
 
 FIXTURES = REPO / "tests" / "fixtures" / "erc"
@@ -48,8 +54,10 @@ DESIGNS = {
     "erc": (FIXTURES / "erc.kicad_sch", FIXTURES / "erc.kicad.json", FIXTURES / "cases.json"),
     "erc2": (FIXTURES / "erc2.kicad_sch", FIXTURES / "erc2.kicad.json", FIXTURES / "cases2.json"),
 }
-# What KiCad's command-line ERC reports and this is held to.
-COMPARED = set(erc.CHECKED) - set(erc.ANNOTATION)
+# What KiCad's command-line ERC reports and this is held to, on the designs
+# drawn with symbols of no library.
+COMPARED = set(erc.CHECKED) - set(erc.ANNOTATION) - set(erc.LIBRARY)
+LIBRARIES = FIXTURES / "erc3"
 
 # Where this tool and KiCad still differ, by demo: the items KiCad names that
 # this tool does not. On vme-wren two labels on stubs off an aliased bus,
@@ -126,6 +134,66 @@ def test_every_rule_kicad_has_is_either_checked_or_listed_as_not():
     assert set(erc.CHECKED) | set(erc.NOT_CHECKED) == set(erc.SEVERITIES)
     assert not set(erc.CHECKED) & set(erc.NOT_CHECKED)
     assert set(erc.ANNOTATION) <= set(erc.CHECKED)
+    assert set(erc.LIBRARY) <= set(erc.CHECKED)
+
+
+# -- the libraries -------------------------------------------------------------------------
+
+
+def library_cases() -> dict:
+    return json.loads((LIBRARIES / "cases.json").read_text(encoding="utf-8"))
+
+
+def library_case_of(uuids) -> str:
+    drawn = library_cases()["items"]
+    return next((name for name, items in drawn.items() if set(uuids) & set(items)), "?")
+
+
+def checked_libraries(tmp_path, monkeypatch) -> list[erc.Violation]:
+    """The third design checked with no tables but its project's: KiCad's
+    configuration moved to an empty folder."""
+    monkeypatch.setenv("KICAD_CONFIG_HOME", str(tmp_path / "config"))
+    settings = erc.Settings.of(LIBRARIES / "erc3.kicad_pro")
+    found = erc.check(LIBRARIES / "erc3.kicad_sch", settings, kicad_root=tmp_path / "kicad")
+    assert {v.rule for v in found} <= set(erc.LIBRARY)
+    return found
+
+
+def test_the_library_fixture_is_checked_as_kicad_checks_it(tmp_path, monkeypatch):
+    recorded = json.loads((LIBRARIES / "erc3.kicad.json").read_text(encoding="utf-8"))
+    missing, extra = compare(recorded["violations"], checked_libraries(tmp_path, monkeypatch))
+    assert [(v["type"], library_case_of(v["items"])) for v in missing] == []
+    assert [(v.rule, library_case_of([i.uuid for i in v.items])) for v in extra] == []
+
+
+def test_the_library_fixture_asks_every_question_it_says_it_asks():
+    drawn = library_cases()
+    assert len(drawn["questions"]) == len(drawn["items"]) == 57
+    assert all(drawn["items"].values())
+
+
+def test_which_differences_from_the_library_count(tmp_path, monkeypatch):
+    """As KiCad answered, case by case: the library's pins where the copy
+    has them, its fields' values, and the drawing both ways; not a pin's
+    look, not what only the copy has, not text."""
+    flagged = {
+        library_case_of([i.uuid for i in v.items])
+        for v in checked_libraries(tmp_path, monkeypatch)
+        if v.rule == "lib_symbol_mismatch"
+    }
+    assert flagged == {
+        "pin_moved", "pin_renumbered", "pin_removed", "line_width", "line_solid", "line_dashed",
+        "fill", "shape_moved", "shape_added", "shape_removed", "field_value", "field_tilde",
+        "field_missing", "unit_added", "unit_named", "power", "pin_names_offset",
+        "lib_name_changed", "derived_changed",
+    }  # fmt: skip
+
+
+def test_the_library_rules_wait_for_kicads_installation():
+    """Its tables name their libraries relative to it: without it every
+    symbol would be missing."""
+    settings = erc.Settings.of(LIBRARIES / "erc3.kicad_pro")
+    assert erc.check(LIBRARIES / "erc3.kicad_sch", settings) == []
 
 
 def test_a_violation_names_at_most_two_items_as_kicads_do():
@@ -197,12 +265,27 @@ def test_kicad_still_says_what_was_recorded(design):
 
 
 @needs_kicad
+def test_kicad_still_says_what_was_recorded_of_the_libraries(tmp_path, monkeypatch):
+    """KiCad reads the machine's tables as well as the project's; no
+    nickname the design uses is one of theirs."""
+    recorded = json.loads((LIBRARIES / "erc3.kicad.json").read_text(encoding="utf-8"))
+    asked = [v for v in kicad_erc(LIBRARIES / "erc3.kicad_sch") if v["type"] in erc.LIBRARY]
+    assert Counter(v["type"] for v in asked) == Counter(v["type"] for v in recorded["violations"])
+    missing, extra = compare(asked, checked_libraries(tmp_path, monkeypatch))
+    assert [(v["type"], library_case_of(v["items"])) for v in missing] == []
+    assert extra == []
+
+
+@needs_kicad
 @pytest.mark.skipif(not DEMOS.exists(), reason=SKIP_REASON)
 @pytest.mark.parametrize("root", demo_roots(), ids=lambda p: p.stem)
 def test_every_demo_is_checked_as_kicad_checks_it(root):
-    """As the project has its rules set: a rule it switches off is off here."""
-    theirs = [v for v in kicad_erc(root) if v["type"] in COMPARED]
-    missing, extra = compare(theirs, [v for v in erc.check(root) if v.rule in COMPARED])
+    """As the project has its rules set: a rule it switches off is off here.
+    The library rules too, with the machine's tables, as KiCad reads them."""
+    rules = COMPARED | set(erc.LIBRARY)
+    theirs = [v for v in kicad_erc(root) if v["type"] in rules]
+    ours = erc.check(root, kicad_root=kicad_env.find_kicad_root())
+    missing, extra = compare(theirs, [v for v in ours if v.rule in rules])
     known = KNOWN.get(root.stem, set())
     assert [v for v in missing if not set(v["items"]) <= known] == []
     assert [(v.rule, [i.description for i in v.items]) for v in extra] == []
