@@ -90,14 +90,37 @@ class Placed:
     out: Point
 
 
+# Paper sizes KiCad knows, in millimetres, landscape.
+PAPERS = {
+    "A5": (210, 148), "A4": (297, 210), "A3": (420, 297), "A2": (594, 420),
+    "A1": (841, 594), "A0": (1189, 841), "A": (279.4, 215.9), "B": (431.8, 279.4),
+    "C": (558.8, 431.8), "D": (863.6, 558.8), "E": (1117.6, 863.6),
+    "USLetter": (279.4, 215.9), "USLegal": (355.6, 215.9), "USLedger": (431.8, 279.4),
+}  # fmt: skip
+MARGIN = 15 * NM  # the page's frame, and a little room inside it
+TITLE_BLOCK = (110 * NM, 40 * NM)  # its size in the bottom right-hand corner
+CELL = 10 * NM  # the side of a cell of the index of what is where
+
+
+def _cells(box: Box):
+    for cx in range(box[0] // CELL, box[2] // CELL + 1):
+        for cy in range(box[1] // CELL, box[3] // CELL + 1):
+            yield (cx, cy)
+
+
 @dataclass
 class Canvas:
-    """One sheet file: what attaches where, and what takes up room."""
+    """One sheet file: what attaches where, and what takes up room -- found
+    by where it is, so a search over the sheet stays quick."""
 
     sch: Schematic
     points: dict[Point, list[str]] = field(default_factory=dict)
     wires: list[tuple[Point, Point]] = field(default_factory=list)
     boxes: list[Box] = field(default_factory=list)
+    _box_cells: dict = field(default_factory=dict)
+    _point_cells: dict = field(default_factory=dict)
+    _wire_cells: dict = field(default_factory=dict)
+    area: Box = (0, 0, 0, 0)  # where a new thing may go: inside the frame
 
     @classmethod
     def of(cls, sch: Schematic) -> Canvas:
@@ -108,38 +131,61 @@ class Canvas:
     # -- what is there ---------------------------------------------------------------------
 
     def _at(self, point: Point, what: str) -> None:
+        if point not in self.points:
+            self._point_cells.setdefault((point[0] // CELL, point[1] // CELL), []).append(point)
         self.points.setdefault(point, []).append(what)
+
+    def _room(self, box: Box) -> None:
+        self.boxes.append(box)
+        for cell in _cells(box):
+            self._box_cells.setdefault(cell, []).append(box)
+
+    def _wire(self, a: Point, b: Point) -> None:
+        self.wires.append((a, b))
+        for cell in _cells(_span(a, b)):
+            self._wire_cells.setdefault(cell, []).append((a, b))
 
     def _read(self) -> None:
         sch = self.sch
+        paper = sch.root.find("paper")
+        name = (paper.value(1) or "A4") if paper is not None else "A4"
+        if name == "User" and paper is not None:
+            width, height = _nm(paper.atom(2)) / NM, _nm(paper.atom(3)) / NM
+        else:
+            width, height = PAPERS.get(name, PAPERS["A4"])
+            if paper is not None and "portrait" in paper.values():
+                width, height = height, width
+        w, h = round(width * NM), round(height * NM)
+        self.area = (MARGIN, MARGIN, w - MARGIN, h - MARGIN)
+        self._room((w - MARGIN - TITLE_BLOCK[0], h - MARGIN - TITLE_BLOCK[1], w, h))
         for wire in sch.wires:
-            self.wires.append((wire.start, wire.end))
+            self._wire(wire.start, wire.end)
             self._at(wire.start, wire.kind)
             self._at(wire.end, wire.kind)
-            self.boxes.append(_pad(_span(wire.start, wire.end), GRID // 4))
+            self._room(_pad(_span(wire.start, wire.end), GRID // 4))
         for point in sch.junctions:
             self._at(point, "junction")
-            self.boxes.append(_pad((point[0], point[1], point[0], point[1]), GRID // 2))
+            self._room(_pad((point[0], point[1], point[0], point[1]), GRID // 2))
         for point in sch.no_connects:
             self._at(point, "no_connect")
-            self.boxes.append(_pad((point[0], point[1], point[0], point[1]), GRID // 2))
+            self._room(_pad((point[0], point[1], point[0], point[1]), GRID // 2))
         for label in sch.labels:
             self._at(label.position, "label")
-            self.boxes.append(_label_box(label.kind, label.text, label.position, label.angle))
+            self._room(_label_box(label.kind, label.text, label.position, label.angle))
         for sheet in sch.sheets:
-            (x, y), (w, h) = sheet.position, sheet.size
-            self.boxes.append((x, y - 2 * FONT, x + w, y + h + 2 * FONT))
+            (x, y), (sw, sh) = sheet.position, sheet.size
+            self._room((x, y - 2 * FONT, x + sw, y + sh + 2 * FONT))
             for pin in sheet.pins:
                 self._at(pin.position, "sheet_pin")
         for entry in sch.bus_entries:
             self._at(entry.position, "bus_entry")
             self._at(entry.end, "bus_entry")
-            self.boxes.append(_pad(_span(entry.position, entry.end), GRID // 4))
+            self._room(_pad(_span(entry.position, entry.end), GRID // 4))
         for text in sch.texts:
-            width = max((len(line) for line in text.text.split("\n")), default=0) * CHAR
+            width_ = max((len(line) for line in text.text.split("\n")), default=0) * CHAR
             lines = text.text.count("\n") + 1
             x, y = text.position
-            self.boxes.append((x, y - FONT, x + width, y + FONT * 2 * lines))
+            self._room((x, y - FONT, x + width_, y + FONT * 2 * lines))
         for sym in sch.symbols:
             lib = sch.library.get(sym.library_name)
             if lib is None:
@@ -148,8 +194,9 @@ class Canvas:
                 self._at(placed.at, "pin")
             body = _body(sym, lib)
             if body is not None:
-                self.boxes.append(body)
-            self.boxes += _field_boxes(sym)
+                self._room(body)
+            for box in _field_boxes(sym):
+                self._room(box)
 
     def pins(self, sym: Symbol, lib: LibSymbol) -> list[Placed]:
         out = []
@@ -160,29 +207,55 @@ class Canvas:
             out.append(Placed(sym, pin, at, ((tip[0] - at[0]) // GRID, (tip[1] - at[1]) // GRID)))
         return out
 
+    def _wires_near(self, box: Box) -> set[tuple[Point, Point]]:
+        found = set()
+        for cell in _cells(box):
+            found.update(self._wire_cells.get(cell, ()))
+        return found
+
+    def _points_near(self, box: Box) -> set[Point]:
+        found = set()
+        for cell in _cells(box):
+            found.update(self._point_cells.get(cell, ()))
+        return found
+
     def touching(self, point: Point, besides: str | None = None) -> list[str]:
         """What attaches at a point -- and wires passing through it, which a
         label there would join."""
         found = list(self.points.get(point, []))
         if besides in found:
             found.remove(besides)
-        for a, b in self.wires:
+        for a, b in self._wires_near((point[0], point[1], point[0], point[1])):
             if point not in (a, b) and _on_segment(point, a, b):
                 found.append("wire_through")
         return found
 
     def clear(self, start: Point, end: Point) -> bool:
         """A new wire from `start` to `end` touches nothing but at `start`."""
-        for point in self.points:
-            if point != start and _on_segment(point, start, end):
+        span = _span(start, end)
+        for point in self._points_near(span):
+            if point != start and self.points.get(point) and _on_segment(point, start, end):
                 return False
-        return all(not _crosses((start, end), wire) for wire in self.wires)
+        return all(not _crosses((start, end), wire) for wire in self._wires_near(span))
+
+    def _boxes_near(self, box: Box) -> list[Box]:
+        seen, found = set(), []
+        for cell in _cells(box):
+            for other in self._box_cells.get(cell, ()):
+                if id(other) not in seen:
+                    seen.add(id(other))
+                    found.append(other)
+        return found
 
     def free(self, box: Box) -> bool:
-        return not any(_meets(box, other) for other in self.boxes)
+        return not any(_meets(box, other) for other in self._boxes_near(box))
 
     def overlaps(self, box: Box) -> int:
-        return sum(1 for other in self.boxes if _meets(box, other))
+        return sum(1 for other in self._boxes_near(box) if _meets(box, other))
+
+    def inside(self, box: Box) -> bool:
+        a = self.area
+        return a[0] <= box[0] and a[1] <= box[1] and box[2] <= a[2] and box[3] <= a[3]
 
     def forget(self, point: Point, what: str) -> None:
         """Something taken away: a no-connect flag, say, and its room."""
@@ -190,19 +263,26 @@ class Canvas:
             self.points[point].remove(what)
         if what == "no_connect":
             room = _pad((point[0], point[1], point[0], point[1]), GRID // 2)
+            for cell in _cells(room):
+                cell_boxes = self._box_cells.get(cell, [])
+                if room in cell_boxes:
+                    cell_boxes.remove(room)
             if room in self.boxes:
                 self.boxes.remove(room)
 
     def take(self, point: Point, what: str, box: Box | None = None) -> None:
         self._at(point, what)
         if box is not None:
-            self.boxes.append(box)
+            self._room(box)
+
+    def take_box(self, box: Box) -> None:
+        self._room(box)
 
     def take_wire(self, a: Point, b: Point) -> None:
-        self.wires.append((a, b))
+        self._wire(a, b)
         self._at(a, "wire")
         self._at(b, "wire")
-        self.boxes.append(_pad(_span(a, b), GRID // 4))
+        self._room(_pad(_span(a, b), GRID // 4))
 
 
 def _span(a: Point, b: Point) -> Box:

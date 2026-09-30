@@ -496,8 +496,13 @@ def test_kicad_reads_the_edited_design_as_this_tool_does(design: Path) -> None:
             {"op": "connect", "ref": "R5", "pin": "1", "net": "+3V3A"},
             {"op": "connect", "ref": "R11", "pin": "2", "net": "ENABLE"},
             {"op": "disconnect", "ref": "R1", "pin": "2"},
+            {"op": "remove", "ref": "R3"},
+            {"op": "add", "ref": "C?", "symbol": "fixture:R", "pins": {"1": "LOCAL", "2": "ENABLE"},
+             "sheet": "/CHILD_A/"},
+            {"op": "add", "ref": "R?", "symbol": "fixture:R", "pins": {"1": "/SIG", "2": "GND"},
+             "near": "R2"},
         ],
-    )
+    )  # fmt: skip
     assert done["ok"] is True, done
     assert _kicad_nets(design) == nets(design)
     text = (design.parent / "kicad.net").read_text(encoding="utf-8")
@@ -514,3 +519,109 @@ def test_a_name_a_bus_on_its_sheet_carries_is_not_renamed(tmp_path: Path) -> Non
     done = plan(tmp_path / "erc2.kicad_sch", [{"op": "rename", "net": "/DATA0", "to": "D0"}])
     assert done["error"]["code"] == "E_VALIDATION"
     assert "leave the bus" in done["error"]["details"]["problems"][0]["problem"]
+
+
+# -- add and remove --------------------------------------------------------------------------
+
+
+def test_a_part_is_added_beside_another_with_its_pins_on_their_nets(design: Path) -> None:
+    before = nets(design)
+    done = edit(
+        design,
+        [
+            {
+                "op": "add",
+                "ref": "R?",
+                "symbol": "fixture:R",
+                "value": "47k",
+                "pins": {"1": "/SIG", "2": "GND"},
+                "near": "R2",
+                "fields": {"MPN": "RC0603"},
+            }
+        ],
+    )
+    assert done["ok"] is True, done
+    report = done["data"]["changes"][0]
+    new = report["ref"]
+    assert new == "R6"  # the lowest number no part has
+    assert report["placed"][0]["overlaps"] == 0
+    after = nets(design)
+    assert after["/SIG"] == before["/SIG"] | {"R6.1"}
+    assert after["GND"] == before["GND"] | {"R6.2"}
+    sym = symbols(design, "R6")[0]
+    assert (sym.properties["Value"], sym.properties["MPN"]) == ("47k", "RC0603")
+
+
+def test_a_pin_not_named_gets_a_no_connect_flag(design: Path) -> None:
+    done = edit(design, [{"op": "add", "ref": "R30", "symbol": "fixture:R", "pins": {"1": "EN"}}])
+    assert done["ok"] is True, done
+    after = nets(design)
+    assert "R30.1" in after["EN"]
+    alone = next(name for name, pins in after.items() if pins == {"R30.2"})
+    assert alone.startswith("unconnected-")
+
+
+def test_a_part_added_to_a_sheet_placed_twice_is_in_both(design: Path) -> None:
+    done = edit(
+        design,
+        [{"op": "add", "ref": "C?", "symbol": "fixture:R", "pins": {"1": "LOCAL", "2": "EN"},
+          "sheet": "/CHILD_A/"}],
+    )  # fmt: skip
+    assert done["ok"] is True, done
+    report = done["data"]["changes"][0]
+    assert (report["ref"], report["also_added"]) == ("C1", ["C2"])
+    after = nets(design)
+    assert "C1.1" in after["/CHILD_A/LOCAL"] and "C2.1" in after["/CHILD_B/LOCAL"]
+
+
+def test_a_removed_part_takes_what_only_it_used(design: Path) -> None:
+    """R4 and R5 were joined by a bare wire: it goes with R4, and R5's pin
+    is free rather than left hanging on a wire to nowhere."""
+    done = edit(design, [{"op": "remove", "ref": "R4"}])
+    assert done["ok"] is True, done
+    assert done["data"]["changes"][0]["removed"] == {"no_connects": 1, "wires": 3, "symbols": 1}
+    after = nets(design)
+    assert not any("R4." in pin for pins in after.values() for pin in pins)
+    assert next(name for name, pins in after.items() if pins == {"R5.2"}).startswith("unconnected-")
+    assert not [v for v in done["data"]["erc"]["new"] if v["rule"] == "unconnected_wire_endpoint"]
+
+
+def test_a_removed_part_on_a_sheet_placed_twice_leaves_the_sheets_interface(design: Path) -> None:
+    done = edit(design, [{"op": "remove", "ref": "R10"}])
+    assert done["ok"] is True, done
+    report = done["data"]["changes"][0]
+    assert report["also_removes"] == ["R20"]
+    assert report["removed"]["hierarchical_labels_kept"] == 1
+    child = Schematic.load(design.parent / "edit_child.kicad_sch")
+    assert [lb.text for lb in child.labels if lb.kind == "hierarchical_label"] == ["IN"]
+
+
+def test_what_cannot_be_added_is_refused(design: Path) -> None:
+    before = contents(design)
+    for change, said in [
+        ({"op": "add", "ref": "R1", "symbol": "fixture:R"}, "already has that reference"),
+        ({"op": "add", "ref": "R40", "symbol": "nolib:R"}, "no symbol library"),
+        ({"op": "add", "ref": "R40", "symbol": "fixture:R", "pins": {"9": "EN"}}, "no such pin"),
+        ({"op": "add", "ref": "#PWR99", "symbol": "fixture:PWR"}, "power symbol"),
+    ]:
+        done = plan(design, [change])
+        assert said in done["error"]["details"]["problems"][0]["problem"], (change, done)
+    assert contents(design) == before
+
+
+def test_a_part_from_kicads_own_libraries_is_added(design: Path) -> None:
+    """Found through the library tables, as KiCad finds it, and embedded."""
+    from kicad_cli import kicad_env  # noqa: PLC0415
+
+    if kicad_env.find_kicad_root() is None:
+        pytest.skip("needs KiCad's installed libraries")
+    done = edit(
+        design,
+        [{"op": "add", "ref": "C?", "symbol": "Device:C", "value": "100n",
+          "footprint": "Capacitor_SMD:C_0402_1005Metric", "pins": {"1": "+3V3", "2": "GND"}}],
+    )  # fmt: skip
+    assert done["ok"] is True, done
+    after = nets(design)
+    assert "C1.1" in after["+3V3"] and "C1.2" in after["GND"]
+    root = Schematic.load(design)
+    assert "Device:C" in root.library
