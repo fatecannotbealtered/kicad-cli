@@ -40,11 +40,14 @@ could stand in their place.
 from __future__ import annotations
 
 import json
+import os
+import re
 from collections import defaultdict
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from .circuit import Design, Graph, PlacedPin, bus_members, graph, natural_key
+from . import annotation
+from .circuit import Design, Graph, PlacedPin, _on_segment, bus_members, graph, natural_key
 from .schematic import Label, Wire, uuid_of
 
 Point = tuple[int, int]
@@ -115,30 +118,39 @@ CHECKED = (
     "single_global_label", "same_local_global_label", "similar_labels", "similar_power",
     "similar_label_and_power", "multiple_net_names", "unconnected_wire_endpoint",
     "wire_dangling", "endpoint_off_grid", "four_way_junction", "label_multiple_wires",
+    "unannotated", "duplicate_reference", "extra_units", "unit_value_mismatch",
+    "missing_unit", "missing_input_pin", "missing_bidi_pin", "missing_power_pin",
+    "different_unit_footprint", "different_unit_net", "hier_label_mismatch",
+    "duplicate_sheet_names", "bus_to_net_conflict", "net_not_bus_member",
+    "unresolved_variable", "undefined_netclass",
 )  # fmt: skip
 
-# The rules KiCad has and this does not check yet, and what they are about.
+# Checked here, and not by KiCad's command-line ERC, which does not run the
+# annotation check its editor runs first. What counts as an annotation error
+# was measured on the warning KiCad's netlist export gives instead
+# (`fileformat/annotation.py`).
+ANNOTATION = ("unannotated", "duplicate_reference", "extra_units", "unit_value_mismatch")
+
+# The rules KiCad has and this does not check, and why.
 NOT_CHECKED = {
-    "unannotated": "annotation", "duplicate_reference": "annotation",
-    "extra_units": "annotation", "unit_value_mismatch": "annotation",
-    "missing_unit": "parts of several units", "missing_input_pin": "parts of several units",
-    "missing_bidi_pin": "parts of several units", "missing_power_pin": "parts of several units",
-    "different_unit_footprint": "parts of several units",
-    "different_unit_net": "parts of several units",
-    "hier_label_mismatch": "the hierarchy", "duplicate_sheet_names": "the hierarchy",
-    "bus_definition_conflict": "buses", "bus_entry_needed": "buses",
-    "bus_to_bus_conflict": "buses", "bus_to_net_conflict": "buses",
-    "net_not_bus_member": "buses", "global_label_dangling": "labels",
-    "unresolved_variable": "text variables", "undefined_netclass": "net classes",
     "lib_symbol_issues": "the symbol libraries", "lib_symbol_mismatch": "the symbol libraries",
     "footprint_link_issues": "the footprint libraries",
     "footprint_filter": "the footprint libraries", "simulation_model_issue": "simulation",
+    # Not reported by KiCad 10's own ERC on any drawing tried for them: a wire
+    # on a bus with and without a junction, buses of different members
+    # joined directly and through a sheet, one alias defined two ways, global
+    # labels floating, on stubs and on buses.
+    "bus_entry_needed": "never seen reported", "bus_to_bus_conflict": "never seen reported",
+    "bus_definition_conflict": "never seen reported",
+    "global_label_dangling": "never seen reported",
 }  # fmt: skip
 
 
 @dataclass
 class Item:
-    kind: str  # pin, wire, label, global_label, hierarchical_label, no_connect, sheet_pin
+    # pin, wire, bus, bus_entry, label, global_label, hierarchical_label,
+    # directive_label, no_connect, sheet, sheet_pin, symbol, text
+    kind: str
     uuid: str
     description: str
     position: Point
@@ -246,14 +258,37 @@ class _Check:
             k for k, v in g.items.items()
             if k[0] == "l" and bus_members(v.text, aliases) is not None
         }  # fmt: skip
+        # A directive label sets a net's class and connects nothing.
+        self.directive = {
+            k for k, v in g.items.items() if k[0] == "l" and v.kind == "directive_label"
+        }
         for key in g.items:
             if key in self.bus_labels:
                 continue
             self.net_members[g.net.find(key)].append(key)
             self.sub_members[g.sheet.find(key)].append(key)
+        # A bus's label on a wire is a label there, if a wrong one.
+        self.bus_label_wires = set()
+        for key in self.bus_labels:
+            position = g.items[key].position
+            self.bus_label_wires.update(
+                k for k, w in g.items.items()
+                if k[0] == "w" and k[1] == key[1] and _on_segment(position, w.start, w.end)
+            )  # fmt: skip
+        # Bus labels a junction puts on a net that has a label of its own:
+        # KiCad judges them as the net's labels (`buses`).
+        self.joined_bus_labels: dict = defaultdict(list)
+        # Subgraphs a junction joins to a bus: connected, if wrongly.
+        self.on_bus: set = set()
         # What only the drawing decides is reported once per sheet file, however
         # many times the sheet is placed; KiCad does.
         self.screens: set = set()
+        try:
+            self.project = json.loads(
+                design.root_path.with_suffix(".kicad_pro").read_text(encoding="utf-8")
+            )
+        except (OSError, ValueError):
+            self.project = {}
         pages = design.pages()
         self.page_order = sorted(design.instances, key=lambda i: natural_key(pages.get(i.path, "")))
 
@@ -308,22 +343,46 @@ class _Check:
 
     def pins_not_connected(self) -> None:
         g = self.graph
+        powered: dict = defaultdict(list)  # subgraph -> power symbols with only each other
         for key, pp in g.pins_at.items():
             if self.pin_type(key) in ("no_connect", "free"):
                 continue
             # A supply pin a part hides is on the net of its name wherever
             # that net is drawn; a power symbol's pin is where it is drawn.
-            hidden_supply = (
-                pp.pin.hidden and pp.function[1] == "power_in" and not self._is_power(pp)
-            )
+            power_symbol = self._is_power(pp)
+            hidden_supply = pp.pin.hidden and pp.function[1] == "power_in" and not power_symbol
             members = self.net_members[g.net.find(key)] if hidden_supply else None
             company = [k for k in (members or self.sub_members[g.sheet.find(key)]) if k != key]
-            if any(
-                k[0] in ("l", "s", "nc") or (k[0] == "p" and self.pin_type(k) != "no_connect")
+            if g.sheet.find(key) in self.on_bus or any(
+                (k[0] == "l" and k not in self.directive)
+                or k[0] in ("s", "nc")
+                or (k[0] == "w" and k in self.bus_label_wires)
                 for k in company
             ):
                 continue
+            others = [k for k in company if k[0] == "p" and self.pin_type(k) != "no_connect"]
+            if power_symbol:
+                # Power symbols with no part between them, on a net that has no
+                # part or label anywhere, are one finding, named by one of them.
+                if not any(not self._is_power(g.pins_at[k]) for k in others) and not any(
+                    (k[0] == "p" and not self._is_power(g.pins_at[k])
+                     and self.pin_type(k) != "no_connect")
+                    or (k[0] == "l" and k not in self.directive)
+                    for k in self.net_members[g.net.find(key)]
+                ):  # fmt: skip
+                    powered[g.sheet.find(key)].append(key)
+                continue
+            if others:
+                continue
             self.report("pin_not_connected", "Pin not connected", key[1], _pin_item(pp))
+        for keys in powered.values():
+            self.report(
+                "pin_not_connected",
+                "Pin not connected",
+                keys[0][1],
+                _pin_item(g.pins_at[keys[0]]),
+                alternatives={self.uuid(k) for k in keys},
+            )
 
     def nets_not_driven(self) -> None:
         g = self.graph
@@ -346,6 +405,7 @@ class _Check:
                     "Input Power pin not driven by any Output Power pins",
                     first[1],
                     _pin_item(g.pins_at[first]),
+                    alternatives=self._same_pin(first, power_in),
                 )
                 continue
             inputs = [k for k in pins if types[k] == "input"]
@@ -356,7 +416,18 @@ class _Check:
                     "Input pin not driven by any Output pins",
                     first[1],
                     _pin_item(g.pins_at[first]),
+                    alternatives=self._same_pin(first, inputs),
                 )
+
+    def _same_pin(self, first, keys) -> set[str]:
+        """The pins that sort with `first`: one pin of a part placed once per
+        unit, which KiCad names by any of its copies."""
+        g = self.graph
+        want = (g.pins_at[first].reference, g.pins_at[first].pin.number)
+        return {
+            self.uuid(k) for k in keys
+            if (g.pins_at[k].reference, g.pins_at[k].pin.number) == want
+        }  # fmt: skip
 
     def pin_conflicts(self) -> None:
         g = self.graph
@@ -455,7 +526,12 @@ class _Check:
                     key[1],
                     _pin_item(g.pins_at[at_flag[0]]),
                     _flag_item(flag),
-                    alternatives={self.uuid(k) for k in pins},
+                    # KiCad names any pin of the net, from run to run.
+                    alternatives={
+                        self.uuid(k)
+                        for k in self.net_members[g.net.find(key)]
+                        if k[0] == "p" and self.pin_type(k) != "no_connect"
+                    },
                 )
         for key, pp in g.pins_at.items():
             if self.pin_type(key) != "no_connect":
@@ -480,8 +556,9 @@ class _Check:
 
     def labels(self) -> None:
         g = self.graph
-        for keys in self.net_members.values():
-            labels = [k for k in keys if k[0] == "l"]
+        for root, keys in self.net_members.items():
+            labels = [k for k in keys if k[0] == "l" and k not in self.directive]
+            labels += self.joined_bus_labels.get(root, [])
             if not labels:
                 continue
             floating = [k for k in labels if self.sub_members[g.sheet.find(k)] == [k]]
@@ -584,7 +661,10 @@ class _Check:
         g = self.graph
         # Once per sheet file, on the first placement of it in page order.
         rank = {i.path: n for n, i in enumerate(self.page_order)}
-        subgraphs = sorted(self.sub_members.values(), key=lambda keys: rank.get(keys[0][1], 0))
+        subgraphs = sorted(
+            (keys for keys in self.sub_members.values() if keys),
+            key=lambda keys: rank.get(keys[0][1], 0),
+        )
         for keys in subgraphs:
             drivers = []
             for k in keys:
@@ -665,7 +745,9 @@ class _Check:
                 seen_subgraphs.add(root)
                 members = self.sub_members[root]
                 if any(
-                    m[0] in ("l", "s") or (m[0] == "p" and self.pin_type(m) != "no_connect")
+                    (m[0] == "l" and m not in self.directive)
+                    or m[0] == "s"
+                    or (m[0] == "p" and self.pin_type(m) != "no_connect")
                     for m in members
                 ):
                     continue
@@ -749,7 +831,7 @@ class _Check:
     def label_wires(self) -> None:
         g = self.graph
         for key, label in g.items.items():
-            if key[0] != "l" or key in self.bus_labels:
+            if key[0] != "l" or key in self.bus_labels or key in self.directive:
                 continue
             inside = [
                 k for k, w in g.items.items()
@@ -767,11 +849,376 @@ class _Check:
                     alternatives={self.uuid(k) for k in inside},
                 )
 
+    # -- references ---------------------------------------------------------------------
+
+    def _placements(self) -> dict[str, list]:
+        """Every placed unit of every part, by reference."""
+        placed: dict[str, list] = defaultdict(list)
+        for instance in self.design.instances:
+            for symbol in instance.schematic.symbols:
+                inst = symbol.instance(instance.path)
+                reference = inst.reference if inst else symbol.properties.get("Reference", "")
+                unit = inst.unit if inst else symbol.unit
+                placed[reference].append((instance, symbol, unit))
+        return placed
+
+    def annotation(self) -> None:
+        by_name = {i.name: i.path for i in self.design.instances}
+        for problem in annotation.problems(self.design):
+            items = [
+                Item("symbol", symbol, f"Symbol {problem.reference}", (0, 0))
+                for _, symbol in problem.symbols
+            ]
+            path = by_name.get(problem.symbols[0][0], "") if problem.symbols else ""
+            self.report(
+                problem.rule,
+                problem.detail,
+                path,
+                *items[:2],
+                alternatives={i.uuid for i in items},
+            )
+
+    def units(self) -> None:
+        """Parts of several units: every unit placed, one footprint for all,
+        and a pin every unit has on one net in all of them."""
+        g = self.graph
+        pins_of: dict[str, list] = defaultdict(list)
+        for key, pp in g.pins_at.items():
+            pins_of[pp.reference].append(key)
+        for reference, entries in self._placements().items():
+            if not reference or reference.endswith("?") or reference.startswith("#"):
+                continue
+            instance, symbol, _ = entries[0]
+            library = instance.schematic.library.get(symbol.library_name)
+            if library is None or library.unit_count < 2:
+                continue  # one reference on parts of one unit is an annotation error
+            items = [_symbol_item(s, reference, i.path) for i, s, _ in entries]
+            either = {i.uuid for i in items}
+            have = {unit for _, _, unit in entries}
+            missing = [u for u in range(1, library.unit_count + 1) if u not in have]
+            if missing:
+                kinds = {
+                    p.electrical for u in missing for p in library.pins_of(u, symbol.body_style)
+                }
+                where = instance.path
+                self.report("missing_unit", f"Symbol {reference} has units not placed", where,
+                            items[0], alternatives=either)  # fmt: skip
+                for kind, rule, what in (
+                    ("input", "missing_input_pin", "input"),
+                    ("bidirectional", "missing_bidi_pin", "bidirectional"),
+                    ("power_in", "missing_power_pin", "power input"),
+                ):
+                    if kind in kinds:
+                        self.report(
+                            rule,
+                            f"Symbol {reference} has a unit not placed with {what} pins",
+                            where,
+                            items[0],
+                            alternatives=either,
+                        )
+            footprints = [s.properties.get("Footprint", "") for _, s, _ in entries]
+            if len(set(footprints)) > 1:
+                other = next(n for n, f in enumerate(footprints) if f != footprints[0])
+                self.report(
+                    "different_unit_footprint",
+                    f"Units of {reference} have different footprints",
+                    instance.path,
+                    items[0],
+                    items[other],
+                )
+            by_number: dict[str, list] = defaultdict(list)
+            for key in pins_of.get(reference, []):
+                by_number[g.pins_at[key].pin.number].append(key)
+            for number, keys in by_number.items():
+                if len({g.pins_at[k].symbol.uuid for k in keys}) < 2:
+                    continue
+                nets = [g.net.find(k) for k in keys]
+                if len(set(nets)) < 2:
+                    continue
+                other = next(k for k in keys if g.net.find(k) != nets[0])
+                self.report(
+                    "different_unit_net",
+                    f"Pin {number} of {reference} is on different nets in different units",
+                    keys[0][1],
+                    _pin_item(g.pins_at[keys[0]]),
+                    _pin_item(g.pins_at[other]),
+                )
+
+    # -- the hierarchy --------------------------------------------------------------------
+
+    def sheets(self) -> None:
+        paths = {i.path: i for i in self.design.instances}
+        for instance in self.design.instances:
+            seen: dict[str, Item] = {}
+            for sheet in instance.schematic.sheets:
+                item = Item("sheet", sheet.uuid, f"Sheet '{sheet.name}'", sheet.position)
+                if sheet.name in seen:
+                    self.report("duplicate_sheet_names", "Two sheets of one name on one sheet",
+                                instance.path, seen[sheet.name], item)  # fmt: skip
+                else:
+                    seen[sheet.name] = item
+                child = paths.get(f"{instance.path}/{sheet.uuid}")
+                if child is None:
+                    continue
+                inside = {
+                    label.text for label in child.schematic.labels
+                    if label.kind == "hierarchical_label"
+                }  # fmt: skip
+                outside = {pin.name for pin in sheet.pins}
+                for pin in sheet.pins:
+                    if pin.name not in inside:
+                        self.report(
+                            "hier_label_mismatch",
+                            f"Sheet pin {pin.name} has no hierarchical label inside the sheet",
+                            instance.path,
+                            Item(
+                                "sheet_pin",
+                                uuid_of(pin.node),
+                                f"Sheet pin '{pin.name}'",
+                                pin.position,
+                            ),  # fmt: skip
+                        )
+                for label in child.schematic.labels:
+                    if label.kind == "hierarchical_label" and label.text not in outside:
+                        self.report(
+                            "hier_label_mismatch",
+                            f"Hierarchical label {label.text} has no sheet pin outside the sheet",
+                            child.path,
+                            _label_item(label),
+                        )
+
+    # -- buses ------------------------------------------------------------------------------
+
+    def buses(self) -> None:
+        """Nets and buses meeting where they should not, members that are not,
+        and buses of two names."""
+        from .circuit import PRIORITY, _UnionFind  # noqa: PLC0415
+
+        g = self.graph
+        aliases = self.design.bus_aliases()
+        rank = {i.path: n for n, i in enumerate(self.page_order)}
+        for instance in sorted(self.design.instances, key=lambda i: rank.get(i.path, 0)):
+            path = instance.path
+            sch = instance.schematic
+            buses = [w for w in sch.wires if w.kind == "bus"]
+            if not buses and not any(k[1] == path for k in self.bus_labels):
+                continue
+            junctions = set(sch.junctions)
+            groups = _UnionFind()
+            for i, a in enumerate(buses):
+                groups.add(i)
+                for j in range(i):
+                    b = buses[j]
+                    if {a.start, a.end} & {b.start, b.end} or any(
+                        _on_segment(p, a.start, a.end) and _on_segment(p, b.start, b.end)
+                        for p in junctions
+                    ):
+                        groups.union(i, j)
+            on_bus: dict = defaultdict(list)  # bus group -> label keys on it
+            for key, label in g.items.items():
+                if key[0] != "l" or key[1] != path or key in self.directive:
+                    continue
+                hit = next(
+                    (i for i, b in enumerate(buses) if _on_segment(label.position, b.start, b.end)),
+                    None,
+                )
+                is_bus = key in self.bus_labels
+                if hit is not None and not is_bus:
+                    self.report("bus_to_net_conflict", "A net label on a bus", path,
+                                _label_item(label), _wire_item(buses[hit]))  # fmt: skip
+                elif hit is None and is_bus:
+                    wire = next(
+                        (k for k in self.bus_label_wires if k[1] == path
+                         and _on_segment(label.position, g.items[k].start, g.items[k].end)),
+                        None,
+                    )  # fmt: skip
+                    if wire is not None:
+                        self.report("bus_to_net_conflict", "A bus label on a wire", path,
+                                    _wire_item(g.items[wire]), _label_item(label))  # fmt: skip
+                if hit is not None and is_bus:
+                    on_bus[groups.find(hit)].append(key)
+            # Two names on one bus.
+            for keys in on_bus.values():
+                names = sorted(
+                    {(-PRIORITY.get(g.items[k].kind, 0), g.items[k].text, k) for k in keys}
+                )
+                texts = {text for _, text, _ in names}
+                if len(texts) < 2:
+                    continue
+                winner = names[0]
+                other = next(n for n in names if n[1] != winner[1])
+                first, second = _label_item(g.items[winner[2]]), _label_item(g.items[other[2]])
+                if self.once_per_screen("multiple_net_names", path, first, second):
+                    self.report(
+                        "multiple_net_names",
+                        f"Both {winner[1]} and {other[1]} name one bus; {winner[1]} is used",
+                        path,
+                        first,
+                        second,
+                    )
+            # A junction putting a wire on a bus.
+            wire_keys = [k for k in g.items if k[0] == "w" and k[1] == path]
+            for point in junctions:
+                hit = next(
+                    (i for i, b in enumerate(buses) if _on_segment(point, b.start, b.end)), None
+                )
+                if hit is None:
+                    continue
+                wire = next(
+                    (k for k in wire_keys
+                     if _on_segment(point, g.items[k].start, g.items[k].end)),
+                    None,
+                )  # fmt: skip
+                if wire is None:
+                    continue
+                net_labels = [
+                    k for k in self.sub_members.get(g.sheet.find(wire), [])
+                    if k[0] == "l" and k not in self.directive
+                ]  # fmt: skip
+                bus_labels = on_bus.get(groups.find(hit), [])
+                first = (
+                    _label_item(g.items[net_labels[0]]) if net_labels else _wire_item(g.items[wire])
+                )
+                second = (
+                    _label_item(g.items[bus_labels[0]]) if bus_labels else _wire_item(buses[hit])
+                )
+                self.report("bus_to_net_conflict", "A wire joined to a bus", path, first, second)
+                self.on_bus.add(g.sheet.find(wire))
+                if net_labels and bus_labels:
+                    self.joined_bus_labels[g.net.find(wire)].extend(bus_labels)
+                    candidates = sorted(
+                        (-PRIORITY.get(g.items[k].kind, 0), g.items[k].text, k)
+                        for k in net_labels + bus_labels
+                    )
+                    winner = candidates[0]
+                    other = next((c for c in candidates if c[1] != winner[1]), None)
+                    if other is not None:
+                        self.report(
+                            "multiple_net_names",
+                            f"Both {winner[1]} and {other[1]} are attached to the same items",
+                            path,
+                            _label_item(g.items[winner[2]]),
+                            _label_item(g.items[other[2]]),
+                        )
+            # A net off a bus through an entry must be one of the bus's members.
+            for entry in sch.bus_entries:
+                ends = (entry.position, entry.end)
+                hit = next(
+                    ((i, e) for e in ends for i, b in enumerate(buses)
+                     if _on_segment(e, b.start, b.end)),
+                    None,
+                )  # fmt: skip
+                if hit is None:
+                    continue
+                bus_index, bus_end = hit
+                wire_end = ends[1] if bus_end == ends[0] else ends[0]
+                wire = next(
+                    (k for k in wire_keys if wire_end in (g.items[k].start, g.items[k].end)), None
+                )
+                if wire is None:
+                    continue
+                names = [
+                    g.items[k].text for k in self.sub_members.get(g.sheet.find(wire), [])
+                    if k[0] == "l" and k not in self.directive
+                ]  # fmt: skip
+                members = {
+                    name
+                    for k in on_bus.get(groups.find(bus_index), [])
+                    for _, name in (bus_members(g.items[k].text, aliases) or [])
+                }
+                if names and members and not any(name in members for name in names):
+                    self.report(
+                        "net_not_bus_member",
+                        f"Net {names[0]} is not a member of the bus it leaves",
+                        path,
+                        Item(
+                            "bus_entry", uuid_of(entry.node), "Bus to wire entry", entry.position
+                        ),  # fmt: skip
+                        _wire_item(buses[bus_index]),
+                    )
+
+    # -- text and net classes -------------------------------------------------------------
+
+    def text_variables(self) -> None:
+        """A ${NAME} nothing defines, in free text or in a part's fields."""
+        variables = {name.upper() for name in self.project.get("text_variables") or {}}
+        for instance in self.design.instances:
+            sch = instance.schematic
+            for text in sch.texts:
+                if _unresolved(text.text, set(), variables):
+                    item = Item("text", uuid_of(text.node), f"Text '{text.text}'", text.position)
+                    if self.once_per_screen("unresolved_variable", instance.path, item):
+                        self.report("unresolved_variable", "Unresolved text variable",
+                                    instance.path, item)  # fmt: skip
+            for symbol in sch.symbols:
+                fields = {name.upper() for name in symbol.properties}
+                if any(_unresolved(v, fields, variables) for v in symbol.properties.values()):
+                    inst = symbol.instance(instance.path)
+                    reference = inst.reference if inst else symbol.properties.get("Reference", "")
+                    item = _symbol_item(symbol, reference, instance.path)
+                    if self.once_per_screen("unresolved_variable", instance.path, item):
+                        self.report("unresolved_variable", "Unresolved text variable",
+                                    instance.path, item)  # fmt: skip
+
+    def net_classes(self) -> None:
+        """A directive label naming a net class the project does not have."""
+        settings = self.project.get("net_settings") or {}
+        classes = {c.get("name") for c in settings.get("classes") or []} | {"Default"}
+        for instance in self.design.instances:
+            for label in instance.schematic.labels:
+                if label.kind != "directive_label" or label.node is None:
+                    continue
+                for prop in label.node.find_all("property"):
+                    wanted = prop.value(2) or ""
+                    if prop.value(1) == "Netclass" and wanted and wanted not in classes:
+                        item = _label_item(label)
+                        if self.once_per_screen("undefined_netclass", instance.path, item):
+                            self.report("undefined_netclass", f"Net class {wanted} is not defined",
+                                        instance.path, item)  # fmt: skip
+
+
+# Text variables KiCad defines itself: of the sheet and its title block, of
+# a part, of a label's net.
+BUILT_IN_VARIABLES = {
+    "#", "##", "SHEETNAME", "SHEETPATH", "SHEETFILE", "FILENAME", "FILEPATH", "PROJECTNAME",
+    "PROJECTPATH", "CURRENT_DATE", "ISSUE_DATE", "REVISION", "TITLE", "COMPANY", "PAPER",
+    "KICAD_VERSION", "VARIANT", "VARIANTNAME", "REFERENCE", "VALUE", "FOOTPRINT", "DATASHEET",
+    "DESCRIPTION", "FOOTPRINT_LIBRARY", "FOOTPRINT_NAME", "UNIT", "SHORT_REFERENCE",
+    "SYMBOL_LIBRARY", "SYMBOL_NAME", "SYMBOL_DESCRIPTION", "SYMBOL_KEYWORDS",
+    "EXCLUDE_FROM_BOM", "EXCLUDE_FROM_BOARD", "EXCLUDE_FROM_SIM", "DNP", "NET_NAME",
+    "SHORT_NET_NAME", "NET_CLASS", "PIN_NAME", "INTERSHEET_REFS", "CONNECTION_TYPE", "OP",
+    "ERC_ERROR", "ERC_WARNING", "KIPRJMOD",
+} | {f"COMMENT{n}" for n in range(1, 10)}  # fmt: skip
+_VARIABLE = re.compile(r"\$\{([^}]*)\}")
+
+
+def _unresolved(text: str, fields: set[str], project: set[str]) -> bool:
+    """Whether a ${NAME} in `text` is one nothing defines. Cross-references
+    (${U1:VALUE}), functions (${NET_NAME(3)}) and the environment's paths
+    (${KICAD9_SYMBOL_DIR}) are taken as defined."""
+    for name in _VARIABLE.findall(text):
+        upper = name.upper()
+        if (
+            upper in BUILT_IN_VARIABLES
+            or upper in fields
+            or upper in project
+            or ":" in name
+            or "(" in name
+            or upper.startswith("KICAD")
+            or name in os.environ
+        ):
+            continue
+        return True
+    return False
+
+
+def _symbol_item(symbol, reference: str, _path: str) -> Item:
+    value = symbol.properties.get("Value", "")
+    return Item("symbol", symbol.uuid, f"Symbol {reference} [{value}]", symbol.position)
+
 
 def _inside(p: Point, wire: Wire) -> bool:
     """On the wire, and not at either end."""
-    from .circuit import _on_segment  # noqa: PLC0415
-
     return p not in (wire.start, wire.end) and _on_segment(p, wire.start, wire.end)
 
 
@@ -786,6 +1233,7 @@ def check(root: str | Path, settings: Settings | None = None) -> list[Violation]
     if settings is None:
         settings = Settings.of(Path(root).with_suffix(".kicad_pro"))
     run = _Check(design, settings)
+    run.buses()
     run.pins_not_connected()
     run.nets_not_driven()
     run.pin_conflicts()
@@ -798,4 +1246,9 @@ def check(root: str | Path, settings: Settings | None = None) -> list[Violation]
     run.grid()
     run.junctions()
     run.label_wires()
+    run.annotation()
+    run.units()
+    run.sheets()
+    run.text_variables()
+    run.net_classes()
     return run.found

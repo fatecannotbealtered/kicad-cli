@@ -26,6 +26,7 @@ projects (`tests/test_fileformat_circuit.py`).
 
 from __future__ import annotations
 
+import json
 import re
 from collections import defaultdict
 from dataclasses import dataclass, field
@@ -166,12 +167,22 @@ class Design:
         return out
 
     def bus_aliases(self) -> dict[str, list[str]]:
-        """Every `(bus_alias ...)` of every sheet: aliases are the design's."""
+        """Every bus alias of the design: KiCad 10 keeps them in the project
+        file, and older schematics in each sheet, `(bus_alias ...)`."""
         out: dict[str, list[str]] = {}
         for schematic in self._files.values():
             for node in schematic.root.find_all("bus_alias"):
                 members = node.find("members")
                 out[node.value(1) or ""] = members.values() if members is not None else []
+        try:
+            project = json.loads(self.root_path.with_suffix(".kicad_pro").read_text("utf-8"))
+        except (OSError, ValueError):
+            project = {}
+        given = (project.get("schematic") or {}).get("bus_aliases") or {}
+        if isinstance(given, dict):
+            for name, members in given.items():
+                if isinstance(members, list):
+                    out[name] = [str(m) for m in members]
         return out
 
     # -- what is placed -----------------------------------------------------------------
