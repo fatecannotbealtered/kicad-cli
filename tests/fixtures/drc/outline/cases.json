@@ -1,0 +1,12 @@
+{
+ "closed": "",
+ "open": "not a closed shape",
+ "gap_10um": "",
+ "gap_10_5um": "not a closed shape",
+ "bowtie": "self-intersecting",
+ "none": "no edges found on Edge.Cuts layer",
+ "two_boards": "",
+ "cut_out": "",
+ "crossing": "self-intersecting",
+ "stray_line": "not a closed shape"
+}

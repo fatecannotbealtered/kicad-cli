@@ -13,7 +13,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[3]))
 from kicad_cli.fileformat import new_board, new_project  # noqa: E402
-from kicad_cli.fileformat.sexpr import Document  # noqa: E402
+from kicad_cli.fileformat.sexpr import Document, List  # noqa: E402
 
 PITCH = 10
 
@@ -144,12 +144,12 @@ def arc(key, a, m, b, width, layer, net):
     )
 
 
-def via(key, at, size, drill, net, layers=("F.Cu", "B.Cu"), kind="", n=0):
+def via(key, at, size, drill, net, layers=("F.Cu", "B.Cu"), kind="", n=0, extra=""):
     kind_text = f" {kind}" if kind else ""
     layers_text = " ".join(f'"{layer}"' for layer in layers)
     add(
         f"(via{kind_text} (at {xy(at)}) (size {num(size)}) (drill {num(drill)})"
-        f' (layers {layers_text}) (net "{net}") (uuid "{uid(key, "via", at, n)}"))'
+        f' (layers {layers_text}){extra} (net "{net}") (uuid "{uid(key, "via", at, n)}"))'
     )
 
 
@@ -196,10 +196,18 @@ def rect(x, y, w, h):
     return [(x, y), (x + w, y), (x + w, y + h), (x, y + h)]
 
 
+def _node(head: str, value) -> List:
+    """A list of a value, or of lists when the value is a dict of them."""
+    if isinstance(value, dict):
+        return List.new(head, *(_node(k, v) for k, v in value.items()))
+    return List.new(head, str(value))
+
+
 def write(out: Path, cols: int, rows: int, severities=None, rules=None, net_settings=None,
-          inner=True):  # fmt: skip
+          inner=True, setup=None):  # fmt: skip
     """The board, outlined around its cells, and its project: a new
-    project's settings but for what is given."""
+    project's settings but for what is given -- `setup` the board's own,
+    each key's list replaced or added."""
     x1, y1 = 10, 10
     x2, y2 = 20 + PITCH * cols, 20 + PITCH * rows
     add(
@@ -216,6 +224,15 @@ def write(out: Path, cols: int, rows: int, severities=None, rules=None, net_sett
     assert head.endswith(tail)
     text_out = head[: -len(tail)] + "".join(f"\t{item}\n" for item in S.items) + tail
     document = Document.parse(text_out)
+    if setup:
+        node = document.root.find("setup")
+        for key, value in setup.items():
+            new = _node(key, value)
+            old = node.find(key)
+            if old is not None:
+                node.replace(old, new)
+            else:
+                node.insert(node.items.index(node.find("pad_to_mask_clearance")) + 1, new)
     out.mkdir(exist_ok=True)
     (out / f"{S.name}.kicad_pcb").write_bytes(document.dumps().encode("utf-8"))
     project = json.loads(new_project.project(S.name))

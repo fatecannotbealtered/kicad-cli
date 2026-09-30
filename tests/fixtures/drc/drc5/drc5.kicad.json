@@ -1,0 +1,126 @@
+{
+ "kicad_version": "10.0.6",
+ "violations": [
+  {
+   "type": "solder_mask_bridge",
+   "severity": "error",
+   "items": [
+    "0c523a89-b446-5b25-a0ee-592ad8f5729a",
+    "15bf7593-6a77-520b-bee8-73ea4e5f0852"
+   ]
+  },
+  {
+   "type": "solder_mask_bridge",
+   "severity": "error",
+   "items": [
+    "20898bb1-3f1e-54cc-a791-bc710b393915",
+    "15ec3685-d103-5ef7-9122-26afe53771c6"
+   ]
+  },
+  {
+   "type": "solder_mask_bridge",
+   "severity": "error",
+   "items": [
+    "2db96742-8870-55e1-a3c2-f1438724269c",
+    "51da4dee-4855-54d8-b624-01c7e023ce80"
+   ]
+  },
+  {
+   "type": "solder_mask_bridge",
+   "severity": "error",
+   "items": [
+    "45122dd4-498f-5caf-91b8-de085ff5043a",
+    "8eda593c-3d66-53a4-8942-fa1d8a9289b0"
+   ]
+  },
+  {
+   "type": "solder_mask_bridge",
+   "severity": "error",
+   "items": [
+    "4dab9564-b17a-5a28-ab39-bcc578600936",
+    "0a1cc1b5-d17b-52c5-9318-ee92a073512c"
+   ]
+  },
+  {
+   "type": "solder_mask_bridge",
+   "severity": "error",
+   "items": [
+    "4dab9564-b17a-5a28-ab39-bcc578600936",
+    "6df1d066-a073-5d40-ae99-63e1eb28fec7"
+   ]
+  },
+  {
+   "type": "solder_mask_bridge",
+   "severity": "error",
+   "items": [
+    "61d0e8a3-8dad-5298-9d1c-6b6470eefc8b",
+    "53dabbe6-f711-5f04-9f75-34950fb7eea9"
+   ]
+  },
+  {
+   "type": "solder_mask_bridge",
+   "severity": "error",
+   "items": [
+    "6bb4ccef-2a2e-5fc3-98bb-25254bf7ba38",
+    "15a121d5-73e2-571e-9185-470af850307e"
+   ]
+  },
+  {
+   "type": "solder_mask_bridge",
+   "severity": "error",
+   "items": [
+    "6ee25d50-dce1-5333-bb43-1720cff9d799",
+    "a7e19e56-cfb5-528d-807a-9af30161edef"
+   ]
+  },
+  {
+   "type": "solder_mask_bridge",
+   "severity": "error",
+   "items": [
+    "831cd452-215d-5245-a834-73cb39a76113",
+    "54896faa-63d7-53ee-bc19-a83b92fe0a35"
+   ]
+  },
+  {
+   "type": "solder_mask_bridge",
+   "severity": "error",
+   "items": [
+    "9c3345e2-4c4d-5e62-a54d-1e0741304ea2",
+    "ac317a2e-1855-5b86-aaf8-2845edfc0d7d"
+   ]
+  },
+  {
+   "type": "solder_mask_bridge",
+   "severity": "error",
+   "items": [
+    "c4bd0bf3-4a71-57bd-bbe6-b73dcab80a6e",
+    "8a5f37a9-c5f7-51c8-bd49-dacabfbd9ffb"
+   ]
+  },
+  {
+   "type": "solder_mask_bridge",
+   "severity": "error",
+   "items": [
+    "cfef1b27-e548-5588-b0a4-33e870593b4e",
+    "72b6dcb3-a3a3-5f5d-b55f-113e36bf64c2"
+   ]
+  },
+  {
+   "type": "solder_mask_bridge",
+   "severity": "error",
+   "items": [
+    "e4343a80-71fb-5e8c-a292-6f04f031f682",
+    "0a1cc1b5-d17b-52c5-9318-ee92a073512c"
+   ]
+  },
+  {
+   "type": "solder_mask_bridge",
+   "severity": "error",
+   "items": [
+    "e4343a80-71fb-5e8c-a292-6f04f031f682",
+    "8aea981d-6b97-5ac5-b1d7-cfe733a1b1a1"
+   ]
+  }
+ ],
+ "unconnected_items": []
+}

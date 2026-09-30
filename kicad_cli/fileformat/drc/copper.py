@@ -12,10 +12,10 @@ as the file records it) or, at the ends of its span, when it keeps them.
 The net an item is checked on is its own, except for copper that reaches no
 pad of its net (`tests/fixtures/drc/drc2`, row 4): KiCad gives such copper
 the net of the pad it touches -- a track across a pad of another net, or a
-via on another net's track, is not a short to KiCad -- or, where it touches
-pads of several nets, the last of them by name; copper touching no pad at
-all shares one net, the first by name. Copper that does reach a pad of its
-own net keeps it.
+via on another net's track, is not a short to KiCad, and is named with that
+net -- unless it touches pads of several nets, when it keeps its own;
+copper touching no pad at all shares one net, the first by name. Copper that
+does reach a pad of its own net keeps it.
 """
 
 from __future__ import annotations
@@ -375,12 +375,14 @@ class Copper:
             cluster = self._cluster(members, grid, first)
             done |= cluster
             things = [members[i] for i in cluster]
-            pads = sorted({t.own_net for t in things if t.kind == "pad"})
-            nets = sorted({t.own_net for t in things if t.own_net})
-            net = pads[-1] if pads else nets[0]
+            pads = {t.own_net for t in things if t.kind == "pad"}
+            if len(pads) > 1:
+                continue  # pads of several nets: each item keeps its own
+            net = min(pads) if pads else min(t.own_net for t in things if t.own_net)
             for thing in things:
-                if thing.kind != "pad" and id(thing.owner) not in anchored:
+                if thing.kind != "pad" and id(thing.owner) not in anchored and thing.net != net:
                     thing.net = net
+                    thing.item = describe.renamed(thing.item, thing.own_net, net)
 
     def _footprint_copper(self) -> None:
         """A footprint's copper drawing has no net. Across pads of two nets
@@ -421,7 +423,13 @@ class Copper:
         }  # fmt: skip
 
     def _cluster(self, members, grid, first: int) -> set[int]:
-        from .shapes import distance  # noqa: PLC0415
+        """The copper joined to one item across nets: overlapping, not merely
+        touching -- a track whose end meets a pad's edge keeps its own net
+        (`tests/fixtures/drc/drc4`)."""
+        from .shapes import core_distance  # noqa: PLC0415
+
+        def overlap(a: Shape, b: Shape) -> bool:
+            return core_distance(a.core, b.core) < a.radius + b.radius - 0.5
 
         cell = connectivity.CELL
         found = {first}
@@ -437,7 +445,7 @@ class Copper:
                         near.update(grid.get((layer, cx, cy), ()))
                 for other in near - found:
                     target = members[other].pieces.get(layer)
-                    if target and any(distance(a, b) == 0 for a in pieces for b in target):
+                    if target and any(overlap(a, b) for a in pieces for b in target):
                         found.add(other)
                         todo.append(other)
         return found

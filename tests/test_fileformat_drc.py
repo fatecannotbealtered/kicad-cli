@@ -6,10 +6,16 @@ a track or a via must be, when a padstack is questioned, which text is too
 small or reads the wrong way, when holes crowd each other, when zones
 overlap, which track ends dangle, which courtyards collide. `drc2` asks
 about clearance: which clearance two items are held to, when touching is a
-short, how far copper keeps from holes and from the board's edge. The
-`*.kicad.json` beside each is KiCad 10's answer, violation by violation, so
-the comparison runs anywhere; with KiCad installed it is asked again, and
-every demo board KiCad ships is checked both ways too.
+short, how far copper keeps from holes and from the board's edge. `drc3`
+asks about rule areas, text variables, a plated pad with no hole and copper
+on a layer the board has not got. `drc4` and `drc5` ask about the solder
+mask: which openings bridge nets, under a margin, a minimum web and a
+clearance to copper, and with all of them 0. The `*.kicad.json` beside each
+is KiCad 10's answer, violation by violation, so the comparison runs
+anywhere; with
+KiCad installed it is asked again, and every demo board KiCad ships is
+checked both ways too. The board's outline, of which a board has one, is
+asked about on boards of its own (`outline/`).
 
 A violation matches when its rule and its items are the same, with these
 allowances for what KiCad does its own way:
@@ -25,6 +31,9 @@ allowances for what KiCad does its own way:
   flags too.
 - Of edges equally near, which one KiCad names for copper too near the
   board's edge is its own; that rule is compared by the copper.
+- An opening drawn on a solder mask layer is named beside one item it lays
+  bare, which KiCad picks by chance, run to run; its bridges are compared
+  by the opening.
 - Missing connections are compared net by net: of several equally near
   items, which one KiCad names for a connection follows an order of its
   own, which is not reproduced.
@@ -56,7 +65,10 @@ FIXTURES = REPO / "tests" / "fixtures" / "drc"
 FIXTURE = FIXTURES / "drc1"
 BOARD = FIXTURE / "drc1.kicad_pcb"
 RECORDED = FIXTURE / "drc1.kicad.json"
-BOARDS = {name: FIXTURES / name / f"{name}.kicad_pcb" for name in ("drc1", "drc2")}
+BOARDS = {
+    name: FIXTURES / name / f"{name}.kicad_pcb" for name in ("drc1", "drc2", "drc3", "drc4", "drc5")
+}
+OUTLINES = FIXTURES / "outline"
 # The rules whose findings are copper touching or too near copper: which of
 # them KiCad names for a touch is compared as one.
 COPPER = ("clearance", "shorting_items", "tracks_crossing")
@@ -108,6 +120,16 @@ def _by_copper(board: Path, found: set) -> set:
     return {frozenset(u for u in key if u not in edges) or key for key in found}
 
 
+def _by_opening(board: Path, found: set) -> set:
+    """Solder mask bridges of a drawn opening, by the opening alone."""
+    drawn = {
+        uuid_of(node) for node in Board.load(board).root.walk()
+        if node.head and node.head[:3] in ("gr_", "fp_") and node.find("layer") is not None
+        and (node.find("layer").value(1) or "").endswith(".Mask")
+    }  # fmt: skip
+    return {frozenset(key & drawn) or key for key in found}
+
+
 def differences(board: Path, report: dict) -> list[str]:
     """Where this tool and KiCad disagree on a board, rule by rule."""
     ours = drc.check(board)
@@ -126,6 +148,10 @@ def differences(board: Path, report: dict) -> list[str]:
     if edge not in ours.not_checked:
         found[edge] = _by_copper(board, found.get(edge, set()))
         mine[edge] = _by_copper(board, mine.get(edge, set()))
+    mask = "solder_mask_bridge"
+    if mask not in ours.not_checked:
+        found[mask] = _by_opening(board, found.get(mask, set()))
+        mine[mask] = _by_opening(board, mine.get(mask, set()))
     out = []
     for rule in drc.CHECKED:
         if rule == "unconnected_items" or rule in ours.not_checked:
@@ -170,7 +196,7 @@ def test_the_fixture_is_checked_as_kicad_checks_it(name):
 def test_the_fixtures_ask_every_question_they_say_they_ask():
     rules = Counter(v["type"] for name in BOARDS for v in recorded(name)["violations"])
     for rule in drc.CHECKED:
-        if rule != "unconnected_items":
+        if rule not in ("unconnected_items", "invalid_outline"):  # the outline: `outline/`
             assert rules[rule], f"no fixture asks about {rule}"
     assert recorded("drc1")["unconnected_items"]
 
@@ -194,6 +220,50 @@ def test_a_clearance_names_what_set_it_as_kicad_names_it():
     ):
         assert expected in messages
     assert not any("actual 0.1995 mm" in m for m in messages)  # within KiCad's 0.5 um
+
+
+def _outline(name: str) -> list[str]:
+    """What this tool says of an outline board: the reasons it gives."""
+    report = drc.check(OUTLINES / name / f"{name}.kicad_pcb")
+    return sorted(
+        v.message.split("(", 1)[1].rstrip(")") for v in report.violations
+        if v.rule == "invalid_outline"
+    )  # fmt: skip
+
+
+@pytest.mark.parametrize(
+    "name", sorted(json.loads((OUTLINES / "cases.json").read_text(encoding="utf-8")))
+)
+def test_an_outline_is_judged_as_kicad_judges_it(name):
+    said = json.loads((OUTLINES / "cases.json").read_text(encoding="utf-8"))[name]
+    assert _outline(name) == ([said] if said else [])
+
+
+def test_a_drc_marker_in_a_text_is_raised_as_its_own_violation():
+    """drc3: KiCad resolves ${DRC_ERROR} to nothing and raises a DRC error
+    where it stands -- a marker a person leaves on the board."""
+    found = [v for v in drc.check(BOARDS["drc3"]).violations if v.rule.startswith("generic_")]
+    assert sorted((v.message, v.severity) for v in found) == [
+        ("Error", "error"), ("check this", "warning"),
+    ]  # fmt: skip
+
+
+def test_a_solder_mask_bridge_names_its_side():
+    messages = {v.message for v in drc.check(BOARDS["drc4"]).violations}
+    assert messages == {
+        "Front solder mask aperture bridges items with different nets",
+        "Rear solder mask aperture bridges items with different nets",
+    }
+
+
+def test_a_track_from_a_pad_of_another_net_is_named_with_that_net():
+    """drc4: KiCad's connectivity gives a track the net of the one pad it
+    comes from, and names it so; a track merely touching a pad keeps its
+    own."""
+    names = {i.description for v in drc.check(BOARDS["drc4"]).violations for i in v.items}
+    assert "Track [C10d] on F.Cu, length 4.0000 mm" in names
+    assert "Track [C11c] on F.Cu, length 1.4000 mm" in names
+    assert not any("[C10c]" in name for name in names)
 
 
 def test_the_two_nets_of_a_differential_pair_are_held_to_its_gap():
@@ -336,6 +406,19 @@ def kicad_drc(board: Path) -> dict:
             if out.exists():
                 return json.loads(out.read_text(encoding="utf-8"))
     raise AssertionError(f"KiCad would not check {board}")
+
+
+@needs_kicad
+@pytest.mark.parametrize(
+    "name", sorted(json.loads((OUTLINES / "cases.json").read_text(encoding="utf-8")))
+)
+def test_kicad_still_judges_each_outline_as_recorded(name):
+    """KiCad's words are in its own language here; that it finds a fault,
+    and how many kinds, is what is asked again."""
+    said = json.loads((OUTLINES / "cases.json").read_text(encoding="utf-8"))[name]
+    asked = kicad_drc(OUTLINES / name / f"{name}.kicad_pcb")
+    faults = [v for v in asked["violations"] if v["type"] == "invalid_outline"]
+    assert bool(faults) == bool(said)
 
 
 @needs_kicad

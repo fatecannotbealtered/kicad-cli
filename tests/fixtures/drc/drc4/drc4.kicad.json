@@ -1,0 +1,166 @@
+{
+ "kicad_version": "10.0.6",
+ "violations": [
+  {
+   "type": "solder_mask_bridge",
+   "severity": "error",
+   "items": [
+    "073b9738-8efb-5d5f-b99a-e5725f842a40",
+    "836db982-7472-5e52-9900-8eb15c1bf8d4"
+   ]
+  },
+  {
+   "type": "solder_mask_bridge",
+   "severity": "error",
+   "items": [
+    "0868fb02-8a08-5168-8f3e-700f087c3b23",
+    "0e03bb1e-0c98-5d6f-98c4-aa05103cf807"
+   ]
+  },
+  {
+   "type": "solder_mask_bridge",
+   "severity": "error",
+   "items": [
+    "1076ed10-78cc-5111-9b8b-c7c3a6c1ac62",
+    "5db0efa7-22fb-5573-84ae-5fc11094c4ad"
+   ]
+  },
+  {
+   "type": "solder_mask_bridge",
+   "severity": "error",
+   "items": [
+    "1294998e-5616-5bca-b7d7-3c175c3a316d",
+    "bb8d983f-42eb-5772-ae53-4e3a4a307911"
+   ]
+  },
+  {
+   "type": "solder_mask_bridge",
+   "severity": "error",
+   "items": [
+    "28ac2634-4211-538c-9b7f-a79bfd15c892",
+    "b4d28834-c7b6-56f2-b637-47a3a398a651"
+   ]
+  },
+  {
+   "type": "solder_mask_bridge",
+   "severity": "error",
+   "items": [
+    "2bfadd55-c83c-548a-b857-75003e9f5ab4",
+    "175a4fa5-a4e7-5775-b1ff-6dc16cd72f83"
+   ]
+  },
+  {
+   "type": "solder_mask_bridge",
+   "severity": "error",
+   "items": [
+    "309828bf-f292-5fef-a57f-4053131bdaa8",
+    "9e3b82be-de73-542f-9594-ca0bed6e4cf5"
+   ]
+  },
+  {
+   "type": "solder_mask_bridge",
+   "severity": "error",
+   "items": [
+    "3555fa0b-4408-5e9e-a4ea-e9317f84a5f7",
+    "5ed5d8e9-8732-51e0-b99e-2e7282adae61"
+   ]
+  },
+  {
+   "type": "solder_mask_bridge",
+   "severity": "error",
+   "items": [
+    "3bce48dd-f232-5179-a6ae-8af77071c0b2",
+    "3a529ddf-2c2f-5b05-ab4f-4d75a6ffa017"
+   ]
+  },
+  {
+   "type": "solder_mask_bridge",
+   "severity": "error",
+   "items": [
+    "3fc524fd-dbcc-566b-ba9f-a9a058f36bbe",
+    "5dd0a38b-10c3-55df-8028-d15a7a83a0fd"
+   ]
+  },
+  {
+   "type": "solder_mask_bridge",
+   "severity": "error",
+   "items": [
+    "43e3ab96-3185-5f94-9635-d4fa25c6209f",
+    "6f359780-f69e-50d4-8c97-64ec10679c02"
+   ]
+  },
+  {
+   "type": "solder_mask_bridge",
+   "severity": "error",
+   "items": [
+    "62aadfcc-e501-5e62-b005-76df3f3eb7d7",
+    "79ff8d0e-f285-5bb1-9874-79f9f96c0885"
+   ]
+  },
+  {
+   "type": "solder_mask_bridge",
+   "severity": "error",
+   "items": [
+    "7f2f0cc6-31fc-52a6-b190-c9f18906a7d9",
+    "0e372d93-cd97-5cb5-8f38-aa3c717ea38d"
+   ]
+  },
+  {
+   "type": "solder_mask_bridge",
+   "severity": "error",
+   "items": [
+    "8e5badb7-743e-5e1d-8ff2-7114d9c8c5a3",
+    "a3cfa1e5-371e-5264-b2d4-075c0b6d4854"
+   ]
+  },
+  {
+   "type": "solder_mask_bridge",
+   "severity": "error",
+   "items": [
+    "9855224e-3b34-5679-a92a-77966a0db690",
+    "9734d6b3-02e2-53f2-9be6-e070ab4ee146"
+   ]
+  },
+  {
+   "type": "solder_mask_bridge",
+   "severity": "error",
+   "items": [
+    "ae54a709-4816-567f-bc9e-7a442323489a",
+    "e84a6e56-e89e-570e-8338-badf942a62ee"
+   ]
+  },
+  {
+   "type": "solder_mask_bridge",
+   "severity": "error",
+   "items": [
+    "c1312e38-c623-527e-89e3-0b109f2c8db8",
+    "1d2ff392-320d-5cda-b108-fb03bde617db"
+   ]
+  },
+  {
+   "type": "solder_mask_bridge",
+   "severity": "error",
+   "items": [
+    "d075f471-7827-5be0-9180-091f1f7f6d17",
+    "0c4625b8-aa38-5486-a3d2-b3a8b31b403d"
+   ]
+  },
+  {
+   "type": "solder_mask_bridge",
+   "severity": "error",
+   "items": [
+    "e7776c2f-a3a5-5972-9f70-010dd14be0b2",
+    "15e318ea-1aec-5548-b631-c13571e99168"
+   ]
+  },
+  {
+   "type": "solder_mask_bridge",
+   "severity": "error",
+   "items": [
+    "fbb5ddee-726d-5d45-8135-8dd652d018b1",
+    "4c5be76d-4ab8-57f4-b575-1478e70fad27"
+   ]
+  }
+ ],
+ "unconnected_items": []
+}

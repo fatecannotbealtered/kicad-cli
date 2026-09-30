@@ -10,7 +10,7 @@ someone renamed F.Cu).
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 
 from ..board import Board, Footprint, Pad, Track, Via, Zone
 from ..sexpr import List
@@ -94,6 +94,13 @@ def via(board: Board, via: Via) -> Item:
     top, bottom = (via.layers[0], via.layers[-1]) if via.layers else ("", "")
     text = f"{kind} [{_net(via.net)}] on {board.layer_name(top)} - {board.layer_name(bottom)}"
     return Item("via", uuid_of(via.node), text, via.position)
+
+
+def renamed(item: Item, net: str, new: str) -> Item:
+    """A track or via named with the net KiCad's connectivity gives it."""
+    return replace(
+        item, description=item.description.replace(f"[{_net(net)}]", f"[{_net(new)}]", 1)
+    )
 
 
 def layer_list(board: Board, layers: list[str]) -> str:

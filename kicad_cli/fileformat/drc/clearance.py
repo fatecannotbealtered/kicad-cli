@@ -41,7 +41,7 @@ from .. import geometry
 from ..board import shape_points
 from . import items as describe
 from . import mm
-from .copper import ARC_ERROR, Copper, Thing
+from .copper import ARC_ERROR, Thing
 from .settings import DEFAULT_CLASS, NM
 from .shapes import Shape, core_distance, distance, segments_cross
 
@@ -55,7 +55,7 @@ def check(run) -> None:
              "copper_edge_clearance")  # fmt: skip
     if not any(run.on(rule) for rule in rules):
         return
-    copper = Copper(run.board, run.connectivity())
+    copper = run.copper()
     things = copper.things
     grid = _grid(things)
     widest = _widest(run, things)

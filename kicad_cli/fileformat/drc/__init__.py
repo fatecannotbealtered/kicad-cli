@@ -76,6 +76,7 @@ class Run:
         self.unconnected: list[Violation] = []
         self._seen: set[tuple[str, frozenset[str], str]] = set()
         self._joined = None
+        self._copper = None
 
     def connectivity(self):
         """Which copper of a net touches which (`connectivity.py`), worked
@@ -85,6 +86,14 @@ class Run:
 
             self._joined = connectivity.connect(self.board)
         return self._joined
+
+    def copper(self):
+        """The board's copper as DRC measures it (`copper.py`), once."""
+        if self._copper is None:
+            from .copper import Copper  # noqa: PLC0415
+
+            self._copper = Copper(self.board, self.connectivity())
+        return self._copper
 
     def on(self, rule: str) -> bool:
         """Whether a check is made: the project has not turned it off, and
@@ -122,10 +131,24 @@ def mm(value: float) -> str:
 
 
 def _checks():
-    from . import clearance, connections, courtyards, holes, local, zones  # noqa: PLC0415
+    from . import (  # noqa: PLC0415
+        areas,
+        clearance,
+        connections,
+        courtyards,
+        holes,
+        local,
+        mask,
+        outline,
+        zones,
+    )  # fmt: skip
 
     return (
         clearance.check,
+        areas.check,
+        outline.check,
+        mask.check,
+        local.layers,
         local.tracks,
         local.vias,
         local.pads,
@@ -147,7 +170,9 @@ CHECKED = (
     "zones_intersect", "unconnected_items", "track_dangling", "via_dangling",
     "courtyards_overlap", "malformed_courtyard", "missing_courtyard", "pth_inside_courtyard",
     "npth_inside_courtyard", "clearance", "shorting_items", "tracks_crossing", "hole_clearance",
-    "copper_edge_clearance",
+    "copper_edge_clearance", "items_not_allowed", "invalid_outline", "item_on_disabled_layer",
+    "through_hole_pad_without_hole", "unresolved_variable", "generic_error", "generic_warning",
+    "solder_mask_bridge",
 )  # fmt: skip
 
 # Rules checked, but not everything they cover: rule -> what is left out.
@@ -155,18 +180,15 @@ PARTIAL = {
     "clearance": "text on copper layers is not measured yet: it needs the stroke font",
     "shorting_items": "text on copper layers is not measured yet: it needs the stroke font",
     "copper_edge_clearance": "text on copper layers is not measured yet: it needs the stroke font",
+    "solder_mask_bridge": "text on a mask layer is not an opening yet: it needs the stroke font",
 }
 
 # The rules KiCad has and this does not check yet, and why.
 NOT_CHECKED = {
-    "items_not_allowed": "rule areas are not checked yet",
-    "invalid_outline": "the board outline is not checked yet",
-    "item_on_disabled_layer": "not checked yet",
     "isolated_copper": "zone fills are not checked yet",
     "starved_thermal": "zone fills are not checked yet",
     "connection_width": "zone fills are not checked yet",
     "copper_sliver": "zone fills are not checked yet",
-    "solder_mask_bridge": "solder mask is not checked yet",
     "silk_overlap": "silkscreen needs the stroke font, which this tool does not have yet",
     "silk_over_copper": "silkscreen needs the stroke font, which this tool does not have yet",
     "silk_edge_clearance": "silkscreen needs the stroke font, which this tool does not have yet",
@@ -180,8 +202,6 @@ NOT_CHECKED = {
     "track_angle": "custom rules (.kicad_dru) are not read yet",
     "track_segment_length": "custom rules (.kicad_dru) are not read yet",
     "creepage": "custom rules (.kicad_dru) are not read yet",
-    "unresolved_variable": "not checked yet",
-    "through_hole_pad_without_hole": "not checked yet",
     "track_on_post_machined_layer": "not checked yet",
     "track_not_centered_on_via": "not checked yet",
     "footprint": "not checked yet",
