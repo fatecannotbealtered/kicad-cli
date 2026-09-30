@@ -63,8 +63,10 @@ def drc(args: dict[str, Any]) -> None:
     performing a write, which is the wrong shape for a question.
 
     The check is this tool's own (`fileformat/drc/`), in this process: no
-    KiCad runs. What it does not check yet is listed in `not_checked`, and
-    `ok_to_fabricate` is the verdict of the checks it makes.
+    KiCad runs. Footprints are held to their libraries where KiCad installed
+    them, read as files; with no KiCad installed, those rules are listed in
+    `not_checked`, as is what else it does not check yet. `ok_to_fabricate`
+    is the verdict of the checks it makes.
 
     Exit is 0 whatever DRC found. The command succeeded at checking; whether
     the board passed is `counts` and `ok_to_fabricate`, not the exit code.
@@ -80,8 +82,11 @@ def drc(args: dict[str, Any]) -> None:
     # copy to keep in step with the first.
     severity = str(args.get("severity") or "all").lower()
     limit = int(args.get("limit") or DRC_LIMIT)
+    from .. import kicad_env  # noqa: PLC0415
+
     try:
-        report = own.check(board)
+        # KiCad's installation, if any, for the libraries its tables name.
+        report = own.check(board, kicad_root=kicad_env.find_kicad_root())
     except (BoardError, SexprError, UnicodeDecodeError) as exc:
         envelope.fail("E_VALIDATION", "the board cannot be read", {"path": board,
                       "reason": str(exc)[:200]})  # fmt: skip

@@ -48,6 +48,8 @@ class Library:
 class Tables:
     symbols: dict[str, Library] = field(default_factory=dict)
     footprints: dict[str, Library] = field(default_factory=dict)
+    # nicknames a table names but switches off
+    disabled_footprints: set[str] = field(default_factory=set)
     _loaded: dict[Path, _SymbolLibrary | None] = field(default_factory=dict, repr=False)
 
     @classmethod
@@ -62,9 +64,10 @@ class Tables:
             ("sym-lib-table", tables.symbols),
             ("fp-lib-table", tables.footprints),
         ):
+            off = tables.disabled_footprints if kind == "fp-lib-table" else set()
             if config is not None:
-                target.update(_read(config / kind, variables, set()))
-            target.update(_read(project_dir / kind, variables, set()))
+                target.update(_read(config / kind, variables, set(), off))
+            target.update(_read(project_dir / kind, variables, set(), off))
         return tables
 
     def _symbol_library(self, library: Library) -> _SymbolLibrary | None:
@@ -178,8 +181,11 @@ def expand(text: str, variables: dict[str, str]) -> str:
     return _VARIABLE.sub(lambda m: variables.get(m.group(1) or m.group(2), m.group(0)), text)
 
 
-def _read(path: Path, variables: dict[str, str], seen: set[Path]) -> dict[str, Library]:
-    """A table's libraries, a nested table's included, in the table's order."""
+def _read(
+    path: Path, variables: dict[str, str], seen: set[Path], disabled: set[str] | None = None
+) -> dict[str, Library]:
+    """A table's libraries, a nested table's included, in the table's order;
+    the nicknames it switches off go into `disabled`."""
     try:
         key = path.resolve()
         if key in seen or not path.is_file():
@@ -205,9 +211,11 @@ def _read(path: Path, variables: dict[str, str], seen: set[Path]) -> dict[str, L
             location=location,
         )
         if library.disabled:
+            if disabled is not None and library.kind != "Table":
+                disabled.add(library.nickname)
             continue
         if library.kind == "Table":
-            out.update(_read(library.path, variables, seen))
+            out.update(_read(library.path, variables, seen, disabled))
         else:
             out[library.nickname] = library
     return out

@@ -9,13 +9,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - `board drc` is this tool's own DRC now, in this process: no KiCad runs.
-  It checks 37 of KiCad 10's rules -- copper clearance and shorts, crossing
+  It checks 39 of KiCad 10's rules -- copper clearance and shorts, crossing
   tracks, hole and edge clearance, solder mask bridges, track widths, vias,
   annular rings, hole sizes, padstacks, footprint types, text size and
   mirroring, holes too close or on one spot, overlapping zones, rule areas,
   the board outline, copper on layers the board has not got, plated pads
   with no hole, text variables left unresolved and DRC markers left in
-  text, missing connections, dangling tracks and vias, courtyards -- by the
+  text, missing connections, dangling tracks and vias, courtyards,
+  footprints against their libraries (read where KiCad installed them; with
+  no KiCad installed, those two rules are listed as not checked) -- by the
   project's rules, severities, net
   classes and exclusions, and on every demo board KiCad ships it finds what
   KiCad's own DRC finds under those rules. What it does not check yet is
