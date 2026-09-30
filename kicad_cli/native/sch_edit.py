@@ -1971,7 +1971,8 @@ def not_checked(kicad_root: str | None) -> list[str]:
         "old one was, and may now overlap what is beside it; a new wire and its label go "
         "where nothing is if there is room, and `drawn.overlaps` counts what they cross if "
         "there is not",
-        "a board made from this schematic is not changed by this command",
+        "a board made from this schematic is not changed by this command: `board update` "
+        "carries the change onto it",
     ]
     if kicad_root is None:
         out.append(

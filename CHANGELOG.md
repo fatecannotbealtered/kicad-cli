@@ -8,6 +8,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- `board update` carries the schematic onto its board, in this process, as
+  KiCad's Update PCB from Schematic does with the options its dialog opens
+  with: parts are matched to footprints by uuid path; references, values,
+  fields and DNP/BOM marks follow the parts; a part naming another footprint
+  gets it from the project's libraries, where the old one was, at its angle,
+  with the old reference and value text where they were; every pad takes
+  its pin's net. A net renamed in the schematic keeps its copper -- tracks,
+  vias and zones are renamed with its pads -- and a net whose pads went
+  different ways is listed. New footprints wait beside the board; nothing is
+  deleted. The board is read back against the schematic before it is
+  written. On KiCad's demo boards, and on the edited fixture design, KiCad's
+  own `pcb drc --schematic-parity` finds the updated boards true to their
+  schematics, but for what a missing library footprint or a removed part
+  leaves, as its dialog would.
 - `sch edit` adds and removes parts. `add` takes a symbol from the
   project's library tables -- or the sheet's own copy, if its kin are
   already there -- and puts each unit where nothing is, beside `near` if

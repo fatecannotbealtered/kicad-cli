@@ -347,7 +347,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "fixture:R_0805"
 			(at 50.8 50.8 0)
 			(hide yes)
 			(effects
@@ -456,7 +456,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "fixture:R_0805"
 			(at 63.5 50.8 0)
 			(hide yes)
 			(effects
@@ -566,7 +566,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "fixture:R_0805"
 			(at 76.2 50.8 0)
 			(hide yes)
 			(effects
@@ -763,7 +763,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "fixture:SO8"
 			(at 101.6 50.8 0)
 			(hide yes)
 			(effects
@@ -862,7 +862,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "fixture:R_0805"
 			(at 50.8 76.2 0)
 			(hide yes)
 			(effects
@@ -929,7 +929,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "fixture:R_0805"
 			(at 63.5 76.2 0)
 			(hide yes)
 			(effects
@@ -1034,7 +1034,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "fixture:SO8"
 			(at 101.6 76.2 0)
 			(hide yes)
 			(effects

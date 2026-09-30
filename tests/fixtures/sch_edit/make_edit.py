@@ -116,7 +116,7 @@ class Sheet:
             f"(no_connect (at {num(p[0])} {num(p[1])}) (uuid {q(uid(self.name, 'nc', p))}))"
         )
 
-    def symbol(self, lib_id, refs, at, unit=1, value=None):
+    def symbol(self, lib_id, refs, at, unit=1, value=None, footprint=""):
         """refs: {sheet instance path: reference}; the pins, where they land."""
         self.libs.add(lib_id)
         sid = uid(self.name, "sym", lib_id, at, unit)
@@ -129,8 +129,9 @@ class Sheet:
             f" {HIDDEN if first.startswith('#') else FONT})"
             f' (property "Value" {q(value)} (at {num(at[0] + 2.54)} {num(at[1] + 1.27)} 0) {FONT})'
         )
-        for field in ("Footprint", "Datasheet", "Description"):
-            text += f" (property {q(field)} {q('')} (at {num(at[0])} {num(at[1])} 0) {HIDDEN})"
+        fields = {"Footprint": footprint, "Datasheet": "", "Description": ""}
+        for field, content in fields.items():
+            text += f" (property {q(field)} {q(content)} (at {num(at[0])} {num(at[1])} 0) {HIDDEN})"
         defs = PINS[(lib_id, unit)]
         for number, *_ in defs:
             text += f" (pin {q(number)} (uuid {q(uid(sid, 'pin', number))}))"
@@ -193,30 +194,35 @@ def stub(sheet, at, dy, kind, text):
     sheet.label(kind, text, end)
 
 
+R0805 = "fixture:R_0805"  # every part's footprint is the fixture's own library's
 root = Sheet("root", "edit.kicad_sch")
 ROOT = "/" + root.uuid
-r1 = root.symbol("fixture:R", {ROOT: "R1"}, (50.8, 50.8), value="10k")
+r1 = root.symbol("fixture:R", {ROOT: "R1"}, (50.8, 50.8), value="10k", footprint=R0805)
 stub(root, r1["1"], -2.54, "label", "SIG")
 stub(root, r1["2"], 2.54, "label", "OUT")
-r2 = root.symbol("fixture:R", {ROOT: "R2"}, (63.5, 50.8), value="10k")
+r2 = root.symbol("fixture:R", {ROOT: "R2"}, (63.5, 50.8), value="10k", footprint=R0805)
 stub(root, r2["1"], -2.54, "label", "SIG")
 stub(root, r2["2"], 2.54, "global_label", "EN")
-r3 = root.symbol("fixture:R", {ROOT: "R3"}, (76.2, 50.8), value="1k")
+r3 = root.symbol("fixture:R", {ROOT: "R3"}, (76.2, 50.8), value="1k", footprint=R0805)
 root.power("+3V3", r3["1"], ROOT)
 root.power("GND", r3["2"], ROOT)
-u1 = root.symbol("fixture:DUAL", {ROOT: "U1"}, (101.6, 50.8), unit=1, value="LM358")
+u1 = root.symbol(
+    "fixture:DUAL", {ROOT: "U1"}, (101.6, 50.8), unit=1, value="LM358", footprint="fixture:SO8"
+)
 root.wire(u1["1"], (111.76, 50.8))
 root.label("label", "OUT", (111.76, 50.8))
 root.no_connect(u1["2"])
 root.no_connect(u1["3"])
-r4 = root.symbol("fixture:R", {ROOT: "R4"}, (50.8, 76.2), value="1k")
-r5 = root.symbol("fixture:R", {ROOT: "R5"}, (63.5, 76.2), value="1k")
+r4 = root.symbol("fixture:R", {ROOT: "R4"}, (50.8, 76.2), value="1k", footprint=R0805)
+r5 = root.symbol("fixture:R", {ROOT: "R5"}, (63.5, 76.2), value="1k", footprint=R0805)
 root.no_connect(r4["1"])
 root.no_connect(r5["1"])
 root.wire(r4["2"], (50.8, 82.55))
 root.wire((50.8, 82.55), (63.5, 82.55))
 root.wire((63.5, 82.55), r5["2"])
-u1b = root.symbol("fixture:DUAL", {ROOT: "U1"}, (101.6, 76.2), unit=2, value="LM358")
+u1b = root.symbol(
+    "fixture:DUAL", {ROOT: "U1"}, (101.6, 76.2), unit=2, value="LM358", footprint="fixture:SO8"
+)
 for at in u1b.values():
     root.no_connect(at)
 child_a = root.sheet("CHILD_A", "edit_child.kicad_sch", (127, 38.1), (15.24, 10.16),
@@ -228,13 +234,13 @@ child_b = root.sheet("CHILD_B", "edit_child.kicad_sch", (127, 63.5), (15.24, 10.
 
 child = Sheet("child", "edit_child.kicad_sch")
 A, B = f"{ROOT}/{child_a}", f"{ROOT}/{child_b}"
-r10 = child.symbol("fixture:R", {A: "R10", B: "R20"}, (50.8, 50.8), value="4k7")
+r10 = child.symbol("fixture:R", {A: "R10", B: "R20"}, (50.8, 50.8), value="4k7", footprint=R0805)
 stub(child, r10["1"], -2.54, "hierarchical_label", "IN")
 stub(child, r10["2"], 2.54, "label", "LOCAL")
-c10 = child.symbol("fixture:R", {A: "C10", B: "C20"}, (63.5, 50.8), value="100n")
+c10 = child.symbol("fixture:R", {A: "C10", B: "C20"}, (63.5, 50.8), value="100n", footprint=R0805)
 stub(child, c10["1"], -2.54, "label", "LOCAL")
 stub(child, c10["2"], 2.54, "global_label", "EN")
-r11 = child.symbol("fixture:R", {A: "R11", B: "R21"}, (88.9, 50.8), value="10k")
+r11 = child.symbol("fixture:R", {A: "R11", B: "R21"}, (88.9, 50.8), value="10k", footprint=R0805)
 child.no_connect(r11["1"])
 child.no_connect(r11["2"])
 

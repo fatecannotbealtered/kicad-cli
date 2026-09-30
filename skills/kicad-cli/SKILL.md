@@ -120,6 +120,7 @@ ones apart:
 | Does the board still match the schematic? | `board parity` (components and nets) | — |
 | Make a board from a requirement (no design exists yet) | `sch create` → `board from-netlist` → `board place` → `board pour` → `board route` → `board netclass`/`board rewidth` → `board silkscreen` → `board drc` → `fab *` | see "Building a board from nothing" below; do not hand-write a `.kicad_sch` |
 | Turn an existing schematic into a board | KiCad's own `sch export netlist`, then `board from-netlist` | this creates a *new* board; it does not update one that already has a layout |
+| Carry schematic changes onto a board that is already laid out | `sch sync-preview` to read what will happen, then `board update` | KiCad's dialog is not needed: `board update` does what it does with its default options |
 | Will "Update PCB from Schematic" destroy my layout? | `sch link`, then `sch sync-preview` | never `pcb drc --schematic-parity`; it matches by reference designator and is blind to broken links |
 | ERC says zero — is the schematic fine? | `sch audit` (checks the silenced rules too) | `sch link` |
 | Change a part's value, footprint or fields, rename a net, move a pin to another net, add or remove a part, in a schematic that exists | `sch edit` (see "Changing an existing schematic") | editing the `.kicad_sch` text by hand: a label renamed on one sheet and not its sheet pin splits the net |
@@ -296,10 +297,37 @@ kicad-cli sch edit --schematic design.kicad_sch --changes changes.json --confirm
 - The drawing is not laid out again, and a board made from the schematic is not
   changed: carry the change over with KiCad's Update PCB from Schematic.
 
+## Carrying a schematic change onto the board
+
+```bash
+kicad-cli sch sync-preview --board board.kicad_pcb --compact   # what will change
+kicad-cli board update --board board.kicad_pcb --dry-run --compact
+kicad-cli board update --board board.kicad_pcb --confirm ct_xxx --compact
+```
+
+- It does what KiCad's Update PCB from Schematic does with its dialog's
+  defaults: parts matched to footprints by uuid path; references, values,
+  fields and DNP/BOM marks updated; a part naming another footprint gets it,
+  where the old one was; every pad on its pin's net. Nothing is deleted:
+  `changes.not_removed` lists footprints no part matches.
+- `changes.renamed_nets`: a net renamed in the schematic keeps its tracks,
+  vias and zones. `changes.copper_left_on_old_nets` lists nets whose pads
+  went different ways: their copper still carries the old name and now
+  touches pads of another net -- re-route those (`board route --mode repair`
+  after deleting the stale track in KiCad) and run `board drc`.
+- New parts wait beside the board (`changes.add[].at_mm`): place them
+  (`board move`, `board place`), then route.
+- `status: PARTIAL` with `skipped`: a footprint no library of the project's
+  tables has, or one on the bottom of the board, was left as it was -- the
+  rest of the update was made, as KiCad's dialog makes it.
+- If `sch link` reports broken links, run `sch relink` first: a footprint
+  that has lost its link is not matched, and its part is added again.
+
 ## Checkpoints
 
 STOP CHECKPOINT: Ask the user before confirming any write. All of `sch create`,
-`sch edit`, `board from-netlist`, `board route`, `board stitch`, `board rewidth`,
+`sch edit`, `board update`, `board from-netlist`, `board route`, `board stitch`,
+`board rewidth`,
 `board widen`, `board move`, `board place`, `board netclass`, `board pour`,
 `board silkscreen`, `sch relink` and `fab *` modify files on disk.
 `sch create` and `board from-netlist` replace a file of that name if one exists.
