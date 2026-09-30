@@ -50,6 +50,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   size the parts needed.
 
 ### Added
+- `kicad_cli/fileformat/erc.py` checks KiCad's four library rules, 39 of 44
+  now: a symbol whose library no table names, whose library file is not
+  there, or which its library does not have; a sheet's copy of a symbol
+  that is no longer its library's; a footprint whose library is not
+  configured or does not have it; and a footprint its symbol's filters do not
+  allow -- no footprint at all being one. The library tables are read as
+  KiCad reads them (`kicad_cli/fileformat/lib_tables.py`): the user's, with
+  the table KiCad 10 installs nested in it, then the project's, which wins a
+  nickname both use; `${KICAD6_SYMBOL_DIR}` to `${KICAD10_...}`,
+  `${KIPRJMOD}`, KiCad's own settings and the environment expanded; a
+  disabled library absent. They are checked only where KiCad's installation
+  is known, since the tables name their libraries relative to it.
+
+  Which differences between a copy and its library count was asked of KiCad
+  one at a time, on a third design drawn for it (`tests/fixtures/erc/erc3/`,
+  57 cases, with libraries of its own). The answers are not the obvious
+  ones. A pin moved, renumbered or removed counts; one longer, turned,
+  retyped, reshaped, renamed or hidden does not. A pin or field only the copy
+  has does not count; a field of the library's the copy lacks does. A line's
+  width and style count -- solid is not the default -- and its colour does
+  not; text does not count at all. A "~" is empty only in files older than
+  KiCad 10's format. On the 35 demo projects it finds all 5900 of KiCad's
+  library findings and nothing else; with the other rules, 7947 of 7949.
 - `kicad_cli/fileformat/erc.py` checks 16 more of KiCad's rules, 35 of 44
   now: references (not numbered, numbered twice, units of different value,
   a unit the part lacks), parts of several units (a unit not placed -- with

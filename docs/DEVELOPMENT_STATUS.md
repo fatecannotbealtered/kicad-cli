@@ -122,17 +122,18 @@ had 23 errors each -- no symbol or text over another, power and ground as
 power symbols, decoupling beneath the chip it serves, and the same file from
 the same description every time.
 
-`kicad_cli/fileformat/erc.py` is ERC of this tool's own: 35 of the 44 rules
+`kicad_cli/fileformat/erc.py` is ERC of this tool's own: 39 of the 44 rules
 KiCad 10 has -- pins, drivers and conflicts, no-connect flags, labels,
 wires, names, the grid, references, parts of several units, the hierarchy,
-buses, text variables and net classes -- measured on two designs drawn to
-ask KiCad's ERC one question per case (`tests/fixtures/erc/`, 209 of them)
-and held to it on KiCad's 35 demo projects: 2047 of the 2049 findings KiCad
-makes there, and nothing else. Of the other nine, four are about libraries,
-one about simulation, and four KiCad's own ERC was never seen to report
-(`erc.NOT_CHECKED`). No command uses it yet. Next on that side: `sch audit`
-on it -- the last `sch` command on KiCad's binary -- the library rules, then
-editing an existing schematic, and carrying a schematic change onto a
+buses, text variables, net classes and the libraries -- measured on three
+designs drawn to ask KiCad's ERC one question per case
+(`tests/fixtures/erc/`, 266 of them) and held to it on KiCad's 35 demo
+projects: 7947 of the 7949 findings KiCad makes there, and nothing else.
+The library tables are read as files (`kicad_cli/fileformat/lib_tables.py`).
+Of the other five, one is about simulation and four KiCad's own ERC was
+never seen to report (`erc.NOT_CHECKED`). No command uses it yet. Next on
+that side: `sch audit` on it -- the last `sch` command on KiCad's binary --
+then editing an existing schematic, and carrying a schematic change onto a
 routed board.
 
 Progress. Step 1 is in (`bench/`). Step 2 is in for boards:

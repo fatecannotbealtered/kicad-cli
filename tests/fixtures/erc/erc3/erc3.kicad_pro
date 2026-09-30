@@ -1,0 +1,64 @@
+{
+  "erc": {
+    "rule_severities": {
+      "bus_definition_conflict": "ignore",
+      "bus_entry_needed": "ignore",
+      "bus_to_bus_conflict": "ignore",
+      "bus_to_net_conflict": "ignore",
+      "different_unit_footprint": "ignore",
+      "different_unit_net": "ignore",
+      "duplicate_reference": "ignore",
+      "duplicate_sheet_names": "ignore",
+      "endpoint_off_grid": "ignore",
+      "extra_units": "ignore",
+      "footprint_filter": "warning",
+      "footprint_link_issues": "warning",
+      "four_way_junction": "ignore",
+      "global_label_dangling": "ignore",
+      "hier_label_mismatch": "ignore",
+      "isolated_pin_label": "ignore",
+      "label_dangling": "ignore",
+      "label_multiple_wires": "ignore",
+      "lib_symbol_issues": "warning",
+      "lib_symbol_mismatch": "warning",
+      "missing_bidi_pin": "ignore",
+      "missing_input_pin": "ignore",
+      "missing_power_pin": "ignore",
+      "missing_unit": "ignore",
+      "multiple_net_names": "ignore",
+      "net_not_bus_member": "ignore",
+      "no_connect_connected": "ignore",
+      "no_connect_dangling": "ignore",
+      "pin_not_connected": "ignore",
+      "pin_not_driven": "ignore",
+      "pin_to_pin": "ignore",
+      "power_pin_not_driven": "ignore",
+      "same_local_global_label": "ignore",
+      "similar_label_and_power": "ignore",
+      "similar_labels": "ignore",
+      "similar_power": "ignore",
+      "simulation_model_issue": "ignore",
+      "single_global_label": "ignore",
+      "unannotated": "ignore",
+      "unconnected_wire_endpoint": "ignore",
+      "undefined_netclass": "ignore",
+      "unit_value_mismatch": "ignore",
+      "unresolved_variable": "ignore",
+      "wire_dangling": "ignore"
+    }
+  },
+  "meta": {
+    "filename": "erc3.kicad_pro",
+    "version": 3
+  },
+  "net_settings": {
+    "classes": [
+      {
+        "name": "Default"
+      }
+    ],
+    "meta": {
+      "version": 5
+    }
+  }
+}
