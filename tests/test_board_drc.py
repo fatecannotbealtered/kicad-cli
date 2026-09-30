@@ -77,7 +77,7 @@ def test_an_unrouted_board_is_reported_as_not_ready_to_fabricate(tmp_path):
     data = doc["data"]
     assert data["ok_to_fabricate"] is False
     assert data["unconnected_count"] >= 1
-    assert data["oracle"] == "kicad-cli pcb drc"
+    assert data["engine"] == "kicad-cli's own DRC, in this process"
 
 
 @needs_kicad

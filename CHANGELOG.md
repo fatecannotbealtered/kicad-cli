@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- `board drc` is this tool's own DRC now, in this process: no KiCad runs.
+  It checks 29 of KiCad 10's rules -- copper clearance and shorts, crossing
+  tracks, hole and edge clearance, track widths, vias, annular rings, hole
+  sizes, padstacks, footprint types, text size and mirroring, holes too
+  close or on one spot, overlapping zones, missing connections, dangling
+  tracks and vias, courtyards -- by the project's rules, severities, net
+  classes and exclusions, and on every demo board KiCad ships it finds what
+  KiCad's own DRC finds under those rules. What it does not check yet is
+  listed in `not_checked` (and what a checked rule leaves out in
+  `partial`); a rule the project's custom rules decide is among them until
+  those rules are read. `ok_to_fabricate` is the verdict of the checks made.
+  The envelope's `oracle` is `engine` now, and excluded violations are
+  listed, marked, and counted apart (`excluded_count`).
+
 ### Added
 - `board update` carries the schematic onto its board, in this process, as
   KiCad's Update PCB from Schematic does with the options its dialog opens

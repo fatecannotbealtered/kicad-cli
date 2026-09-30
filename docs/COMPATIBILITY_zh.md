@@ -21,9 +21,9 @@
 
 | 路 | 方式 | 谁在用 | 寿命 |
 |----|------|--------|------|
-| 文件格式 | 直接读写 `.kicad_pcb` / `.kicad_sch` 文本 | `sch create`、`sch link`、`sch relink`、`sch sync-preview`、`sch audit`、`board audit`、`board plane`、`board parity`、`board move`、`board netclass`、`board from-netlist` | 稳定。不依赖任何 KiCad API，也不需要装 KiCad——`sch create` 和 `board from-netlist` 会把 KiCad 的符号库、封装库当文件读。 |
+| 文件格式 | 直接读写 `.kicad_pcb` / `.kicad_sch` 文本 | `sch create`、`sch link`、`sch relink`、`sch sync-preview`、`sch audit`、`sch edit`、`board audit`、`board plane`、`board parity`、`board move`、`board netclass`、`board from-netlist`、`board update`、`board drc` | 稳定。不依赖任何 KiCad API，也不需要装 KiCad——`sch create` 和 `board from-netlist` 会把 KiCad 的符号库、封装库当文件读。 |
 | `pcbnew`（SWIG） | 跑在 KiCad 自带的 Python 下 | `board route`、`board rewidth`、`board widen`、`board stitch`、`fab *` | **KiCad 11 计划移除。** |
-| 官方二进制 | 调 KiCad 自己的 `kicad-cli` | `board drc` 和每条写命令自验背后的 DRC | 稳定。 |
+| 官方二进制 | 调 KiCad 自己的 `kicad-cli` | 走 `pcbnew` 的写命令用来自验写入的 DRC | 稳定；随 `pcbnew` 命令一起退场。 |
 | IPC API | 通过 `kipy` 连 KiCad 的 API 服务 | `board live` | 年轻。需要 KiCad 开着，且在「偏好设置 → KiCad API」里启用。 |
 
 SWIG 那一行就是敞口。大多数命令压在它上面，而 KiCad 已宣布移除它。真到那天，

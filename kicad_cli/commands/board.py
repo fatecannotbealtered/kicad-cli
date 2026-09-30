@@ -1,9 +1,9 @@
 """``kicad-cli board ...`` -- read-only inspection of a board.
 
-Most run in this process on the files themselves (`kicad_cli/native/`).
-`board from-netlist` still relays to a payload in KiCad's interpreter, and
-`board drc` asks KiCad's own binary; the shell owns the envelope either way,
-so ``--fields`` and ``--compact`` behave identically wherever a command ran.
+They run in this process on the files themselves (`kicad_cli/native/`,
+`kicad_cli/fileformat/`); `board drc` is this tool's own DRC. The shell owns
+the envelope, so ``--fields`` and ``--compact`` behave identically wherever a
+command ran.
 """
 
 from __future__ import annotations
@@ -11,7 +11,7 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any
 
-from .. import boardgen, envelope, kicad_env
+from .. import boardgen, envelope
 from ..native import audit as native_audit
 from ..native import from_netlist as native_from_netlist
 from ..native import parity as native_parity
@@ -54,7 +54,7 @@ DRC_LIMIT = 50
 
 
 def drc(args: dict[str, Any]) -> None:
-    """Run KiCad's design rule check and report what it found.
+    """Check the board against its design rules and report what was found.
 
     Every write command in this tool already runs DRC -- it is the referee for
     `board route`, `board place` and the rest, and the thing they roll back
@@ -62,59 +62,73 @@ def drc(args: dict[str, Any]) -> None:
     is the question at the end of the chain, and answering it required
     performing a write, which is the wrong shape for a question.
 
-    This runs host-side: KiCad's own `pcb drc` is a separate binary, so unlike
-    the other board commands there is no payload and no guest interpreter.
+    The check is this tool's own (`fileformat/drc/`), in this process: no
+    KiCad runs. What it does not check yet is listed in `not_checked`, and
+    `ok_to_fabricate` is the verdict of the checks it makes.
 
     Exit is 0 whatever DRC found. The command succeeded at checking; whether
     the board passed is `counts` and `ok_to_fabricate`, not the exit code.
     A violation is a fact about the board, not a failure of this command.
     """
+    from ..fileformat import drc as own  # noqa: PLC0415
+    from ..fileformat.board import BoardError  # noqa: PLC0415
+    from ..fileformat.sexpr import SexprError  # noqa: PLC0415
+
     board = _board_arg(args)
     # The accepted values live in this command's registry entry, which rejects
     # anything else before this runs. Re-listing them here would be a second
     # copy to keep in step with the first.
     severity = str(args.get("severity") or "all").lower()
     limit = int(args.get("limit") or DRC_LIMIT)
+    try:
+        report = own.check(board)
+    except (BoardError, SexprError, UnicodeDecodeError) as exc:
+        envelope.fail("E_VALIDATION", "the board cannot be read", {"path": board,
+                      "reason": str(exc)[:200]})  # fmt: skip
 
-    report = kicad_env.run_drc(board)
-    violations = report.get("violations") or []
-    unconnected = report.get("unconnected_items") or []
-
+    counted = [v for v in report.violations if not v.excluded]
     counts: dict[str, int] = {}
-    for violation in violations:
-        key = str(violation.get("severity", "unknown"))
-        counts[key] = counts.get(key, 0) + 1
+    for violation in counted:
+        counts[violation.severity] = counts.get(violation.severity, 0) + 1
+    unconnected = [v for v in report.unconnected if not v.excluded]
 
-    def flatten(entry: dict[str, Any]) -> dict[str, Any]:
-        # The top-level description names the rule; the items name the things
-        # that broke it. Keeping only the first gives every missing connection
-        # the text "Missing connection between items", which identifies nothing.
-        return {
-            "severity": entry.get("severity"),
-            "type": entry.get("type"),
-            "description": entry.get("description"),
-            "items": [i.get("description") for i in (entry.get("items") or [])][:4],
+    def flatten(violation) -> dict[str, Any]:
+        # The top-level message names the rule; the items name the things that
+        # broke it. Keeping only the first gives every missing connection the
+        # text "Missing connection between items", which identifies nothing.
+        out = {
+            "severity": violation.severity,
+            "type": violation.rule,
+            "description": violation.message,
+            "items": [i.description for i in violation.items],
         }
+        if violation.excluded:
+            out["excluded"] = True
+        return out
 
-    shown = [v for v in violations if severity in ("all", str(v.get("severity")))]
+    shown = [v for v in report.violations if severity in ("all", v.severity)]
     trimmed = [flatten(v) for v in shown[:limit]]
-
     errors = counts.get("error", 0)
     envelope.ok(
         {
             "board": board,
-            "oracle": "kicad-cli pcb drc",
+            "engine": "kicad-cli's own DRC, in this process",
             "counts": counts,
+            "excluded_count": len(report.violations) - len(counted),
             "unconnected_count": len(unconnected),
             "ok_to_fabricate": errors == 0 and not unconnected,
             "violations": trimmed,
             "violations_shown": len(trimmed),
-            "violations_total": len(violations),
-            "unconnected": [flatten(i) for i in unconnected[:limit]],
+            "violations_total": len(report.violations),
+            "unconnected": [flatten(v) for v in report.unconnected[:limit]],
+            "not_checked": report.not_checked,
+            "partial": report.partial,
             "note": "counts and *_total describe the whole report; violations may be "
-            "truncated to --limit. Warnings do not stop fabrication, errors do. "
-            "Schematic parity is not checked here -- that is `board parity`, which "
-            "matches by link rather than by reference designator.",
+            "truncated to --limit. Warnings do not stop fabrication, errors do; excluded "
+            "violations (the project's DRC exclusions) are listed but not counted. "
+            "ok_to_fabricate is the verdict of the checks made: not_checked lists the rules "
+            "not checked yet, partial what a checked rule leaves out. Schematic parity is "
+            "`board parity`.",
         }
     )
 

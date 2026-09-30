@@ -190,12 +190,3 @@ def run_payload(payload: str, args: list[str], timeout: int = 1800) -> dict:
         },
     )
     raise AssertionError("unreachable")  # pragma: no cover
-
-
-def run_drc(board: str, timeout: int = 1800) -> dict:
-    """Compatibility adapter: execution failures never become clean DRC reports."""
-    try:
-        return drc_runner.run(board, find_official_cli(), timeout).report
-    except drc_runner.DrcError as exc:
-        envelope.fail(exc.code, str(exc), exc.details)
-    raise AssertionError("unreachable")

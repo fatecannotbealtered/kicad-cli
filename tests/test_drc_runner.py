@@ -315,23 +315,23 @@ def test_cannot_resolve_the_running_cli_as_its_own_upstream(board, monkeypatch):
     assert drc.find_official_cli() is None
 
 
-@pytest.mark.parametrize("adapter", ["shell", "payload"])
-def test_both_adapters_preserve_error_semantics(board, monkeypatch, capsys, adapter):
+def test_the_payload_adapter_preserves_error_semantics(board, monkeypatch, capsys):
+    """The write commands' own verification is the runner's one caller left:
+    `board drc` checks the board in this process now."""
     envelope.configure()
     monkeypatch.setenv("KICAD_CLI_OFFICIAL", sys.executable)
     install_fake(monkeypatch, rc=1)
     with pytest.raises(SystemExit) as exc:
-        (kicad_env.run_drc if adapter == "shell" else kicad_lib.run_drc)(str(board))
+        kicad_lib.run_drc(str(board))
     captured = capsys.readouterr()
     doc = json.loads(captured.out)
     assert exc.value.code == 1 and doc["error"]["code"] == "E_IO"
     assert captured.err == ""
-    if adapter == "payload":
-        # No write was armed in this test, and that is now distinguishable from
-        # "we have no idea". The pinned "unknown" it used to assert was a
-        # placeholder for the absence of any transaction to ask.
-        assert doc["error"]["details"]["write_state"] == "not_started"
-        assert "write_state" in doc["error"]["details"]["next_action"]
+    # No write was armed in this test, and that is now distinguishable from
+    # "we have no idea". The pinned "unknown" it used to assert was a
+    # placeholder for the absence of any transaction to ask.
+    assert doc["error"]["details"]["write_state"] == "not_started"
+    assert "write_state" in doc["error"]["details"]["next_action"]
 
 
 @pytest.mark.parametrize("name", ["pcb_route.py", "pcb_widen.py"])
@@ -380,7 +380,7 @@ def test_real_child_process_roundtrip_in_both_import_modes(board, tmp_path):
     )
     env.pop("KICAD_CLI_TRACE", None)
     for source in (
-        "from kicad_cli import envelope, kicad_env\nenvelope.ok(kicad_env.run_drc(sys.argv[1]))\n",
+        "from kicad_cli.payload import kicad_lib\nkicad_lib.ok(kicad_lib.run_drc(sys.argv[1]))\n",
         f"sys.path.insert(0, {str(REPO / 'kicad_cli' / 'payload')!r})\n"
         "import kicad_lib\n"
         "kicad_lib.ok(kicad_lib.run_drc(sys.argv[1]))\n",

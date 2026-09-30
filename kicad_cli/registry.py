@@ -398,14 +398,17 @@ SCHEMAS: dict[str, dict[str, Any]] = {
         # report even when `violations` is truncated to --limit.
         "fields": [
             "board",
-            "oracle",
+            "engine",
             "counts",
+            "excluded_count",
             "unconnected_count",
             "ok_to_fabricate",
             "violations",
             "violations_shown",
             "violations_total",
             "unconnected",
+            "not_checked",
+            "partial",
             "note",
         ],
         # Violation text quotes reference designators, net names and rule names
@@ -690,8 +693,9 @@ def build() -> list[dict[str, Any]]:
         _cmd(
             "board drc",
             "read",
-            "Run KiCad's design rule check and report the violations. Exit is 0 whatever "
-            "it finds: read ok_to_fabricate and counts, not the exit code.",
+            "Check the board against its design rules, with this tool's own DRC (no KiCad "
+            "runs), and report the violations and the rules not checked yet. Exit is 0 "
+            "whatever it finds: read ok_to_fabricate and counts, not the exit code.",
             [
                 _board_param(),
                 {

@@ -16,7 +16,7 @@ such shapes, or a polygon.
 from __future__ import annotations
 
 import math
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from .. import geometry
 from ..board import Pad, Via, shape_points, stroke_width
@@ -31,12 +31,16 @@ class Shape:
 
     core: tuple[Point, ...]
     radius: float = 0.0
+    box: tuple[float, float, float, float] = field(default=(0, 0, 0, 0), compare=False)
 
-    def bbox(self) -> tuple[float, float, float, float]:
+    def __post_init__(self) -> None:
         xs = [p[0] for p in self.core]
         ys = [p[1] for p in self.core]
         r = self.radius
-        return (min(xs) - r, min(ys) - r, max(xs) + r, max(ys) + r)
+        object.__setattr__(self, "box", (min(xs) - r, min(ys) - r, max(xs) + r, max(ys) + r))
+
+    def bbox(self) -> tuple[float, float, float, float]:
+        return self.box
 
 
 # -- distances ------------------------------------------------------------------------------
@@ -64,14 +68,46 @@ def segments_cross(a: Point, b: Point, c: Point, d: Point) -> bool:
 
 
 def segment_segment(a: Point, b: Point, c: Point, d: Point) -> float:
-    if segments_cross(a, b, c, d):
-        return 0.0
-    return min(
-        point_segment(a, c, d),
-        point_segment(b, c, d),
-        point_segment(c, a, b),
-        point_segment(d, a, b),
-    )
+    """Between two segments (either may be a point): the nearest points'
+    distance, found by where each segment's parameter clamps; 0 exactly
+    where they cross."""
+    ax, ay = a
+    cx, cy = c
+    ux, uy = b[0] - ax, b[1] - ay
+    vx, vy = d[0] - cx, d[1] - cy
+    wx, wy = ax - cx, ay - cy
+    uu = ux * ux + uy * uy
+    vv = vx * vx + vy * vy
+    vw = vx * wx + vy * wy
+    if uu == 0 and vv == 0:
+        return math.hypot(wx, wy)
+    if uu == 0:
+        s, t = 0.0, min(1.0, max(0.0, vw / vv))
+    else:
+        uw = ux * wx + uy * wy
+        if vv == 0:
+            s, t = min(1.0, max(0.0, -uw / uu)), 0.0
+        else:
+            uv = ux * vx + uy * vy
+            den = uu * vv - uv * uv
+            if den > 0:
+                # Not parallel: crossing is exact zero, not a rounding of it.
+                cross1 = ux * (cy - ay) - uy * (cx - ax)
+                cross2 = ux * (d[1] - ay) - uy * (d[0] - ax)
+                if (cross1 > 0) != (cross2 > 0) and cross1 and cross2:
+                    cross3 = vx * (ay - cy) - vy * (ax - cx)
+                    cross4 = vx * (b[1] - cy) - vy * (b[0] - cx)
+                    if (cross3 > 0) != (cross4 > 0) and cross3 and cross4:
+                        return 0.0
+                s = min(1.0, max(0.0, (uv * vw - uw * vv) / den))
+            else:
+                s = 0.0
+            t = (uv * s + vw) / vv
+            if t < 0:
+                s, t = min(1.0, max(0.0, -uw / uu)), 0.0
+            elif t > 1:
+                s, t = min(1.0, max(0.0, (uv - uw) / uu)), 1.0
+    return math.hypot(wx + ux * s - vx * t, wy + uy * s - vy * t)
 
 
 def _edges(core: tuple[Point, ...]):
@@ -97,11 +133,13 @@ def inside_convex(p: Point, core: tuple[Point, ...]) -> bool:
             sign = s
         elif s != sign:
             return False
-    return True
+    return sign != 0  # a polygon with no area has no inside
 
 
 def core_distance(a: tuple[Point, ...], b: tuple[Point, ...]) -> float:
     """Between two convex cores: 0 where they meet."""
+    if len(a) <= 2 and len(b) <= 2:
+        return segment_segment(a[0], a[-1], b[0], b[-1])
     if len(a) >= 3 and any(inside_convex(p, a) for p in b[:1]):
         return 0.0
     if len(b) >= 3 and any(inside_convex(p, b) for p in a[:1]):
@@ -200,10 +238,22 @@ def pad_copper(pad: Pad, max_error: float = geometry.MAX_ERROR) -> list[Shape]:
             )
             return [Shape(_placed(pad, points))]
         radius = min(radius, min(w, h) / 2)
-        return [Shape(_placed(pad, geometry.rectangle(w - 2 * radius, h - 2 * radius)), radius)]
+        return [Shape(_placed(pad, _box(w - 2 * radius, h - 2 * radius)), radius)]
     if shape == "custom":
         return _custom(pad, max_error)
     return [Shape(_placed(pad, geometry.rectangle(w, h)))]
+
+
+def _box(w: float, h: float) -> list[tuple[float, float]]:
+    """A rectangle about the origin; a segment or a point when it has no
+    width or no height -- a rounded rectangle whose corners meet."""
+    if w <= 0 and h <= 0:
+        return [(0.0, 0.0)]
+    if h <= 0:
+        return [(-w / 2, 0.0), (w / 2, 0.0)]
+    if w <= 0:
+        return [(0.0, -h / 2), (0.0, h / 2)]
+    return geometry.rectangle(w, h)
 
 
 def _custom(pad: Pad, max_error: float) -> list[Shape]:

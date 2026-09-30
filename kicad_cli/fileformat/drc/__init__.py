@@ -24,7 +24,9 @@ from ..board import Board
 from .items import Item
 from .settings import SEVERITIES, Settings
 
-__all__ = ["CHECKED", "NOT_CHECKED", "Item", "Report", "Settings", "Violation", "check"]
+__all__ = [
+    "CHECKED", "NOT_CHECKED", "PARTIAL", "Item", "Report", "Settings", "Violation", "check",
+]  # fmt: skip
 
 NM = 1_000_000
 
@@ -61,6 +63,7 @@ class Report:
     unconnected: list[Violation]
     not_checked: dict[str, str]  # rule -> why
     ignored: list[str]  # rules the project turned off
+    partial: dict[str, str] = field(default_factory=dict)  # rule -> what it leaves out
 
 
 class Run:
@@ -72,6 +75,16 @@ class Run:
         self.found: list[Violation] = []
         self.unconnected: list[Violation] = []
         self._seen: set[tuple[str, frozenset[str], str]] = set()
+        self._joined = None
+
+    def connectivity(self):
+        """Which copper of a net touches which (`connectivity.py`), worked
+        out once for every check that asks."""
+        if self._joined is None:
+            from .. import connectivity  # noqa: PLC0415
+
+            self._joined = connectivity.connect(self.board)
+        return self._joined
 
     def on(self, rule: str) -> bool:
         """Whether a check is made: the project has not turned it off, and
@@ -109,9 +122,10 @@ def mm(value: float) -> str:
 
 
 def _checks():
-    from . import connections, courtyards, holes, local, zones  # noqa: PLC0415
+    from . import clearance, connections, courtyards, holes, local, zones  # noqa: PLC0415
 
     return (
+        clearance.check,
         local.tracks,
         local.vias,
         local.pads,
@@ -132,16 +146,19 @@ CHECKED = (
     "nonmirrored_text_on_back_layer", "text_on_edge_cuts", "hole_to_hole", "holes_co_located",
     "zones_intersect", "unconnected_items", "track_dangling", "via_dangling",
     "courtyards_overlap", "malformed_courtyard", "missing_courtyard", "pth_inside_courtyard",
-    "npth_inside_courtyard",
+    "npth_inside_courtyard", "clearance", "shorting_items", "tracks_crossing", "hole_clearance",
+    "copper_edge_clearance",
 )  # fmt: skip
+
+# Rules checked, but not everything they cover: rule -> what is left out.
+PARTIAL = {
+    "clearance": "text on copper layers is not measured yet: it needs the stroke font",
+    "shorting_items": "text on copper layers is not measured yet: it needs the stroke font",
+    "copper_edge_clearance": "text on copper layers is not measured yet: it needs the stroke font",
+}
 
 # The rules KiCad has and this does not check yet, and why.
 NOT_CHECKED = {
-    "clearance": "copper clearance is not checked yet",
-    "shorting_items": "copper clearance is not checked yet",
-    "hole_clearance": "copper clearance is not checked yet",
-    "copper_edge_clearance": "copper clearance is not checked yet",
-    "tracks_crossing": "copper clearance is not checked yet",
     "items_not_allowed": "rule areas are not checked yet",
     "invalid_outline": "the board outline is not checked yet",
     "item_on_disabled_layer": "not checked yet",
@@ -199,4 +216,5 @@ def check(path: str | Path, settings: Settings | None = None, board: Board | Non
                 "and they are not read yet"
             )
     ignored = sorted(rule for rule in settings.severities if not run.enabled(rule))
-    return Report(run.found, run.unconnected, not_checked, ignored)
+    partial = {rule: why for rule, why in PARTIAL.items() if run.on(rule)}
+    return Report(run.found, run.unconnected, not_checked, ignored, partial)
