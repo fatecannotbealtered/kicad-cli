@@ -716,10 +716,7 @@ def edit(args: dict[str, Any]) -> None:
     if not sources:
         envelope.ok({**result, "status": "NOOP", "not_checked": sch_edit.not_checked(kicad_root)})
     verified = report["verified"]
-    if not all(
-        verified[k]
-        for k in ("nets_join_the_same_pins", "nets_renamed_as_asked", "no_other_net_renamed")
-    ):
+    if not all(verified[k] for k in sch_edit.NET_CHECKS):
         envelope.fail(
             "E_CONFLICT",
             "the changes would join, split or misname nets; nothing was written",

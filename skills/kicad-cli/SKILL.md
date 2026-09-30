@@ -42,9 +42,10 @@ Schematic *creation*: `sch create` turns a JSON circuit specification into a
 "Building a board from nothing".
 
 Schematic *changes*: `sch edit` changes an existing schematic from a JSON list
-of changes -- a part's value, footprint, any field or its DNP/BOM/board flags,
-and a net's name, wherever it is drawn. It does not yet add, remove or rewire
-parts: for that, edit the specification and regenerate, or open KiCad.
+of changes -- a part's value, footprint, any field or its DNP/BOM/board flags;
+a net's name, wherever it is drawn; which net a pin is on. It does not yet add
+or remove parts: for that, edit the specification and regenerate, or open
+KiCad.
 
 **Do not use this Skill for**: authoring symbols or footprints, choosing parts,
 BOM sourcing, or SPICE.
@@ -122,7 +123,7 @@ ones apart:
 | Turn an existing schematic into a board | KiCad's own `sch export netlist`, then `board from-netlist` | this creates a *new* board; it does not update one that already has a layout |
 | Will "Update PCB from Schematic" destroy my layout? | `sch link`, then `sch sync-preview` | never `pcb drc --schematic-parity`; it matches by reference designator and is blind to broken links |
 | ERC says zero — is the schematic fine? | `sch audit` (checks the silenced rules too) | `sch link` |
-| Change a part's value, footprint or fields, or rename a net, in a schematic that exists | `sch edit` (see "Changing an existing schematic") | editing the `.kicad_sch` text by hand: a label renamed on one sheet and not its sheet pin splits the net |
+| Change a part's value, footprint or fields, rename a net, or move a pin to another net, in a schematic that exists | `sch edit` (see "Changing an existing schematic") | editing the `.kicad_sch` text by hand: a label renamed on one sheet and not its sheet pin splits the net |
 | Power nets are being routed at signal width | `board netclass --name Power --width 0.6 --nets +3V3,VIN`, then `board rewidth` | widening without a netclass: `board widen` and `board rewidth` both read the target *from* a netclass |
 | A trace is too thin | `board widen` first (in place), then `board route --mode rewidth --nets X` | `board rewidth` has no `--nets`; it works by netclass |
 | Connections are missing | `board route --mode repair` (repeat until it stops improving) | `--mode full` clears every existing track first |
@@ -241,12 +242,17 @@ built without it. Name footprints when you write the spec.
 ## Changing an existing schematic
 
 ```bash
-# changes.json -- every change in one list, made together or not at all:
+# changes.json -- made in order, each seeing the ones before it, and written
+# together or not at all:
 # {"changes": [
 #   {"op": "set", "ref": "R5", "value": "4.7k",
 #    "footprint": "Resistor_SMD:R_0603_1608Metric",
 #    "fields": {"MPN": "RC0603FR-074K7L"}, "dnp": true},
-#   {"op": "rename", "net": "/SDA", "to": "I2C_SDA"}
+#   {"op": "rename", "net": "/SDA", "to": "I2C_SDA"},
+#   {"op": "rename", "net": "Net-(U1-PA5)", "to": "LED"},
+#   {"op": "disconnect", "ref": "U1", "pin": "12"},
+#   {"op": "connect", "ref": "U1", "pin": "12", "net": "/LED"},
+#   {"op": "connect", "ref": "R9", "pin": "2", "net": "+3V3"}
 # ]}
 kicad-cli sch edit --schematic design.kicad_sch --changes changes.json --dry-run --compact
 kicad-cli sch edit --schematic design.kicad_sch --changes changes.json --confirm ct_xxx --compact
@@ -257,10 +263,23 @@ kicad-cli sch edit --schematic design.kicad_sch --changes changes.json --confirm
 - `net` is the net's name as this tool's netlist gives it -- `/SDA` for a
   local label on the root sheet, `/sub/SDA` on a child, `SDA` for a global
   label or a power net. `to` is the text drawn; the sheet's path is kept.
-- Read `changes[].also_changes` and `also_renames`: a sheet placed twice is
-  one drawing, so its other placement changes too.
-- `verified` must be all true for anything to be written. A rename that would
-  join two nets or split one is refused with `E_CONFLICT`; nothing is written.
+- A net nothing names yet (`Net-(...)`) is named by `rename`: a label goes on
+  one of its pins. Connect to it by its new name in a later change.
+- `connect` takes the net by name, by `REF.PIN` (the net that pin is on), or a
+  new name, which becomes a local label. The pin must be free: `disconnect` it
+  first. A short wire goes out from the pin, and at its end a label, a global
+  label or a power symbol like the net's others. `drawn[].overlaps` counts
+  what it had to cross when there was no clear room; above zero, look at it.
+- `disconnect` removes the wire from the pin as far as nothing else uses it;
+  what named the rest of the net on that wire moves to where it met the rest.
+  The pin gets a no-connect flag unless `"no_connect": false`.
+- Read `changes[].also_changes`, `also_renames`, `also_connects` and
+  `also_disconnects`: a sheet placed twice is one drawing, so its other
+  placement changes too. A local net is each placement's own: a pin on
+  `/B/` cannot join `/A/LOCAL`.
+- `verified` must be all true for anything to be written. A change that would
+  join or split any net it did not name is refused with `E_CONFLICT`; nothing
+  is written.
 - `erc.new` lists findings the edit adds -- a label now differing from another
   only in case, say. They do not block the write; report them.
 - The drawing is not laid out again, and a board made from the schematic is not

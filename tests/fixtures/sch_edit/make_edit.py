@@ -13,6 +13,10 @@ to see.
     /CHILD_A/LOCAL   R10.2 C10.1       a local label in the child
     /CHILD_B/LOCAL   R20.2 C20.1       the same label, the other placement
     /CHILD_B/IN      R20.1             named by the child's hierarchical label
+    Net-(R4-Pad2)    R4.2 R5.2         a wire, and nothing naming it
+
+and pins free to connect, flagged: R4.1, R5.1, and R11.1 and R11.2 (R21 in
+the other placement) in the child.
 
 To change the design: edit this and run it.
 """
@@ -205,6 +209,13 @@ root.wire(u1["1"], (111.76, 50.8))
 root.label("label", "OUT", (111.76, 50.8))
 root.no_connect(u1["2"])
 root.no_connect(u1["3"])
+r4 = root.symbol("fixture:R", {ROOT: "R4"}, (50.8, 76.2), value="1k")
+r5 = root.symbol("fixture:R", {ROOT: "R5"}, (63.5, 76.2), value="1k")
+root.no_connect(r4["1"])
+root.no_connect(r5["1"])
+root.wire(r4["2"], (50.8, 82.55))
+root.wire((50.8, 82.55), (63.5, 82.55))
+root.wire((63.5, 82.55), r5["2"])
 u1b = root.symbol("fixture:DUAL", {ROOT: "U1"}, (101.6, 76.2), unit=2, value="LM358")
 for at in u1b.values():
     root.no_connect(at)
@@ -223,6 +234,9 @@ stub(child, r10["2"], 2.54, "label", "LOCAL")
 c10 = child.symbol("fixture:R", {A: "C10", B: "C20"}, (63.5, 50.8), value="100n")
 stub(child, c10["1"], -2.54, "label", "LOCAL")
 stub(child, c10["2"], 2.54, "global_label", "EN")
+r11 = child.symbol("fixture:R", {A: "R11", B: "R21"}, (88.9, 50.8), value="10k")
+child.no_connect(r11["1"])
+child.no_connect(r11["2"])
 
 root.write(root=True)
 child.write()

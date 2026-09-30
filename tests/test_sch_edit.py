@@ -118,7 +118,9 @@ def test_a_parts_fields_and_flags_are_set_on_every_unit(design: Path) -> None:
     assert all(u.properties["MPN"] == "TL072CDR" for u in units)
     assert all(u.dnp for u in units)
     assert nets(design) == before
-    assert all(done["data"]["verified"][k] for k in ("nets_join_the_same_pins", "fields_read_back"))
+    assert all(
+        done["data"]["verified"][k] for k in ("nets_join_the_pins_asked", "fields_read_back")
+    )
 
 
 def test_only_what_changed_is_rewritten(design: Path) -> None:
@@ -155,12 +157,14 @@ def test_a_field_can_be_removed_and_a_mandatory_one_emptied(design: Path) -> Non
     assert "MPN" not in sym.properties and sym.properties["Footprint"] == ""
 
 
-def test_a_part_on_a_sheet_placed_twice_changes_in_both(design: Path) -> None:
-    """One drawing, two references: the other is named, not surprised."""
-    done = edit(design, [{"op": "set", "ref": "R10", "value": "10k"}])
+@pytest.mark.parametrize(("named", "other"), [("R10", "R20"), ("R20", "R10")])
+def test_a_part_on_a_sheet_placed_twice_changes_in_both(design: Path, named, other) -> None:
+    """One drawing, two references -- either names it -- and the other is
+    named, not surprised."""
+    done = edit(design, [{"op": "set", "ref": named, "value": "10k"}])
     assert done["ok"] is True, done
-    assert done["data"]["changes"][0]["also_changes"] == ["R20"]
-    assert symbols(design, "R20")[0].properties["Value"] == "10k"
+    assert done["data"]["changes"][0]["also_changes"] == [other]
+    assert symbols(design, other)[0].properties["Value"] == "10k"
 
 
 # -- rename ----------------------------------------------------------------------------------
@@ -225,10 +229,150 @@ def test_a_rename_that_would_join_two_nets_writes_nothing(design: Path) -> None:
     assert contents(design) == before
 
 
-def test_a_net_nothing_names_has_no_name_to_change(design: Path) -> None:
-    done = plan(design, [{"op": "rename", "net": "unconnected-(U1A-IN+-Pad3)", "to": "X"}])
-    assert done["error"]["code"] == "E_VALIDATION"
-    assert "no name to change" in done["error"]["details"]["problems"][0]["problem"]
+def test_a_net_nothing_names_is_named_by_a_label_on_its_wire(design: Path) -> None:
+    before = nets(design)
+    done = edit(design, [{"op": "rename", "net": "Net-(R4-Pad2)", "to": "BRIDGE"}])
+    assert done["ok"] is True, done
+    assert done["data"]["changes"][0]["to"] == "/BRIDGE"
+    assert nets(design)["/BRIDGE"] == before["Net-(R4-Pad2)"]
+    root = Schematic.load(design)
+    label = next(lb for lb in root.labels if lb.text == "BRIDGE")
+    # On R4's pin, along the wire that leaves it: downwards.
+    assert (label.position, label.angle) == ((50_800_000, 80_010_000), 270.0)
+
+
+# -- connect and disconnect ------------------------------------------------------------------
+
+
+def test_a_free_pin_is_connected_to_a_local_net(design: Path) -> None:
+    before = nets(design)
+    done = edit(design, [{"op": "connect", "ref": "R4", "pin": "1", "net": "/SIG"}])
+    assert done["ok"] is True, done
+    after = nets(design)
+    assert after["/SIG"] == before["/SIG"] | {"R4.1"}
+    drawn = done["data"]["changes"][0]["drawn"][0]
+    assert drawn["marker"] == "label" and drawn["overlaps"] == 0
+    # Its no-connect flag went, and nothing else moved.
+    assert not [p for p in Schematic.load(design).no_connects if p == (50_800_000, 72_390_000)]
+    assert {k: v for k, v in after.items() if k != "/SIG" and "R4-Pad1" not in k} == {
+        k: v for k, v in before.items() if k != "/SIG" and "R4-Pad1" not in k
+    }
+
+
+def test_a_pin_joins_a_power_net_by_a_symbol_like_its_others(design: Path) -> None:
+    done = edit(design, [{"op": "connect", "ref": "R5", "pin": "1", "net": "+3V3"}])
+    assert done["ok"] is True, done
+    assert nets(design)["+3V3"] == {"R3.1", "R5.1"}
+    root = Schematic.load(design)
+    powers = [s for s in root.symbols if s.properties.get("Value") == "+3V3"]
+    assert len(powers) == 2
+    new = next(s for s in powers if s.instances[0].reference != "#PWR11")
+    assert new.lib_id == "fixture:PWR"
+    assert new.instances[0].reference.startswith("#PWR")
+
+
+def test_a_pin_joins_a_global_net_and_a_new_one(design: Path) -> None:
+    done = edit(
+        design,
+        [
+            {"op": "connect", "ref": "R4", "pin": "1", "net": "EN"},
+            {"op": "connect", "ref": "R5", "pin": "1", "net": "FRESH"},
+        ],
+    )
+    assert done["ok"] is True, done
+    after = nets(design)
+    assert "R4.1" in after["EN"]
+    assert after["/FRESH"] == {"R5.1"}
+
+
+def test_a_pin_joins_the_net_another_pin_is_on(design: Path) -> None:
+    done = edit(design, [{"op": "connect", "ref": "R4", "pin": "1", "net": "R1.2"}])
+    assert done["ok"] is True, done
+    assert nets(design)["/OUT"] == {"R1.2", "U1.1", "R4.1"}
+
+
+@pytest.mark.parametrize(
+    ("named", "net", "other"),
+    [("R11", "/CHILD_A/LOCAL", "R21"), ("R21", "/CHILD_B/LOCAL", "R11")],
+)
+def test_a_pin_on_a_sheet_placed_twice_joins_in_both(design: Path, named, net, other) -> None:
+    """Each placement's pin joins that placement's net of the name."""
+    done = edit(design, [{"op": "connect", "ref": named, "pin": "1", "net": net}])
+    assert done["ok"] is True, done
+    report = done["data"]["changes"][0]
+    assert report["also_connects"] == [f"{other}.1"]
+    assert {j["pin"]: j["net"] for j in report["joined"]} == {
+        "R11.1": "/CHILD_A/LOCAL",
+        "R21.1": "/CHILD_B/LOCAL",
+    }
+    after = nets(design)
+    assert after["/CHILD_A/LOCAL"] == {"R10.2", "C10.1", "R11.1"}
+    assert after["/CHILD_B/LOCAL"] == {"R20.2", "C20.1", "R21.1"}
+
+
+def test_a_net_named_on_one_change_is_connected_to_by_the_next(design: Path) -> None:
+    done = edit(
+        design,
+        [
+            {"op": "rename", "net": "Net-(R4-Pad2)", "to": "BRIDGE"},
+            {"op": "connect", "ref": "R4", "pin": "1", "net": "/BRIDGE"},
+        ],
+    )
+    assert done["ok"] is True, done
+    assert nets(design)["/BRIDGE"] == {"R4.1", "R4.2", "R5.2"}
+
+
+def test_a_connected_pin_is_not_connected_again(design: Path) -> None:
+    done = plan(design, [{"op": "connect", "ref": "R1", "pin": "1", "net": "EN"}])
+    problem = done["error"]["details"]["problems"][0]
+    assert "already connected" in problem["problem"] and problem["net"] == "/SIG"
+
+
+def test_a_pin_is_not_joined_to_its_sheets_other_placement(design: Path) -> None:
+    """R21 is on CHILD_B: a label there names CHILD_B's net, never CHILD_A's."""
+    done = plan(design, [{"op": "connect", "ref": "R21", "pin": "1", "net": "/CHILD_A/LOCAL"}])
+    assert "not to /CHILD_A/LOCAL" in done["error"]["details"]["problems"][0]["problem"]
+
+
+def test_a_net_local_to_another_sheet_is_refused(design: Path) -> None:
+    done = plan(design, [{"op": "connect", "ref": "R4", "pin": "1", "net": "/CHILD_A/LOCAL"}])
+    assert "local to another sheet" in done["error"]["details"]["problems"][0]["problem"]
+
+
+def test_disconnecting_takes_away_only_what_the_pin_used(design: Path) -> None:
+    """R1's pin 2 reaches the label OUT by its own wire; U1's output keeps
+    the net and its name, and R1's pin gets a flag."""
+    before = nets(design)
+    done = edit(design, [{"op": "disconnect", "ref": "R1", "pin": "2"}])
+    assert done["ok"] is True, done
+    assert done["data"]["changes"][0]["removed"] == {
+        "wires": 1,
+        "labels": 1,
+        "no_connect_added": 1,
+    }
+    after = nets(design)
+    assert after["/OUT"] == before["/OUT"] - {"R1.2"}
+    assert Schematic.load(design).no_connects.count((50_800_000, 54_610_000)) == 1
+
+
+def test_a_pin_is_moved_from_one_net_to_another(design: Path) -> None:
+    done = edit(
+        design,
+        [
+            {"op": "disconnect", "ref": "R1", "pin": "2"},
+            {"op": "connect", "ref": "R1", "pin": "2", "net": "EN"},
+        ],
+    )
+    assert done["ok"] is True, done
+    after = nets(design)
+    assert "R1.2" in after["EN"] and "R1.2" not in after["/OUT"]
+
+
+def test_disconnecting_a_power_pin_takes_its_power_symbol(design: Path) -> None:
+    done = edit(design, [{"op": "disconnect", "ref": "R3", "pin": "1", "no_connect": False}])
+    assert done["ok"] is True, done
+    assert done["data"]["changes"][0]["removed"] == {"power_symbols": 1}
+    assert "+3V3" not in nets(design)
 
 
 def test_every_problem_is_refused_together(design: Path) -> None:
@@ -236,7 +380,7 @@ def test_every_problem_is_refused_together(design: Path) -> None:
     done = plan(
         design,
         [
-            {"op": "set", "ref": "R11", "value": "1k"},
+            {"op": "set", "ref": "R12", "value": "1k"},
             {"op": "set", "ref": "R1", "colour": "red"},
             {"op": "set", "ref": "#PWR", "value": "+5V"},
             {"op": "set", "ref": "R2", "fields": {"Reference": "R9"}},
@@ -246,7 +390,7 @@ def test_every_problem_is_refused_together(design: Path) -> None:
     assert done["error"]["code"] == "E_VALIDATION"
     problems = done["error"]["details"]["problems"]
     assert {p["index"] for p in problems} >= {0, 1, 3, 4}
-    assert "R1" in next(p for p in problems if p["index"] == 0)["nearest"]
+    assert "R1" in next(p for p in problems if p["index"] == 0)["nearest"]  # R12: not a part
     assert contents(design) == before
 
 
@@ -347,6 +491,11 @@ def test_kicad_reads_the_edited_design_as_this_tool_does(design: Path) -> None:
             {"op": "rename", "net": "EN", "to": "ENABLE"},
             {"op": "rename", "net": "+3V3", "to": "+3V3A"},
             {"op": "rename", "net": "/CHILD_B/IN", "to": "DATA_IN"},
+            {"op": "rename", "net": "Net-(R4-Pad2)", "to": "BRIDGE"},
+            {"op": "connect", "ref": "R4", "pin": "1", "net": "/BRIDGE"},
+            {"op": "connect", "ref": "R5", "pin": "1", "net": "+3V3A"},
+            {"op": "connect", "ref": "R11", "pin": "2", "net": "ENABLE"},
+            {"op": "disconnect", "ref": "R1", "pin": "2"},
         ],
     )
     assert done["ok"] is True, done

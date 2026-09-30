@@ -8,6 +8,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- `sch edit` connects and disconnects pins, and names nets. `connect` draws
+  a short wire out from a free pin and, at its end, what names the net there
+  -- a local label, a global label, or a power symbol copied from the net's
+  others -- where it touches nothing else and, when there is room, overlaps
+  nothing; the net is given by name, by `REF.PIN`, or as a new one.
+  `disconnect` takes away the wire from the pin as far as it served the pin
+  alone, and what named only it; where the wire joined the rest, what named
+  the rest moves there, so the rest keeps its name. `rename` of a net
+  nothing names puts a label on one of its pins. Changes are made in order,
+  each on the design as the ones before it left it, and the read-back holds
+  the result to what was asked: every pin on the net it was moved to, every
+  other net as it was. On all 35 demos, 138 disconnections and 60
+  connections read back as asked; 17 were refused, each saying why -- no
+  clear way out of a crowded pin, a net local to another sheet.
 - `sch edit` changes an existing schematic from a JSON list of changes, in
   this process: `set` gives a part's fields and flags -- value, footprint,
   any field, DNP, BOM, board, simulation -- on every unit of it; `rename`
