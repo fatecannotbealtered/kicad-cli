@@ -201,6 +201,17 @@ exception is a mistake that destroys the owner's work: pcbnew's Save reset an
 existing `.kicad_pro` to KiCad's defaults, and `board from-netlist` leaves it
 alone.
 
+The commands still on pcbnew -- `board route`, `stitch`, `widen` and `pour`
+-- refill the board's zones before they save it, so the next thing they need
+is a zone filler, and it is in: `kicad_cli/fileformat/zonefill.py`, on
+polygon operations written here (`polygons.py`, whole nanometres, no library
+behind them). On KiCad's demos its fills differ from KiCad's own by a tenth
+of a percent of their area, in as many pieces, and KiCad's DRC finds the same
+in them as in KiCad's fills (`tests/test_fileformat_zonefill.py` holds it to
+a board of one question per zone that KiCad filled). Text on copper is cut
+out by a box round it until the stroke font is in. It is slow on a big board
+-- a minute or more where KiCad takes seconds.
+
 ### Carried over from the payloads, to fix after the port
 
 Found while porting `board audit`, kept so the port stays identical:

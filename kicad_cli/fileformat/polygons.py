@@ -144,31 +144,42 @@ def _meet(p1: Point, p2: Point, q1: Point, q2: Point) -> list[Point]:
     return [(x, y)]
 
 
-def _near_pairs(segments) -> set[tuple[int, int]]:
+def _near_pairs(segments) -> list[tuple[int, int]]:
     """Pairs of edges whose boxes meet, found by a grid of cells about as
-    big as the edges."""
-    if len(segments) < 2:
-        return set()
-    sizes = sorted(max(abs(b[0] - a[0]), abs(b[1] - a[1])) for a, b, _ in segments)
-    cell = max(1, sizes[len(sizes) // 2] * 2)
+    big as the edges: each pair is looked at in the one cell holding the
+    lower corner of where their boxes overlap."""
+    n = len(segments)
+    if n < 2:
+        return []
+    x1 = [min(a[0], b[0]) for a, b, _ in segments]
+    x2 = [max(a[0], b[0]) for a, b, _ in segments]
+    y1 = [min(a[1], b[1]) for a, b, _ in segments]
+    y2 = [max(a[1], b[1]) for a, b, _ in segments]
+    sizes = sorted(max(x2[i] - x1[i], y2[i] - y1[i]) for i in range(n))
+    cell = max(1, sizes[n // 2] * 2)
     cells: dict[tuple[int, int], list[int]] = defaultdict(list)
-    for i, (a, b, _) in enumerate(segments):
-        for cx in range(min(a[0], b[0]) // cell, max(a[0], b[0]) // cell + 1):
-            for cy in range(min(a[1], b[1]) // cell, max(a[1], b[1]) // cell + 1):
+    for i in range(n):
+        for cx in range(x1[i] // cell, x2[i] // cell + 1):
+            for cy in range(y1[i] // cell, y2[i] // cell + 1):
                 cells[(cx, cy)].append(i)
-    pairs: set[tuple[int, int]] = set()
-    for members in cells.values():
-        for x in range(len(members)):
-            i = members[x]
-            ai, bi, _ = segments[i]
-            for y in range(x + 1, len(members)):
-                j = members[y]
-                aj, bj, _ = segments[j]
-                if (max(ai[0], bi[0]) < min(aj[0], bj[0]) or max(aj[0], bj[0]) < min(ai[0], bi[0])
-                        or max(ai[1], bi[1]) < min(aj[1], bj[1])
-                        or max(aj[1], bj[1]) < min(ai[1], bi[1])):  # fmt: skip
+    pairs = []
+    for (cx, cy), members in cells.items():
+        count = len(members)
+        if count < 2:
+            continue
+        for k in range(count):
+            i = members[k]
+            xi1, xi2, yi1, yi2 = x1[i], x2[i], y1[i], y2[i]
+            for m in range(k + 1, count):
+                j = members[m]
+                lo_x = xi1 if xi1 > x1[j] else x1[j]
+                if lo_x > (xi2 if xi2 < x2[j] else x2[j]):
                     continue
-                pairs.add((i, j) if i < j else (j, i))
+                lo_y = yi1 if yi1 > y1[j] else y1[j]
+                if lo_y > (yi2 if yi2 < y2[j] else y2[j]):
+                    continue
+                if lo_x // cell == cx and lo_y // cell == cy:
+                    pairs.append((i, j))
     return pairs
 
 
@@ -181,6 +192,20 @@ def _cut(segments: list[tuple[Point, Point, int]]) -> list[tuple[Point, Point, i
         for i, j in _near_pairs(segments):
             a, b, _ = segments[i]
             c, d, _ = segments[j]
+            # Both ends of one strictly on one side of the other: they do not
+            # meet. Most pairs a grid finds end here.
+            ux, uy = d[0] - c[0], d[1] - c[1]
+            d1 = ux * (a[1] - c[1]) - uy * (a[0] - c[0])
+            d2 = ux * (b[1] - c[1]) - uy * (b[0] - c[0])
+            if (d1 > 0 and d2 > 0) or (d1 < 0 and d2 < 0):
+                continue
+            vx, vy = b[0] - a[0], b[1] - a[1]
+            d3 = vx * (c[1] - a[1]) - vy * (c[0] - a[0])
+            d4 = vx * (d[1] - a[1]) - vy * (d[0] - a[0])
+            if (d3 > 0 and d4 > 0) or (d3 < 0 and d4 < 0):
+                continue
+            if (a == c or a == d or b == c or b == d) and (d1 or d2) and (d3 or d4):
+                continue  # sharing an end and not on one line: that end is all
             for p in _meet(a, b, c, d):
                 if p != a and p != b:
                     cuts[i].add(p)
@@ -518,10 +543,13 @@ def _in_triangle(a, b, c, q) -> bool:
 # -- growing and shrinking ------------------------------------------------------------------
 
 
-def offset(rings: list[Ring], delta: float, max_error: float = geometry.MAX_ERROR) -> list[Ring]:
+def offset(rings: list[Ring], delta: float, max_error: float = geometry.MAX_ERROR,
+           outside: bool = False) -> list[Ring]:  # fmt: skip
     """The rings grown by `delta` (shrunk where it is negative), corners
     rounded, each arc in chords none of which strays more than max_error
-    inside it."""
+    from it: inside the arc -- the corner cut -- or, with `outside`, outside
+    it. Grown with arcs inside, or shrunk with arcs outside, a shape never
+    takes in more than it should; the other way round, never less."""
     if delta == 0:
         return union(rings)
     raw = []
@@ -529,11 +557,11 @@ def offset(rings: list[Ring], delta: float, max_error: float = geometry.MAX_ERRO
         ring = clean(ring)
         if not ring:
             continue
-        raw.append(_offset_ring(ring, delta, max_error))
+        raw.append(_offset_ring(ring, delta, max_error, outside))
     return union(raw, POSITIVE)
 
 
-def _offset_ring(ring: Ring, delta: float, max_error: float) -> Ring:
+def _offset_ring(ring: Ring, delta: float, max_error: float, outside: bool = False) -> Ring:
     """One ring's edges moved out by delta -- to their right, which is out of
     a counter-clockwise ring -- and joined round its corners: an arc where
     the ring turns away from the side moved to, the corner itself where it
@@ -565,9 +593,18 @@ def _offset_ring(ring: Ring, delta: float, max_error: float) -> Ring:
             while sweep < -math.pi:
                 sweep += 2 * math.pi
             steps = geometry.segments_for(abs(delta), math.degrees(abs(sweep)), max_error)
-            for k in range(1, steps):
-                t = a1 + sweep * k / steps
-                out.append(_snap((here[0] + math.cos(t) * delta, here[1] + math.sin(t) * delta)))
+            if outside:
+                # Corners just outside the arc, their chords touching it.
+                far = delta / math.cos(sweep / steps / 2)
+                for k in range(steps):
+                    t = a1 + sweep * (k + 0.5) / steps
+                    out.append(_snap((here[0] + math.cos(t) * far, here[1] + math.sin(t) * far)))
+            else:
+                for k in range(1, steps):
+                    t = a1 + sweep * k / steps
+                    out.append(
+                        _snap((here[0] + math.cos(t) * delta, here[1] + math.sin(t) * delta))
+                    )
         else:
             out.append(here)
         out.append(_snap(end))
