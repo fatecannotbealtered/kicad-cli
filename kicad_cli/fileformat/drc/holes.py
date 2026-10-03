@@ -13,7 +13,8 @@ from __future__ import annotations
 from collections import defaultdict
 
 from . import items as describe
-from . import mm
+from . import mm, subjects
+from . import rules as rules_module
 from .shapes import Shape, distance, hole, via_hole
 
 CELL = 2_000_000
@@ -27,9 +28,9 @@ def _holes(board):
                 continue
             shape = hole(pad)
             if shape is not None and pad.drill is not None and min(pad.drill) > 0:
-                out.append((shape, pad.position, None, describe.pad(board, fp, pad)))
+                out.append((shape, pad.position, None, describe.pad(board, fp, pad), (fp, pad)))
     for via in board.vias:
-        out.append((via_hole(via), via.position, set(via.layers), describe.via(board, via)))
+        out.append((via_hole(via), via.position, set(via.layers), describe.via(board, via), via))
     return out
 
 
@@ -37,10 +38,11 @@ def check(run) -> None:
     if not (run.on("hole_to_hole") or run.on("holes_co_located")):
         return
     least = run.settings.nm("min_hole_to_hole")
+    reach = max(least, rules_module.largest(run.settings.dru, "hole_to_hole"))
     holes = _holes(run.board)
     grid: dict[tuple[int, int], list[int]] = defaultdict(list)
     for index, (shape, *_rest) in enumerate(holes):
-        x1, y1, x2, y2 = _grown(shape, least)
+        x1, y1, x2, y2 = _grown(shape, reach)
         for cx in range(int(x1 // CELL), int(x2 // CELL) + 1):
             for cy in range(int(y1 // CELL), int(y2 // CELL) + 1):
                 grid[(cx, cy)].append(index)
@@ -59,19 +61,32 @@ def _grown(shape: Shape, by: int):
     return x1 - by, y1 - by, x2 + by, y2 + by
 
 
+def _subject(run, owner):
+    if isinstance(owner, tuple):
+        return subjects.of_pad(run, *owner)
+    return subjects.of_via(run, owner)
+
+
 def _pair(run, a, b, least: int) -> None:
-    shape_a, centre_a, layers_a, item_a = a
-    shape_b, centre_b, layers_b, item_b = b
+    shape_a, centre_a, layers_a, item_a, owner_a = a
+    shape_b, centre_b, layers_b, item_b, owner_b = b
     if layers_a is not None and layers_b is not None and not layers_a & layers_b:
         return
     if centre_a == centre_b:
         run.report("holes_co_located", "Drilled holes co-located", [item_a, item_b])
         return
     gap = distance(shape_a, shape_b)
-    if gap < least:
+    value, who, severity = least, "board setup constraints", None
+    rules = run.settings.dru
+    if rules is not None and rules.rules:
+        value, who, severity = rules_module.least(
+            rules, "hole_to_hole", _subject(run, owner_a), _subject(run, owner_b), None, least,
+        )  # fmt: skip
+    if gap < value:
         run.report(
             "hole_to_hole",
-            f"Drilled hole too close to other hole (board setup constraints min {mm(least)}; "
+            f"Drilled hole too close to other hole ({who} min {mm(value)}; "
             f"actual {mm(round(gap))})",
             [item_a, item_b],
+            severity,
         )

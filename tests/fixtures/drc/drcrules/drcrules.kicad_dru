@@ -1,0 +1,109 @@
+(version 1)
+(rule "wide_min"
+	(condition "A.NetClass == 'Wide'")
+	(constraint track_width (min 0.3mm)))
+(rule "wide_max"
+	(condition "A.NetName == 'WC'")
+	(constraint track_width (max 0.4mm)))
+(rule "thin"
+	(condition "A.NetClass == 'Thin'")
+	(constraint track_width (min 0.1mm)))
+(rule "sig_first"
+	(condition "A.NetName == 'S*'")
+	(constraint track_width (min 0.3mm)))
+(rule "sig_second"
+	(condition "A.NetName == 'S*'")
+	(constraint track_width (min 0.2mm)))
+(rule "inner_only"
+	(layer inner)
+	(condition "A.NetName == 'I*'")
+	(constraint track_width (min 0.3mm)))
+(rule "mx_max"
+	(condition "A.NetName == 'MX'")
+	(constraint track_width (max 0.4mm)))
+(rule "wide_default"
+	(condition "A.NetClass == 'Wide' && B.NetClass == 'Default'")
+	(constraint clearance (min 0.5mm)))
+(rule "loose"
+	(condition "A.intersectsArea('loose')")
+	(constraint clearance (min 0.1mm)))
+(rule "not_usb"
+	(condition "(A.NetName == 'USBK6' || A.NetName == 'XK7') && A.NetName != '*USB*'")
+	(constraint clearance (min 0.5mm)))
+(rule "low"
+	(condition "A.NetName == 'L*'")
+	(constraint clearance (min 0.12mm)))
+(rule "z_zone"
+	(condition "A.NetName == 'Z*' && B.Type == 'Zone' && A.Layer == B.Layer")
+	(constraint clearance (min 1mm)))
+(rule "zone_a"
+	(condition "A.NetName == 'ZAt' && B.Type == 'Zone'")
+	(constraint clearance (min 0.3mm)))
+(rule "zone_b"
+	(condition "A.NetName == 'ZBt' && B.Type == 'Zone'")
+	(constraint clearance (min 0.6mm)))
+(rule "pair"
+	(condition "A.inDiffPair('DP_')")
+	(constraint clearance (min 0.1mm)))
+(rule "vias_only"
+	(condition "A.Type == 'Via' && A.NetName == 'G*'")
+	(constraint clearance (min 0.5mm)))
+(rule "arcs"
+	(condition "A.Type == 'Track' && A.NetName == 'AR'")
+	(constraint track_width (min 0.3mm)))
+(rule "upper"
+	(condition "A.NetName == 'CASE'")
+	(constraint track_width (min 0.3mm)))
+(rule "wide_class"
+	(condition "A.NetName == 'WH' && A.NetClass == 'Wide'")
+	(constraint track_width (min 0.3mm)))
+(rule "composite_class"
+	(condition "A.NetName == 'WHb' && A.NetClass == 'Wide,Hot'")
+	(constraint track_width (min 0.3mm)))
+(rule "hot_class"
+	(condition "A.NetName == 'WH1' && A.NetClass == 'Hot'")
+	(constraint track_width (min 0.3mm)))
+(rule "has_hot"
+	(condition "A.NetName == 'WHAS' && A.hasNetclass('Hot')")
+	(constraint track_width (min 0.3mm)))
+(rule "via_a"
+	(condition "A.NetName == 'VA'")
+	(constraint via_diameter (min 0.5mm))
+	(constraint hole_size (min 0.3mm)))
+(rule "via_b"
+	(condition "A.NetName == 'VB'")
+	(constraint via_diameter (max 0.8mm)))
+(rule "via_c"
+	(condition "A.NetName == 'VC'")
+	(constraint annular_width (max 0.15mm)))
+(rule "via_d"
+	(layer inner)
+	(condition "A.NetName == 'VD'")
+	(constraint via_diameter (min 0.6mm)))
+(rule "via_e"
+	(layer outer)
+	(condition "A.NetName == 'VE'")
+	(constraint via_diameter (min 0.6mm)))
+(rule "pad_hole"
+	(condition "A.Type == 'Pad' && A.NetName == 'PH'")
+	(constraint hole_size (min 0.6mm)))
+(rule "npth_far"
+	(condition "A.NetName == 'HAt' || B.NetName == 'HAt'")
+	(constraint hole_clearance (min 0.5mm)))
+(rule "holes_far"
+	(condition "A.NetName == 'VV*'")
+	(constraint hole_to_hole (min 1mm)))
+(rule "edge_far"
+	(condition "A.NetName == 'EA'")
+	(constraint edge_clearance (min 1mm)))
+(rule "edge_near"
+	(condition "A.NetName == 'EB'")
+	(constraint edge_clearance (min 0.3mm)))
+(rule "as_warning"
+	(condition "A.NetName == 'SV'")
+	(constraint track_width (min 0.3mm))
+	(severity warning))
+(rule "as_ignore"
+	(condition "A.NetName == 'SI'")
+	(constraint track_width (min 0.3mm))
+	(severity ignore))
