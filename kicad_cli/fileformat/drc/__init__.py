@@ -64,6 +64,8 @@ class Report:
     not_checked: dict[str, str]  # rule -> why
     ignored: list[str]  # rules the project turned off
     partial: dict[str, str] = field(default_factory=dict)  # rule -> what it leaves out
+    # the project's custom rules: its .kicad_dru, whether it is read, why not
+    custom_rules: dict = field(default_factory=dict)
 
 
 class Run:
@@ -107,16 +109,23 @@ class Run:
         return self.settings.severities.get(rule, SEVERITIES.get(rule, "error")) != "ignore"
 
     def report(
-        self, rule: str, message: str, items: list[Item], severity: str | None = None
+        self,
+        rule: str,
+        message: str,
+        items: list[Item],
+        severity: str | None = None,
+        once: bool = True,
     ) -> None:
         """One violation, once: KiCad names some twice, from two of its
-        checks; this names each once. `severity` is the custom rule's own,
-        where the rule deciding it gives one -- "ignore" reports nothing."""
+        checks; this names each once -- but where two things are alike in
+        all KiCad says of them (two islands of one zone), `once=False`.
+        `severity` is the custom rule's own, where the rule deciding it
+        gives one -- "ignore" reports nothing."""
         if not self.on(rule) or severity == "ignore":
             return
         uuids = frozenset(i.uuid for i in items if i.uuid)
         key = (rule, uuids, message)
-        if key in self._seen:
+        if once and key in self._seen:
             return
         self._seen.add(key)
         comment = self.settings.exclusions.get((rule, uuids))
@@ -144,11 +153,14 @@ def _checks():
         clearance,
         connections,
         courtyards,
+        fills,
         holes,
         library,
         local,
         mask,
         outline,
+        pairs,
+        ruled,
         zones,
     )  # fmt: skip
 
@@ -168,6 +180,9 @@ def _checks():
         connections.check,
         courtyards.check,
         library.check,
+        ruled.check,
+        fills.check,
+        pairs.check,
     )
 
 
@@ -183,6 +198,8 @@ CHECKED = (
     "copper_edge_clearance", "items_not_allowed", "invalid_outline", "item_on_disabled_layer",
     "through_hole_pad_without_hole", "unresolved_variable", "generic_error", "generic_warning",
     "solder_mask_bridge", "lib_footprint_issues", "lib_footprint_mismatch",
+    "track_segment_length", "too_many_vias", "track_angle", "isolated_copper", "starved_thermal",
+    "diff_pair_gap_out_of_range",
 )  # fmt: skip
 
 # Checked only when KiCad's installation is known: the library tables name
@@ -199,20 +216,15 @@ PARTIAL = {
 
 # The rules KiCad has and this does not check yet, and why.
 NOT_CHECKED = {
-    "isolated_copper": "zone fills are not checked yet",
-    "starved_thermal": "zone fills are not checked yet",
-    "connection_width": "zone fills are not checked yet",
-    "copper_sliver": "zone fills are not checked yet",
+    "connection_width": "the narrowest width of copper is not measured yet",
+    "copper_sliver": "slivers of copper are not measured yet",
     "silk_overlap": "silkscreen needs the stroke font, which this tool does not have yet",
     "silk_over_copper": "silkscreen needs the stroke font, which this tool does not have yet",
     "silk_edge_clearance": "silkscreen needs the stroke font, which this tool does not have yet",
     "length_out_of_range": "the lengths of nets are not measured yet",
+    "diff_pair_uncoupled_length_too_long": "the coupled length of a pair's route is not "
+    "measured yet",
     "skew_out_of_range": "the lengths of nets are not measured yet",
-    "diff_pair_gap_out_of_range": "differential pairs' coupling is not measured yet",
-    "diff_pair_uncoupled_length_too_long": "differential pairs' coupling is not measured yet",
-    "too_many_vias": "vias are not counted net by net yet",
-    "track_angle": "track angles are not checked yet",
-    "track_segment_length": "track segment lengths are not checked yet",
     "creepage": "creepage is not measured yet",
     "track_on_post_machined_layer": "not checked yet",
     "track_not_centered_on_via": "not checked yet",
@@ -261,4 +273,10 @@ def check(
             not_checked[rule] = why
     ignored = sorted(rule for rule in settings.severities if not run.enabled(rule))
     partial = {rule: why for rule, why in PARTIAL.items() if run.on(rule)}
-    return Report(run.found, run.unconnected, not_checked, ignored, partial)
+    dru = settings.dru
+    custom = {}
+    if dru is not None and dru.source is not None:
+        custom = {"file": str(dru.source), "read": not dru.unreadable, "rules": len(dru.rules)}
+        if dru.unreadable:
+            custom["why"] = f"KiCad does not read it, and ignores every rule in it: {dru.why}"
+    return Report(run.found, run.unconnected, not_checked, ignored, partial, custom)

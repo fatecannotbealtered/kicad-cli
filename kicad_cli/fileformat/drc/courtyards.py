@@ -12,7 +12,10 @@ closed already. Measured on `tests/fixtures/drc/drc1`:
 - a plated or unplated hole of one footprint inside another's courtyard,
   on either side, is reported as that;
 - a footprint with no courtyard at all is missing one, unless it says a
-  courtyard is not required of it.
+  courtyard is not required of it;
+- a custom rule's courtyard clearance holds two courtyards apart, their gap
+  measured 10 um wider than it is -- the same 10 um an overlap must reach
+  (`tests/fixtures/drc/drcrules`).
 """
 
 from __future__ import annotations
@@ -24,6 +27,9 @@ from .. import geometry
 from ..board import Footprint, shape_points
 from ..connectivity import Polygon
 from . import items as describe
+from . import mm, subjects
+from . import rules as rules_module
+from .clearance import fills_distance
 from .shapes import hole, segment_segment, triangles
 
 CHAIN = 1_000  # nm: how near two ends must be to join
@@ -216,17 +222,54 @@ def check(run) -> None:
             )
     boxes = [_box(yard) for yard in yards]
     if run.on("courtyards_overlap"):
-        for i, j in _pairs(boxes):
+        rules = run.settings.dru
+        ruled = rules is not None and any(
+            "courtyard_clearance" in rule.constraints for rule in rules.rules
+        )
+        reach = rules_module.largest(rules, "courtyard_clearance") if ruled else 0
+        grown = [_widened(box, reach) for box in boxes]
+        for i, j in _pairs(grown):
             a, b = yards[i], yards[j]
+            items = [describe.footprint(a.fp), describe.footprint(b.fp)]
+            if ruled and _held_apart(run, rules, a, b, reach, items):
+                continue
             if any(
                 overlap(p, q) for side in SIDES for p in a.polygons[side] for q in b.polygons[side]
             ):
-                run.report(
-                    "courtyards_overlap", "Courtyards overlap",
-                    [describe.footprint(a.fp), describe.footprint(b.fp)],
-                )  # fmt: skip
+                run.report("courtyards_overlap", "Courtyards overlap", items)
     if run.on("pth_inside_courtyard") or run.on("npth_inside_courtyard"):
         _holes_inside(run, yards, boxes)
+
+
+def _widened(box, by: int):
+    return None if box is None else (box[0] - by, box[1] - by, box[2] + by, box[3] + by)
+
+
+def _held_apart(run, rules, a: Courtyard, b: Courtyard, reach: int, items) -> bool:
+    """A custom rule's courtyard clearance between two footprints: whether
+    one decides the pair, reporting them when they are too near."""
+    found = rules.find(
+        "courtyard_clearance", subjects.of_footprint(run, a.fp), subjects.of_footprint(run, b.fp),
+        bound="min",
+    )  # fmt: skip
+    if found is None:
+        return False
+    rule, constraint = found
+    gaps = [
+        fills_distance(p, q, reach)
+        for side in SIDES for p in a.polygons[side] for q in b.polygons[side]
+    ]  # fmt: skip
+    if not gaps:
+        return True
+    actual = round(min(gaps)) + OVERLAP
+    if actual < constraint.min:
+        run.report(
+            "courtyards_overlap",
+            f"Courtyards overlap (rule '{rule.name}' clearance {mm(constraint.min)}; "
+            f"actual {mm(actual)})",
+            items, rule.severity,
+        )  # fmt: skip
+    return True
 
 
 def _cells(box):
