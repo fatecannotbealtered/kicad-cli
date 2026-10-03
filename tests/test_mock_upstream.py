@@ -127,6 +127,27 @@ def test_the_native_writes_run_without_kicad(tmp_path: Path) -> None:
     assert fake_upstream.attempts(tmp_path / "fake") == 0, "a write started KiCad after all"
 
 
+OUTLINED = ONE_PART.replace(
+    '\t(footprint "R:R"',
+    "\t(gr_rect (start 0 0) (end 20 20) (stroke (width 0.1) (type solid)) (fill no)"
+    ' (layer "Edge.Cuts"))\n\t(footprint "R:R"',
+).replace('(layers "F.Cu"))', '(layers "F.Cu") (net "GND"))')
+
+
+def test_board_pour_needs_no_kicad(tmp_path: Path) -> None:
+    """`board pour` fills the zone with this tool's own filler, both of
+    KiCad's boundaries replaced by stubs that fail when called."""
+    board = tmp_path / "one.kicad_pcb"
+    board.write_text(OUTLINED, encoding="utf-8")
+    env = fake_upstream.env(tmp_path / "fake", "launch_fail")
+    argv = ["board", "pour", "--board", str(board), "--net", "GND", "--layer", "F.Cu"]
+    poured = _confirmed(argv, env)
+    assert code_of(poured) == "OK", poured
+    assert poured["data"]["filled_mm2"] > 300
+    assert "(filled_polygon" in board.read_text(encoding="utf-8")
+    assert fake_upstream.attempts(tmp_path / "fake") == 0, "pour started KiCad after all"
+
+
 def test_board_parity_needs_no_kicad(tmp_path: Path) -> None:
     """Both sides are read here now: the board from its file, the schematic
     through this tool's own netlist. Both of KiCad's boundaries are stubs that

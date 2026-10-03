@@ -186,7 +186,7 @@ pcbnew net by net by `tests/test_fileformat_connectivity.py`. Not yet built:
 the schematic side of the file model.
 
 Step 3 has begun: `board audit`, `board plane`, `board parity`, `board move`,
-`board netclass` and `board from-netlist` run in this process
+`board netclass`, `board pour` and `board from-netlist` run in this process
 (`kicad_cli/native/`), output identical to the pcbnew versions -- on every
 demo board, and for `board from-netlist` on a netlist of every kind of part a
 footprint library holds. `board from-netlist` reads KiCad's footprint
@@ -201,16 +201,19 @@ exception is a mistake that destroys the owner's work: pcbnew's Save reset an
 existing `.kicad_pro` to KiCad's defaults, and `board from-netlist` leaves it
 alone.
 
-The commands still on pcbnew -- `board route`, `stitch`, `widen` and `pour`
--- refill the board's zones before they save it, so the next thing they need
-is a zone filler, and it is in: `kicad_cli/fileformat/zonefill.py`, on
+The commands that refill the board's zones before they save it -- `board
+route`, `stitch`, `widen` and `pour` -- needed a zone filler before they
+could leave pcbnew, and it is in: `kicad_cli/fileformat/zonefill.py`, on
 polygon operations written here (`polygons.py`, whole nanometres, no library
 behind them). On KiCad's demos its fills differ from KiCad's own by a tenth
 of a percent of their area, in as many pieces, and KiCad's DRC finds the same
 in them as in KiCad's fills (`tests/test_fileformat_zonefill.py` holds it to
 a board of one question per zone that KiCad filled). Text on copper is cut
 out by a box round it until the stroke font is in. It is slow on a big board
--- a minute or more where KiCad takes seconds.
+-- a minute or more where KiCad takes seconds. `board pour` fills with it:
+its report is the payload's field for field but the filled area, a tenth of
+a percent from pcbnew's -- less where text on the copper is cut out by its
+box (`tests/test_native_pour.py`).
 
 ### Carried over from the payloads, to fix after the port
 

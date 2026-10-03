@@ -504,8 +504,9 @@ class Filler:
         return out
 
     def _zones(self, zone: Zone, settings: Settings, layer: str) -> list[Ring]:
-        """Keep-outs on the layer, and the fills of other nets' zones of a
-        higher priority, grown by the clearance."""
+        """Keep-outs on the layer; the fills of other nets' zones filled
+        before it (`_above`), grown by the clearance; and the outlines of its
+        own net's zones filled before it."""
         out: list[Ring] = []
         for other in self.board.zones:
             if other is zone or layer not in other.layers:
@@ -516,11 +517,16 @@ class Filler:
                 if pour is not None and pour.atom(1) == "not_allowed":
                     out += [ring for ring in other.outlines if len(ring) >= 3]
                 continue
-            if other.priority <= zone.priority or (other.net and other.net == zone.net):
+            if not _above(other, zone):
+                continue
+            if other.net == zone.net:
+                # One of its own net and higher: kept out of its outline.
+                out += [ring for ring in other.outlines if len(ring) >= 3]
                 continue
             theirs = self.fill(other).layers.get(layer, [])
             if theirs:
-                grow = self.clearance(zone, settings, other.net) + MARGIN
+                # Its fill's arcs are chords inside them: an error more.
+                grow = self.clearance(zone, settings, other.net) + MARGIN + self.max_error
                 out += polygons.offset(theirs, grow, self.max_error, outside=True)
         return out
 
@@ -609,6 +615,17 @@ def _text_box(node, text: str, fp) -> Ring | None:
         placed = geometry.place(local, x, y, angle)
         return placed
     return geometry.place(local, x, y, angle)
+
+
+def _above(other: Zone, zone: Zone) -> bool:
+    """Whether a zone is filled before another and kept out of by it: of a
+    higher priority, or of the same one and a larger uuid (as KiCad decides
+    between two of one priority, measured)."""
+    if other.priority != zone.priority:
+        return other.priority > zone.priority
+    from .drc.items import uuid_of  # noqa: PLC0415
+
+    return uuid_of(other.node) > uuid_of(zone.node)
 
 
 def _own(fp: Footprint, pad: Pad) -> int | None:

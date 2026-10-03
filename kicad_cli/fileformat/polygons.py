@@ -184,16 +184,21 @@ def _near_pairs(segments) -> list[tuple[int, int]]:
 
 
 def _cut(segments: list[tuple[Point, Point, int]]) -> list[tuple[Point, Point, int]]:
-    """The edges cut wherever another meets them, until none crosses another
-    but at an end. A cut rounded to the nanometre can land an edge on a
-    third: each round finds what the last one made."""
-    for _ in range(16):
-        cuts: dict[int, set[Point]] = defaultdict(set)
+    """The edges cut wherever another meets them, by snap rounding: each
+    point where two meet, rounded to the nanometre, and each end, is a hot
+    pixel -- the square of a nanometre round it -- and an edge passing
+    through a hot pixel is bent through its centre. Edges so bent meet only
+    at their corners (Hobby, 1999); where rounding still left a crossing,
+    its point is made hot too and the edges bent again."""
+    hot: set[Point] = set()
+    for a, b, _ in segments:
+        hot.add(a)
+        hot.add(b)
+    for _ in range(8):
+        found = False
         for i, j in _near_pairs(segments):
             a, b, _ = segments[i]
             c, d, _ = segments[j]
-            # Both ends of one strictly on one side of the other: they do not
-            # meet. Most pairs a grid finds end here.
             ux, uy = d[0] - c[0], d[1] - c[1]
             d1 = ux * (a[1] - c[1]) - uy * (a[0] - c[0])
             d2 = ux * (b[1] - c[1]) - uy * (b[0] - c[0])
@@ -206,27 +211,62 @@ def _cut(segments: list[tuple[Point, Point, int]]) -> list[tuple[Point, Point, i
                 continue
             if (a == c or a == d or b == c or b == d) and (d1 or d2) and (d3 or d4):
                 continue  # sharing an end and not on one line: that end is all
-            for p in _meet(a, b, c, d):
-                if p != a and p != b:
-                    cuts[i].add(p)
-                if p != c and p != d:
-                    cuts[j].add(p)
-        if not cuts:
+            for point in _meet(a, b, c, d):
+                if point not in hot:
+                    hot.add(point)
+                    found = True
+        segments = _bend(segments, hot)
+        if not found:
             return segments
-        out = []
-        for i, (a, b, op) in enumerate(segments):
-            points = cuts.get(i)
-            if not points:
-                out.append((a, b, op))
-                continue
-            dx, dy = b[0] - a[0], b[1] - a[1]
-            along = sorted(points, key=lambda p: (p[0] - a[0]) * dx + (p[1] - a[1]) * dy)
-            chain = [a, *along, b]
-            for k in range(len(chain) - 1):
-                if chain[k] != chain[k + 1]:
-                    out.append((chain[k], chain[k + 1], op))
-        segments = out
-    raise ArithmeticError("edges still crossing after cutting them sixteen times")
+    raise ArithmeticError("edges still crossing after snapping them eight times")
+
+
+def _bend(segments, hot: set[Point]) -> list[tuple[Point, Point, int]]:
+    """Each edge bent through the centre of every hot pixel it passes
+    through, in order along it."""
+    if not segments:
+        return segments
+    sizes = sorted(max(abs(b[0] - a[0]), abs(b[1] - a[1])) for a, b, _ in segments)
+    cell = max(2, sizes[len(sizes) // 2] * 2)
+    grid: dict[tuple[int, int], list[Point]] = defaultdict(list)
+    for p in hot:
+        grid[(p[0] // cell, p[1] // cell)].append(p)
+    out = []
+    for a, b, op in segments:
+        x1, x2 = min(a[0], b[0]), max(a[0], b[0])
+        y1, y2 = min(a[1], b[1]), max(a[1], b[1])
+        dx, dy = b[0] - a[0], b[1] - a[1]
+        through = []
+        for cx in range((x1 - 1) // cell, (x2 + 1) // cell + 1):
+            for cy in range((y1 - 1) // cell, (y2 + 1) // cell + 1):
+                for p in grid.get((cx, cy), ()):
+                    px, py = p
+                    if px < x1 - 1 or px > x2 + 1 or py < y1 - 1 or py > y2 + 1:
+                        continue
+                    if p == a or p == b:
+                        continue
+                    # Does the edge meet the square (px +- 1/2, py +- 1/2)? Its
+                    # corners, doubled to stay whole, not all on one side.
+                    if 2 * px + 1 < 2 * x1 or 2 * px - 1 > 2 * x2:
+                        continue
+                    if 2 * py + 1 < 2 * y1 or 2 * py - 1 > 2 * y2:
+                        continue
+                    sides = [
+                        dx * (2 * py + ey - 2 * a[1]) - dy * (2 * px + ex - 2 * a[0])
+                        for ex in (-1, 1) for ey in (-1, 1)
+                    ]  # fmt: skip
+                    if min(sides) > 0 or max(sides) < 0:
+                        continue
+                    through.append(p)
+        if not through:
+            out.append((a, b, op))
+            continue
+        through.sort(key=lambda p: (p[0] - a[0]) * dx + (p[1] - a[1]) * dy)
+        chain = [a, *through, b]
+        for k in range(len(chain) - 1):
+            if chain[k] != chain[k + 1]:
+                out.append((chain[k], chain[k + 1], op))
+    return out
 
 
 # -- winding on either side of each edge ----------------------------------------------------

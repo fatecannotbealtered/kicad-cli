@@ -25,6 +25,7 @@ from typing import Any
 from .. import envelope, kicad_env
 from ..native import move as native_move
 from ..native import netclass as native_netclass
+from ..native import pour as native_pour
 from .board import _board_arg
 
 # `pcb_route` backs two commands with different contracts, so some of what it
@@ -317,11 +318,9 @@ def pour(args: dict[str, Any]) -> None:
     FAIL with `backed_fraction: 0.0` -- every track with no copper beneath it,
     on a board DRC was perfectly happy with.
     """
-    extra = ["--net", str(args["net"]), "--layer", str(args["layer"])]
-    for option in ("margin", "clearance", "min-width", "connect"):
-        if args.get(option) is not None:
-            extra += [f"--{option}", str(args[option])]
-    _relay("pour", args, extra)
+    board = _board_arg(args)
+    _guard(board, args)
+    native_pour.run(board, args)
 
 
 def silkscreen(args: dict[str, Any]) -> None:
