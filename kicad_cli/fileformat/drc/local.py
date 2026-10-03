@@ -598,6 +598,37 @@ def _texts(board):
         yield item, layer.value(1), node
 
 
+def _text_size(run, item, layer: str, height: int, pen: int, least_height: int,
+               least_stroke: int) -> None:  # fmt: skip
+    """A text's height and stroke: held to a custom rule's on any layer, to
+    the board's minimum on silkscreen."""
+    rules = run.settings.dru
+    subject = None
+    if rules is not None and rules.rules:
+        from . import subjects  # noqa: PLC0415
+
+        subject = subjects.of_text(run, layer)
+    silk = layer in SILK
+    for kind, rule, value, least, word in (
+        ("text_height", "text_height", height, least_height, "height"),
+        ("text_thickness", "text_thickness", pen, least_stroke, "thickness"),
+    ):
+        low, high = limits(run, kind, subject, layer, least if silk else None)
+        if low[1] == BOARD:
+            low = (low[0], f"board setup constraints silk text {word}", None)
+        broken = _out_of(value, (low, high))
+        if broken is None:
+            continue
+        bound, limit, who, severity = broken
+        what = "Text height" if kind == "text_height" else "Text thickness"
+        run.report(
+            rule,
+            f"{what} out of range ({who} {bound} {word} {mm(limit)}; actual {mm(value)})",
+            [item],
+            severity=severity,
+        )
+
+
 def texts(run) -> None:
     settings = run.settings
     least_height = settings.nm("min_text_height")
@@ -616,22 +647,8 @@ def texts(run) -> None:
         height, width, stroke, bold, mirrored = _font(node)
         if layer == "Edge.Cuts":
             run.report("text_on_edge_cuts", "Text or graphic on Edge.Cuts layer", [item])
-        if layer in SILK:
-            if height < least_height:
-                run.report(
-                    "text_height",
-                    f"Text height out of range (board setup constraints silk text height "
-                    f"min height {mm(least_height)}; actual {mm(height)})",
-                    [item],
-                )
-            pen = _pen(height, width, stroke, bold)
-            if pen < least_stroke:
-                run.report(
-                    "text_thickness",
-                    f"Text thickness out of range (board setup constraints silk text "
-                    f"thickness min thickness {mm(least_stroke)}; actual {mm(pen)})",
-                    [item],
-                )
+        _text_size(run, item, layer, height, _pen(height, width, stroke, bold),
+                   least_height, least_stroke)  # fmt: skip
         if layer in FRONT and mirrored:
             run.report("mirrored_text_on_front_layer", "Mirrored text on front layer", [item])
         elif layer in BACK and not mirrored:

@@ -133,12 +133,11 @@ def clearance(run, a: Thing, b: Thing, layer: str | None = None) -> tuple[int, s
 
 
 def coupled(a: str, b: str) -> bool:
-    """Whether two nets are the two halves of a differential pair: names
-    alike but for a last P and N, or + and -."""
-    return (
-        len(a) > 1 and len(a) == len(b) and a[:-1] == b[:-1]
-        and {a[-1], b[-1]} in ({"P", "N"}, {"+", "-"})
-    )  # fmt: skip
+    """Whether two nets are the two halves of a differential pair
+    (`pairs.py`)."""
+    from .pairs import complement  # noqa: PLC0415
+
+    return complement(a) == b
 
 
 # -- the grid -------------------------------------------------------------------------------
@@ -353,6 +352,8 @@ def _report(run, a: Thing, b: Thing, gap: float, layer: str, seen: set) -> None:
 
 def _pairs(run, things: list[Thing], grid, widest: int) -> None:
     seen: set = set()
+    rules = run.settings.dru
+    ruled = rules is not None and any("clearance" in r.constraints for r in rules.rules)
     for index, a in enumerate(things):
         if a.fills:
             continue
@@ -364,8 +365,15 @@ def _pairs(run, things: list[Thing], grid, widest: int) -> None:
                 b = things[other]
                 if _unchecked(a, b) or _apart(box, b.box(layer), widest):
                     continue
-                gap = thing_distance(a, b, layer, widest)
-                if gap < widest:
+                reach = widest
+                if ruled:
+                    # A rule's clearance can be far wider than most: what this
+                    # pair is held to bounds how far to measure.
+                    reach = clearance(run, a, b, layer)[0]
+                    if _apart(box, b.box(layer), reach):
+                        continue
+                gap = thing_distance(a, b, layer, reach)
+                if gap < reach:
                     _report(run, a, b, gap, layer, seen)
 
 
@@ -466,14 +474,28 @@ def _holes(run, things: list[Thing], grid) -> None:
                 gap = min(distance(p, other.hole) for p in owner.npth)
                 if gap < reach - EPSILON:
                     check(owner, other, gap, None)
+    # Holes against zones' fills: a zone is measured against the holes a grid
+    # of them finds near its fill, in the holes' own order.
+    holes_at: dict[tuple[int, int], list[int]] = defaultdict(list)
+    for index, owner in enumerate(drilled):
+        for cell in _cells(owner.hole.bbox(), reach):
+            holes_at[cell].append(index)
     for zone in (t for t in things if t.fills):
-        for owner in drilled:
+        near = {
+            index for polygons in zone.fills.values() for polygon in polygons
+            for cell in _cells(polygon.bbox, reach) for index in holes_at.get(cell, ())
+        }  # fmt: skip
+        for index in sorted(near):
+            owner = drilled[index]
             if owner.net and owner.net == zone.net:
                 continue
+            box = owner.hole.bbox()
             for layer in _hole_layers(copper, owner):
                 if owner.pieces.get(layer) is not None:
                     continue
                 for polygon in zone.fills.get(layer, ()):
+                    if _apart(box, polygon.bbox, reach):
+                        continue
                     gap = fill_distance([owner.hole], polygon, reach)
                     if gap < reach - EPSILON:
                         check(owner, zone, gap, layer)

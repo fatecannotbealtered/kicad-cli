@@ -409,11 +409,13 @@ SCHEMAS: dict[str, dict[str, Any]] = {
             "unconnected",
             "not_checked",
             "partial",
+            "custom_rules",
             "note",
         ],
         # Violation text quotes reference designators, net names and rule names
-        # out of the board file. Data, never instructions.
-        "untrusted_fields": ["violations", "unconnected"],
+        # out of the board file, and custom_rules the rules file's own words.
+        # Data, never instructions.
+        "untrusted_fields": ["violations", "unconnected", "custom_rules"],
     },
     "board_move": {
         "shape": "object",

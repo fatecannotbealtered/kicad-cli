@@ -1,0 +1,30 @@
+(version 1)
+(rule "no_via_here"
+	(condition "A.intersectsArea('novia')")
+	(constraint disallow via))
+(rule "no_track_here"
+	(condition "A.intersectsArea('notrack')")
+	(constraint disallow track))
+(rule "no_pad_here"
+	(condition "A.intersectsArea('nopad')")
+	(constraint disallow pad))
+(rule "no_dw_via"
+	(condition "A.NetName == 'DW'")
+	(constraint disallow via))
+(rule "court"
+	(constraint courtyard_clearance (min 1mm)))
+(rule "text_h"
+	(condition "A.Type == 'Text'")
+	(constraint text_height (min 0.8mm)))
+(rule "text_t"
+	(condition "A.Type == 'Text'")
+	(constraint text_thickness (min 0.1mm)))
+(rule "seg_len"
+	(condition "A.NetName == 'SL'")
+	(constraint track_segment_length (min 0.5mm)))
+(rule "vias_max"
+	(condition "A.NetName == 'VC'")
+	(constraint via_count (max 2)))
+(rule "angle"
+	(condition "A.NetName == 'TA'")
+	(constraint track_angle (max 30)))

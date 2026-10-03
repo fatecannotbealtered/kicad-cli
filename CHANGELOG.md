@@ -9,20 +9,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - `board drc` is this tool's own DRC now, in this process: no KiCad runs.
-  It checks 39 of KiCad 10's rules -- copper clearance and shorts, crossing
+  It checks 45 of KiCad 10's rules -- copper clearance and shorts, crossing
   tracks, hole and edge clearance, solder mask bridges, track widths, vias,
   annular rings, hole sizes, padstacks, footprint types, text size and
   mirroring, holes too close or on one spot, overlapping zones, rule areas,
   the board outline, copper on layers the board has not got, plated pads
   with no hole, text variables left unresolved and DRC markers left in
   text, missing connections, dangling tracks and vias, courtyards,
+  isolated islands of zone fill and pads starved of thermal spokes, the gap
+  between a differential pair's coupled tracks,
   footprints against their libraries (read where KiCad installed them; with
   no KiCad installed, those two rules are listed as not checked) -- by the
   project's rules, severities, net classes and exclusions, and by its custom
-  rules (`.kicad_dru`) where they decide a track's width, a via, a hole or
-  a clearance: the last rule to match wins, each bound on its own; a rule
-  may loosen the board's minimums as well as tighten them; its own severity
-  counts. On every demo board KiCad ships it finds what KiCad's own DRC
+  rules (`.kicad_dru`) where they decide a track's width, a via, a hole, a
+  clearance, courtyards, text sizes, or keep items out -- and the rules only
+  they ask for: segment lengths, vias per net, the angle two segments make.
+  The last rule to match wins, each bound on its own; a rule may loosen the
+  board's minimums as well as tighten them; its own severity counts; a
+  rules file KiCad does not read -- a length without mm, mil or in, a
+  constraint it does not know -- is ignored whole, as KiCad ignores it, and
+  `custom_rules` says so. On every demo board KiCad ships it finds what KiCad's own DRC
   finds under those rules. What it does not check yet is listed in
   `not_checked` (and what a checked rule leaves out in `partial`), a check
   a custom rule decides by a kind of constraint not read yet among them.

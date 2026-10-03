@@ -64,7 +64,8 @@ CHECKS = {
 # The kinds of constraint the checks here take from the rules.
 SUPPORTED = (
     "clearance", "track_width", "via_diameter", "annular_width", "hole_size", "hole_clearance",
-    "edge_clearance", "hole_to_hole",
+    "edge_clearance", "hole_to_hole", "disallow", "courtyard_clearance", "text_height",
+    "text_thickness", "track_segment_length", "via_count", "track_angle",
 )  # fmt: skip
 
 # What a condition may ask of an item, as `Subject` answers it.
@@ -74,7 +75,22 @@ FUNCTIONS = frozenset({
     "memberOfFootprint", "hasNetclass", "isMicroVia", "isBlindBuriedVia",
 })  # fmt: skip
 
-_LENGTH = re.compile(r"^(-?\d+(?:\.\d*)?|-?\.\d+)(mm|mils?|in|um|nm)?$")
+# A length in a rule carries its unit, one of these three: KiCad reads
+# "0.5", "500um" or "0.5MM" as no rule file at all.
+_LENGTH = re.compile(r"^(-?\d+(?:\.\d*)?|-?\.\d+)(mm|mil|in)$")
+_NUMBER = re.compile(r"^-?\d+(?:\.\d*)?$|^-?\.\d+$")
+
+# The kinds of constraint KiCad knows, by what their values are.
+LENGTHS = frozenset({
+    "annular_width", "clearance", "connection_width", "courtyard_clearance", "creepage",
+    "diff_pair_gap", "diff_pair_uncoupled", "edge_clearance", "hole_clearance", "hole_size",
+    "hole_to_hole", "length", "physical_clearance", "physical_hole_clearance", "silk_clearance",
+    "skew", "solder_mask_expansion", "solder_paste_abs_margin", "text_height", "text_thickness",
+    "thermal_relief_gap", "thermal_spoke_width", "track_segment_length", "track_width",
+    "via_diameter",
+})  # fmt: skip
+NUMBERS = frozenset({"via_count", "min_resolved_spokes", "track_angle", "solder_paste_rel_margin"})
+WORDS = frozenset({"disallow", "zone_connection", "assertion", "bridged_mask"})
 
 
 @dataclass
@@ -94,12 +110,21 @@ class Rule:
     constraints: dict[str, Constraint] = field(default_factory=dict)
     severity: str | None = None
     unread: str = ""  # what of its condition is not understood
+    # whether its condition asks only what an item is, not where: its answer
+    # for two items is the answer for any two alike
+    static: bool = False
+    # whether its condition asks only of A: its answer for a pair is either
+    # item's alone
+    unary: bool = False
 
 
 @dataclass
 class Rules:
     rules: list[Rule] = field(default_factory=list)
     unreadable: bool = False
+    why: str = ""  # what KiCad would not read, when it does not
+    source: Path | None = None
+    _memo: dict = field(default_factory=dict, repr=False, compare=False)
 
     def find(
         self, kind: str, a, b=None, layer: str | None = None, bound: str | None = None
@@ -117,11 +142,63 @@ class Rules:
                 continue
             if not _on(rule.layer, layer, a):
                 continue
-            if rule.condition is None or _holds(rule.condition, a, b, layer) or (
-                b is not None and _holds(rule.condition, b, a, layer)
-            ):  # fmt: skip
+            if rule.condition is None or self._applies(rule, a, b, layer):
                 return rule, constraint
         return None
+
+    def _applies(self, rule: Rule, a, b, layer: str | None) -> bool:
+        """Whether a rule's condition holds for the items, either way round
+        -- remembered, for a condition that asks only what items are, or
+        asks only of A."""
+        if rule.unary:
+            return self._one(rule, a, layer) or (b is not None and self._one(rule, b, layer))
+        key = None
+        if rule.static:
+            key = (id(rule), _signature(a), _signature(b), layer)
+            found = self._memo.get(key)
+            if found is not None:
+                return found
+        held = _holds(rule.condition, a, b, layer) or (
+            b is not None and _holds(rule.condition, b, a, layer)
+        )
+        if key is not None:
+            self._memo[key] = held
+        return held
+
+    def _one(self, rule: Rule, item, layer: str | None) -> bool:
+        """A condition's answer for one item, kept with the item: an item
+        made afresh for each question is answered afresh."""
+        key = ("rule", id(rule), layer)
+        found = item.answers.get(key)
+        if found is None:
+            found = item.answers[key] = _holds(rule.condition, item, None, layer)
+        return found
+
+
+def _signature(item):
+    return None if item is None else item.signature
+
+
+# What a condition may ask that depends on what an item is, not where it is.
+STATIC = frozenset({
+    "Type", "NetName", "NetClass", "Layer", "Width", "Pad_Type", "Reference", "inDiffPair",
+    "isPlated", "existsOnLayer", "memberOfFootprint", "hasNetclass", "isMicroVia",
+    "isBlindBuriedVia",
+})  # fmt: skip
+
+
+def _owners(node: Node) -> set:
+    """The items a condition asks of: "A", "B"."""
+    found = {node.value[0]} if node.kind in ("property", "call") else set()
+    for arg in node.args:
+        found |= _owners(arg)
+    return found
+
+
+def _static(node: Node) -> bool:
+    if node.kind in ("property", "call") and node.value[1] not in STATIC:
+        return False
+    return all(_static(arg) for arg in node.args)
 
 
 def least(rules: Rules | None, kind: str, a, b=None, layer=None, board: int = 0,
@@ -194,14 +271,28 @@ def _root(source: Path):
 
 
 def load(project: Path | None) -> Rules:
-    """The project's rules, read; none when it has no `.kicad_dru`."""
+    """The project's rules, read; none when it has no `.kicad_dru`. A file
+    KiCad does not read -- a kind of constraint it does not know, a length
+    without its unit, a condition that does not parse -- it ignores whole,
+    every rule in it (`tests/fixtures/drc/drcrules`), and so does this."""
     source = _source(project)
     if source is None:
         return Rules()
     try:
         root = _root(source)
-    except (OSError, UnicodeDecodeError, SexprError):
-        return Rules(unreadable=True)
+        rules = _rules(root)
+    except (OSError, UnicodeDecodeError, SexprError) as exc:
+        return Rules(unreadable=True, why=f"it does not parse ({exc})", source=source)
+    except _Unreadable as exc:
+        return Rules(unreadable=True, why=str(exc), source=source)
+    return Rules(rules, source=source)
+
+
+class _Unreadable(ValueError):
+    """What makes KiCad ignore a rules file whole."""
+
+
+def _rules(root) -> list[Rule]:
     rules = []
     for node in root.find_all("rule"):
         rule = Rule(node.value(1) or "")
@@ -215,32 +306,49 @@ def load(project: Path | None) -> Rules:
         if condition is not None and (condition.value(1) or "").strip():
             try:
                 rule.condition = expression.parse(condition.value(1) or "")
-                rule.unread = _unread(rule.condition)
             except ExpressionError as exc:
-                rule.unread = f"its condition does not read ({exc})"
+                raise _Unreadable(
+                    f"rule '{rule.name}': its condition does not parse ({exc})"
+                ) from exc
+            rule.unread = _unread(rule.condition)
+            rule.static = _static(rule.condition)
+            rule.unary = "B" not in _owners(rule.condition)
         for item in node.find_all("constraint"):
             kind = item.atom(1) or ""
+            if kind not in LENGTHS | NUMBERS | WORDS:
+                raise _Unreadable(f"rule '{rule.name}': KiCad knows no constraint '{kind}'")
             constraint = Constraint(kind)
             words = []
             for part in item.items[2:]:
                 if isinstance(part, str):
                     words.append(part)
                     continue
-                value = _length(part.atom(1) or "")
-                if part.head in ("min", "max", "opt") and value is not None:
-                    setattr(constraint, part.head, value)
+                if part.head not in ("min", "max", "opt"):
+                    continue
+                text = (part.atom(1) or "").strip()
+                if kind in LENGTHS:
+                    value = _length(text)
+                    if value is None:
+                        raise _Unreadable(
+                            f"rule '{rule.name}': the length {text!r} has no unit KiCad reads "
+                            "(mm, mil or in)"
+                        )
+                else:
+                    if not _NUMBER.match(text):
+                        raise _Unreadable(f"rule '{rule.name}': {text!r} is not a number")
+                    value = float(text)
+                setattr(constraint, part.head, value)
             constraint.words = tuple(words)
             rule.constraints[kind] = constraint
         rules.append(rule)
-    return Rules(rules)
+    return rules
 
 
 def _length(text: str) -> int | None:
     m = _LENGTH.match(text.strip())
     if m is None:
         return None
-    unit = m.group(2) or "mm"
-    return round(float(m.group(1)) * expression.UNITS[unit])
+    return round(float(m.group(1)) * expression.UNITS[m.group(2)])
 
 
 def _unread(node: Node) -> str:
@@ -266,12 +374,7 @@ def constrained(project: Path | None) -> dict[str, str]:
         return {}
     rules = load(project)
     if rules.unreadable:
-        # A rules file KiCad could not read either: every check it might
-        # decide is uncertain.
-        return {
-            check: "the project's custom rules (.kicad_dru) do not read"
-            for checks in CHECKS.values() for check in checks
-        }  # fmt: skip
+        return {}  # KiCad ignores the file whole: every check is made without it
     out: dict[str, str] = {}
     for rule in rules.rules:
         for kind in rule.constraints:

@@ -128,6 +128,7 @@ def drc(args: dict[str, Any]) -> None:
             "unconnected": [flatten(v) for v in report.unconnected[:limit]],
             "not_checked": report.not_checked,
             "partial": report.partial,
+            "custom_rules": report.custom_rules,
             "note": "counts and *_total describe the whole report; violations may be "
             "truncated to --limit. Warnings do not stop fabrication, errors do; excluded "
             "violations (the project's DRC exclusions) are listed but not counted. "

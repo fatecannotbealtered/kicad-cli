@@ -140,32 +140,36 @@ routed board, as KiCad's Update PCB from Schematic does, and KiCad's own
 schematic-parity check finds the result true to the schematic.
 
 Step 4 has begun: `board drc` is DRC of this tool's own
-(`kicad_cli/fileformat/drc/`), in this process. It checks 39 of KiCad 10's
+(`kicad_cli/fileformat/drc/`), in this process. It checks 45 of KiCad 10's
 rules so far -- copper clearance and shorts, crossing tracks, hole and edge
 clearance, solder mask bridges, track widths, vias, annular rings, hole
 sizes, padstacks, footprint types, text size and mirroring, holes crowding
 each other, zones overlapping, rule areas, the board outline, copper on
 layers the board has not got, plated pads with no hole, unresolved text
 variables and DRC markers, missing connections, dangling tracks and vias,
-courtyards, footprints against their libraries -- measured on six boards
-drawn to ask KiCad's DRC one question per case, and ten outlines
-(`tests/fixtures/drc/`), and held to it on
-KiCad's demo boards: every finding KiCad makes there under those rules, and
-nothing else, but where KiCad names one of several equivalent things -- the
-first clearance violation it finds on a track, one of two equally near
-edges, which of a short and a clearance of nothing a footprint's own copper
-over two of its pads is, which item a drawn solder mask opening is named
-beside (KiCad picks it by chance). The footprint libraries are read where
-KiCad installed them, as files. What it does not check yet -- the
-silkscreen, zone fills' own rules, parity with the schematic, lengths and
-skews, creepage, text on copper and on the mask -- it says it
-does not (`not_checked`, `partial`); a check a
-project's custom rules decide is made by them where they constrain a
-track's width, a via, a hole or a clearance (`drc/rules.py`,
-`tests/fixtures/drc/drcrules`), and not made where they decide it by a kind
-of constraint not read yet. The
-write commands still on `pcbnew` verify their writes with KiCad's binary
-until they move over.
+courtyards, footprints against their libraries, isolated islands of zone
+fill, pads starved of thermal spokes, differential pairs' gaps -- measured
+on boards drawn to ask
+KiCad's DRC one question per case, and ten outlines (`tests/fixtures/drc/`),
+and held to it on KiCad's demo boards: every finding KiCad makes there under
+those rules, and nothing else, but where KiCad names one of several
+equivalent things -- the first clearance violation it finds on a track, one
+of two equally near edges, which of a short and a clearance of nothing a
+footprint's own copper over two of its pads is, which item a drawn solder
+mask opening is named beside (KiCad picks it by chance) -- and whether a
+pad's spokes reaching only a lone island are said to (one pad on interf_u).
+The footprint libraries are read where KiCad installed them, as files. A
+check a project's custom rules decide is made by them where they constrain
+a track's width, a via, a hole, a clearance, courtyards or text, or keep
+items out, and the checks only rules ask for -- segment lengths, vias per
+net, track angles -- are made too (`drc/rules.py`, `drc/ruled.py`,
+`tests/fixtures/drc/drcrules*`); a rules file KiCad does not read, it
+ignores whole, and so does this. What it does not check yet -- the
+silkscreen, the narrowest copper and slivers of fill, parity with the
+schematic, lengths and skews, creepage, text on copper and on the mask, a
+check a rule decides by a kind of constraint not read yet -- it says it
+does not (`not_checked`, `partial`). The write commands still on `pcbnew`
+verify their writes with KiCad's binary until they move over.
 
 Progress. Step 1 is in (`bench/`). Step 2 is in for boards:
 `kicad_cli/fileformat/sexpr.py` reads and writes KiCad's S-expressions

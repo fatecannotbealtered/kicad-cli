@@ -15,7 +15,7 @@ from .expression import Unknown, matches
 from .shapes import Shape
 
 TYPES = {"segment": "Track", "arc": "Track", "via": "Via", "pad": "Pad", "fill": "Zone",
-         "shape": "Graphic"}  # fmt: skip
+         "shape": "Graphic", "footprint": "Footprint", "text": "Text"}  # fmt: skip
 PAD_TYPES = {"smd": "SMD", "thru_hole": "Through-hole", "np_thru_hole": "NPTH, mechanical",
              "connect": "Edge connector"}  # fmt: skip
 
@@ -34,9 +34,17 @@ class Subject:
     pad_kind: str = ""
     via_kind: str = ""
     footprint: str | None = None  # the reference of the footprint it belongs to
+    answers: dict = field(default_factory=dict, repr=False, compare=False)
 
     def on(self, layer: str | None) -> _Bound:
         return _Bound(self, layer)
+
+    @property
+    def signature(self) -> tuple:
+        """What it is, as a condition can ask of it: two items alike here are
+        alike to any condition that asks nothing of where they are."""
+        return (self.kind, self.net, self.layers, self.width, self.pad_kind, self.via_kind,
+                self.footprint)  # fmt: skip
 
 
 @dataclass
@@ -70,10 +78,15 @@ class _Bound:
     def call(self, name: str, args: list):
         s = self.subject
         first = str(args[0]) if args else ""
-        if name in ("intersectsArea", "insideArea"):
-            return any(_meets(s, zone) for zone in _areas(s.run, first))
-        if name == "enclosedByArea":
-            return any(_within(s, zone) for zone in _areas(s.run, first))
+        if name in ("intersectsArea", "insideArea", "enclosedByArea"):
+            # Where an item is does not change while it is asked about: each
+            # item and area answered once.
+            key = (name, first)
+            found = s.answers.get(key)
+            if found is None:
+                test = _within if name == "enclosedByArea" else _meets
+                found = s.answers[key] = any(test(s, zone) for zone in _areas(s.run, first))
+            return found
         if name == "inDiffPair":
             return _in_pair(s.run, s.net, first)
         if name == "isPlated":
@@ -107,15 +120,23 @@ def _areas(run, name: str) -> list:
     return [zone for key, zones in cache.items() if matches(name, key) for zone in zones]
 
 
-def _outline(zone) -> list[Polygon]:
-    return [Polygon(points) for points in zone.outlines if len(points) >= 3]
+def _outline(run, zone) -> list[Polygon]:
+    """A zone's outline, as polygons made once a run: their edge index is
+    built on first asking, and asked of again and again."""
+    cache = getattr(run, "_outlines", None)
+    if cache is None:
+        cache = run._outlines = {}
+    found = cache.get(id(zone))
+    if found is None:
+        found = cache[id(zone)] = [Polygon(points) for points in zone.outlines if len(points) >= 3]
+    return found
 
 
 def _meets(subject: Subject, zone) -> bool:
     from .clearance import fill_distance, fills_distance  # noqa: PLC0415
 
     for layer in subject.layers & set(zone.layers):
-        for outline in _outline(zone):
+        for outline in _outline(subject.run, zone):
             pieces = subject.pieces.get(layer, [])
             if pieces and fill_distance(pieces, outline, 0) <= 0:
                 return True
@@ -126,7 +147,7 @@ def _meets(subject: Subject, zone) -> bool:
 
 def _within(subject: Subject, zone) -> bool:
     for layer in subject.layers & set(zone.layers):
-        for outline in _outline(zone):
+        for outline in _outline(subject.run, zone):
             pieces = subject.pieces.get(layer, [])
             points = [p for piece in pieces for p in piece.core]
             points += [p for area in subject.areas.get(layer, []) for p in area.points]
@@ -136,9 +157,8 @@ def _within(subject: Subject, zone) -> bool:
 
 
 def _in_pair(run, net: str, pattern: str) -> bool:
-    if len(net) < 2 or net[-1] not in "PN+-":
-        return False
-    partner = net[:-1] + {"P": "N", "N": "P", "+": "-", "-": "+"}[net[-1]]
+    from .pairs import _suffix, partner  # noqa: PLC0415
+
     nets = getattr(run, "_net_names", None)
     if nets is None:
         board = run.board
@@ -147,9 +167,9 @@ def _in_pair(run, net: str, pattern: str) -> bool:
             | {v.net for v in board.vias}
             | {p.net for fp in board.footprints for p in fp.pads}
         )
-    if partner not in nets:
+    if partner(net, nets) is None:
         return False
-    base = net[:-1]
+    base = net[: _suffix(net)]
     return matches(pattern, base) or matches(pattern, base.rstrip("_"))
 
 
@@ -157,7 +177,17 @@ def _in_pair(run, net: str, pattern: str) -> bool:
 
 
 def of_thing(run, thing) -> Subject:
-    """A piece of copper (`copper.Thing`) as a rule sees it."""
+    """A piece of copper (`copper.Thing`) as a rule sees it, made once."""
+    cache = getattr(run, "_subjects", None)
+    if cache is None:
+        cache = run._subjects = {}
+    found = cache.get(id(thing))
+    if found is None:
+        found = cache[id(thing)] = _of_thing(run, thing)
+    return found
+
+
+def _of_thing(run, thing) -> Subject:
     pad = thing.owner if thing.kind == "pad" else None
     via = thing.owner if thing.kind == "via" else None
     return Subject(
@@ -175,8 +205,35 @@ def of_thing(run, thing) -> Subject:
 
 
 def of_track(run, track, pieces=None) -> Subject:
+    if pieces is None:
+        from .copper import arc_chords  # noqa: PLC0415
+
+        pieces = (
+            arc_chords(track.start, track.mid, track.end, track.width)
+            if track.kind == "arc" and track.mid is not None
+            else [Shape((track.start, track.end), track.width / 2)]
+        )  # fmt: skip
     return Subject(run, track.kind, track.net, frozenset({track.layer}),
-                   pieces={track.layer: pieces or []}, width=track.width)  # fmt: skip
+                   pieces={track.layer: pieces}, width=track.width)  # fmt: skip
+
+
+def of_footprint(run, fp) -> Subject:
+    """A footprint: by its pads' copper, on its side."""
+    from .shapes import pad_copper  # noqa: PLC0415
+
+    pieces: dict[str, list[Shape]] = {}
+    for pad in fp.pads:
+        if pad.kind == "np_thru_hole":
+            continue
+        for layer in pad.layers:
+            if layer.endswith(".Cu"):
+                pieces.setdefault(layer, []).extend(pad_copper(pad))
+    layers = frozenset(pieces) | {fp.layer}
+    return Subject(run, "footprint", "", layers, pieces=pieces, footprint=fp.reference)
+
+
+def of_text(run, layer: str, footprint: str | None = None) -> Subject:
+    return Subject(run, "text", "", frozenset({layer}), footprint=footprint)
 
 
 def of_via(run, via) -> Subject:

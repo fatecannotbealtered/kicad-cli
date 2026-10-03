@@ -1,0 +1,22 @@
+{
+ "kicad_version": "10.0.6",
+ "violations": [
+  {
+   "type": "starved_thermal",
+   "severity": "error",
+   "items": [
+    "a830057d-25c8-5f73-9018-17a6bc0f8efa",
+    "c8272f34-a78b-5de7-ae6a-8e2a149480d3"
+   ]
+  },
+  {
+   "type": "starved_thermal",
+   "severity": "error",
+   "items": [
+    "b2b02056-2049-541c-ab39-943d16b3bf33",
+    "48b90f52-ddaa-5641-a7be-d7d4d43e69f3"
+   ]
+  }
+ ],
+ "unconnected_items": []
+}
