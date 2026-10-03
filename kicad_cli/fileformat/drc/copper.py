@@ -53,7 +53,7 @@ class Thing:
     npth: list[Shape] | None = None  # an unplated pad's shape, which holds no copper
     net: str = ""  # the net it is checked on
     tied: frozenset[str] = frozenset()  # the nets a net-tie footprint's copper joins
-    bridges: str = ""  # a footprint's drawing across two of its pads: "short" or "clearance"
+    bridges: bool = False  # a footprint's drawing across two of its pads
     ties: tuple[frozenset[str], ...] = ()  # its footprint's net-tie groups of pad numbers
     filled: bool = False  # a drawing with its inside filled
     boxes: dict[str, tuple[float, float, float, float]] = field(default_factory=dict)
@@ -388,9 +388,8 @@ class Copper:
         """A footprint's copper drawing has no net. Across pads of two nets
         of a net-tie footprint it joins them, as the footprint means it to
         (`tied`). Across two pads of any other footprint it bridges them
-        (`tests/fixtures/drc/drc2`, and KiCad's microwave demo): a filled
-        drawing touching them is a short whatever their nets, a stroke a
-        clearance of nothing."""
+        (`tests/fixtures/drc/drc2`, and KiCad's microwave demo): touching
+        each, a short or a clearance of nothing, as `clearance.py` says."""
         from .clearance import thing_distance  # noqa: PLC0415
 
         pads: dict[int, list[Thing]] = defaultdict(list)
@@ -408,7 +407,7 @@ class Copper:
             if thing.ties:
                 thing.tied = frozenset(pad.own_net for pad in touched if pad.own_net)
             elif len(touched) > 1:
-                thing.bridges = "short" if thing.filled else "clearance"
+                thing.bridges = True
 
     def _anchored(self) -> set[int]:
         """The tracks and vias whose copper reaches a pad of their own net."""

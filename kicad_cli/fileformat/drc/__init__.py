@@ -21,7 +21,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 from ..board import Board
-from .items import Item
+from .items import Item, millimetres
 from .settings import SEVERITIES, Settings
 
 __all__ = [
@@ -143,8 +143,8 @@ class Run:
 
 
 def mm(value: float) -> str:
-    """A length in a message, as KiCad writes it: millimetres, four places."""
-    return f"{value / NM:.4f} mm"
+    """A length in a message, as KiCad writes it (`items.millimetres`)."""
+    return millimetres(value)
 
 
 def _checks():

@@ -29,7 +29,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   rules file KiCad does not read -- a length without mm, mil or in, a
   constraint it does not know -- is ignored whole, as KiCad ignores it, and
   `custom_rules` says so. On every demo board KiCad ships it finds what KiCad's own DRC
-  finds under those rules. What it does not check yet is listed in
+  finds under those rules, and says it in KiCad's words: which net class a
+  clearance names (or none, where only the classes' clearances count), net
+  names as KiCad writes them, the items in KiCad's order, a short or a
+  clearance of nothing as KiCad tells them apart. What it does not check yet is listed in
   `not_checked` (and what a checked rule leaves out in `partial`), a check
   a custom rule decides by a kind of constraint not read yet among them.
   `ok_to_fabricate` is the verdict of the checks made.

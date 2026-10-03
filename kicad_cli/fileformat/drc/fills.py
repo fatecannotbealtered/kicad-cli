@@ -214,5 +214,5 @@ def _judge(run, board, zone_item, layer, fp, pad, spokes: int, least: int) -> No
         "starved_thermal",
         f"Thermal relief connection to zone incomplete (layer {board.layer_name(layer)}; "
         f"zone min spoke count {least}; actual {spokes})",
-        [zone_item, describe.pad(board, fp, pad)],
+        [describe.pad(board, fp, pad), zone_item],  # the pad first, as KiCad lists them
     )

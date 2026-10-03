@@ -1,0 +1,58 @@
+[
+ {
+  "type": "clearance",
+  "description": "Clearance violation (pad clearance 0.3000 mm; actual 0.2500 mm)",
+  "items": [
+   {
+    "uuid": "2966dd3a-059b-5052-9f04-0aeec9f5d2a6",
+    "description": "Pad 1 [P1] of U10 on F.Cu"
+   },
+   {
+    "uuid": "6f6224f1-81d8-5552-bce9-21ac89b22491",
+    "description": "Track [T1] on F.Cu, length 4.0000 mm"
+   }
+  ]
+ },
+ {
+  "type": "clearance",
+  "description": "Clearance violation ( clearance 0.2000 mm; actual 0.1000 mm)",
+  "items": [
+   {
+    "uuid": "36d57791-750b-5ee2-a856-b83539823cb5",
+    "description": "Track [D0x] on F.Cu, length 4.0000 mm"
+   },
+   {
+    "uuid": "82279831-082a-54fa-a9db-bd7a2d780978",
+    "description": "Track [D0] on F.Cu, length 4.0000 mm"
+   }
+  ]
+ },
+ {
+  "type": "clearance",
+  "description": "Clearance violation (board minimum clearance 0.1500 mm; actual 0.1200 mm)",
+  "items": [
+   {
+    "uuid": "a42ab27f-e05e-5326-87ab-de7cf0da9803",
+    "description": "Pad 1 [P2] of U20 on F.Cu"
+   },
+   {
+    "uuid": "c156c5fe-bd59-581d-829e-1fb6fa17f2a1",
+    "description": "Track [T2] on F.Cu, length 4.0000 mm"
+   }
+  ]
+ },
+ {
+  "type": "clearance",
+  "description": "Clearance violation (zone clearance 0.3000 mm; actual 0.2500 mm)",
+  "items": [
+   {
+    "uuid": "a9802dc8-70c0-56e3-a5c7-3c6f2324de67",
+    "description": "Track [T3] on F.Cu, length 4.0000 mm"
+   },
+   {
+    "uuid": "6b13f2ec-a1a0-5f6c-9165-cd95a281faea",
+    "description": "Zone [Z3] on F.Cu, priority 0"
+   }
+  ]
+ }
+]

@@ -10,6 +10,7 @@ someone renamed F.Cu).
 
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass, replace
 
 from ..board import Board, Footprint, Pad, Track, Via, Zone
@@ -21,6 +22,29 @@ SHAPES = {
     "line": "Segment", "arc": "Arc", "circle": "Circle", "rect": "Rectangle",
     "poly": "Polygon", "curve": "Bezier Curve",
 }  # fmt: skip
+# What a net's name holds escaped in the file, and a report writes plainly
+# (`tests/fixtures/drc/drcwords`).
+ESCAPES = {
+    "slash": "/", "backslash": "\\", "lt": "<", "gt": ">", "colon": ":", "dblquote": '"',
+    "quote": "'", "space": " ", "bar": "|",
+}  # fmt: skip
+_ESCAPED = re.compile(r"\{(" + "|".join(ESCAPES) + r")\}")
+
+
+def shown(name: str) -> str:
+    """A net's name as a report writes it: "/USB/D+" where the file says
+    "{slash}USB{slash}D+"."""
+    return _ESCAPED.sub(lambda m: ESCAPES[m.group(1)], name) if "{" in name else name
+
+
+def millimetres(value: float) -> str:
+    """A length, in nm, as KiCad writes it: millimetres to four places -- or,
+    where four places would say nothing of something, four figures and a
+    power of ten ("1.000e-05 mm")."""
+    text = f"{value / NM:.4f}"
+    if value and text in ("0.0000", "-0.0000"):
+        text = f"{value / NM:.3e}"
+    return f"{text} mm"
 
 
 @dataclass(frozen=True)
@@ -58,7 +82,7 @@ def layer_order(name: str) -> int:
 
 
 def _net(net: str) -> str:
-    return net or NO_NET
+    return shown(net) if net else NO_NET
 
 
 def reference(fp: Footprint | None) -> str:
@@ -84,7 +108,7 @@ def track(board: Board, track: Track) -> Item:
     kind = "Track (arc)" if track.kind == "arc" else "Track"
     text = (
         f"{kind} [{_net(track.net)}] on {board.layer_name(track.layer)}, "
-        f"length {track.length() / NM:.4f} mm"
+        f"length {millimetres(track.length())}"
     )
     return Item("track", uuid_of(track.node), text, track.start)
 
