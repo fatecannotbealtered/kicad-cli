@@ -8,6 +8,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Changed
+- `board pour` runs in this process and fills the zone with this tool's own
+  zone filler: no KiCad is needed. Like pcbnew, it fills every zone on the
+  board again before saving. Its report is the same; the filled area is
+  within a tenth of a percent of pcbnew's. Text on the copper is cut out by
+  a box round it until the stroke font is in, so a layer with text on it
+  fills a little less.
 - `board drc` is this tool's own DRC now, in this process: no KiCad runs.
   It checks 45 of KiCad 10's rules -- copper clearance and shorts, crossing
   tracks, hole and edge clearance, solder mask bridges, track widths, vias,
