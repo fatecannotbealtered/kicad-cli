@@ -186,8 +186,8 @@ pcbnew net by net by `tests/test_fileformat_connectivity.py`. Not yet built:
 the schematic side of the file model.
 
 Step 3 has begun: `board audit`, `board plane`, `board parity`, `board move`,
-`board netclass`, `board pour` and `board from-netlist` run in this process
-(`kicad_cli/native/`), output identical to the pcbnew versions -- on every
+`board place`, `board netclass`, `board pour` and `board from-netlist` run in
+this process (`kicad_cli/native/`), output identical to the pcbnew versions -- on every
 demo board, and for `board from-netlist` on a netlist of every kind of part a
 footprint library holds. `board from-netlist` reads KiCad's footprint
 libraries, as files; the rest need no KiCad installed -- `board parity` reads
@@ -199,7 +199,9 @@ version's behaviour exactly, mistakes included, so that the port is provable
 by comparison; the mistakes are fixed afterwards, one change each. The one
 exception is a mistake that destroys the owner's work: pcbnew's Save reset an
 existing `.kicad_pro` to KiCad's defaults, and `board from-netlist` leaves it
-alone.
+alone. `board place` checks its work with this tool's DRC where the payload
+asked KiCad's (`verify.oracle` is `engine`): its counts leave out what this
+DRC does not check yet, the silkscreen's among them.
 
 The commands that refill the board's zones before they save it -- `board
 route`, `stitch`, `widen` and `pour` -- needed a zone filler before they

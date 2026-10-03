@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Changed
+- `board place` runs in this process and needs no KiCad. It places parts
+  exactly as before, to the micrometre. The DRC it runs before and after is
+  this tool's own (`verify.oracle` is `engine`), so its counts leave out what
+  that DRC does not check yet, the silkscreen's among them.
 - `board pour` runs in this process and fills the zone with this tool's own
   zone filler: no KiCad is needed. Like pcbnew, it fills every zone on the
   board again before saving. Its report is the same; the filled area is
