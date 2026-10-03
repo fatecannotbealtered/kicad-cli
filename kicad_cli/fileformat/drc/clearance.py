@@ -9,9 +9,11 @@ clearance one case at a time:
   of that and their class's pair gap. A pad's own clearance, or its
   footprint's, stands instead of the net classes' -- even when it is
   smaller. A zone's fill is held to its zone's clearance too, whichever is
-  larger. The message names what set the clearance: "netclass 'X'" -- with
-  no name at all when the project has no net class patterns -- "board
-  minimum", "pad", "footprint R1", "zone".
+  larger. The message names what set the clearance: "board minimum",
+  "pad", "footprint R1", "zone", "netclass 'X'" -- of two classes asking
+  the same, the one later by name, Default the earliest -- or, where only
+  the classes' own clearances can set one, no name at all
+  (`tests/fixtures/drc/drcwords`).
 - Distances are exact: edge to edge, an arc as an arc. Less than the
   clearance by more than 0.5 um is a violation, and not by less.
 - Copper of two nets touching is a short, two tracks' centre lines crossing
@@ -115,9 +117,14 @@ def clearance(run, a: Thing, b: Thing, layer: str | None = None) -> tuple[int, s
     else:
         ca = settings.netclasses.of(a.net)
         cb = settings.netclasses.of(b.net)
-        best = ca if ca.nm("clearance") >= cb.nm("clearance") else cb
+        if ca.nm("clearance") != cb.nm("clearance"):
+            best = ca if ca.nm("clearance") > cb.nm("clearance") else cb
+        else:
+            # Of two classes asking the same, the one KiCad lists last: Default
+            # first, then the rest by name, capitals before small letters.
+            best = max((ca, cb), key=lambda c: _listed(c.sources["clearance"]))
         value = best.nm("clearance")
-        name = f"netclass '{best.sources['clearance']}'" if settings.netclasses.patterns else ""
+        name = f"netclass '{best.sources['clearance']}'" if _names_classes(run) else ""
         if coupled(a.net, b.net):
             # The two nets of a differential pair keep apart by its gap, where
             # that is the smaller -- by a rule KiCad does not name.
@@ -130,6 +137,34 @@ def clearance(run, a: Thing, b: Thing, layer: str | None = None) -> tuple[int, s
     if value < least:
         value, name = least, "board minimum"
     return value, name, None
+
+
+def _listed(name: str) -> tuple[bool, str]:
+    return name != "Default", name
+
+
+def _names_classes(run) -> bool:
+    """Whether a clearance message names the class setting it. KiCad names it
+    only where more than the classes' own clearances can set one: a custom
+    rule with a clearance, or a class in use -- Default always is -- whose
+    pairs keep closer than its clearance (`tests/fixtures/drc/drcwords`).
+    Elsewhere it says "( clearance 0.2000 mm; ...)"."""
+    found = getattr(run, "_names_classes", None)
+    if found is None:
+        settings = run.settings
+        rules = settings.dru
+        found = rules is not None and any("clearance" in r.constraints for r in rules.rules)
+        if not found:
+            board = run.board
+            nets = (
+                {""} | {t.net for t in board.tracks} | {v.net for v in board.vias}
+                | {p.net for fp in board.footprints for p in fp.pads}
+                | {z.net for z in board.zones if not z.rule_area}
+            )  # fmt: skip
+            classes = {settings.netclasses.of(net) for net in nets}
+            found = any(c.nm("clearance") > c.nm("diff_pair_gap") for c in classes)
+        run._names_classes = found
+    return found
 
 
 def coupled(a: str, b: str) -> bool:
@@ -330,15 +365,28 @@ def _report(run, a: Thing, b: Thing, gap: float, layer: str, seen: set) -> None:
         return
     seen.add(key)
     fill = a.kind == "fill" or b.kind == "fill"
+    both_pads = a.kind == "pad" and b.kind == "pad"
+    a, b = _listed_order(a, b)
+    bridge = ""
     if gap <= 0 and not fill:
         if a.kind in TRACKS and b.kind in TRACKS and _crossing(a, b, layer):
             run.report("tracks_crossing", "Tracks crossing", [a.item, b.item])
             return
-        both_pads = a.kind == "pad" and b.kind == "pad"
-        bridge = a.bridges or b.bridges
+        across = a.bridges or b.bridges
+        if across and a.fp is not None and a.fp is b.fp and {a.kind, b.kind} == {"pad", "shape"}:
+            # A footprint's drawing across its pads, touching one: a short
+            # where the drawing's uuid is the smaller, else a clearance of
+            # nothing (`tests/fixtures/drc/drc2`, KiCad's microwave demo).
+            drawing, pad = (a, b) if a.kind == "shape" else (b, a)
+            bridge = "short" if drawing.item.uuid < pad.item.uuid else "clearance"
         short = (a.net and b.net) if both_pads else (a.net or b.net)
         if bridge == "short" or (short and bridge != "clearance"):
-            nets = " and ".join(t.net or "<no net>" for t in (a, b))
+            # The nets as the file has them, "S{slash}1", unlike the items;
+            # no net at all is nothing, but a drawing's
+            # (`tests/fixtures/drc/drcwords`).
+            nets = " and ".join(
+                t.net or (describe.NO_NET if t.kind == "shape" else "") for t in (a, b)
+            )
             run.report("shorting_items", f"Items shorting two nets (nets {nets})", [a.item, b.item])
             return
     label = f"{name} " if name else " "
@@ -348,6 +396,17 @@ def _report(run, a: Thing, b: Thing, gap: float, layer: str, seen: set) -> None:
         [a.item, b.item],
         severity,
     )
+
+
+def _listed_order(a: Thing, b: Thing) -> tuple[Thing, Thing]:
+    """Two items in the order KiCad lists them: a zone's fill second, two
+    pads as found, and any other two by their uuids (KiCad's demos,
+    `tests/fixtures/drc/drcwords`)."""
+    if a.kind == "fill" or b.kind == "fill":
+        return (b, a) if a.kind == "fill" else (a, b)
+    if a.kind == "pad" and b.kind == "pad":
+        return a, b
+    return (a, b) if a.item.uuid <= b.item.uuid else (b, a)
 
 
 def _pairs(run, things: list[Thing], grid, widest: int) -> None:

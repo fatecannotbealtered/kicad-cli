@@ -154,10 +154,14 @@ KiCad's DRC one question per case, and ten outlines (`tests/fixtures/drc/`),
 and held to it on KiCad's demo boards: every finding KiCad makes there under
 those rules, and nothing else, but where KiCad names one of several
 equivalent things -- the first clearance violation it finds on a track, one
-of two equally near edges, which of a short and a clearance of nothing a
-footprint's own copper over two of its pads is, which item a drawn solder
-mask opening is named beside (KiCad picks it by chance) -- and whether a
-pad's spokes reaching only a lone island are said to (one pad on interf_u).
+of two equally near edges, which item a drawn solder mask opening is named
+beside (KiCad picks it by chance) -- and whether a pad's spokes reaching
+only a lone island are said to (one pad on interf_u). Its messages are
+KiCad's, word for word (`tests/fixtures/drc/drcwords`): which net class a
+clearance names, or none; net names unescaped in items; the order of the
+items; lengths too small for four places. They differ on jetson, where
+KiCad's distance from an arc to a zone's fill is not the least, and some
+arcs' lengths differ in the fourth place.
 The footprint libraries are read where KiCad installed them, as files. A
 check a project's custom rules decide is made by them where they constrain
 a track's width, a via, a hole, a clearance, courtyards or text, or keep

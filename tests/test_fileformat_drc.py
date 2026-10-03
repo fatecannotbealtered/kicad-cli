@@ -91,6 +91,8 @@ BOARDS = {
         "drcislands",
         "drcthermal",
         "drcpairs",
+        "drcwords",
+        "drcwords2",
     )
 }
 # KiCad's installation, for the libraries the tables of a demo board name;
@@ -233,6 +235,25 @@ def test_the_fixtures_ask_every_question_they_say_they_ask():
 
 def _messages(name: str) -> dict[frozenset, str]:
     return {v.uuids(): v.message for v in drc.check(BOARDS[name]).violations}
+
+
+@pytest.mark.parametrize("name", ["drcwords", "drcwords2"])
+def test_a_violation_is_worded_as_kicad_words_it(name):
+    """KiCad's own words, recorded (`<name>.words.json`): which class a
+    clearance names, or none; net names as items write them and as a short's
+    message does; lengths too small for four places; the order of the items
+    -- but a solder mask opening's, which KiCad picks its own way."""
+    said = json.loads((FIXTURES / name / f"{name}.words.json").read_text(encoding="utf-8"))
+    ours = {(v.rule, v.uuids()): v for v in drc.check(BOARDS[name]).violations}
+    for entry in said:
+        v = ours[(entry["type"], frozenset(i["uuid"] for i in entry["items"]))]
+        assert v.message == entry["description"]
+        words = [(i.uuid, i.description) for i in v.items]
+        theirs = [(i["uuid"], i["description"]) for i in entry["items"]]
+        if entry["type"] == "solder_mask_bridge":
+            words, theirs = sorted(words), sorted(theirs)
+        assert words == theirs
+    assert len(ours) == len(said)
 
 
 def test_a_clearance_names_what_set_it_as_kicad_names_it():

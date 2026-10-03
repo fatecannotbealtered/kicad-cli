@@ -1,0 +1,350 @@
+[
+ {
+  "type": "clearance",
+  "description": "Clearance violation (netclass 'Beta' clearance 0.2000 mm; actual 0.1000 mm)",
+  "items": [
+   {
+    "uuid": "0eaf10cb-a9c9-5fa4-8538-fd6010ff3321",
+    "description": "Track [A3] on F.Cu, length 4.0000 mm"
+   },
+   {
+    "uuid": "86c1a00e-d296-5b3b-b72f-ee544321dcad",
+    "description": "Track [B3] on F.Cu, length 4.0000 mm"
+   }
+  ]
+ },
+ {
+  "type": "clearance",
+  "description": "Clearance violation (netclass 'Default' clearance 0.2000 mm; actual 0.1000 mm)",
+  "items": [
+   {
+    "uuid": "12dd4577-21b3-5f0f-9dbe-1396ab8cddd3",
+    "description": "Track [E'6] on F.Cu, length 4.0000 mm"
+   },
+   {
+    "uuid": "77926118-3efd-5d1e-93df-bf7874ea4d4f",
+    "description": "Track [P5] on F.Cu, length 4.0000 mm"
+   }
+  ]
+ },
+ {
+  "type": "clearance",
+  "description": "Clearance violation (netclass 'Default' clearance 0.2000 mm; actual 0.1000 mm)",
+  "items": [
+   {
+    "uuid": "15bcc071-4980-5ce7-83d9-c4c387c53666",
+    "description": "Track [E<3>] on F.Cu, length 4.0000 mm"
+   },
+   {
+    "uuid": "c9cc6b46-31c8-5c94-89e6-27f43cabfec0",
+    "description": "Track [P2] on F.Cu, length 4.0000 mm"
+   }
+  ]
+ },
+ {
+  "type": "clearance",
+  "description": "Clearance violation (netclass 'Alpha' clearance 0.2000 mm; actual 0.1000 mm)",
+  "items": [
+   {
+    "uuid": "1948643a-86ca-5dbf-904b-8c0294ee8499",
+    "description": "Track [D1] on F.Cu, length 4.0000 mm"
+   },
+   {
+    "uuid": "d40e6100-bb5e-5225-b779-57dc21a78af6",
+    "description": "Track [A1] on F.Cu, length 4.0000 mm"
+   }
+  ]
+ },
+ {
+  "type": "clearance",
+  "description": "Clearance violation (netclass 'Default' clearance 0.2000 mm; actual 0.1000 mm)",
+  "items": [
+   {
+    "uuid": "1ea3fa61-b8d6-5b8e-bfa5-60010ae8acd9",
+    "description": "Track [P7] on F.Cu, length 4.0000 mm"
+   },
+   {
+    "uuid": "e91782a1-079e-54a2-ac50-d58e8ae3a0b5",
+    "description": "Track [E|8] on F.Cu, length 4.0000 mm"
+   }
+  ]
+ },
+ {
+  "type": "clearance",
+  "description": "Clearance violation (netclass 'Alpha' clearance 0.2000 mm; actual 0.1000 mm)",
+  "items": [
+   {
+    "uuid": "2bf8b1a6-ca1c-58f5-85b5-8830f94643fa",
+    "description": "Track [D11] on F.Cu, length 4.0000 mm"
+   },
+   {
+    "uuid": "8f693fe5-cf28-5c54-a287-18d16f3805e7",
+    "description": "Pad 1 [A11] of U11 on F.Cu"
+   }
+  ]
+ },
+ {
+  "type": "clearance",
+  "description": "Clearance violation (netclass 'Beta' clearance 0.2000 mm; actual 0.1000 mm)",
+  "items": [
+   {
+    "uuid": "2fcbde32-ed28-5595-9407-314f13692f61",
+    "description": "Track [A2] on F.Cu, length 4.0000 mm"
+   },
+   {
+    "uuid": "85d3d3bc-c389-526f-87b7-01379eab279d",
+    "description": "Track [B2] on F.Cu, length 4.0000 mm"
+   }
+  ]
+ },
+ {
+  "type": "clearance",
+  "description": "Clearance violation (netclass 'Gamma' clearance 0.2000 mm; actual 0.1000 mm)",
+  "items": [
+   {
+    "uuid": "4ec1fce8-f0c4-5fd4-80d4-b54236bc186f",
+    "description": "Pad 1 [B12] of U21 on F.Cu"
+   },
+   {
+    "uuid": "7aa51c5c-3507-521f-9316-842e515c5ed1",
+    "description": "Track [G12] on F.Cu, length 4.0000 mm"
+   }
+  ]
+ },
+ {
+  "type": "clearance",
+  "description": "Clearance violation (netclass 'Default' clearance 0.2000 mm; actual 0.1000 mm)",
+  "items": [
+   {
+    "uuid": "54e2714a-2b25-569e-a883-8de7d52863dc",
+    "description": "Track [P4] on F.Cu, length 4.0000 mm"
+   },
+   {
+    "uuid": "84bd50e4-1245-5b84-9b8a-fbce708fd3dc",
+    "description": "Track [E\"5] on F.Cu, length 4.0000 mm"
+   }
+  ]
+ },
+ {
+  "type": "clearance",
+  "description": "Clearance violation (netclass 'Alpha' clearance 0.2000 mm; actual 0.1000 mm)",
+  "items": [
+   {
+    "uuid": "5cc48316-5144-5138-935f-f22914e06659",
+    "description": "Track [D0] on F.Cu, length 4.0000 mm"
+   },
+   {
+    "uuid": "b4596ee5-7787-5586-81a6-7d4b0aa49744",
+    "description": "Track [A0] on F.Cu, length 4.0000 mm"
+   }
+  ]
+ },
+ {
+  "type": "clearance",
+  "description": "Clearance violation (netclass 'Default' clearance 0.2000 mm; actual 0.1000 mm)",
+  "items": [
+   {
+    "uuid": "60eeae31-0e21-5ca3-9ccd-7b6b62029e46",
+    "description": "Track [P6] on F.Cu, length 4.0000 mm"
+   },
+   {
+    "uuid": "b735905b-1ab6-53ff-9c14-d55f06f48d49",
+    "description": "Track [E 7] on F.Cu, length 4.0000 mm"
+   }
+  ]
+ },
+ {
+  "type": "clearance",
+  "description": "Clearance violation (netclass 'Default' clearance 0.2000 mm; actual 0.1000 mm)",
+  "items": [
+   {
+    "uuid": "7361d070-7def-5777-9116-83f5812af562",
+    "description": "Track [P0] on F.Cu, length 4.0000 mm"
+   },
+   {
+    "uuid": "da8d46ae-198a-52ce-8147-a1adae9e3bdd",
+    "description": "Track [E/1] on F.Cu, length 4.0000 mm"
+   }
+  ]
+ },
+ {
+  "type": "clearance",
+  "description": "Clearance violation (netclass 'Default' clearance 0.2000 mm; actual 0.1000 mm)",
+  "items": [
+   {
+    "uuid": "8b182ba3-5d55-5902-9f82-6c7835b5041e",
+    "description": "Track [P1] on F.Cu, length 4.0000 mm"
+   },
+   {
+    "uuid": "b3698c8f-8ea6-5e28-a268-5fb48cb9293c",
+    "description": "Track [E\\2] on F.Cu, length 4.0000 mm"
+   }
+  ]
+ },
+ {
+  "type": "clearance",
+  "description": "Clearance violation (netclass 'Default' clearance 0.2000 mm; actual 0.1000 mm)",
+  "items": [
+   {
+    "uuid": "8c0f394f-c298-589e-b569-b608b0f0010a",
+    "description": "Track [E:4] on F.Cu, length 4.0000 mm"
+   },
+   {
+    "uuid": "adf41c5e-ef37-5725-a5da-59da5740d2b5",
+    "description": "Track [P3] on F.Cu, length 4.0000 mm"
+   }
+  ]
+ },
+ {
+  "type": "clearance",
+  "description": "Clearance violation (netclass 'Gamma' clearance 0.2000 mm; actual 0.1000 mm)",
+  "items": [
+   {
+    "uuid": "90f7f3ea-5e1d-5e3e-8fa4-01ed8791a5d1",
+    "description": "Pad 1 [G13] of U31 on F.Cu"
+   },
+   {
+    "uuid": "b5601d58-c2bc-5ab8-b059-d54377a249b5",
+    "description": "Track [B13] on F.Cu, length 4.0000 mm"
+   }
+  ]
+ },
+ {
+  "type": "clearance",
+  "description": "Clearance violation (netclass 'Gamma' clearance 0.2000 mm; actual 0.1000 mm)",
+  "items": [
+   {
+    "uuid": "939b2d55-d12d-543c-9425-c7c273acd6a1",
+    "description": "Track [B5] on F.Cu, length 4.0000 mm"
+   },
+   {
+    "uuid": "e63cd6ff-05a8-548b-887a-9dea8e3a9bed",
+    "description": "Track [G5] on F.Cu, length 4.0000 mm"
+   }
+  ]
+ },
+ {
+  "type": "clearance",
+  "description": "Clearance violation (netclass 'alpha' clearance 0.2000 mm; actual 0.1000 mm)",
+  "items": [
+   {
+    "uuid": "94786f9f-1f79-541f-95fd-e0d849561fce",
+    "description": "Track [L6] on F.Cu, length 4.0000 mm"
+   },
+   {
+    "uuid": "c5f2de76-0569-5586-8b0b-41f6f5611e5f",
+    "description": "Track [B6] on F.Cu, length 4.0000 mm"
+   }
+  ]
+ },
+ {
+  "type": "clearance",
+  "description": "Clearance violation (netclass 'Alpha' clearance 0.2000 mm; actual 0.1000 mm)",
+  "items": [
+   {
+    "uuid": "95b15ac1-34d4-5f4c-9b04-9529cc11a024",
+    "description": "Pad 1 [D10] of U01 on F.Cu"
+   },
+   {
+    "uuid": "d74d5388-a7ca-5196-96ec-1779c547d9ff",
+    "description": "Track [A10] on F.Cu, length 4.0000 mm"
+   }
+  ]
+ },
+ {
+  "type": "clearance",
+  "description": "Clearance violation (netclass 'alpha' clearance 0.2000 mm; actual 0.1000 mm)",
+  "items": [
+   {
+    "uuid": "abc7195a-5c2b-53f3-afce-985f93d3b5de",
+    "description": "Track [L7] on F.Cu, length 4.0000 mm"
+   },
+   {
+    "uuid": "e8b6f63b-a896-54c3-903c-b71bba61f0d7",
+    "description": "Track [B7] on F.Cu, length 4.0000 mm"
+   }
+  ]
+ },
+ {
+  "type": "clearance",
+  "description": "Clearance violation (netclass 'Gamma' clearance 0.2000 mm; actual 0.1000 mm)",
+  "items": [
+   {
+    "uuid": "b35809ac-7d2c-52f9-ba2a-6a7cbfde776d",
+    "description": "Track [B4] on F.Cu, length 4.0000 mm"
+   },
+   {
+    "uuid": "c796a85c-544e-5116-a56b-3755c7afb26d",
+    "description": "Track [G4] on F.Cu, length 4.0000 mm"
+   }
+  ]
+ },
+ {
+  "type": "drill_out_of_range",
+  "description": "Hole size out of range (board setup constraints min hole 0.3000 mm; actual 1.000e-05 mm)",
+  "items": [
+   {
+    "uuid": "91cfb03c-7ad3-534e-9e9f-23ea81fa496f",
+    "description": "Via [V0] on F.Cu - B.Cu"
+   }
+  ]
+ },
+ {
+  "type": "drill_out_of_range",
+  "description": "Hole size out of range (board setup constraints min hole 0.3000 mm; actual 4.000e-05 mm)",
+  "items": [
+   {
+    "uuid": "d7cb2c37-8aba-5d2c-a69e-d0e14758a516",
+    "description": "Via [V1] on F.Cu - B.Cu"
+   }
+  ]
+ },
+ {
+  "type": "drill_out_of_range",
+  "description": "Hole size out of range (board setup constraints min hole 0.3000 mm; actual 0.0001 mm)",
+  "items": [
+   {
+    "uuid": "e4e0824b-5230-52d1-bd5f-484c621cc16b",
+    "description": "Via [V3] on F.Cu - B.Cu"
+   }
+  ]
+ },
+ {
+  "type": "drill_out_of_range",
+  "description": "Hole size out of range (board setup constraints min hole 0.3000 mm; actual 0.0001 mm)",
+  "items": [
+   {
+    "uuid": "ee9b6648-eee2-518c-b0c3-e15dd4f29eac",
+    "description": "Via [V2] on F.Cu - B.Cu"
+   }
+  ]
+ },
+ {
+  "type": "shorting_items",
+  "description": "Items shorting two nets (nets S{slash}1 and S{colon}2)",
+  "items": [
+   {
+    "uuid": "21672089-96cd-539a-ae8d-1412ce5e2297",
+    "description": "Track [S/1] on F.Cu, length 5.0000 mm"
+   },
+   {
+    "uuid": "3620bb8e-fbce-5154-97b5-6867481f695f",
+    "description": "Pad 1 [S:2] of U82 on F.Cu"
+   }
+  ]
+ },
+ {
+  "type": "solder_mask_bridge",
+  "description": "Front solder mask aperture bridges items with different nets",
+  "items": [
+   {
+    "uuid": "21672089-96cd-539a-ae8d-1412ce5e2297",
+    "description": "Track [S/1] on F.Cu, length 5.0000 mm"
+   },
+   {
+    "uuid": "3620bb8e-fbce-5154-97b5-6867481f695f",
+    "description": "Pad 1 [S:2] of U82 on F.Cu"
+   }
+  ]
+ }
+]
