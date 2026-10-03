@@ -25,6 +25,7 @@ from typing import Any
 from .. import envelope, kicad_env
 from ..native import move as native_move
 from ..native import netclass as native_netclass
+from ..native import place as native_place
 from ..native import pour as native_pour
 from .board import _board_arg
 
@@ -279,19 +280,13 @@ def place(args: dict[str, Any]) -> None:
     from-netlist` laid out a grid ordered by reference designator, which puts a
     decoupling capacitor wherever the alphabet happens to put it.
 
-    The payload reports half-perimeter wirelength before and after and declines
-    to write when it did not improve, so "the placement got better" is a number
-    in the envelope rather than a claim about the algorithm.
+    It reports half-perimeter wirelength before and after and declines to write
+    when it did not improve, so "the placement got better" is a number in the
+    envelope rather than a claim about the algorithm.
     """
-    extra: list[str] = []
-    for name in ("iterations", "clearance"):
-        if args.get(name) is not None:
-            extra += [f"--{name}", str(args[name])]
-    keep = args.get("keep")
-    if keep:
-        refs = keep if isinstance(keep, list) else [keep]
-        extra += ["--keep", ",".join(str(r) for r in refs)]
-    _relay("pcb_autoplace", args, extra)
+    board = _board_arg(args)
+    _guard(board, args)
+    native_place.run(board, args)
 
 
 def netclass(args: dict[str, Any]) -> None:

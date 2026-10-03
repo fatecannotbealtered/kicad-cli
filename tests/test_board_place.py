@@ -254,7 +254,7 @@ def test_drc_is_the_referee_and_it_reports_what_it_cost(tmp_path):
     doc = confirmed(["board", "place", "--board", str(board)])
     verify = doc["data"]["verify"]
     assert verify["ran"] is True
-    assert verify["oracle"] == "kicad-cli pcb drc"
+    assert verify["oracle"] == "engine"
     assert verify["drc_after"].get("error", 0) <= verify["drc_before"].get("error", 0)
     assert "warnings_added" in verify
 

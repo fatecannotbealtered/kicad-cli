@@ -148,6 +148,35 @@ def test_board_pour_needs_no_kicad(tmp_path: Path) -> None:
     assert fake_upstream.attempts(tmp_path / "fake") == 0, "pour started KiCad after all"
 
 
+TWO_PARTS = """(kicad_pcb (version 20241229) (generator "t") (general (thickness 1.6)) (paper "A4")
+	(layers (0 "F.Cu" signal) (2 "B.Cu" signal) (25 "Edge.Cuts" user))
+	(gr_rect (start 0 0) (end 40 30) (stroke (width 0.1) (type solid)) (fill no)
+		(layer "Edge.Cuts"))
+	(footprint "R:R" (layer "F.Cu") (at 5 5)
+		(property "Reference" "R1" (at 0 0 0) (layer "F.SilkS"))
+		(pad "1" smd rect (at -1 0) (size 1 1) (layers "F.Cu") (net "A"))
+	)
+	(footprint "R:R" (layer "F.Cu") (at 35 25)
+		(property "Reference" "R2" (at 0 0 0) (layer "F.SilkS"))
+		(pad "1" smd rect (at -1 0) (size 1 1) (layers "F.Cu") (net "A"))
+	)
+)
+"""
+
+
+def test_board_place_needs_no_kicad(tmp_path: Path) -> None:
+    """`board place` checks its work with this tool's DRC, both of KiCad's
+    boundaries replaced by stubs that fail when called."""
+    board = tmp_path / "two.kicad_pcb"
+    board.write_text(TWO_PARTS, encoding="utf-8")
+    env = fake_upstream.env(tmp_path / "fake", "launch_fail")
+    placed = _confirmed(["board", "place", "--board", str(board)], env)
+    assert code_of(placed) == "OK", placed
+    assert placed["data"]["improved"] is True
+    assert placed["data"]["verify"]["oracle"] == "engine"
+    assert fake_upstream.attempts(tmp_path / "fake") == 0, "place started KiCad after all"
+
+
 def test_board_parity_needs_no_kicad(tmp_path: Path) -> None:
     """Both sides are read here now: the board from its file, the schematic
     through this tool's own netlist. Both of KiCad's boundaries are stubs that
