@@ -220,7 +220,7 @@ def generate(destination, module=None, executable=None, runtime_binding=None, in
             if p.is_file() and p.name != "RESOURCE-MANIFEST.json"
         }
         (target / "RESOURCE-MANIFEST.json").write_text(
-            json.dumps(resources, indent=2) + "\n", encoding="utf-8", newline="\n"
+            json.dumps(resources, indent=2, sort_keys=True) + "\n", encoding="utf-8", newline="\n"
         )
 
 

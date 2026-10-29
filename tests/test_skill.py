@@ -102,6 +102,8 @@ def test_generated_skill_resources_are_current(tmp_path):
     for install_name in INSTALL_NAMES.values():
         fresh = tmp_path / install_name
         checked = ROOT / "skills" / install_name
+        manifest = json.loads((fresh / "RESOURCE-MANIFEST.json").read_bytes())
+        assert list(manifest) == sorted(manifest), "Manifest key order must be OS-independent"
         for path in fresh.rglob("*"):
             if path.is_file():
                 assert path.read_bytes() == (checked / path.relative_to(fresh)).read_bytes()
