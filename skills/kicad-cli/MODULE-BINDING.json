@@ -1,7 +1,7 @@
 {
   "module": "kicad-cli",
   "install_name": "kicad-cli",
-  "source_code_sha256": "20374c0317ac3b01ef3a33ebed64b259b1e94502932d7009b744fc01c5005fba",
+  "source_code_sha256": "0e02af9c15fef9d1ea16e0ebaf44705e1e56cc626b7c719aeadcdf29bc0b244d",
   "protocol": "driver-board.v2.20-integer-nm-library",
   "command_contract_sha256": "3a1bd28f2a33cbb5d0ce8f70d34cf7647ee71d5f03cf185aab9cf527b0198291",
   "executable_sha256": null,

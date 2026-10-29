@@ -1,6 +1,6 @@
 # 制造资料导出与交付检查
 
-先读[共享运行规则](common.md)。本模块负责已有fab gerber、fab drill和board plot的导出范围；命令以当前reference为准。本轮没有自动装配BOM/贴片坐标的新入口，不创建占位命令。
+先读[共享运行规则](common.md)。本模块负责fab gerber、fab drill和board plot导出；命令以当前reference为准。装配BOM和贴片坐标导出不在本模块支持范围内。
 
 导出前固定可继续编辑的PCB、同名PRO/DRU、库上下文和检查证据。记录精确文件hash与实际构件，确认所需层、孔与输出格式。先完成PCB规划与修改；导出时不自动修设计，也不更改规则取得通过。
 

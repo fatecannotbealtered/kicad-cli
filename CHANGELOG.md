@@ -4,6 +4,14 @@ All notable product changes are recorded here. CLI, executable, six Skills and d
 
 ## [Unreleased]
 
+## [1.0.1] - 2026-10-29
+
+### Changed
+
+- Rewrite product introductions and the six Skill descriptions around engineering tasks, package selection and everyday use.
+- Explain Windows x64, macOS arm64/x64 and Linux x64 installation, external KiCad requirements, and upgrades that preserve configuration and knowledge paths.
+- Clarify the two operations that still require Windows and retain the existing preview, confirmation and engineering scope boundaries.
+
 ## [1.0.0] - 2026-10-29
 
 ### Added

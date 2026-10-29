@@ -1,8 +1,8 @@
 {
   "phase": "local_candidate_unpublished",
-  "series": "1.0.0",
-  "tag": "v1.0.0",
-  "product_version": "1.0.0",
+  "series": "1.0.1",
+  "tag": "v1.0.1",
+  "product_version": "1.0.1",
   "qualification": {
     "status": "pending_exact_artifact_acceptance",
     "policy": "Acceptance binds exact artifact hashes; source tests alone do not qualify a package"
