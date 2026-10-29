@@ -1,0 +1,6 @@
+(fp_lib_table
+	(version 7)
+	(lib (name "drclib") (type "KiCad") (uri "${KIPRJMOD}/drclib.pretty") (options "") (descr ""))
+	(lib (name "drcoff") (type "KiCad") (uri "${KIPRJMOD}/drclib.pretty") (options "") (descr "") (disabled))
+	(lib (name "drcgone") (type "KiCad") (uri "${KIPRJMOD}/gone.pretty") (options "") (descr ""))
+)

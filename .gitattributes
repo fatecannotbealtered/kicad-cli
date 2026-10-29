@@ -1,0 +1,45 @@
+# Repository source and generated Skill resources use deterministic LF text.
+* text=auto eol=lf
+
+# Exact native examples and finite regression inputs retain their original bytes.
+examples/arc-scope/** -text whitespace=cr-at-eol,-blank-at-eof
+examples/wired-schmitt/** -text whitespace=cr-at-eol,-blank-at-eof
+bench/trial_tools/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol
+bench/physical-footprint-eco/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol
+bench/advanced_edit/fixtures/** -text whitespace=cr-at-eol
+bench/advanced_edit/requirements/** -text whitespace=cr-at-eol
+bench/hierarchy_edit/fixtures/** -text whitespace=cr-at-eol,-blank-at-eof
+bench/hierarchy_edit/requirements/** -text whitespace=cr-at-eol
+bench/hierarchy_edit/usable/fixtures/** -text whitespace=cr-at-eol,-blank-at-eof
+bench/hierarchy_edit/usable/requirements/** -text whitespace=cr-at-eol
+bench/saved_examples/** -text whitespace=cr-at-eol,-blank-at-eof
+
+# Fixed upstream runtime, tools and the direct user grant keep authenticated bytes.
+kicad_cli/_driver_sdk/** -text whitespace=cr-at-eol
+kicad_cli/driver_spec/** -text whitespace=cr-at-eol
+package/tools/** -text whitespace=cr-at-eol,-blank-at-eof
+docs/first-design-trial/INTERNAL-AUTHORIZATION.json -text whitespace=cr-at-eol
+tests/test_candidate_output_backend.py -text whitespace=cr-at-eol
+tests/test_windows_trial_preparation.py -text whitespace=cr-at-eol
+tests/test_windows_trial_eco.py -text whitespace=cr-at-eol
+tests/test_trial_operation_show_exe.py -text whitespace=cr-at-eol
+tests/trial_operation_fixture.py -text whitespace=cr-at-eol
+
+# Windows command scripts intentionally use CRLF.
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# Binary payloads are never line-normalized.
+*.exe binary
+*.dll binary
+*.so binary
+*.dylib binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary
+*.zip binary
+*.tar.gz binary
+*.tgz binary

@@ -1,0 +1,670 @@
+{
+ "kicad_version": "10.0.6",
+ "violations": [
+  {
+   "type": "clearance",
+   "severity": "error",
+   "items": [
+    "13ab361a-358b-5bc1-9b82-fd063c3f31a8",
+    "e953c351-5eb2-5866-a42f-31d508798cd1"
+   ]
+  },
+  {
+   "type": "clearance",
+   "severity": "error",
+   "items": [
+    "1549dd59-ea8a-5e03-8a2f-b8b8449e7081",
+    "d8919471-9dac-585b-accb-49d11e382441"
+   ]
+  },
+  {
+   "type": "clearance",
+   "severity": "error",
+   "items": [
+    "1b5d20da-29a6-590e-a151-6f22735d87d0",
+    "36f54dfa-a64c-5dec-aa71-a65b228bed0f"
+   ]
+  },
+  {
+   "type": "clearance",
+   "severity": "error",
+   "items": [
+    "1c89c438-75ef-59d6-b91a-4bf39f99dcc2",
+    "aec546eb-329d-57af-a979-3c022059b1b1"
+   ]
+  },
+  {
+   "type": "clearance",
+   "severity": "error",
+   "items": [
+    "25c24f9f-3e4f-5c7a-b0c2-18af82c75f90",
+    "ade4be0b-b53f-52fa-a16a-6688f871684f"
+   ]
+  },
+  {
+   "type": "clearance",
+   "severity": "error",
+   "items": [
+    "2d81b887-fbb8-5371-a52d-5cf135fb797e",
+    "fe9f8e07-36cb-5125-9764-fc9281f3e8b7"
+   ]
+  },
+  {
+   "type": "clearance",
+   "severity": "error",
+   "items": [
+    "4442c4c5-2d44-5188-99f4-507443969dc7",
+    "bf1f76ec-57ac-5caf-a639-3ea3f3c08329"
+   ]
+  },
+  {
+   "type": "clearance",
+   "severity": "error",
+   "items": [
+    "4598ea7f-8d23-508d-b297-6210640b3327",
+    "79e1da98-d792-5466-bbe8-b2ee59254b76"
+   ]
+  },
+  {
+   "type": "clearance",
+   "severity": "error",
+   "items": [
+    "47e6d041-2380-5027-a7d4-667f1b2f91b4",
+    "fa386bc7-1bb1-5fd5-a16b-c9952525e3e3"
+   ]
+  },
+  {
+   "type": "clearance",
+   "severity": "error",
+   "items": [
+    "4a412c78-4a81-55bb-8766-0f756a1efd77",
+    "7cbe5562-8f27-5b27-9865-079966b9cc8a"
+   ]
+  },
+  {
+   "type": "clearance",
+   "severity": "error",
+   "items": [
+    "4fbee371-042a-515d-96c8-208d306238f7",
+    "baa4e5cf-3420-5e63-b43e-2559dad7a651"
+   ]
+  },
+  {
+   "type": "clearance",
+   "severity": "error",
+   "items": [
+    "5dfeffb3-36a0-579e-8421-2291e27b2ebd",
+    "8683ba85-0616-5094-92e8-f41e9d879135"
+   ]
+  },
+  {
+   "type": "clearance",
+   "severity": "error",
+   "items": [
+    "5f18e2f9-9e29-551e-84df-bea881caf706",
+    "aaa0a365-6799-5bf4-81d6-5287edf79417"
+   ]
+  },
+  {
+   "type": "clearance",
+   "severity": "error",
+   "items": [
+    "86299f00-1d43-50c6-8abc-5509830e0c2c",
+    "ddfdb9b2-58fc-583b-97db-69a94346bff2"
+   ]
+  },
+  {
+   "type": "clearance",
+   "severity": "error",
+   "items": [
+    "88172cc3-4c06-5a3b-9256-2e10238901e6",
+    "f0016144-2a71-5a8f-8695-7ed6445334ff"
+   ]
+  },
+  {
+   "type": "clearance",
+   "severity": "error",
+   "items": [
+    "891a4223-0562-5da8-bb51-f7a3a7087a19",
+    "bffe6dcf-5aa5-5e86-90b4-ae7d28fff85b"
+   ]
+  },
+  {
+   "type": "clearance",
+   "severity": "error",
+   "items": [
+    "9097ead5-eaeb-5869-b7b4-2821225dcf4b",
+    "de9fdf4d-9f4f-5848-ab62-3ac1ac13c582"
+   ]
+  },
+  {
+   "type": "clearance",
+   "severity": "error",
+   "items": [
+    "94dfe155-f9ab-5b26-b00f-1529d500ce58",
+    "f4dc1c1f-a146-5a57-ae2f-86141fa9fd36"
+   ]
+  },
+  {
+   "type": "clearance",
+   "severity": "error",
+   "items": [
+    "95e1d04d-8ab8-5d19-b420-64f3213c0d63",
+    "efff5def-06ff-5c34-a9e3-02529b09ced0"
+   ]
+  },
+  {
+   "type": "clearance",
+   "severity": "error",
+   "items": [
+    "95e1d04d-8ab8-5d19-b420-64f3213c0d63",
+    "efff5def-06ff-5c34-a9e3-02529b09ced0"
+   ]
+  },
+  {
+   "type": "clearance",
+   "severity": "error",
+   "items": [
+    "95e1d04d-8ab8-5d19-b420-64f3213c0d63",
+    "efff5def-06ff-5c34-a9e3-02529b09ced0"
+   ]
+  },
+  {
+   "type": "clearance",
+   "severity": "error",
+   "items": [
+    "95e1d04d-8ab8-5d19-b420-64f3213c0d63",
+    "efff5def-06ff-5c34-a9e3-02529b09ced0"
+   ]
+  },
+  {
+   "type": "clearance",
+   "severity": "error",
+   "items": [
+    "9e92e1a6-44cb-5619-9171-e048e89c0fe3",
+    "dadd1a55-4697-5cca-b0c1-1155f8510186"
+   ]
+  },
+  {
+   "type": "clearance",
+   "severity": "error",
+   "items": [
+    "a8157703-81cf-5034-8007-38f81ad8353f",
+    "fb8d8f6f-fac8-5b46-b474-5fccdcb3be3b"
+   ]
+  },
+  {
+   "type": "clearance",
+   "severity": "error",
+   "items": [
+    "a8b21504-578d-5c6e-900e-503af2076858",
+    "ec3bdcdf-80a4-529c-ad30-6f81885fb36f"
+   ]
+  },
+  {
+   "type": "clearance",
+   "severity": "error",
+   "items": [
+    "b61bf574-fcc1-55ed-a272-2bdd2a4989f3",
+    "ffeb5298-0a38-506d-ac88-58df5c64fe58"
+   ]
+  },
+  {
+   "type": "clearance",
+   "severity": "error",
+   "items": [
+    "d53c05e1-a7a5-51af-a973-dc54b6b0d046",
+    "11216187-d632-5782-aa41-4c33d3459914"
+   ]
+  },
+  {
+   "type": "clearance",
+   "severity": "error",
+   "items": [
+    "da1e6294-8f5f-5732-b2dd-90a987f2bc82",
+    "1372b043-756c-52b2-b7eb-ac3ee36574d8"
+   ]
+  },
+  {
+   "type": "copper_edge_clearance",
+   "severity": "error",
+   "items": [
+    "45778dc3-0a1b-557f-9594-bac9c3b84e94",
+    "0829fc7d-47a3-5269-b9ad-bd2a0586f093"
+   ]
+  },
+  {
+   "type": "copper_edge_clearance",
+   "severity": "error",
+   "items": [
+    "45778dc3-0a1b-557f-9594-bac9c3b84e94",
+    "1f25da46-302e-5f09-93e9-92d5ce74a243"
+   ]
+  },
+  {
+   "type": "copper_edge_clearance",
+   "severity": "error",
+   "items": [
+    "45778dc3-0a1b-557f-9594-bac9c3b84e94",
+    "4439d9a7-ac95-5417-9d02-0cf651c39da5"
+   ]
+  },
+  {
+   "type": "copper_edge_clearance",
+   "severity": "error",
+   "items": [
+    "b142a1c7-4b0e-56ab-bf08-18e8be082517",
+    "3b9a399a-4a45-5a7e-b482-eef37db8455d"
+   ]
+  },
+  {
+   "type": "copper_edge_clearance",
+   "severity": "error",
+   "items": [
+    "d2f17596-df8f-55bd-8b26-0e1a273772f6",
+    "3662f839-46d0-5066-9d37-2e450e53fe23"
+   ]
+  },
+  {
+   "type": "copper_edge_clearance",
+   "severity": "error",
+   "items": [
+    "e5b49960-7393-5a09-93ce-2e037339461e",
+    "fc751ee3-9eb1-5333-adbe-b73d139db983"
+   ]
+  },
+  {
+   "type": "hole_clearance",
+   "severity": "error",
+   "items": [
+    "12de8f79-5f15-59cd-9d50-4f9b05200d94",
+    "3ed6309a-6491-5732-9981-695a154fbc39"
+   ]
+  },
+  {
+   "type": "hole_clearance",
+   "severity": "error",
+   "items": [
+    "12de8f79-5f15-59cd-9d50-4f9b05200d94",
+    "3ed6309a-6491-5732-9981-695a154fbc39"
+   ]
+  },
+  {
+   "type": "hole_clearance",
+   "severity": "error",
+   "items": [
+    "12de8f79-5f15-59cd-9d50-4f9b05200d94",
+    "3ed6309a-6491-5732-9981-695a154fbc39"
+   ]
+  },
+  {
+   "type": "hole_clearance",
+   "severity": "error",
+   "items": [
+    "12de8f79-5f15-59cd-9d50-4f9b05200d94",
+    "3ed6309a-6491-5732-9981-695a154fbc39"
+   ]
+  },
+  {
+   "type": "hole_clearance",
+   "severity": "error",
+   "items": [
+    "12de8f79-5f15-59cd-9d50-4f9b05200d94",
+    "3ed6309a-6491-5732-9981-695a154fbc39"
+   ]
+  },
+  {
+   "type": "hole_clearance",
+   "severity": "error",
+   "items": [
+    "12de8f79-5f15-59cd-9d50-4f9b05200d94",
+    "3ed6309a-6491-5732-9981-695a154fbc39"
+   ]
+  },
+  {
+   "type": "hole_clearance",
+   "severity": "error",
+   "items": [
+    "12de8f79-5f15-59cd-9d50-4f9b05200d94",
+    "3ed6309a-6491-5732-9981-695a154fbc39"
+   ]
+  },
+  {
+   "type": "hole_clearance",
+   "severity": "error",
+   "items": [
+    "12de8f79-5f15-59cd-9d50-4f9b05200d94",
+    "3ed6309a-6491-5732-9981-695a154fbc39"
+   ]
+  },
+  {
+   "type": "hole_clearance",
+   "severity": "error",
+   "items": [
+    "24d0d19a-e92a-508c-884b-7190e0112732",
+    "36e2cd1d-6080-5dbc-a681-3566f3a909e8"
+   ]
+  },
+  {
+   "type": "hole_clearance",
+   "severity": "error",
+   "items": [
+    "24d0d19a-e92a-508c-884b-7190e0112732",
+    "36e2cd1d-6080-5dbc-a681-3566f3a909e8"
+   ]
+  },
+  {
+   "type": "hole_clearance",
+   "severity": "error",
+   "items": [
+    "24d0d19a-e92a-508c-884b-7190e0112732",
+    "36e2cd1d-6080-5dbc-a681-3566f3a909e8"
+   ]
+  },
+  {
+   "type": "hole_clearance",
+   "severity": "error",
+   "items": [
+    "24d0d19a-e92a-508c-884b-7190e0112732",
+    "36e2cd1d-6080-5dbc-a681-3566f3a909e8"
+   ]
+  },
+  {
+   "type": "hole_clearance",
+   "severity": "error",
+   "items": [
+    "323ca0b1-d042-521a-a87c-86bb678a2693",
+    "7338a0e8-99ec-5c94-9b41-bf028ace3473"
+   ]
+  },
+  {
+   "type": "hole_clearance",
+   "severity": "error",
+   "items": [
+    "323ca0b1-d042-521a-a87c-86bb678a2693",
+    "7338a0e8-99ec-5c94-9b41-bf028ace3473"
+   ]
+  },
+  {
+   "type": "hole_clearance",
+   "severity": "error",
+   "items": [
+    "323ca0b1-d042-521a-a87c-86bb678a2693",
+    "7338a0e8-99ec-5c94-9b41-bf028ace3473"
+   ]
+  },
+  {
+   "type": "hole_clearance",
+   "severity": "error",
+   "items": [
+    "323ca0b1-d042-521a-a87c-86bb678a2693",
+    "7338a0e8-99ec-5c94-9b41-bf028ace3473"
+   ]
+  },
+  {
+   "type": "hole_clearance",
+   "severity": "error",
+   "items": [
+    "4944600f-7be8-568e-ba7c-b1df9ab86943",
+    "befc7032-63ea-54ec-868e-0db85f5cc011"
+   ]
+  },
+  {
+   "type": "hole_clearance",
+   "severity": "error",
+   "items": [
+    "5d74de6c-c339-5ddc-ad68-ae459a8d9488",
+    "978373cd-22b9-54b3-b8fc-9f2a98ff90ca"
+   ]
+  },
+  {
+   "type": "hole_clearance",
+   "severity": "error",
+   "items": [
+    "5ec99eb5-61cb-5bd1-bb9a-7c56a4d077e8",
+    "b17922ea-1163-5dab-bd5c-57a89d13ffb2"
+   ]
+  },
+  {
+   "type": "hole_clearance",
+   "severity": "error",
+   "items": [
+    "5ec99eb5-61cb-5bd1-bb9a-7c56a4d077e8",
+    "b17922ea-1163-5dab-bd5c-57a89d13ffb2"
+   ]
+  },
+  {
+   "type": "hole_clearance",
+   "severity": "error",
+   "items": [
+    "5ec99eb5-61cb-5bd1-bb9a-7c56a4d077e8",
+    "b17922ea-1163-5dab-bd5c-57a89d13ffb2"
+   ]
+  },
+  {
+   "type": "hole_clearance",
+   "severity": "error",
+   "items": [
+    "5ec99eb5-61cb-5bd1-bb9a-7c56a4d077e8",
+    "b17922ea-1163-5dab-bd5c-57a89d13ffb2"
+   ]
+  },
+  {
+   "type": "hole_clearance",
+   "severity": "error",
+   "items": [
+    "5ec99eb5-61cb-5bd1-bb9a-7c56a4d077e8",
+    "b17922ea-1163-5dab-bd5c-57a89d13ffb2"
+   ]
+  },
+  {
+   "type": "hole_clearance",
+   "severity": "error",
+   "items": [
+    "5ec99eb5-61cb-5bd1-bb9a-7c56a4d077e8",
+    "b17922ea-1163-5dab-bd5c-57a89d13ffb2"
+   ]
+  },
+  {
+   "type": "hole_clearance",
+   "severity": "error",
+   "items": [
+    "5ec99eb5-61cb-5bd1-bb9a-7c56a4d077e8",
+    "b17922ea-1163-5dab-bd5c-57a89d13ffb2"
+   ]
+  },
+  {
+   "type": "hole_clearance",
+   "severity": "error",
+   "items": [
+    "5ec99eb5-61cb-5bd1-bb9a-7c56a4d077e8",
+    "b17922ea-1163-5dab-bd5c-57a89d13ffb2"
+   ]
+  },
+  {
+   "type": "hole_clearance",
+   "severity": "error",
+   "items": [
+    "6643d46a-f073-57b2-894e-9c145a756a93",
+    "52f3e8c2-171d-55ea-bdba-1a08d0fc7a5c"
+   ]
+  },
+  {
+   "type": "hole_clearance",
+   "severity": "error",
+   "items": [
+    "667946b4-2534-5c5b-a480-e2c5f5fd3059",
+    "fcf11c60-73a3-53da-98e0-73e326a921e7"
+   ]
+  },
+  {
+   "type": "hole_clearance",
+   "severity": "error",
+   "items": [
+    "7338a0e8-99ec-5c94-9b41-bf028ace3473",
+    "323ca0b1-d042-521a-a87c-86bb678a2693"
+   ]
+  },
+  {
+   "type": "hole_clearance",
+   "severity": "error",
+   "items": [
+    "7338a0e8-99ec-5c94-9b41-bf028ace3473",
+    "323ca0b1-d042-521a-a87c-86bb678a2693"
+   ]
+  },
+  {
+   "type": "hole_clearance",
+   "severity": "error",
+   "items": [
+    "7338a0e8-99ec-5c94-9b41-bf028ace3473",
+    "323ca0b1-d042-521a-a87c-86bb678a2693"
+   ]
+  },
+  {
+   "type": "hole_clearance",
+   "severity": "error",
+   "items": [
+    "7338a0e8-99ec-5c94-9b41-bf028ace3473",
+    "323ca0b1-d042-521a-a87c-86bb678a2693"
+   ]
+  },
+  {
+   "type": "hole_clearance",
+   "severity": "error",
+   "items": [
+    "b068f295-466a-5b06-95f6-04f854a2a7c9",
+    "c5bc4a52-052f-5242-8710-4775520449a5"
+   ]
+  },
+  {
+   "type": "hole_clearance",
+   "severity": "error",
+   "items": [
+    "f9128e0e-4fe0-5cda-9f0a-643b215162a6",
+    "632cdd85-d2f1-53ea-a4e1-4715972cecd3"
+   ]
+  },
+  {
+   "type": "hole_clearance",
+   "severity": "error",
+   "items": [
+    "f9128e0e-4fe0-5cda-9f0a-643b215162a6",
+    "632cdd85-d2f1-53ea-a4e1-4715972cecd3"
+   ]
+  },
+  {
+   "type": "hole_clearance",
+   "severity": "error",
+   "items": [
+    "f9128e0e-4fe0-5cda-9f0a-643b215162a6",
+    "632cdd85-d2f1-53ea-a4e1-4715972cecd3"
+   ]
+  },
+  {
+   "type": "hole_clearance",
+   "severity": "error",
+   "items": [
+    "f9128e0e-4fe0-5cda-9f0a-643b215162a6",
+    "632cdd85-d2f1-53ea-a4e1-4715972cecd3"
+   ]
+  },
+  {
+   "type": "shorting_items",
+   "severity": "error",
+   "items": [
+    "0c9064fe-6662-5912-9328-a43748b7be48",
+    "662758e4-7355-5c74-93f9-5aecf54a783b"
+   ]
+  },
+  {
+   "type": "shorting_items",
+   "severity": "error",
+   "items": [
+    "0daab77a-62e2-5313-960c-693e4c80a936",
+    "93d94f43-7df8-5f7b-b3c6-6060a7f981f7"
+   ]
+  },
+  {
+   "type": "shorting_items",
+   "severity": "error",
+   "items": [
+    "24c88cf6-f19f-528e-926c-e9b3001e03fd",
+    "f7f76a4d-18b2-5aa3-8841-e483b5fb1867"
+   ]
+  },
+  {
+   "type": "shorting_items",
+   "severity": "error",
+   "items": [
+    "296f636f-3c65-5847-98f5-b58f38aa9339",
+    "b205b9b7-62a5-50c3-995e-3e668828832e"
+   ]
+  },
+  {
+   "type": "shorting_items",
+   "severity": "error",
+   "items": [
+    "2ff0682c-c74e-5885-a051-10486ca15915",
+    "8fbce268-8d69-5b4c-8712-8d15e67709b5"
+   ]
+  },
+  {
+   "type": "shorting_items",
+   "severity": "error",
+   "items": [
+    "314c37e6-5840-5963-9a34-4c50ae5bc783",
+    "c8054a7d-5a42-517f-9f23-6a20b77afcee"
+   ]
+  },
+  {
+   "type": "shorting_items",
+   "severity": "error",
+   "items": [
+    "56e032ce-92cd-5313-8568-442f4cd34571",
+    "e6a794fc-e37b-5ede-9f0e-5b835e471350"
+   ]
+  },
+  {
+   "type": "shorting_items",
+   "severity": "error",
+   "items": [
+    "667946b4-2534-5c5b-a480-e2c5f5fd3059",
+    "fcf11c60-73a3-53da-98e0-73e326a921e7"
+   ]
+  },
+  {
+   "type": "shorting_items",
+   "severity": "error",
+   "items": [
+    "b37950fa-0dde-52bf-b7e9-ccc8b8404e3d",
+    "c81d3e21-e3a4-5beb-8dd0-59194c382515"
+   ]
+  },
+  {
+   "type": "shorting_items",
+   "severity": "error",
+   "items": [
+    "c55a3a8d-1316-5ee6-ac53-8e2f2ea7bd0a",
+    "79e52d5c-851a-57c9-a8b0-98181dbacca7"
+   ]
+  },
+  {
+   "type": "shorting_items",
+   "severity": "error",
+   "items": [
+    "d6725acd-fc65-5bb5-82ca-254c844d1917",
+    "f904b62b-8ecd-5989-b975-1ccf5746c49b"
+   ]
+  },
+  {
+   "type": "tracks_crossing",
+   "severity": "error",
+   "items": [
+    "31bdc0b4-12bd-560d-b67e-0c6eed0c6bf2",
+    "8d5c3ebe-b6df-55a6-9188-4a8de12eca63"
+   ]
+  }
+ ],
+ "unconnected_items": []
+}

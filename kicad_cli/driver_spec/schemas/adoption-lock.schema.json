@@ -1,0 +1,171 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:tool-driver-cli-spec:adoption-lock:2.0",
+  "title": "adoption-lock",
+  "type": "object",
+  "properties": {
+    "spec_version": {
+      "allOf": [
+        {
+          "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/semver"
+        },
+        {
+          "pattern": "^[0-9]+\\."
+        }
+      ]
+    },
+    "schema_version": {
+      "const": "2.0"
+    },
+    "source_kind": {
+      "enum": [
+        "bundle",
+        "git_checkout",
+        "unversioned_copy"
+      ]
+    },
+    "source_commit": {
+      "anyOf": [
+        {
+          "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/commit"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "source_dirty": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "package_sha256": {
+      "anyOf": [
+        {
+          "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/sha256"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "base": {
+      "type": "object",
+      "properties": {
+        "spec": {
+          "const": "ai-native-cli-spec"
+        },
+        "tag": {
+          "type": "string",
+          "pattern": "^v1\\.[0-9]+\\.[0-9]+$"
+        },
+        "commit": {
+          "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/commit"
+        }
+      },
+      "required": [
+        "spec",
+        "tag",
+        "commit"
+      ],
+      "additionalProperties": false
+    },
+    "files": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "^(?!/)(?!.*\\\\)(?!.*:)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*(?:^|/)\\.(?:/|$))[^\\x00-\\x1f\\x7f]+$"
+          },
+          "source_path": {
+            "type": "string",
+            "pattern": "^(?:schemas/[A-Za-z0-9][A-Za-z0-9._-]*\\.schema\\.json|contract/[A-Za-z0-9][A-Za-z0-9._-]*\\.json|base/[A-Za-z0-9][A-Za-z0-9._/-]*|docs/[A-Za-z0-9][A-Za-z0-9._-]*\\.md|scripts/[A-Za-z0-9][A-Za-z0-9._-]*\\.py|packages/[A-Za-z0-9][A-Za-z0-9._/-]*\\.py|VERSION|STATUS)$"
+          },
+          "sha256": {
+            "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/sha256"
+          }
+        },
+        "required": [
+          "path",
+          "source_path",
+          "sha256"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "limitations": {
+      "type": "array",
+      "items": {
+        "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+      }
+    },
+    "extensions": {
+      "type": "object"
+    }
+  },
+  "required": [
+    "spec_version",
+    "schema_version",
+    "source_kind",
+    "source_commit",
+    "source_dirty",
+    "package_sha256",
+    "base",
+    "files"
+  ],
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "source_kind": {
+            "const": "bundle"
+          }
+        },
+        "required": [
+          "source_kind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "package_sha256": {
+            "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/sha256"
+          },
+          "source_commit": {
+            "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/commit"
+          },
+          "source_dirty": {
+            "const": false
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "source_kind": {
+            "const": "git_checkout"
+          }
+        },
+        "required": [
+          "source_kind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "source_commit": {
+            "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/commit"
+          },
+          "source_dirty": {
+            "type": "boolean"
+          }
+        }
+      }
+    }
+  ],
+  "additionalProperties": false
+}

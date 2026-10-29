@@ -1,0 +1,308 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:tool-driver-cli-spec:release-manifest:2.0",
+  "title": "release-manifest",
+  "type": "object",
+  "properties": {
+    "artifact_kind": {
+      "enum": [
+        "specification",
+        "cli_product"
+      ]
+    },
+    "name": {
+      "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+    },
+    "version": {
+      "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/semver"
+    },
+    "spec_version": {
+      "allOf": [
+        {
+          "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/semver"
+        },
+        {
+          "pattern": "^[0-9]+\\."
+        }
+      ]
+    },
+    "base": {
+      "type": "object",
+      "properties": {
+        "spec": {
+          "const": "ai-native-cli-spec"
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^v1\\.[0-9]+\\.[0-9]+$"
+        }
+      },
+      "required": [
+        "spec",
+        "version"
+      ],
+      "additionalProperties": false
+    },
+    "status": {
+      "enum": [
+        "draft",
+        "experimental",
+        "verified",
+        "stable"
+      ]
+    },
+    "source_commit": {
+      "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/commit"
+    },
+    "source_dirty": {
+      "type": "boolean"
+    },
+    "target": {
+      "type": "object",
+      "properties": {
+        "os": {
+          "enum": [
+            "any",
+            "windows",
+            "linux",
+            "darwin"
+          ]
+        },
+        "arch": {
+          "enum": [
+            "any",
+            "amd64",
+            "arm64"
+          ]
+        }
+      },
+      "required": [
+        "os",
+        "arch"
+      ],
+      "additionalProperties": false
+    },
+    "components": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+          },
+          "version": {
+            "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/semver"
+          },
+          "path": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "^(?!/)(?!.*\\\\)(?!.*:)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*(?:^|/)\\.(?:/|$))[^\\x00-\\x1f\\x7f]+$"
+          },
+          "sha256": {
+            "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/sha256"
+          },
+          "role": {
+            "enum": [
+              "cli",
+              "adapter",
+              "service",
+              "plugin",
+              "skill",
+              "documentation",
+              "schema",
+              "contract",
+              "base",
+              "example",
+              "validator",
+              "dependency_manifest"
+            ]
+          }
+        },
+        "required": [
+          "name",
+          "version",
+          "path",
+          "sha256",
+          "role"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "compatibility": {
+      "type": "object",
+      "properties": {
+        "application": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "identity": {
+                "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+              },
+              "version_range": {
+                "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+              },
+              "validation": {
+                "enum": [
+                  "not_run",
+                  "verified"
+                ]
+              },
+              "evidence_refs": {
+                "type": "array",
+                "items": {
+                  "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+                }
+              }
+            },
+            "required": [
+              "identity",
+              "version_range",
+              "validation",
+              "evidence_refs"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "plugin": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "identity": {
+                "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+              },
+              "version_range": {
+                "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+              },
+              "validation": {
+                "enum": [
+                  "not_run",
+                  "verified"
+                ]
+              },
+              "evidence_refs": {
+                "type": "array",
+                "items": {
+                  "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+                }
+              }
+            },
+            "required": [
+              "identity",
+              "version_range",
+              "validation",
+              "evidence_refs"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "protocol": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "identity": {
+                "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+              },
+              "version_range": {
+                "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+              },
+              "validation": {
+                "enum": [
+                  "not_run",
+                  "verified"
+                ]
+              },
+              "evidence_refs": {
+                "type": "array",
+                "items": {
+                  "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+                }
+              }
+            },
+            "required": [
+              "identity",
+              "version_range",
+              "validation",
+              "evidence_refs"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "skill": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "identity": {
+                "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+              },
+              "version_range": {
+                "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+              },
+              "validation": {
+                "enum": [
+                  "not_run",
+                  "verified"
+                ]
+              },
+              "evidence_refs": {
+                "type": "array",
+                "items": {
+                  "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+                }
+              }
+            },
+            "required": [
+              "identity",
+              "version_range",
+              "validation",
+              "evidence_refs"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "application",
+        "plugin",
+        "protocol",
+        "skill"
+      ],
+      "additionalProperties": false
+    },
+    "external_requirements": {
+      "type": "array",
+      "items": {
+        "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+      }
+    },
+    "limitations": {
+      "type": "array",
+      "items": {
+        "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+      }
+    },
+    "extensions": {
+      "type": "object"
+    }
+  },
+  "required": [
+    "artifact_kind",
+    "name",
+    "version",
+    "spec_version",
+    "base",
+    "status",
+    "source_commit",
+    "source_dirty",
+    "target",
+    "components",
+    "compatibility",
+    "external_requirements",
+    "limitations"
+  ],
+  "additionalProperties": false
+}

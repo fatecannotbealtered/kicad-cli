@@ -1,0 +1,13 @@
+{
+  "meta": {
+    "filename": "shared.kicad_pro",
+    "version": 1
+  },
+  "erc": {
+    "erc_exclusions": [],
+    "meta": {
+      "version": 0
+    },
+    "rule_severities": {}
+  }
+}

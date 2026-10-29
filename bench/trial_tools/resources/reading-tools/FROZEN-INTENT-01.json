@@ -1,0 +1,477 @@
+{
+  "schema": "dual-rc-direct-two-child-pin-intent/v1",
+  "source_requirement": {
+    "path": "D:\\personalSpace\\kicad-hierarchical-create-20261018\\source-01\\dual-rc-drill-clearance\\requirements\\ORIGINAL-REQUIREMENTS-v2.json",
+    "sha256": "4ff1b6481c30fbee8840e5a6651e1fc26a679d82b10b93ea9d0ed698567bd4be"
+  },
+  "retained_flat_inputs": {
+    "dual_rc.kicad_pcb": "d8b14b56264be43ae6e30439dab7c691cf7658a9f61669a3195d4888c54c1460",
+    "dual_rc.kicad_prl": "af40ce39689adb64fea69a854880953f3b79e8e0c09818fe5ff567ed7cc55de1",
+    "dual_rc.kicad_pro": "b5be9bdcc895b2f686f141ec0481a64041f820de05b230765e04dbe632693c13",
+    "dual_rc.kicad_sch": "85cdcca1dddbf430d07a3e0e26166395f6d6398f61c5cec796d5ed57ace3de60",
+    "dual_rc.net": "5a21f7e71a917bbe9abbf1c72921c65103fe6b257b0bd0685e7b627a01f201cd",
+    "fp-lib-table": "acbb2688f5f72e29436542908723b040357a3987914e3a6430e217792700008d",
+    "sym-lib-table": "ff879e8c4caedb9b9e531b023ac35ed73f00090cbac2517667b60a32652006fa"
+  },
+  "derivation": "New public-created three-page circuit; electrical membership retained from prior dual RC requirement; user explicitly fixes R10=12k and R20=10k. No old copper, original files or UUIDs are reused. New net scope names are explicitly mapped before generation.",
+  "partition": {
+    "root": [
+      "U1",
+      "C1",
+      "C2",
+      "J5"
+    ],
+    "A": [
+      "J1",
+      "J2",
+      "R10",
+      "R11",
+      "C10",
+      "C11",
+      "TP1",
+      "TP2"
+    ],
+    "B": [
+      "J3",
+      "J4",
+      "R20",
+      "R21",
+      "C20",
+      "C21",
+      "TP3",
+      "TP4"
+    ]
+  },
+  "physical_pins": [
+    {
+      "reference": "U1",
+      "physical_pin": "1",
+      "pad": "1",
+      "intent_net_id": "A_BUF",
+      "canonical_net": "/CHANNEL_A/BUF",
+      "sheet_id": "root",
+      "disposition": "connect"
+    },
+    {
+      "reference": "U1",
+      "physical_pin": "2",
+      "pad": "2",
+      "intent_net_id": "A_BUF",
+      "canonical_net": "/CHANNEL_A/BUF",
+      "sheet_id": "root",
+      "disposition": "connect"
+    },
+    {
+      "reference": "U1",
+      "physical_pin": "3",
+      "pad": "3",
+      "intent_net_id": "A_RC",
+      "canonical_net": "/CHANNEL_A/RC",
+      "sheet_id": "root",
+      "disposition": "connect"
+    },
+    {
+      "reference": "U1",
+      "physical_pin": "4",
+      "pad": "4",
+      "intent_net_id": "GND",
+      "canonical_net": "GND",
+      "sheet_id": "root",
+      "disposition": "connect"
+    },
+    {
+      "reference": "U1",
+      "physical_pin": "5",
+      "pad": "5",
+      "intent_net_id": "B_RC",
+      "canonical_net": "/CHANNEL_B/RC",
+      "sheet_id": "root",
+      "disposition": "connect"
+    },
+    {
+      "reference": "U1",
+      "physical_pin": "6",
+      "pad": "6",
+      "intent_net_id": "B_BUF",
+      "canonical_net": "/CHANNEL_B/BUF",
+      "sheet_id": "root",
+      "disposition": "connect"
+    },
+    {
+      "reference": "U1",
+      "physical_pin": "7",
+      "pad": "7",
+      "intent_net_id": "B_BUF",
+      "canonical_net": "/CHANNEL_B/BUF",
+      "sheet_id": "root",
+      "disposition": "connect"
+    },
+    {
+      "reference": "U1",
+      "physical_pin": "8",
+      "pad": "8",
+      "intent_net_id": "+3V3",
+      "canonical_net": "+3V3",
+      "sheet_id": "root",
+      "disposition": "connect"
+    },
+    {
+      "reference": "J1",
+      "physical_pin": "1",
+      "pad": "1",
+      "intent_net_id": "A_IN",
+      "canonical_net": "/CHANNEL_A/IN",
+      "sheet_id": "A",
+      "disposition": "connect"
+    },
+    {
+      "reference": "J1",
+      "physical_pin": "2",
+      "pad": "2",
+      "intent_net_id": "GND",
+      "canonical_net": "GND",
+      "sheet_id": "A",
+      "disposition": "connect"
+    },
+    {
+      "reference": "J2",
+      "physical_pin": "1",
+      "pad": "1",
+      "intent_net_id": "A_OUT",
+      "canonical_net": "/CHANNEL_A/OUT",
+      "sheet_id": "A",
+      "disposition": "connect"
+    },
+    {
+      "reference": "J2",
+      "physical_pin": "2",
+      "pad": "2",
+      "intent_net_id": "GND",
+      "canonical_net": "GND",
+      "sheet_id": "A",
+      "disposition": "connect"
+    },
+    {
+      "reference": "J3",
+      "physical_pin": "1",
+      "pad": "1",
+      "intent_net_id": "B_IN",
+      "canonical_net": "/CHANNEL_B/IN",
+      "sheet_id": "B",
+      "disposition": "connect"
+    },
+    {
+      "reference": "J3",
+      "physical_pin": "2",
+      "pad": "2",
+      "intent_net_id": "GND",
+      "canonical_net": "GND",
+      "sheet_id": "B",
+      "disposition": "connect"
+    },
+    {
+      "reference": "J4",
+      "physical_pin": "1",
+      "pad": "1",
+      "intent_net_id": "B_OUT",
+      "canonical_net": "/CHANNEL_B/OUT",
+      "sheet_id": "B",
+      "disposition": "connect"
+    },
+    {
+      "reference": "J4",
+      "physical_pin": "2",
+      "pad": "2",
+      "intent_net_id": "GND",
+      "canonical_net": "GND",
+      "sheet_id": "B",
+      "disposition": "connect"
+    },
+    {
+      "reference": "J5",
+      "physical_pin": "1",
+      "pad": "1",
+      "intent_net_id": "+3V3",
+      "canonical_net": "+3V3",
+      "sheet_id": "root",
+      "disposition": "connect"
+    },
+    {
+      "reference": "J5",
+      "physical_pin": "2",
+      "pad": "2",
+      "intent_net_id": "GND",
+      "canonical_net": "GND",
+      "sheet_id": "root",
+      "disposition": "connect"
+    },
+    {
+      "reference": "R10",
+      "physical_pin": "1",
+      "pad": "1",
+      "intent_net_id": "A_IN",
+      "canonical_net": "/CHANNEL_A/IN",
+      "sheet_id": "A",
+      "disposition": "connect"
+    },
+    {
+      "reference": "R10",
+      "physical_pin": "2",
+      "pad": "2",
+      "intent_net_id": "A_RC",
+      "canonical_net": "/CHANNEL_A/RC",
+      "sheet_id": "A",
+      "disposition": "connect"
+    },
+    {
+      "reference": "R11",
+      "physical_pin": "1",
+      "pad": "1",
+      "intent_net_id": "A_BUF",
+      "canonical_net": "/CHANNEL_A/BUF",
+      "sheet_id": "A",
+      "disposition": "connect"
+    },
+    {
+      "reference": "R11",
+      "physical_pin": "2",
+      "pad": "2",
+      "intent_net_id": "A_OUT",
+      "canonical_net": "/CHANNEL_A/OUT",
+      "sheet_id": "A",
+      "disposition": "connect"
+    },
+    {
+      "reference": "R20",
+      "physical_pin": "1",
+      "pad": "1",
+      "intent_net_id": "B_IN",
+      "canonical_net": "/CHANNEL_B/IN",
+      "sheet_id": "B",
+      "disposition": "connect"
+    },
+    {
+      "reference": "R20",
+      "physical_pin": "2",
+      "pad": "2",
+      "intent_net_id": "B_RC",
+      "canonical_net": "/CHANNEL_B/RC",
+      "sheet_id": "B",
+      "disposition": "connect"
+    },
+    {
+      "reference": "R21",
+      "physical_pin": "1",
+      "pad": "1",
+      "intent_net_id": "B_BUF",
+      "canonical_net": "/CHANNEL_B/BUF",
+      "sheet_id": "B",
+      "disposition": "connect"
+    },
+    {
+      "reference": "R21",
+      "physical_pin": "2",
+      "pad": "2",
+      "intent_net_id": "B_OUT",
+      "canonical_net": "/CHANNEL_B/OUT",
+      "sheet_id": "B",
+      "disposition": "connect"
+    },
+    {
+      "reference": "C10",
+      "physical_pin": "1",
+      "pad": "1",
+      "intent_net_id": "A_RC",
+      "canonical_net": "/CHANNEL_A/RC",
+      "sheet_id": "A",
+      "disposition": "connect"
+    },
+    {
+      "reference": "C10",
+      "physical_pin": "2",
+      "pad": "2",
+      "intent_net_id": "GND",
+      "canonical_net": "GND",
+      "sheet_id": "A",
+      "disposition": "connect"
+    },
+    {
+      "reference": "C11",
+      "physical_pin": "1",
+      "pad": "1",
+      "intent_net_id": "A_OUT",
+      "canonical_net": "/CHANNEL_A/OUT",
+      "sheet_id": "A",
+      "disposition": "connect"
+    },
+    {
+      "reference": "C11",
+      "physical_pin": "2",
+      "pad": "2",
+      "intent_net_id": "GND",
+      "canonical_net": "GND",
+      "sheet_id": "A",
+      "disposition": "connect"
+    },
+    {
+      "reference": "C20",
+      "physical_pin": "1",
+      "pad": "1",
+      "intent_net_id": "B_RC",
+      "canonical_net": "/CHANNEL_B/RC",
+      "sheet_id": "B",
+      "disposition": "connect"
+    },
+    {
+      "reference": "C20",
+      "physical_pin": "2",
+      "pad": "2",
+      "intent_net_id": "GND",
+      "canonical_net": "GND",
+      "sheet_id": "B",
+      "disposition": "connect"
+    },
+    {
+      "reference": "C21",
+      "physical_pin": "1",
+      "pad": "1",
+      "intent_net_id": "B_OUT",
+      "canonical_net": "/CHANNEL_B/OUT",
+      "sheet_id": "B",
+      "disposition": "connect"
+    },
+    {
+      "reference": "C21",
+      "physical_pin": "2",
+      "pad": "2",
+      "intent_net_id": "GND",
+      "canonical_net": "GND",
+      "sheet_id": "B",
+      "disposition": "connect"
+    },
+    {
+      "reference": "C1",
+      "physical_pin": "1",
+      "pad": "1",
+      "intent_net_id": "+3V3",
+      "canonical_net": "+3V3",
+      "sheet_id": "root",
+      "disposition": "connect"
+    },
+    {
+      "reference": "C1",
+      "physical_pin": "2",
+      "pad": "2",
+      "intent_net_id": "GND",
+      "canonical_net": "GND",
+      "sheet_id": "root",
+      "disposition": "connect"
+    },
+    {
+      "reference": "C2",
+      "physical_pin": "1",
+      "pad": "1",
+      "intent_net_id": "+3V3",
+      "canonical_net": "+3V3",
+      "sheet_id": "root",
+      "disposition": "connect"
+    },
+    {
+      "reference": "C2",
+      "physical_pin": "2",
+      "pad": "2",
+      "intent_net_id": "GND",
+      "canonical_net": "GND",
+      "sheet_id": "root",
+      "disposition": "connect"
+    },
+    {
+      "reference": "TP1",
+      "physical_pin": "1",
+      "pad": "1",
+      "intent_net_id": "A_RC",
+      "canonical_net": "/CHANNEL_A/RC",
+      "sheet_id": "A",
+      "disposition": "connect"
+    },
+    {
+      "reference": "TP2",
+      "physical_pin": "1",
+      "pad": "1",
+      "intent_net_id": "A_OUT",
+      "canonical_net": "/CHANNEL_A/OUT",
+      "sheet_id": "A",
+      "disposition": "connect"
+    },
+    {
+      "reference": "TP3",
+      "physical_pin": "1",
+      "pad": "1",
+      "intent_net_id": "B_RC",
+      "canonical_net": "/CHANNEL_B/RC",
+      "sheet_id": "B",
+      "disposition": "connect"
+    },
+    {
+      "reference": "TP4",
+      "physical_pin": "1",
+      "pad": "1",
+      "intent_net_id": "B_OUT",
+      "canonical_net": "/CHANNEL_B/OUT",
+      "sheet_id": "B",
+      "disposition": "connect"
+    }
+  ],
+  "canonical_nets": {
+    "+3V3": "+3V3",
+    "GND": "GND",
+    "A_IN": "/CHANNEL_A/IN",
+    "A_RC": "/CHANNEL_A/RC",
+    "A_BUF": "/CHANNEL_A/BUF",
+    "A_OUT": "/CHANNEL_A/OUT",
+    "B_IN": "/CHANNEL_B/IN",
+    "B_RC": "/CHANNEL_B/RC",
+    "B_BUF": "/CHANNEL_B/BUF",
+    "B_OUT": "/CHANNEL_B/OUT"
+  },
+  "shared_global_power_only": [
+    "+3V3",
+    "GND"
+  ],
+  "counts": {
+    "physical_packages": 20,
+    "physical_pins": 42,
+    "nets": 10,
+    "assembly_components": 16,
+    "bare_test_pads": 4,
+    "U1_units": [
+      1,
+      2,
+      3
+    ],
+    "copper_required_this_round": false
+  },
+  "expected_ECO": {
+    "kind": "rename_hierarchical_port",
+    "old_net": "/CHANNEL_A/RC",
+    "new_port": "SENSE",
+    "new_net": "/CHANNEL_A/SENSE",
+    "expected_changed_files": [
+      "hier_dual_rc.kicad_sch",
+      "channel_a.kicad_sch"
+    ],
+    "protected_file": "channel_b.kicad_sch",
+    "electrical_members_preserved": true
+  },
+  "PCB_handoff": "New same-stem own board from generated netlist; use public links inspect/repair then sync if needed. No original board UUID rebinding or copper transfer. Expect unrouted physical components, not parity=connectivity.",
+  "new_ignored_checks": [],
+  "claims_excluded": [
+    "general hierarchy",
+    "nested/shared sheets",
+    "bus",
+    "manufacturing signoff",
+    "analog performance signoff",
+    "routing completion"
+  ],
+  "spec_sha256": "7d6496fb555064d284c570e7b54648f75270f99c9de5bf5a1f16171646e62bf4"
+}

@@ -1,0 +1,301 @@
+{
+  "format": "usable-hierarchy-edit-intent.v1",
+  "frozen_before_public_edits": true,
+  "baseline_stage": "U0",
+  "input_preparation": {
+    "source_commit": "37a7a26a2fc394ca1b25832ab60a33facce8b230",
+    "source_fixture": "retained input-preparation-r4 with separately declared schematic wire style correction",
+    "method": "Existing externally authored synthetic input, native API board preparation and prior public routing/silk; no CLI hierarchy creation claim",
+    "design_intent_sha256": "fae057bd88ae81cc6234b7299f83af960b5e0715ec926f0c975bfb243c74c7ca",
+    "retained_original_design_intent_sha256": "0aaf324f8069fab6e570f71f17d12b75706023d1f2a0c61fa5727eeeb8c2033c",
+    "fixture_files": {
+      "edit.kicad_pcb": "3eb580df71c56f01755f35f3610b22cf90f9d6cefa6ca69b4dfe899b18dcc601",
+      "edit.kicad_pro": "f04e69801cde9f23d2b9848b2262b5f066bde7f168aed925e1c041a054f9355a",
+      "edit.kicad_sch": "3ac036889c1ae3abbcb46cff40f6a8315fbf07ac469730e6e6fa71bda5a20a00",
+      "edit_child.kicad_sch": "f9c62dffc6b29720495b67bc14d78099f9a903c92674e28927479b7822035b12",
+      "fp-lib-table": "d2c6b86404c01938930979a04f1f9422fcd17ad71082400cebbc1797c3805567",
+      "sym-lib-table": "8383948a70fd83d05990c10e647ad0abadafee2d5a0b39ce3499295e994fe0ac"
+    },
+    "baseline_observation_sha256": "40d2c17be839c334fa0fd24d79b4aa163533c9e6fbb061540d2cad57062d31f3",
+    "style_addendum_sha256": "3e7298984f4780bba4946a40c2b4c4515a5ed2451d909796ce22b8ff02283ccd",
+    "rejected_prestyle_frozen_sha256": "17036ffffee512ff1f363b604ee27602f1020d16437149fdef83ceefedcb7917"
+  },
+  "units": {
+    "positions": "schematic mm; PCB integer nm",
+    "angles": "saved KiCad degrees",
+    "tolerance": "unchanged saved geometry compared exactly"
+  },
+  "expected_structure": {
+    "sheet_instances": 3,
+    "reused_child_instances": [
+      "/CHILD_A/",
+      "/CHILD_B/"
+    ],
+    "footprints": 10,
+    "physical_pads": 29,
+    "component_units": 12,
+    "power_symbol_instances": 2,
+    "multi_unit_reference": "U1",
+    "multi_unit_units": [
+      1,
+      2,
+      3
+    ]
+  },
+  "physical_mapping": {
+    "rule": "All 29 logical pins have corresponding physical pads; all eight U1 pins mapped across all three units",
+    "fixture_SO8_unmapped_pads": [],
+    "unmapped_pad_policy": "None permitted"
+  },
+  "protected": "All instances, units, symbol poses/properties except declared values; footprint/pad identities and geometry; all 71 track/via items except declared net rename; board graphics,outline,rules,libraries and unrelated schematic drawings. U3/U4 permit wire/label/NC edits only inside two predeclared input-pin strips.",
+  "stages": {
+    "U0": {
+      "meaning": "Existing prepared and independently qualified baseline; no design generation",
+      "values": {},
+      "net_renames": {},
+      "pin_connections": {},
+      "disconnected_pins": [],
+      "drawing_regions_mm": {},
+      "native_policy": "require_clean"
+    },
+    "U1": {
+      "meaning": "Shared R10/R20 value 2k2 and all U1 units Value LM2904A",
+      "values": {
+        "R10": "2k2",
+        "R20": "2k2",
+        "U1": "LM2904A"
+      },
+      "net_renames": {},
+      "pin_connections": {},
+      "disconnected_pins": [],
+      "drawing_regions_mm": {},
+      "native_policy": "require_clean"
+    },
+    "U2": {
+      "meaning": "Shared child LOCAL label renamed FILTERED in both instances",
+      "values": {
+        "R10": "2k2",
+        "R20": "2k2",
+        "U1": "LM2904A"
+      },
+      "net_renames": {
+        "/CHILD_A/LOCAL": "/CHILD_A/FILTERED",
+        "/CHILD_B/LOCAL": "/CHILD_B/FILTERED"
+      },
+      "pin_connections": {},
+      "disconnected_pins": [],
+      "drawing_regions_mm": {},
+      "native_policy": "require_clean"
+    },
+    "U3": {
+      "meaning": "Real + alias disconnects U1 physical pins 3 and 5 with no-connect flags; preserve PCB copper and retain native failures",
+      "values": {
+        "R10": "2k2",
+        "R20": "2k2",
+        "U1": "LM2904A"
+      },
+      "net_renames": {
+        "/CHILD_A/LOCAL": "/CHILD_A/FILTERED",
+        "/CHILD_B/LOCAL": "/CHILD_B/FILTERED"
+      },
+      "pin_connections": {},
+      "disconnected_pins": [
+        "U1.3",
+        "U1.5"
+      ],
+      "drawing_regions_mm": {
+        "edit.kicad_sch": [
+          [
+            125.73,
+            72.39,
+            144.78,
+            74.93
+          ],
+          [
+            125.73,
+            128.27,
+            144.78,
+            130.81
+          ]
+        ]
+      },
+      "native_policy": "intentional_disconnect"
+    },
+    "U4": {
+      "meaning": "Numbered reconnect 3 to /BUF_IN_A, 5 to /BUF_IN_B; preserve original copper, final zero reported ERC/DRC/parity/open findings",
+      "values": {
+        "R10": "2k2",
+        "R20": "2k2",
+        "U1": "LM2904A"
+      },
+      "net_renames": {
+        "/CHILD_A/LOCAL": "/CHILD_A/FILTERED",
+        "/CHILD_B/LOCAL": "/CHILD_B/FILTERED"
+      },
+      "pin_connections": {
+        "U1.3": "/BUF_IN_A",
+        "U1.5": "/BUF_IN_B"
+      },
+      "disconnected_pins": [],
+      "drawing_regions_mm": {
+        "edit.kicad_sch": [
+          [
+            125.73,
+            72.39,
+            144.78,
+            74.93
+          ],
+          [
+            125.73,
+            128.27,
+            144.78,
+            130.81
+          ]
+        ]
+      },
+      "native_policy": "require_clean"
+    }
+  },
+  "rename_label": {
+    "file": "edit_child.kicad_sch",
+    "uuid": "54dea2ef-476c-5c0f-9f3e-016c51f98b53",
+    "old_text": "LOCAL",
+    "new_text": "FILTERED",
+    "at_mm": [
+      106.68,
+      76.2
+    ]
+  },
+  "native_findings": {
+    "erc_baseline": {
+      "$schema": "https://schemas.kicad.org/erc.v1.json",
+      "coordinate_units": "mm",
+      "date": "2026-10-13T04:56:22",
+      "ignored_checks": [
+        {
+          "description": "Global label only appears once in the schematic",
+          "key": "single_global_label"
+        },
+        {
+          "description": "Four connection points are joined together",
+          "key": "four_way_junction"
+        },
+        {
+          "description": "SPICE model issue",
+          "key": "simulation_model_issue"
+        },
+        {
+          "description": "Assigned footprint doesn't match footprint filters",
+          "key": "footprint_filter"
+        }
+      ],
+      "included_severities": [
+        "error",
+        "warning",
+        "exclusion"
+      ],
+      "kicad_version": "10.0.6",
+      "sheets": [
+        {
+          "path": "/",
+          "uuid_path": "/28b031df-89da-50ed-a03a-da57aa471891",
+          "violations": []
+        },
+        {
+          "path": "/CHILD_A/",
+          "uuid_path": "/28b031df-89da-50ed-a03a-da57aa471891/2bbe8de2-5aed-5afe-9d90-41e5efa3fe7b",
+          "violations": []
+        },
+        {
+          "path": "/CHILD_B/",
+          "uuid_path": "/28b031df-89da-50ed-a03a-da57aa471891/0ce2d146-e689-5d25-9406-b1a92c30d190",
+          "violations": []
+        }
+      ],
+      "source": "edit.kicad_sch"
+    },
+    "drc_baseline": {
+      "$schema": "https://schemas.kicad.org/drc.v1.json",
+      "coordinate_units": "mm",
+      "date": "2026-10-13T04:56:36",
+      "ignored_checks": [
+        {
+          "description": "Footprint has no courtyard defined",
+          "key": "missing_courtyard"
+        },
+        {
+          "description": "Track endpoint not centered on via",
+          "key": "track_not_centered_on_via"
+        },
+        {
+          "description": "Tuning profile track geometries",
+          "key": "tuning_profile_track_geometries"
+        },
+        {
+          "description": "Footprint doesn't match symbol's footprint filters",
+          "key": "footprint_filters_mismatch"
+        },
+        {
+          "description": "Footprint component type doesn't match footprint pads",
+          "key": "footprint_type_mismatch"
+        }
+      ],
+      "included_severities": [
+        "error",
+        "warning",
+        "exclusion"
+      ],
+      "kicad_version": "10.0.6",
+      "schematic_parity": [],
+      "source": "edit.kicad_pcb",
+      "unconnected_items": [],
+      "violations": []
+    },
+    "unconnected_counts": {
+      "U0": 0,
+      "U1": 0,
+      "U2": 0,
+      "U4": 0
+    },
+    "default_ignored_checks_retained": true
+  },
+  "external_libraries": {
+    "Device": {
+      "path": "<EXISTING_KICAD_ROOT>/share/kicad/symbols/Device.kicad_sym",
+      "sha256": "e03831d421787531315439a4af4229e5d5d88ee51c7f36ba3f658ddf2978cda9"
+    },
+    "Connector_Generic": {
+      "path": "<EXISTING_KICAD_ROOT>/share/kicad/symbols/Connector_Generic.kicad_sym",
+      "sha256": "1ae3b346fe1c4e874fecb72abc7df4e94a253780db183439dbfefc4e2ff3a0be"
+    },
+    "Amplifier_Operational": {
+      "path": "<EXISTING_KICAD_ROOT>/share/kicad/symbols/Amplifier_Operational.kicad_sym",
+      "sha256": "c521d737d1c23d6dbda8bdcddcee623cbd741de039d4ce245fb011fa7e3047bd"
+    },
+    "power": {
+      "path": "<EXISTING_KICAD_ROOT>/share/kicad/symbols/power.kicad_sym",
+      "sha256": "9f49ee941555a5194f330db1363f24f339b88272a2a60c6e15da8ba11ec6d114"
+    },
+    "Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical": {
+      "path": "<EXISTING_KICAD_ROOT>/share/kicad/footprints/Connector_PinHeader_2.54mm.pretty/PinHeader_1x04_P2.54mm_Vertical.kicad_mod",
+      "sha256": "8952158347d7b7cc13924c62dccb0c48911af892bb009a0de27cb4d3c25cc1bb"
+    },
+    "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical": {
+      "path": "<EXISTING_KICAD_ROOT>/share/kicad/footprints/Connector_PinHeader_2.54mm.pretty/PinHeader_1x03_P2.54mm_Vertical.kicad_mod",
+      "sha256": "6a7dba97d6e733fd9d5f12d2d57f2cde29e8393e15b08d8b3e41bf2b430d83ed"
+    },
+    "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm": {
+      "path": "<EXISTING_KICAD_ROOT>/share/kicad/footprints/Package_SO.pretty/SOIC-8_3.9x4.9mm_P1.27mm.kicad_mod",
+      "sha256": "3c9b63198dd4dbf5e6c28c84702c29fad46a35103b821a19306c4ac888ad8e76"
+    },
+    "Capacitor_SMD:C_0603_1608Metric": {
+      "path": "<EXISTING_KICAD_ROOT>/share/kicad/footprints/Capacitor_SMD.pretty/C_0603_1608Metric.kicad_mod",
+      "sha256": "d45eebd5cb9faace255d4ec95a0f9484efde898359507b02e2ba9bbb3ef6d857"
+    },
+    "Resistor_SMD:R_0603_1608Metric": {
+      "path": "<EXISTING_KICAD_ROOT>/share/kicad/footprints/Resistor_SMD.pretty/R_0603_1608Metric.kicad_mod",
+      "sha256": "03fc7902b2661df01b4d828fdb6eab9eddf974e7130ed2b98892607387a50c4b"
+    }
+  },
+  "not_a_manufacturing_or_electrical_rating_signoff": true
+}

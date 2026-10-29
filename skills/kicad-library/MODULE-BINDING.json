@@ -1,0 +1,36 @@
+{
+  "module": "kicad-library",
+  "install_name": "kicad-library",
+  "source_code_sha256": "20374c0317ac3b01ef3a33ebed64b259b1e94502932d7009b744fc01c5005fba",
+  "protocol": "driver-board.v2.20-integer-nm-library",
+  "command_contract_sha256": "fd7bb066e7077ae26b8a4d22111c23b95b4e135224ca759a115017311d3bde5d",
+  "executable_sha256": null,
+  "capability": {
+    "commands": [
+      "library build",
+      "library inspect"
+    ],
+    "scope": "Project-local single-unit rectangular symbols, explicit pins, rectangular front SMD pads, bijective same-number mapping, source/version records",
+    "unsupported": [
+      "multi-unit authoring",
+      "THT/custom pads",
+      "automatic datasheet interpretation",
+      "global library editing",
+      "automatic placed-instance refresh"
+    ],
+    "internal_1_0_supported_commands": [
+      "library build",
+      "library inspect"
+    ],
+    "state": "implemented_bounded_experimental",
+    "regression_group": [
+      "test_module_operations.py",
+      "test_module_geometry.py",
+      "native wired functional library placement/reopen"
+    ],
+    "qualification": "Requires evidence bound to this exact artifact; historical qualification does not transfer automatically"
+  },
+  "skill_dependencies": [],
+  "shared_resources": "reference/common.md (generated from docs/modules/common.md)",
+  "compatibility": "Match source, contract, protocol and optional executable; version alone is insufficient"
+}

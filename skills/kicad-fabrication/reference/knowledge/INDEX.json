@@ -1,0 +1,90 @@
+{
+  "format_version": 1,
+  "consumer": "agent_explicit_file_read",
+  "relative_path_base": "configuration_file_directory",
+  "role": "bundled_default_index",
+  "entries": [
+    {
+      "id": "operation-rules",
+      "category": "tool_operation_contract",
+      "title": "Shared operation rules",
+      "purpose": "Use current discovery, scope, preview, persistence and verification rules.",
+      "location": {
+        "kind": "file",
+        "path": "../common.md"
+      },
+      "version": "bundled product version; verify the resource manifest",
+      "applicability": "current product and selected operation",
+      "read_method": "Read this UTF-8 file using the authorized file reader.",
+      "enabled": true,
+      "required_for_first_trial": true
+    },
+    {
+      "id": "knowledge-configuration",
+      "category": "tool_operation_contract",
+      "title": "Knowledge configuration",
+      "purpose": "Read explicitly supplied external file or URL metadata.",
+      "location": {
+        "kind": "file",
+        "path": "../KNOWLEDGE.md"
+      },
+      "version": "bundled product version; verify the resource manifest",
+      "applicability": "current product and selected operation",
+      "read_method": "Read this UTF-8 file using the authorized file reader.",
+      "enabled": true,
+      "required_for_first_trial": true
+    },
+    {
+      "id": "cad-resource-boundary",
+      "category": "cad_resource_catalog",
+      "title": "CAD resources and knowledge",
+      "purpose": "Keep CAD libraries separate from design standards.",
+      "location": {
+        "kind": "file",
+        "path": "CAD_RESOURCES.md"
+      },
+      "version": "bundled product version; verify the resource manifest",
+      "applicability": "current product and selected operation",
+      "read_method": "Read this UTF-8 file using the authorized file reader.",
+      "enabled": true,
+      "required_for_first_trial": true
+    },
+    {
+      "id": "official-schematic-manual",
+      "category": "official_documentation",
+      "title": "Schematic Editor",
+      "purpose": "Background only; product command syntax comes from runtime reference.",
+      "location": {
+        "kind": "url",
+        "url": "https://docs.kicad.org/10.0/en/eeschema/eeschema.html"
+      },
+      "version": "KiCad 10.0 online documentation; may change",
+      "applicability": "current product and selected operation",
+      "read_method": "Read only when task-relevant and network access is authorized.",
+      "enabled": true,
+      "required_for_first_trial": false
+    },
+    {
+      "id": "official-cli-manual",
+      "category": "official_documentation",
+      "title": "Official CLI",
+      "purpose": "Background only; product command syntax comes from runtime reference.",
+      "location": {
+        "kind": "url",
+        "url": "https://docs.kicad.org/10.0/en/cli/cli.html"
+      },
+      "version": "KiCad 10.0 online documentation; may change",
+      "applicability": "current product and selected operation",
+      "read_method": "Read only when task-relevant and network access is authorized.",
+      "enabled": true,
+      "required_for_first_trial": false
+    }
+  ],
+  "unconfigured_categories": [
+    {
+      "category": "team_design_standard",
+      "status": "not_configured",
+      "message": "Supply an authorized external index and applicable version before claiming team-standard compliance."
+    }
+  ]
+}

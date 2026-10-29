@@ -1,0 +1,61 @@
+{
+  "format": "bounded-hierarchy-selector-addendum.v1",
+  "frozen_before_these_public_operations": true,
+  "original_frozen_sha256": "5a5b7d1289e9dcfedb508d165d0e80d2fdde43e352d5dbe48baaa33a9ac5bebd",
+  "preserved_H4": {
+    "status": "unsupported_selector_rejected_without_dispatch",
+    "requested_alias": "~",
+    "reason": "The supplied 20250114 fixture serializes unnamed pins as ~; the existing public model has no name selector for those pins. The original H4 requirement and failure are retained, not relabelled as passed.",
+    "input_correction_not_design_change": true
+  },
+  "stages": {
+    "N1": {
+      "meaning": "Numbered alternative after the preserved H4 nameless-marker refusal: disconnect R11 physical pin 1; shared R21.1 follows. Pin 2 remains NC and protected.",
+      "values": {
+        "R10": "2k2",
+        "R20": "2k2",
+        "U1": "LM358A"
+      },
+      "net_renames": {
+        "/CHILD_A/LOCAL": "/CHILD_A/SENSE",
+        "/CHILD_B/LOCAL": "/CHILD_B/SENSE"
+      },
+      "pin_connections": {}
+    },
+    "M1": {
+      "meaning": "Separate real-name alias test: connect U1 IN+ to /OUT. The exact name matches physical pins 3 and 5 across units 1 and 2; both must be disclosed before confirmation.",
+      "values": {
+        "R10": "2k2",
+        "R20": "2k2",
+        "U1": "LM358A"
+      },
+      "net_renames": {
+        "/CHILD_A/LOCAL": "/CHILD_A/SENSE",
+        "/CHILD_B/LOCAL": "/CHILD_B/SENSE"
+      },
+      "pin_connections": {
+        "U1.3": "/OUT",
+        "U1.5": "/OUT"
+      }
+    },
+    "M2": {
+      "meaning": "Disconnect U1 real-name alias IN+; both physical pins 3/5 return to their original NC nets, then sync.",
+      "values": {
+        "R10": "2k2",
+        "R20": "2k2",
+        "U1": "LM358A"
+      },
+      "net_renames": {
+        "/CHILD_A/LOCAL": "/CHILD_A/SENSE",
+        "/CHILD_B/LOCAL": "/CHILD_B/SENSE"
+      },
+      "pin_connections": {}
+    }
+  },
+  "unconnected_counts": {
+    "N1": 7,
+    "M1": 9,
+    "M2": 7
+  },
+  "constraints": "No source/PCB identity, rules, original copper or original final network intent is relaxed. N1 is reported separately from H4. M1/M2 are additional frozen edits using an actual repeated name, not added product capabilities."
+}

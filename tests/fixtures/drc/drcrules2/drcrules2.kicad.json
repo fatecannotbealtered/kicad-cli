@@ -1,0 +1,86 @@
+{
+ "kicad_version": "10.0.6",
+ "violations": [
+  {
+   "type": "courtyards_overlap",
+   "severity": "error",
+   "items": [
+    "107037af-b85a-57c9-b631-d8d713558490",
+    "a6d1b886-82e8-5264-b3ce-9b876a5bb6c4"
+   ]
+  },
+  {
+   "type": "items_not_allowed",
+   "severity": "error",
+   "items": [
+    "4c61a6f5-9eff-5d1a-b730-095886cf2856"
+   ]
+  },
+  {
+   "type": "items_not_allowed",
+   "severity": "error",
+   "items": [
+    "aa318121-05e2-5ddc-97e5-646c8be57dc7"
+   ]
+  },
+  {
+   "type": "items_not_allowed",
+   "severity": "error",
+   "items": [
+    "f99b4930-5699-5f13-b8ca-fbae3ba14a01"
+   ]
+  },
+  {
+   "type": "items_not_allowed",
+   "severity": "error",
+   "items": [
+    "fac10b8e-d467-58ba-8211-377f72db5b5a"
+   ]
+  },
+  {
+   "type": "text_height",
+   "severity": "warning",
+   "items": [
+    "0e895f2e-3d61-5fb2-ac60-0a725525e4c5"
+   ]
+  },
+  {
+   "type": "text_thickness",
+   "severity": "warning",
+   "items": [
+    "74e600ee-ab0f-55ac-9445-47a4ddebeb6a"
+   ]
+  },
+  {
+   "type": "too_many_vias",
+   "severity": "error",
+   "items": [
+    "aaae02e1-dd0a-526c-9e31-b9dcd24e4f59"
+   ]
+  },
+  {
+   "type": "track_angle",
+   "severity": "error",
+   "items": [
+    "7a9d0ee3-0e2b-5a7e-a7b4-847b7f21c176",
+    "95479db7-d54b-5c07-8186-16315362858e"
+   ]
+  },
+  {
+   "type": "track_angle",
+   "severity": "error",
+   "items": [
+    "95479db7-d54b-5c07-8186-16315362858e",
+    "7a9d0ee3-0e2b-5a7e-a7b4-847b7f21c176"
+   ]
+  },
+  {
+   "type": "track_segment_length",
+   "severity": "error",
+   "items": [
+    "57a7838f-013f-566e-8056-28ae5b199c55"
+   ]
+  }
+ ],
+ "unconnected_items": []
+}

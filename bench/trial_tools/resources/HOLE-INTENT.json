@@ -1,0 +1,26 @@
+{
+  "schema": "current-C10-physical-eco-hole-observation/v1",
+  "input_PCB": {
+    "path": "D:\\personalSpace\\kicad-physical-footprint-eco-20261019\\project\\hier_dual_rc.kicad_pcb",
+    "sha256": "f47f453231ee2982280bd4c00eb68dd48702fae744822527d34b3f3bde5e08ab",
+    "size": 99009
+  },
+  "input_PRO": {
+    "path": "D:\\personalSpace\\kicad-physical-footprint-eco-20261019\\project\\hier_dual_rc.kicad_pro",
+    "sha256": "cb3332bc7ac865b575744de6025ae52be4a0dd0ea13b382e0b47e3593743f655",
+    "size": 9606
+  },
+  "replacement_contract": {
+    "via_hole_avoidance": {
+      "minimum_material_gap_nm": 200000,
+      "native_collision_query_clearance_nm": 200001
+    }
+  },
+  "expected": {
+    "SMD_pads": 42,
+    "ordinary_through_vias": 12,
+    "pairs": 504,
+    "collisions": 0
+  },
+  "source": "Synthetic margin preserved from existing geometry contract; not supplier approval."
+}

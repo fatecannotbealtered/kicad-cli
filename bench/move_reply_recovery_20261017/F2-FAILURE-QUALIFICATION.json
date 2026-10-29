@@ -1,0 +1,185 @@
+{
+  "kind": "F2-harness-failure-qualification-v1",
+  "decision": "preserve_original_failed_harness; completed_original_service_supports_only_a_separate_bounded_read_plan",
+  "original_producer_status": "failed",
+  "original_producer_exit": 1,
+  "method_defect": {
+    "priority": 2,
+    "file": "f2-method/controller.py",
+    "source_sha256": "223a2e48ef83a7047ba4e7d9b81f8bdf636da234108a10f31e92065e357b1b12",
+    "line": 568,
+    "error": "KeyError: replayed",
+    "meaning": "Post-service harness assertion indexed an optional receipt field. Original source, plan, STOP and exit1 remain unchanged.",
+    "independent_review_omission": "The previous static review missed this optional-field condition."
+  },
+  "optional_field_contract": {
+    "schema_id": "urn:tool-driver-cli-spec:receipt:2.0",
+    "schema_path": "driver_spec/schemas/receipt.schema.json",
+    "schema_sha256": "33559ef2e2dc096b3c4938fa45ca8ac3d7b0c9b62a7d595bb79f1632ee49c4a5",
+    "property_pointer": "/properties/replayed",
+    "type_if_present": "boolean",
+    "required_array_contains_replayed": false,
+    "actual_receipt_contains_replayed": false,
+    "default_false_inserted": false
+  },
+  "operation_id": "op-ec385b816a0b44f0838ae502",
+  "confirm_plan_sha256": "68735bc05eeb2a9dd1101b3425b554cf001dd9b01658190028ea72a97312d40a",
+  "request_sha256": "8946c693b76a029b20fcac557bcbf314eb2531337e129ada19e984a450fea4ed",
+  "original_service": {
+    "exit": 0,
+    "complete_tree": true,
+    "timed_out": false,
+    "root_pid": 56904,
+    "root_creation_filetime": "134367024302356126",
+    "natural_empty_owned_job": true,
+    "candidate_PE": 2,
+    "official_CLI": 0,
+    "debug_process_instances": 4,
+    "candidate_argv_matches_original_frozen_request": true,
+    "trace_sha256": "df065be8eeb295746c2d3fa7d8a87fb1d6010805e98691dc48845947ee718c0f",
+    "stdout_sha256": "44afc5197ce13f59713069ecc2ecf71b81b757bbbdab19c81db81c2b3e00c545",
+    "classification": "completed; candidate refusal policy not applied",
+    "stream_hashes_match": true,
+    "classification_trace_stdout_pair_matches": true,
+    "event_count": 141,
+    "journal_records": 282,
+    "received_continued_pairs_match": true,
+    "immutable_process_snapshots_all_hash_and_content_match": true,
+    "all_four_processes_have_one_CREATE_one_EXIT0": true
+  },
+  "receiver": {
+    "pid": 63404,
+    "creation_filetime": "134367024272688542",
+    "exit": 0,
+    "natural_empty_owned_job": true,
+    "record_count": 2,
+    "original_operation_and_request_identity_match": true,
+    "actual_eof": true,
+    "received_bytes": 0,
+    "received_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "service_outcome_known": false,
+    "dispatches": 1,
+    "callback_returned": true,
+    "callback_error": null,
+    "raw_response_delivered": false
+  },
+  "receipt": {
+    "operation_and_plan_and_scope_match_original": true,
+    "execution": "completed",
+    "change": "applied",
+    "persistence": "saved",
+    "bounded_verification": "passed",
+    "snapshot_before_revision": "59b5c3a7f5569031c2c098c01cdee5c5be2c71aed77d33eb5992126ac7b5cb1f",
+    "snapshot_after_revision": "06d9017e89e9e86533041df9d554289435df6edbe8852569d350acfeddd4176c"
+  },
+  "parent": {
+    "path": "controllers/f2-confirm/FINISH.json",
+    "exit": 1,
+    "status": "failed",
+    "execution": "nonzero_exit",
+    "natural_empty_owned_job": true,
+    "controller_root_pid": 61700,
+    "controller_root_creation_filetime": "134367024238648789",
+    "program_sha256": "4d6f5f81a4bca11191c4c7c6b43632694d0a4ce74e068619d8fdc161d469859a",
+    "original_plan_and_source_inputs_before_after_equal": true,
+    "stderr": "Traceback identifies controller.py line568 receipt['replayed']; no write retry occurred."
+  },
+  "durable_snapshot_limit": {
+    "direct_database_read_by_reviewer": false,
+    "qualified_metadata_plan": "f2-readonly-02/ORIGINAL-PLAN.json",
+    "plan_sha256": "9177982d6f506b33d7fb6e4396bcaef4b846092c1e41bb0ac95e73591a03695d",
+    "snapshot_facts": "Serialized freeze02 rows show exactly the original succeeded operation, null lease/resolution, exact receipt, one consumed token for that ID and scope used1. Reviewer read this JSON snapshot only, not SQLite."
+  },
+  "allowed_next_boundary": "Only the separately reviewed F2R plan may show the original ID, test one proven-consumed token refusal and perform one new independent SDK read. No original preview/normal-confirm rerun, oldverify, resolve or unknown-write replay.",
+  "preservation": "This qualification does not change the old attempt to passed and does not supply real process-interruption recovery qualification. Old F1/F4/source-C1 remain outside scope.",
+  "reviewer_execution": {
+    "Python": 0,
+    "pytest": 0,
+    "product": 0,
+    "official_native": 0,
+    "state_or_DB": 0,
+    "live_process_query": 0
+  },
+  "refs": [
+    {
+      "path": "f2-cycle-01/execute-confirm-STOP.json",
+      "sha256": "cbf7e464fc009f8cd3640d03718d81db459c69f8eeaa6c36d91e1d137597b7a5",
+      "size": 177
+    },
+    {
+      "path": "f2-cycle-01/CONFIRM-START.json",
+      "sha256": "8e6365037b9eb7b90534a66c16730c0ed83e2fad65b490347863018e4e027db1",
+      "size": 322
+    },
+    {
+      "path": "f2-cycle-01/CONFIRM-PLAN.json",
+      "sha256": "68735bc05eeb2a9dd1101b3425b554cf001dd9b01658190028ea72a97312d40a",
+      "size": 1252801
+    },
+    {
+      "path": "f2-cycle-01/private-relay-evidence/RELAY-FINISH.json",
+      "sha256": "410e43cafac36011088c3f39865daa0601ef9c517988ffe276e60a67b5b7c506",
+      "size": 3748
+    },
+    {
+      "path": "f2-cycle-01/private-caller-evidence/stdout",
+      "sha256": "bbce19143353770da309bc8fcad3c2af03294b26fbba088a1c58413c614bef18",
+      "size": 482
+    },
+    {
+      "path": "f2-cycle-01/private-caller-evidence/stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "f2-cycle-01/calls/confirm/TRACE.json",
+      "sha256": "df065be8eeb295746c2d3fa7d8a87fb1d6010805e98691dc48845947ee718c0f",
+      "size": 69356
+    },
+    {
+      "path": "f2-cycle-01/calls/confirm/stdout",
+      "sha256": "44afc5197ce13f59713069ecc2ecf71b81b757bbbdab19c81db81c2b3e00c545",
+      "size": 203307
+    },
+    {
+      "path": "f2-cycle-01/calls/confirm/stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "f2-cycle-01/calls/confirm/events.jsonl",
+      "sha256": "e323b96ce4ecf436e83e48938eceb82c2ae3e3fbafa01a01d7c4fb73a30fb413",
+      "size": 77757
+    },
+    {
+      "path": "f2-cycle-01/calls/confirm/CLASSIFICATION.json",
+      "sha256": "de438988c674a308d603e4f5da32b752ef4a2d0bb1d437641afa62bf52019264",
+      "size": 1160
+    },
+    {
+      "path": "f2-cycle-01/calls/confirm/COUNTS.json",
+      "sha256": "2f4b130c05818c3c478c1ef0b3579466cf9d85a1b217e2c24d7b0f5bf4868cfe",
+      "size": 532
+    },
+    {
+      "path": "controllers/f2-confirm/FINISH.json",
+      "sha256": "1b609e086943005fa3e22c473d383069abff32b3311d6f65feeedbe52b184915",
+      "size": 640
+    },
+    {
+      "path": "controllers/f2-confirm/controller.call.json",
+      "sha256": "c2c61bac27643a0ee6cc366911679be5c510e96004d30347ad18c1d54d9448d5",
+      "size": 28683
+    },
+    {
+      "path": "controllers/f2-confirm/controller.stderr",
+      "sha256": "e3d2b7cd115e2f9b738a9923e66a76b3e84b4f53ec1256b65c03cccd63965552",
+      "size": 519
+    },
+    {
+      "path": "f2-method/controller.py",
+      "sha256": "223a2e48ef83a7047ba4e7d9b81f8bdf636da234108a10f31e92065e357b1b12",
+      "size": 45041
+    }
+  ]
+}

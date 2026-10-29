@@ -1,0 +1,41 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "kicad-cli"
+dynamic = ["version"]
+description = "AI-native KiCad PCB CLI - board audit, schematic parity, grid routing, zone stitching, ampacity-driven trace width, and DRC-verified writes"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "Apache-2.0" }
+authors = [{ name = "Sean Guo" }]
+keywords = ["kicad", "pcb", "eda", "cli", "ai-native", "agent"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Environment :: Console",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: Apache Software License",
+  "Programming Language :: Python :: 3",
+  "Topic :: Scientific/Engineering :: Electronic Design Automation (EDA)",
+]
+dependencies = ["jsonschema>=4.20,<5", "referencing>=0.30,<1"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "ruff>=0.6", "pip-audit>=2.7", "pyinstaller>=6.6"]
+
+[project.scripts]
+kicad-cli = "kicad_cli.main:main"
+
+[project.urls]
+Homepage = "https://github.com/fatecannotbealtered/kicad-cli"
+Changelog = "https://github.com/fatecannotbealtered/kicad-cli/blob/main/CHANGELOG.md"
+
+[tool.setuptools.packages.find]
+include = ["kicad_cli*"]
+
+[tool.setuptools.package-data]
+kicad_cli = ["payload/*.py", "driver_contract.json", "driver_spec/**/*", "_driver_sdk/*.py"]
+
+[tool.setuptools.dynamic]
+version = { attr = "kicad_cli.__version__" }

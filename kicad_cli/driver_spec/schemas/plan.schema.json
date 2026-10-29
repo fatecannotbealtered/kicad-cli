@@ -1,0 +1,296 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:tool-driver-cli-spec:plan:2.0",
+  "title": "plan",
+  "description": "The driver plan a --dry-run returns as data.preview, next to the base confirm_token and expires_at. A single-target plan has target and base_snapshot; a batch plan (base §15.2) has total, targets and one item per target, each with the operation_id it will run under.",
+  "type": "object",
+  "properties": {
+    "plan_id": {
+      "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/id"
+    },
+    "operation_id": {
+      "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/id"
+    },
+    "capability_id": {
+      "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/id"
+    },
+    "target": {
+      "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/target"
+    },
+    "base_snapshot": {
+      "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/snapshot"
+    },
+    "total": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "targets": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+      }
+    },
+    "items": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+          },
+          "operation_id": {
+            "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/id"
+          },
+          "target": {
+            "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/target"
+          },
+          "base_snapshot": {
+            "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/snapshot"
+          },
+          "changes": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "action": {
+                  "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+                },
+                "resource": {
+                  "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+                },
+                "id": {
+                  "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/id"
+                },
+                "summary": {
+                  "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+                },
+                "before": {},
+                "after": {}
+              },
+              "required": [
+                "action",
+                "resource",
+                "summary"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "outputs": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "path": {
+                  "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+                },
+                "effect": {
+                  "enum": [
+                    "artifact",
+                    "persist",
+                    "deliver"
+                  ]
+                },
+                "exists": {
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "path",
+                "effect",
+                "exists"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "can_apply": {
+            "type": "boolean"
+          },
+          "unknowns": {
+            "type": "array",
+            "items": {
+              "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+            }
+          }
+        },
+        "required": [
+          "key",
+          "operation_id",
+          "target",
+          "base_snapshot",
+          "changes",
+          "outputs",
+          "can_apply"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "authorization_scope_id": {
+      "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/id"
+    },
+    "effects": {
+      "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/effects"
+    },
+    "level": {
+      "enum": [
+        "plan",
+        "estimate",
+        "trial_observed"
+      ]
+    },
+    "changes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "action": {
+            "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+          },
+          "resource": {
+            "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+          },
+          "id": {
+            "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/id"
+          },
+          "summary": {
+            "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+          },
+          "before": {},
+          "after": {}
+        },
+        "required": [
+          "action",
+          "resource",
+          "summary"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "outputs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+          },
+          "effect": {
+            "enum": [
+              "artifact",
+              "persist",
+              "deliver"
+            ]
+          },
+          "exists": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "path",
+          "effect",
+          "exists"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "unknowns": {
+      "type": "array",
+      "items": {
+        "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+      }
+    },
+    "constraints": {
+      "type": "array",
+      "items": {
+        "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+      }
+    },
+    "trial_snapshot": {
+      "anyOf": [
+        {
+          "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/snapshot"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "can_apply": {
+      "type": "boolean"
+    },
+    "expires_at": {
+      "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/timestamp"
+    },
+    "_untrusted": {
+      "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/untrusted"
+    },
+    "extensions": {
+      "type": "object"
+    }
+  },
+  "required": [
+    "plan_id",
+    "operation_id",
+    "capability_id",
+    "authorization_scope_id",
+    "effects",
+    "level",
+    "changes",
+    "outputs",
+    "unknowns",
+    "constraints",
+    "trial_snapshot",
+    "can_apply",
+    "expires_at"
+  ],
+  "oneOf": [
+    {
+      "required": [
+        "target",
+        "base_snapshot"
+      ],
+      "not": {
+        "anyOf": [
+          {
+            "required": [
+              "items"
+            ]
+          },
+          {
+            "required": [
+              "total"
+            ]
+          },
+          {
+            "required": [
+              "targets"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "required": [
+        "items",
+        "total",
+        "targets"
+      ],
+      "not": {
+        "anyOf": [
+          {
+            "required": [
+              "target"
+            ]
+          },
+          {
+            "required": [
+              "base_snapshot"
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "additionalProperties": false
+}

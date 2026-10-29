@@ -1,0 +1,14 @@
+# Native build tools; runtime has its own six-package lock.
+-r requirements-runtime.lock
+altgraph==0.17.5
+# pip-audit's HTTPS client must not inherit vulnerable runner certificates.
+certifi==2026.10.19
+macholib==1.16.4; sys_platform == "darwin"
+packaging==26.2
+pefile==2024.8.26; sys_platform == "win32"
+pip==26.2.0
+pyinstaller==6.21.0
+pyinstaller-hooks-contrib==2026.6
+pywin32-ctypes==0.2.3; sys_platform == "win32"
+setuptools==84.1.0
+wheel==0.48.0

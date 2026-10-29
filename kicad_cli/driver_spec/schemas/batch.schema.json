@@ -1,0 +1,138 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:tool-driver-cli-spec:batch:2.0",
+  "title": "batch",
+  "description": "The data of an independent batch: the base items[] and summary, with a receipt or operation_id for each dispatched item.",
+  "type": "object",
+  "properties": {
+    "items": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "properties": {
+          "target": {
+            "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+          },
+          "ok": {
+            "type": "boolean"
+          },
+          "error": {
+            "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/item_error"
+          },
+          "operation_id": {
+            "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/id"
+          },
+          "receipt": {
+            "$ref": "urn:tool-driver-cli-spec:receipt:2.0"
+          },
+          "skipped_reason": {
+            "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+          },
+          "_untrusted": {
+            "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/untrusted"
+          }
+        },
+        "required": [
+          "target",
+          "ok"
+        ],
+        "additionalProperties": true,
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "ok": {
+                  "const": false
+                }
+              },
+              "required": [
+                "ok"
+              ],
+              "not": {
+                "required": [
+                  "skipped_reason"
+                ]
+              }
+            },
+            "then": {
+              "required": [
+                "error"
+              ]
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "ok": {
+                  "const": true
+                }
+              },
+              "required": [
+                "ok"
+              ]
+            },
+            "then": {
+              "not": {
+                "anyOf": [
+                  {
+                    "required": [
+                      "error"
+                    ]
+                  },
+                  {
+                    "required": [
+                      "skipped_reason"
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      }
+    },
+    "summary": {
+      "type": "object",
+      "properties": {
+        "total": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "succeeded": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "failed": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "skipped": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "unknown": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "total",
+        "succeeded",
+        "failed"
+      ],
+      "additionalProperties": true
+    },
+    "continue_on_error": {
+      "type": "boolean"
+    },
+    "_untrusted": {
+      "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/untrusted"
+    }
+  },
+  "required": [
+    "items",
+    "summary"
+  ],
+  "additionalProperties": true
+}

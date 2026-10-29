@@ -1,0 +1,156 @@
+L0	as the library has it
+L1	turned 90
+L2	turned 37.5
+L3	on the back
+L4	on the back, turned 90
+L5	on the back, turned 215
+L6	another description
+L7	other tags
+L8	its reference elsewhere
+L9	its reference larger
+L10	another value
+L11	its value elsewhere
+L12	a field of the library's another value
+L13	a field of the library's gone
+L14	a field of its own
+L15	a datasheet
+L16	through hole, not SMD
+L17	left off the BOM
+L18	not populated
+L19	a clearance of its own
+L20	a mask margin of its own
+L21	a net tie
+L22	another 3D model
+L23	its 3D model moved
+L24	no 3D model
+L25	locked
+L26	linked to a symbol
+L27	a line 1 um longer
+L28	a line 1 nm longer
+L29	a line wider
+L30	a line on another layer
+L31	a line dashed
+L32	a rectangle drawn as four lines
+L33	a circle gone
+L34	a line more
+L35	its line and arc in the other order
+L36	its text another text
+L37	its text elsewhere
+L38	its arc bent further
+L39	its circle filled
+L40	its polygon from another corner
+L41	its polygon the other way round
+L42	a pad larger
+L43	a pad moved
+L44	a pad rounded
+L45	a pad rounded more
+L46	a pad without paste
+L47	a hole larger
+L48	a pad renumbered
+L49	its pads in another order
+L50	its pads on nets
+L51	its pads with pin names
+L52	a pad with a clearance of its own
+L53	a pad with a mask margin of its own
+L54	a pad not connected to zones
+L55	a hole's pad without unused layers
+L56	a pad a test point
+L57	a custom pad drawn otherwise
+L58	a pad gone
+L59	a pad more
+L60	a pad turned
+L61	a pad turned with its size swapped: the same copper
+M0	a line 2 nm longer
+M1	a line 10 nm longer
+M2	a line 100 nm longer
+M3	a line 500 nm longer
+M4	a line 999 nm longer
+N0	a pad moved 1 nm
+N1	a pad moved 10 nm
+N2	a pad moved 100 nm
+N3	a pad moved 1000 nm
+P0	a courtyard line wider
+P1	a fab circle wider
+P2	a line drawn the other way
+P3	an arc drawn the other way
+P4	a circle's end elsewhere on it
+P5	its text gone
+P6	a text more
+P7	its text on another layer
+P8	left off position files
+P9	on the board only
+P10	allowed to bridge its pads
+P11	allowed no courtyard
+P12	no attributes
+P13	a paste margin of its own
+P14	zones connected its own way
+P15	a pad's paste margin
+P16	a pad's thermal gap
+P17	a pad's die length
+P18	a hole's pad keeping its end layers
+P19	a hole's pad square
+P20	an oval hole
+P21	a hole off its pad's centre
+P22	a pad on another layer set
+P23	a hole's pad plated no more
+P24	a duplicate pad numbers jumper flag
+P25	a jumper group
+P26	the polygon unfilled
+P27	a pad chamfered
+Q0	a line 20 nm longer
+Q1	a line 40 nm longer
+Q2	a line 49 nm longer
+Q3	a line 50 nm longer
+Q4	a line 51 nm longer
+Q5	a line 99 nm longer
+R0	a pad moved 20 nm
+R1	a pad moved 49 nm
+R2	a pad moved 50 nm
+R3	a pad moved 51 nm
+R4	a pad moved 99 nm
+S0	a pad 49 nm larger
+S1	a pad 50 nm larger
+S2	a pad 51 nm larger
+T0	a pad a heatsink
+T1	a pad's spokes wider
+T2	a pad's spokes turned
+T3	a rectangular pad with a rounding ratio
+T4	a custom pad's anchor round
+T5	a custom pad's clearance by its hull
+T6	a mounting hole larger
+T7	a mounting hole's pad larger, its hole not
+T8	the rectangle filled
+T9	a polygon corner 1 um off
+T10	a private layer
+T11	a keepout of its own
+T12	a text box more
+T13	a line on the courtyard more
+T14	a line on a user layer more
+T15	a line on copper more
+T16	an arc centred elsewhere, same ends
+T17	a library whose folder is gone
+U0	a line 11 nm longer
+U1	a line 12 nm longer
+U2	a line 13 nm longer
+U3	a line 15 nm longer
+U4	a line 17 nm longer
+U5	a line 19 nm longer
+V0	a pad moved 8 nm across and 8 nm down
+V1	a pad moved 7 nm across and 7 nm down
+V2	a pad moved 10 nm across and 10 nm down
+V3	a pad moved 0 nm across and 11 nm down
+W0	a pad 10 nm larger
+W1	a pad 11 nm larger
+W2	a pad 15 nm larger
+W3	a hole 10 nm larger
+W4	a hole 11 nm larger
+W5	a pad turned 0.01 degree
+W6	a pad turned 0.1 degree
+X0	a plated hole's pad on F&B.Cu for *.Cu
+X1	an unplated hole on F&B.Cu for *.Cu
+X2	a pad on an inner layer too
+X3	a default written out
+L62	a footprint the library has not got
+L63	a library switched off
+L64	a library no table names
+L65	no library at all

@@ -1,0 +1,156 @@
+{
+  "repository": "https://github.com/fatecannotbealtered/tool-driver-cli-spec",
+  "commit": "9607a35fe0ea33fe822e1f2ad2704eae260d4018",
+  "version": "1.0.2",
+  "license_status": "No explicit LICENSE file found in supplied exact specification archive; distribution review required.",
+  "files": {
+    "_driver_sdk/__init__.py": {
+      "source": "packages/tool_driver_sdk/__init__.py",
+      "sha256": "a6a61753063d17aaaeb7768713fab94dfec59cb700bbdd6666f4a8b7f026644e"
+    },
+    "_driver_sdk/changelog.py": {
+      "source": "packages/tool_driver_sdk/changelog.py",
+      "sha256": "ac0d11f670476f2b22200687e422f2dc636efe5342361d2e562628df8df65e3f"
+    },
+    "_driver_sdk/models.py": {
+      "source": "packages/tool_driver_sdk/models.py",
+      "sha256": "7491229df60561dac1c4123c26b1375105fc7e188e69ff390a7f86131f6e85e8"
+    },
+    "_driver_sdk/runtime.py": {
+      "source": "packages/tool_driver_sdk/runtime.py",
+      "sha256": "08324576657e7250495dfea21c671a67fbc8fdb42c9d099efe9d72f3ba12eb07"
+    },
+    "_driver_sdk/scope.py": {
+      "source": "packages/tool_driver_sdk/scope.py",
+      "sha256": "69f0c135c10a193337960eec468c46863f6c640aac8aff8e65726e13b5ed4f32"
+    },
+    "_driver_sdk/store.py": {
+      "source": "packages/tool_driver_sdk/store.py",
+      "sha256": "7bd525ed89c98ad8cb2195abfafbe14e5ee7cc913dade4f6b0d6b4ca1c55fa19"
+    },
+    "_driver_sdk/tokens.py": {
+      "source": "packages/tool_driver_sdk/tokens.py",
+      "sha256": "f41340e7bdd15d1b92441529af0715fc03a474fad93dcc94eede31a5fe0b201a"
+    },
+    "_driver_sdk/validation.py": {
+      "source": "packages/tool_driver_sdk/validation.py",
+      "sha256": "16917a8c4c38f99346afdaf7243fca35fafaa400565a6fbeca6e8562192e8cee"
+    },
+    "_driver_sdk/verification.py": {
+      "source": "packages/tool_driver_sdk/verification.py",
+      "sha256": "c0ffa2b17b6c2779ae916f217f06efe96da320b3a0867e4ca6df9bf9dae072f7"
+    },
+    "driver_spec/base/ai-native-cli-spec/contract.json": {
+      "source": "base/ai-native-cli-spec/contract.json",
+      "sha256": "8a7f8d93825b69a53b8dfe6c605498d21708709e9db8730b87b23eb262447752"
+    },
+    "driver_spec/base/base-lock.json": {
+      "source": "base/base-lock.json",
+      "sha256": "de4742060ad11502f83bdad0091d6308858e0a8aacfbb988a4f2a1ab3e865ef5"
+    },
+    "driver_spec/contract/driver-contract.json": {
+      "source": "contract/driver-contract.json",
+      "sha256": "2d0bce8e7053ed2a8424126afe9fd1c4555602b1be7cb03a510a20b4e789daa2"
+    },
+    "driver_spec/packages/tool_driver_sdk/verification.py": {
+      "source": "packages/tool_driver_sdk/verification.py",
+      "sha256": "c0ffa2b17b6c2779ae916f217f06efe96da320b3a0867e4ca6df9bf9dae072f7"
+    },
+    "driver_spec/schemas/adoption-lock.schema.json": {
+      "source": "schemas/adoption-lock.schema.json",
+      "sha256": "d473c98fb0ac692cc837c5b06e69117a52d09354fe9ec191d6e5e18e474089d0"
+    },
+    "driver_spec/schemas/agent-eval.schema.json": {
+      "source": "schemas/agent-eval.schema.json",
+      "sha256": "6a4cc44691e635ec72c6693e11e4fdf188adc79fce7ef8f98a94daef65df0578"
+    },
+    "driver_spec/schemas/batch.schema.json": {
+      "source": "schemas/batch.schema.json",
+      "sha256": "6c7cc33251a267b90e2f99411c2ea85dfc59f3ca5efc016f319baa131f01bfd2"
+    },
+    "driver_spec/schemas/changelog.schema.json": {
+      "source": "schemas/changelog.schema.json",
+      "sha256": "25dd93a0524c6d5d22bb9a42945801efd88082e6cd047165fbef2b53e9351665"
+    },
+    "driver_spec/schemas/common.schema.json": {
+      "source": "schemas/common.schema.json",
+      "sha256": "2e7911303440f362fd588637a2ec8bcebddf8e91621502bdec8b83a5ed318ae3"
+    },
+    "driver_spec/schemas/context.schema.json": {
+      "source": "schemas/context.schema.json",
+      "sha256": "815582605344370b640361cb383f699c83362a878774d9f33d0c1199a9a9422f"
+    },
+    "driver_spec/schemas/doctor.schema.json": {
+      "source": "schemas/doctor.schema.json",
+      "sha256": "e00d4c4eea919412c8d2a00a3dd0bf8cd575ee4ca24241005bc245f3c9593e7a"
+    },
+    "driver_spec/schemas/evidence.schema.json": {
+      "source": "schemas/evidence.schema.json",
+      "sha256": "a7d1f9299a2d6f43bfa9111e58f598c3290fa383c8bc7e5bf1ff1068b00e228d"
+    },
+    "driver_spec/schemas/operation-status.schema.json": {
+      "source": "schemas/operation-status.schema.json",
+      "sha256": "bd09a6043183fcadcea72d3de6a651ee9f62208d0631b2692716b51182fde532"
+    },
+    "driver_spec/schemas/plan.schema.json": {
+      "source": "schemas/plan.schema.json",
+      "sha256": "b24a17934f4f9e5fdc9279869ea9c3a3a6c1ba2c01e38a65aa1565a17c76b123"
+    },
+    "driver_spec/schemas/product-design.schema.json": {
+      "source": "schemas/product-design.schema.json",
+      "sha256": "64f637e06166dab1a2482110040c87a4231f3d3deebe91a0f2cd143f19c84d4e"
+    },
+    "driver_spec/schemas/product-registry.schema.json": {
+      "source": "schemas/product-registry.schema.json",
+      "sha256": "e09b885a72b1953ad50506c7d73715c4ead704b032a92f683aba20f6e1fa0823"
+    },
+    "driver_spec/schemas/query-page.schema.json": {
+      "source": "schemas/query-page.schema.json",
+      "sha256": "b4ff6da14a45e5e3952b7076bc3cbb37cd106df07f323828e644782129b69632"
+    },
+    "driver_spec/schemas/receipt.schema.json": {
+      "source": "schemas/receipt.schema.json",
+      "sha256": "33559ef2e2dc096b3c4938fa45ca8ac3d7b0c9b62a7d595bb79f1632ee49c4a5"
+    },
+    "driver_spec/schemas/reference-command.schema.json": {
+      "source": "schemas/reference-command.schema.json",
+      "sha256": "45d1eae0379e006549f0fd779c2b2856e578c25edcd3dce211254ff394d9b57d"
+    },
+    "driver_spec/schemas/reference-index.schema.json": {
+      "source": "schemas/reference-index.schema.json",
+      "sha256": "5d5d604ce86c243ccfbc6e7aaab37eb2c5012fb9744433567ec8dac0d68b2e65"
+    },
+    "driver_spec/schemas/reference.schema.json": {
+      "source": "schemas/reference.schema.json",
+      "sha256": "b86fff8bc0116afd8f003bbcdd742852101a180527de6236aa632dda34d92ba6"
+    },
+    "driver_spec/schemas/release-manifest.schema.json": {
+      "source": "schemas/release-manifest.schema.json",
+      "sha256": "3cd4ef80566c32b4774d7129264e149c2e880df8d676c287b41a49fd5d0ee48b"
+    },
+    "driver_spec/schemas/response.schema.json": {
+      "source": "schemas/response.schema.json",
+      "sha256": "ec560493413f1e7245581093c98257a801562a7c4f3f9cb7ad3dc8fc6da72efd"
+    },
+    "driver_spec/schemas/scope.schema.json": {
+      "source": "schemas/scope.schema.json",
+      "sha256": "d3953cd0a704f6b165ee9bc095de190953eb85e7d5d9d7eab7683fcef92728fb"
+    },
+    "driver_spec/schemas/verification-result.schema.json": {
+      "source": "schemas/verification-result.schema.json",
+      "sha256": "123dce77e838f0e68dfd30efcfea1ad2a85f6c5b55c025d14047577b03d26f0b"
+    },
+    "driver_spec/schemas/workflow.schema.json": {
+      "source": "schemas/workflow.schema.json",
+      "sha256": "ac4414b50ec6f53b3946a5955fcb13c687e3f1ab9564545016f35481accd3236"
+    },
+    "driver_spec/scripts/check_spec.py": {
+      "source": "scripts/check_spec.py",
+      "sha256": "8f535f2c625ae3aebaa2c9b57603a1a5a8faed7bfc7092ec14c15d39bf91b088"
+    },
+    "driver_spec/scripts/contract_io.py": {
+      "source": "scripts/contract_io.py",
+      "sha256": "00b83f1e05ee85611670af45cb9259d98f84dc8ac278787b99ff4f21ec5a034b"
+    }
+  }
+}

@@ -1,0 +1,69 @@
+{
+ "kicad_version": "10.0.6",
+ "violations": [
+  {
+   "type": "isolated_copper",
+   "severity": "warning",
+   "items": [
+    "20339ccb-bcc7-5608-ba97-b26443a3a07b"
+   ]
+  },
+  {
+   "type": "isolated_copper",
+   "severity": "warning",
+   "items": [
+    "246acab4-01b7-55b3-87be-d372a59107df"
+   ]
+  },
+  {
+   "type": "isolated_copper",
+   "severity": "warning",
+   "items": [
+    "6ebc4f84-01f1-5124-9a3e-1361d7dc3f10"
+   ]
+  },
+  {
+   "type": "isolated_copper",
+   "severity": "warning",
+   "items": [
+    "939115b6-70e2-526f-bd49-38d95daae065"
+   ]
+  },
+  {
+   "type": "isolated_copper",
+   "severity": "warning",
+   "items": [
+    "94f1f689-fb87-5306-abce-508f5a181c7f"
+   ]
+  },
+  {
+   "type": "isolated_copper",
+   "severity": "warning",
+   "items": [
+    "94f1f689-fb87-5306-abce-508f5a181c7f"
+   ]
+  },
+  {
+   "type": "isolated_copper",
+   "severity": "warning",
+   "items": [
+    "9d74980b-7c75-55ea-a4d2-00443772c76a"
+   ]
+  },
+  {
+   "type": "isolated_copper",
+   "severity": "warning",
+   "items": [
+    "b5a5a760-ed6e-517b-893c-ba16706b7f23"
+   ]
+  },
+  {
+   "type": "isolated_copper",
+   "severity": "warning",
+   "items": [
+    "bd180b75-b6b3-598d-8d04-ba1cb64dfba0"
+   ]
+  }
+ ],
+ "unconnected_items": []
+}

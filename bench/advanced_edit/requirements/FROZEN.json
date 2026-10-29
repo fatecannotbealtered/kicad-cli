@@ -1,0 +1,89 @@
+{
+  "frozen_at_utc": "2026-10-12T03:04:47.908394+00:00",
+  "review_baseline": "35f26028b3e77456dac3abf6ca702a202e85af4a",
+  "baseline_source_commit": "3b3c7a2c56cac90c969a40f4e9968f3c784f6334",
+  "baseline": "Previously accepted RC ECO (C2=220nF; R2=(26.5,20)mm), not the earlier 100nF/pre-move version",
+  "baseline_files": {
+    "rc4.kicad_pcb": "be2d6147efe67d545c047e06ffdd0a6f1f7e61d46554e5a41d90438977788f2e",
+    "rc4.kicad_pro": "63e870fedbbe34f682689e3d2b1e81834bda0e039f1b38face56b7d903847b95",
+    "rc4.kicad_sch": "8a1d5103619f4279871e5c32a5b8252189f86649c6116dc1e76515255fce9d08"
+  },
+  "base_frozen_intent_sha256": "90961e87220053430d2da306df824fe3a2cb50fd69fa8830b015ba27cc673aed",
+  "symbol_and_footprint": {
+    "symbol": {
+      "id": "Connector:TestPoint",
+      "file": "Connector.kicad_sym",
+      "sha256": "1596718c70ff14cc217a9297dcb48bad23bdffcca0881600e9e66be16953bf59"
+    },
+    "footprint": {
+      "id": "TestPoint:TestPoint_Pad_D1.5mm",
+      "file": "TestPoint_Pad_D1.5mm.kicad_mod",
+      "sha256": "501dd0ac7ff91f9b1b6f7906a9ac2404c862f91dcfc9bbc9533f769f1a36b984"
+    }
+  },
+  "requirements": {
+    "rename": {
+      "old_logical_name": "OUT2",
+      "new_logical_name": "OUT2_SENSE",
+      "same_member_pins": [
+        "R2.2",
+        "C2.1",
+        "J2.2"
+      ]
+    },
+    "testpoint": {
+      "ref": "TP1",
+      "logical_pin": "1",
+      "physical_pad": "1",
+      "symbol": "Connector:TestPoint",
+      "footprint": "TestPoint:TestPoint_Pad_D1.5mm",
+      "initial_value": "MON2",
+      "later_value": "MONITOR_OUT2",
+      "in_bom": false,
+      "on_board": true,
+      "schematic_placement": "Automatic near C2 on the root sheet; no manual coordinates/rotation are requested",
+      "pcb_position_mm": [
+        55.0,
+        32.0
+      ],
+      "pcb_layer": "F.Cu",
+      "pcb_rotation_deg": 0,
+      "unconnected_definition": "TP1.1 is an isolated singleton with a no-connect marker; native auto-generated unconnected net name is not a tenth intended named net"
+    },
+    "protected": [
+      "All original component references/UUID relationships/footprints/pad numbers/values/positions/rotations/layers",
+      "All channel 1,3,4 logical pin maps and copper geometry/UUIDs",
+      "Original GND tracks/vias and zone definitions; fills separately rechecked",
+      "Original board outline geometry; rule severities and ignored checks"
+    ],
+    "rules": {
+      "track_width_mm": 0.25,
+      "clearance_mm": 0.2,
+      "via_diameter_mm": 0.6,
+      "via_drill_mm": 0.3,
+      "netclass": "RC4",
+      "rename_assignment_policy": "Retain numeric rules and existing-net assignments. If rename does not propagate assignment, explicitly apply the existing RC4 values to OUT2_SENSE; an unused old-name assignment may remain. Do not relax any rule."
+    },
+    "schema_metadata": "Top-level wrapper extra keys are caller metadata, not edit operations; named text fields retain existing semantics."
+  },
+  "pcb_strategy": {
+    "same_board": true,
+    "lifecycle": "The same absolute PCB and schematic paths throughout S0-S5. Never switch to a main board without TP history. Every stage must save, reopen, compare intent/geometry, run native checks and review new full images.",
+    "removal": "S4 explicitly disconnects the schematic pin, syncs and repairs only OUT2_SENSE copper. S5 removes the schematic TP1 and uses project sync --remove-footprint with its exact saved identity/pad selection. Refuse contact/locks/ambiguity instead of removing whole nets. Refill saved zones through public CLI; every original footprint, non-target copper and rule remains protected."
+  },
+  "stages": [
+    "S0 exact frozen RC ECO baseline; fresh native read and images",
+    "S1 OUT2 -> OUT2_SENSE; same PCB sync and explicit effective-rule retention",
+    "S2 add TP1 with pin1 NC; same PCB add and place at (55,32) mm",
+    "S3 connect TP1.1 to OUT2_SENSE; value MONITOR_OUT2; same PCB sync and actual selected-net copper connectivity",
+    "S4 disconnect TP1.1 with NC; same PCB sync and selected-net copper repair; no copper contact to TP1",
+    "S5 remove TP1 in schematic and explicitly remove the exact PCB identity; save/reopen/refill, compare all original objects and S4 copper, prove no TP attachments/UUID references remain"
+  ],
+  "acceptance": "Full pin membership and identities at each stage, fresh native saved-file XML/PCB reads, native ERC where applicable; native DRC for completed PCB stages. Full images and explicit current snapshot-bound visual verdict. No design electrical/ampacity/supplier sign-off.",
+  "previous_frozen_sha256": "4772a43912eda4da3abd8c827ab25fb3f4aa51526338c5ad74262f004e40216d",
+  "revision": 3,
+  "revision_reason": {
+    "purpose": "Explicit new same-board lifecycle acceptance requested before execution; preserve v2 separate retention-board result and failure.",
+    "changed_requirement": "One project PCB participates in every S0-S5 stage, including physical explicit TP deletion; original input bytes and all numeric/identity protections unchanged."
+  }
+}

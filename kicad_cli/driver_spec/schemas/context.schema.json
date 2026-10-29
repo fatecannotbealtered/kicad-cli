@@ -1,0 +1,249 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:tool-driver-cli-spec:context:2.0",
+  "title": "context",
+  "description": "The data of the base context command of a driver CLI.",
+  "type": "object",
+  "properties": {
+    "version": {
+      "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/semver"
+    },
+    "credentials": {
+      "type": "object",
+      "properties": {
+        "configured": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "configured"
+      ],
+      "additionalProperties": true
+    },
+    "notices": {
+      "type": "array",
+      "items": {
+        "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/notice"
+      }
+    },
+    "driver_profile": {
+      "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/driver_profile"
+    },
+    "authorization": {
+      "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/authorization"
+    },
+    "environment": {
+      "type": "object",
+      "properties": {
+        "platform": {
+          "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+        },
+        "arch": {
+          "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+        },
+        "components": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+              },
+              "role": {
+                "enum": [
+                  "cli",
+                  "adapter",
+                  "service",
+                  "plugin",
+                  "application",
+                  "device",
+                  "runtime",
+                  "validator"
+                ]
+              },
+              "version": {
+                "anyOf": [
+                  {
+                    "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "build_id": {
+                "anyOf": [
+                  {
+                    "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "location": {
+                "enum": [
+                  "disk",
+                  "running",
+                  "remote",
+                  "unknown"
+                ]
+              },
+              "identity_status": {
+                "enum": [
+                  "observed",
+                  "unavailable",
+                  "not_applicable"
+                ]
+              },
+              "reason": {
+                "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+              }
+            },
+            "required": [
+              "name",
+              "role",
+              "version",
+              "build_id",
+              "location",
+              "identity_status"
+            ],
+            "additionalProperties": false,
+            "allOf": [
+              {
+                "if": {
+                  "properties": {
+                    "identity_status": {
+                      "enum": [
+                        "unavailable",
+                        "not_applicable"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "identity_status"
+                  ]
+                },
+                "then": {
+                  "required": [
+                    "reason"
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        "connection": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "enum": [
+                "connected",
+                "not_connected",
+                "unavailable",
+                "unknown"
+              ]
+            },
+            "instance_id": {
+              "anyOf": [
+                {
+                  "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/id"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "generation": {
+              "anyOf": [
+                {
+                  "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "ownership": {
+              "enum": [
+                "owned",
+                "attached",
+                null
+              ]
+            },
+            "reason": {
+              "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+            }
+          },
+          "required": [
+            "status",
+            "instance_id",
+            "generation",
+            "ownership"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "platform",
+        "arch",
+        "components",
+        "connection"
+      ],
+      "additionalProperties": false
+    },
+    "state": {
+      "type": "object",
+      "properties": {
+        "dir": {
+          "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+        },
+        "available": {
+          "type": "boolean"
+        },
+        "protection": {
+          "enum": [
+            "posix_owner_only",
+            "windows_profile_acl",
+            "windows_explicit_acl",
+            "unknown"
+          ]
+        },
+        "record_retention_days": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "reason": {
+          "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+        }
+      },
+      "required": [
+        "dir",
+        "available",
+        "protection",
+        "record_retention_days"
+      ],
+      "additionalProperties": false
+    },
+    "_untrusted": {
+      "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/untrusted"
+    }
+  },
+  "required": [
+    "version",
+    "credentials",
+    "driver_profile",
+    "authorization",
+    "environment",
+    "state"
+  ],
+  "additionalProperties": true
+}

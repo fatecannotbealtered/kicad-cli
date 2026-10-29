@@ -1,0 +1,64 @@
+{
+  "spec": "ai-native-cli-spec",
+  "repository": "https://github.com/fatecannotbealtered/ai-native-cli-spec",
+  "tag": "v1.6.3",
+  "commit": "d6733433e2a9b93a4e6fb169c6927f6604ec89c7",
+  "contract_version": "1.0",
+  "files": [
+    {
+      "path": "base/ai-native-cli-spec/AGENT.md",
+      "source_path": "template/common/.agent/AGENT.md",
+      "sha256": "fb5f822b71f3897ad107a985304597e04d229f9b3cb873e2b6e9313783e50ce3"
+    },
+    {
+      "path": "base/ai-native-cli-spec/AGENT_zh.md",
+      "source_path": "template/common/.agent/AGENT_zh.md",
+      "sha256": "25e37880e3ff0f5053d5d8342d73f9526869aaae3ebaa33c877aa02e2ad7c11d"
+    },
+    {
+      "path": "base/ai-native-cli-spec/CLI-SPEC.md",
+      "source_path": "template/common/.agent/CLI-SPEC.md",
+      "sha256": "62258e23fffc4a42fd5c9eba74c80a989b5777175cd0d74aed5279c4f7a41052"
+    },
+    {
+      "path": "base/ai-native-cli-spec/CLI-SPEC_zh.md",
+      "source_path": "template/common/.agent/CLI-SPEC_zh.md",
+      "sha256": "7c46b89b7fd4e34dc5de43cc93a3bd9428bdb9f2a2bd7e2b39b4f5ed84fca3bd"
+    },
+    {
+      "path": "base/ai-native-cli-spec/SEC-SPEC.md",
+      "source_path": "template/common/.agent/SEC-SPEC.md",
+      "sha256": "d36d4ec4c95ccbc11fee0f3f3113bec5dfa500735885a78a2714c731e0b4e8d6"
+    },
+    {
+      "path": "base/ai-native-cli-spec/SEC-SPEC_zh.md",
+      "source_path": "template/common/.agent/SEC-SPEC_zh.md",
+      "sha256": "fc7d092085a12ad06acfcbc99683495976786e543b5ad19811da62f94bc7d982"
+    },
+    {
+      "path": "base/ai-native-cli-spec/SKILL-SPEC.md",
+      "source_path": "template/common/.agent/SKILL-SPEC.md",
+      "sha256": "d68e2e18a16b718139778e27312e78642689d7961e1f38de33c7cacc58a40901"
+    },
+    {
+      "path": "base/ai-native-cli-spec/SKILL-SPEC_zh.md",
+      "source_path": "template/common/.agent/SKILL-SPEC_zh.md",
+      "sha256": "13d1534e8edd0f4b5a36248eb71e2d8e0a7cb567ff7fab8d10ba98c5e357c035"
+    },
+    {
+      "path": "base/ai-native-cli-spec/contract.json",
+      "source_path": "template/common/contract/contract.json",
+      "sha256": "8a7f8d93825b69a53b8dfe6c605498d21708709e9db8730b87b23eb262447752"
+    },
+    {
+      "path": "base/ai-native-cli-spec/REPO-SPEC.md",
+      "source_path": "REPO-SPEC.md",
+      "sha256": "f656126bdb0ac613cbda5320771aa0f461c169fbfed2bb265fdfa5692229bb93"
+    },
+    {
+      "path": "base/ai-native-cli-spec/REPO-SPEC_zh.md",
+      "source_path": "REPO-SPEC_zh.md",
+      "sha256": "adbea7569df882c9d4903489b124044fa628c406b1e8e2afa2d46402c7f91bbb"
+    }
+  ]
+}

@@ -1,0 +1,97 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:tool-driver-cli-spec:doctor:2.0",
+  "title": "doctor",
+  "description": "The data of the base doctor command of a driver CLI.",
+  "type": "object",
+  "properties": {
+    "checks": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "properties": {
+          "check": {
+            "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+          },
+          "status": {
+            "enum": [
+              "pass",
+              "warn",
+              "fail"
+            ]
+          },
+          "fix": {
+            "anyOf": [
+              {
+                "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "message": {
+            "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+          },
+          "details": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "check",
+          "status",
+          "fix"
+        ],
+        "additionalProperties": false,
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "status": {
+                  "const": "fail"
+                }
+              },
+              "required": [
+                "status"
+              ]
+            },
+            "then": {
+              "properties": {
+                "fix": {
+                  "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "status": {
+                  "const": "pass"
+                }
+              },
+              "required": [
+                "status"
+              ]
+            },
+            "then": {
+              "properties": {
+                "fix": {
+                  "type": "null"
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "_untrusted": {
+      "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/untrusted"
+    }
+  },
+  "required": [
+    "checks"
+  ],
+  "additionalProperties": true
+}

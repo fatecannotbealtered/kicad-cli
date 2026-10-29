@@ -1,0 +1,129 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:tool-driver-cli-spec:product-registry:2.0",
+  "title": "product-registry",
+  "x-development-only": true,
+  "description": "Development input: one data-only declaration from which a product's reference, help, Skill capability summary and contract extension are generated. Not a public instance contract.",
+  "type": "object",
+  "properties": {
+    "registry_version": {
+      "const": "2.0"
+    },
+    "name": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "maxLength": 64
+    },
+    "product_version": {
+      "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/semver"
+    },
+    "description": {
+      "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+    },
+    "risk_tier": {
+      "enum": [
+        "T0",
+        "T1",
+        "T2"
+      ]
+    },
+    "release_readiness": {
+      "$ref": "urn:tool-driver-cli-spec:reference:2.0#/properties/release_readiness"
+    },
+    "record": {
+      "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/driver_profile/properties/record"
+    },
+    "changelog": {
+      "description": "Path of the product CHANGELOG.md, relative to the registry file; embedded for the changelog command.",
+      "type": "string",
+      "minLength": 1
+    },
+    "builtins": {
+      "description": "Maturity and evidence of the built-in commands (reference, context, doctor, changelog, operation).",
+      "type": "object",
+      "properties": {
+        "maturity": {
+          "enum": [
+            "draft",
+            "experimental",
+            "verified",
+            "stable"
+          ]
+        },
+        "evidence_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "error_codes": {
+      "description": "Product extension codes only; core and driver codes are added by the generator.",
+      "type": "object",
+      "propertyNames": {
+        "pattern": "^E_[A-Z0-9_]+$"
+      },
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "exit": {
+            "type": "integer"
+          },
+          "retryable": {
+            "type": "boolean"
+          },
+          "description": {
+            "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+          }
+        },
+        "required": [
+          "exit",
+          "retryable",
+          "description"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "schemas": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "$ref": "urn:tool-driver-cli-spec:reference:2.0#/$defs/schema_entry"
+      }
+    },
+    "json_schemas": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "minProperties": 1
+      }
+    },
+    "commands": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "allOf": [
+          {
+            "$ref": "urn:tool-driver-cli-spec:reference:2.0#/$defs/command"
+          }
+        ]
+      }
+    },
+    "design": {
+      "description": "Optional development design record; new starter projects require it. Never copied into public reference or the runtime envelope.",
+      "$ref": "urn:tool-driver-cli-spec:product-design:2.0"
+    }
+  },
+  "required": [
+    "registry_version",
+    "name",
+    "product_version",
+    "description",
+    "risk_tier",
+    "schemas",
+    "commands"
+  ],
+  "additionalProperties": false
+}

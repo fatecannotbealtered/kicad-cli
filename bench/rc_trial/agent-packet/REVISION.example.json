@@ -1,0 +1,6 @@
+{
+  "candidate": "<ABSOLUTE_CANDIDATE_EXE>",
+  "sha256": "<CANDIDATE.json sha256>",
+  "source_commit": "<CANDIDATE.json source_commit>",
+  "release_readiness": "unpublishable"
+}

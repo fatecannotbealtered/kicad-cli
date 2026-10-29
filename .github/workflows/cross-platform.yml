@@ -1,0 +1,115 @@
+name: Cross-platform development builds
+on:
+  push:
+    branches: ['work/cross-platform-*']
+permissions:
+  contents: read
+jobs:
+  native:
+    name: Native ${{ matrix.target }} baseline
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - target: linux-x64
+            runner: ubuntu-24.04
+          - target: darwin-arm64
+            runner: macos-14
+          - target: darwin-x64
+            runner: macos-15-intel
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 25
+    env:
+      # CreateArtifact was refused in 40660748079: account storage quota hit.
+      # Do not retry export until the parent confirms available capacity.
+      ARTIFACT_EXPORT_ENABLED: 'false'
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '20'
+      - name: Isolate build and audit tools from runner site-packages
+        run: |
+          python -m venv "$RUNNER_TEMP/native-build-venv"
+          echo "$RUNNER_TEMP/native-build-venv/bin" >> "$GITHUB_PATH"
+      - name: Install fixed build dependencies
+        run: |
+          python -m pip install -r requirements-build.lock
+          python -m pip install --no-build-isolation -e '.[dev]'
+          python -m pip list --format=json > "$RUNNER_TEMP/build-environment.json"
+      - name: Check fixed specifications and dependencies
+        run: |
+          ruff check scripts/build_module_candidate.py scripts/probe_native_platform.py scripts/smoke_native_package.py bench/module_trial.py
+          node scripts/check-version.js
+          node scripts/check-spec.js --local-only
+          python scripts/check_fixed_specs.py
+          python scripts/audit_dependencies.py --audit
+      - name: Freeze actual native binary with authenticated runtime
+        run: python scripts/build_module_candidate.py "$RUNNER_TEMP/platform-build" --python "$(command -v python)"
+      - name: Preserve native build before external KiCad setup
+        if: always() && env.ARTIFACT_EXPORT_ENABLED == 'true'
+        uses: actions/upload-artifact@v7
+        with:
+          name: native-baseline-${{ matrix.target }}-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/platform-build/dist/
+            ${{ runner.temp }}/platform-build/BUILD-RESULT.json
+            ${{ runner.temp }}/platform-build/SOURCE-INPUTS.json
+            ${{ runner.temp }}/platform-build/stdout.log
+            ${{ runner.temp }}/platform-build/stderr.log
+            ${{ runner.temp }}/build-environment.json
+          if-no-files-found: error
+          retention-days: 7
+      - name: Install official stable KiCad packages on Linux runner
+        if: runner.os == 'Linux'
+        run: |
+          sudo add-apt-repository --yes --no-update ppa:kicad/kicad-10.0-releases
+          sudo apt-get update
+          sudo apt-get install --yes --no-install-recommends kicad kicad-symbols kicad-footprints xvfb
+          echo 'KICAD_PROBE_ROOT=/usr' >> "$GITHUB_ENV"
+      - name: Mount official KiCad macOS distribution read-only
+        if: runner.os == 'macOS'
+        run: |
+          curl --fail --location --retry 2 --max-time 600 https://github.com/KiCad/kicad-source-mirror/releases/download/10.0.7/kicad-unified-universal-10.0.7.dmg --output "$RUNNER_TEMP/kicad.dmg"
+          shasum -a 256 "$RUNNER_TEMP/kicad.dmg" > "$RUNNER_TEMP/kicad-download.sha256"
+          mkdir "$RUNNER_TEMP/kicad-volume"
+          hdiutil attach -readonly -nobrowse -mountpoint "$RUNNER_TEMP/kicad-volume" "$RUNNER_TEMP/kicad.dmg"
+          python - <<'PY'
+          import os
+          from pathlib import Path
+          app = next((Path(os.environ['RUNNER_TEMP']) / 'kicad-volume').rglob('KiCad.app'))
+          with open(os.environ['GITHUB_ENV'], 'a') as stream:
+              stream.write('KICAD_PROBE_ROOT=' + str(app) + '\n')
+          PY
+      - name: Record real installation and baseline startup results
+        run: python scripts/probe_native_platform.py --binary "$RUNNER_TEMP/platform-build/dist/kicad-cli" --kicad-root "$KICAD_PROBE_ROOT" --destination "$RUNNER_TEMP/platform-probe"
+      - name: Native package installation and library SCH PCB smoke
+        run: |
+          if [ "$RUNNER_OS" = Linux ]; then
+            xvfb-run -a python scripts/smoke_native_package.py --build "$RUNNER_TEMP/platform-build" --kicad-root "$KICAD_PROBE_ROOT" --destination "$RUNNER_TEMP/platform-smoke"
+          else
+            python scripts/smoke_native_package.py --build "$RUNNER_TEMP/platform-build" --kicad-root "$KICAD_PROBE_ROOT" --destination "$RUNNER_TEMP/platform-smoke"
+          fi
+      - name: Preserve actual baseline diagnostics, including product failures
+        if: always() && env.ARTIFACT_EXPORT_ENABLED == 'true'
+        uses: actions/upload-artifact@v7
+        with:
+          name: native-probe-${{ matrix.target }}-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/platform-probe/
+            ${{ runner.temp }}/platform-smoke/distribution/
+            ${{ runner.temp }}/platform-smoke/SMOKE-RESULT.json
+            ${{ runner.temp }}/kicad-download.sha256
+          if-no-files-found: warn
+          retention-days: 7
+      - name: Detach only this job's read-only image
+        if: always() && runner.os == 'macOS'
+        run: |
+          if mount | grep -F "$RUNNER_TEMP/kicad-volume"; then
+            hdiutil detach "$RUNNER_TEMP/kicad-volume"
+          fi

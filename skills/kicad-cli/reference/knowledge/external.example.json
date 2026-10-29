@@ -1,0 +1,20 @@
+{
+  "format_version": 1,
+  "consumer": "agent_explicit_file_read",
+  "relative_path_base": "configuration_file_directory",
+  "role": "external_supplement_example",
+  "entries": [
+    {
+      "id": "team-schematic-standard-example",
+      "category": "team_design_standard",
+      "title": "团队SCH规范接入占位示例",
+      "purpose": "示范外置规范元数据；此文件不包含实际团队设计要求。",
+      "location": { "kind": "file", "path": "team/SCHEMATIC_RULES.example.md" },
+      "version": "example-only；启用前改成团队批准版本",
+      "applicability": "example-only；启用前写明适用产品、工程或任务",
+      "read_method": "用户授权后，由agent按UTF-8读取指定文件；非Markdown格式使用已授权的读取工具。",
+      "enabled": false,
+      "required_for_first_trial": false
+    }
+  ]
+}

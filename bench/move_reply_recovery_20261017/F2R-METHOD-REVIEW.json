@@ -1,0 +1,68 @@
+{
+  "kind": "F2R-independent-readonly-method-review-v1",
+  "decision": "approved_for_exact_new_frozen_remaining_reads_and_known_spent_refusal",
+  "p1_count": 0,
+  "p2_count": 0,
+  "reviewed_method": {
+    "path": "f2_readonly_02.py",
+    "sha256": "33e325a67252341ffb5d0f06c0063130220434fd3f340a50efa421de128b3b26"
+  },
+  "original_helper_source": {
+    "path": "f2-method/controller.py",
+    "sha256": "223a2e48ef83a7047ba4e7d9b81f8bdf636da234108a10f31e92065e357b1b12",
+    "modified": false,
+    "old_verify_called": false
+  },
+  "original_failure_qualification": {
+    "path": "F2-FAILURE-QUALIFICATION.json",
+    "sha256": "d278d0478c62f3995f197752ff3178c852c277ee3195cc79d86ddabad5eee107",
+    "old_producer_exit": 1,
+    "old_STOP_unchanged": true
+  },
+  "new_original_plan": {
+    "path": "f2-readonly-02/ORIGINAL-PLAN.json",
+    "sha256": "9177982d6f506b33d7fb6e4396bcaef4b846092c1e41bb0ac95e73591a03695d"
+  },
+  "operation_id": "op-ec385b816a0b44f0838ae502",
+  "qualification_gate": [
+    "Fixed same F2 cycle, original confirm-plan SHA and immutable223 helpers; original failed STOP and exit1 are required, not erased.",
+    "Original service complete schema3 exit0 and natural empty Job, one returned relay callback and actual caller EOF/zero bytes; immutable source/plan/streams retained.",
+    "Before new actions, succeeded original durable receipt, null lease/resolution, one consumed original token, scope used1, and saved board06d must be proven from this own state.",
+    "Saved engineering is qualified against ORIGINAL engineering_before: exactly8 keys, all7 non-board full metadata unchanged, board SHA06d and prebound positive size. A new snapshot cannot silently accept earlier extra files or mutations."
+  ],
+  "closed_P2": "The09bf draft only froze current engineering and omitted full original8-key/7-metadata and non-DB-artifact protection. The33e325 method restores those checks before freeze and after each new action;09bf and its unconsumed plan remain separate history.",
+  "only_actions": {
+    "original_ID_public_show": 1,
+    "proven_consumed_same_token_negative_request": 1,
+    "independent_native_SDK_read": 1,
+    "preview": 0,
+    "normal_success_confirm_retry": 0,
+    "resolve": 0,
+    "preflight_regeneration": 0,
+    "new_render": 0,
+    "new_full_image_view": 0
+  },
+  "required_results": [
+    "Original-ID show must return succeeded and the exact original receipt; known-spent request must be exit6/E_CONFLICT/token_used/not_started with zero official CLI processes.",
+    "Engineering and exact operation/token/scope rows stay equal. Original helper state_after_observe protects non-DB artifacts; SQLite physical changes are recorded separately.",
+    "Independent SDK provider/startup identity, expected R4/pad geometry and other objects remain checked against frozen independent evidence. Saved board equals the current preview candidate; current DRC reuse is not a new post-save DRC run.",
+    "Exact original plan SHA and all method-input hashes are consumed; exclusive execution/invocation markers prevent replay. Action-path failures record a new STOP and do not re-dispatch the old write. Preconditions failing before a new owned execution marker remain parent-recorded failures, not permission to bypass qualification.",
+    "Parent must bind this exact33e325 method,9177982d plan, runtime, inputs/streams and complete Job. This review itself executes nothing."
+  ],
+  "optional_replayed": {
+    "schema_sha256": "33559ef2e2dc096b3c4938fa45ca8ac3d7b0c9b62a7d595bb79f1632ee49c4a5",
+    "json_pointer": "/properties/replayed",
+    "not_in_required": true,
+    "actual_original_field_absent": true,
+    "false_not_synthesized": true
+  },
+  "reviewer_scope": {
+    "source_and_saved_metadata_only": true,
+    "own_DB_opened": false,
+    "Python_executed": 0,
+    "product_executed": 0,
+    "native_executed": 0,
+    "old_evidence_modified": 0
+  },
+  "limits": "This authorizes only the root's bounded new F2R plan after completed-service qualification. The old223 attempt remains failed. No F1 retry, F4/source-C1 access, unknown-write replay or killed-process recovery claim."
+}

@@ -1,0 +1,10 @@
+(sym_lib_table
+	(version 7)
+	(lib
+		(name "LocalLogic")
+		(type "KiCad")
+		(uri "${KIPRJMOD}/LocalLogic.kicad_sym")
+		(options "")
+		(descr "Project-local source-bound library")
+	)
+)

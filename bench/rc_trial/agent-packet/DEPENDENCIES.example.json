@@ -1,0 +1,53 @@
+{
+  "review_baseline_source_commit": "1b5776c7139beeb37da129802f8e7407468a62e4",
+  "candidate": {
+    "path": "<ABSOLUTE_CANDIDATE_EXE>",
+    "sha256": "<CANDIDATE.json sha256>"
+  },
+  "working_directory": "<ABSOLUTE_EXECUTION_DIRECTORY>",
+  "environment": {
+    "KICAD_CLI_DRIVER_SDK_PATH": "<EXTERNAL_PINNED_SDK_PARENT>/_driver_sdk",
+    "KICAD_CLI_ROOT": "<EXISTING_KICAD_ROOT>",
+    "KICAD_CLI_PYTHON": "<EXISTING_KICAD_ROOT>/bin/python.exe",
+    "KICAD_CLI_OFFICIAL": "<EXISTING_KICAD_ROOT>/bin/kicad-cli.exe",
+    "KICAD_CONFIG_HOME": "<ABSOLUTE_EXECUTION_DIRECTORY>/configuration",
+    "KICAD_CLI_STATE_DIR": "<ABSOLUTE_EXECUTION_DIRECTORY>/state",
+    "KICAD_CLI_SCOPE_FILE": "<ABSOLUTE_PACKET_DIRECTORY>/scope.json",
+    "KICAD10_SYMBOL_DIR": "<EXISTING_KICAD_ROOT>/share/kicad/symbols",
+    "KICAD10_FOOTPRINT_DIR": "<EXISTING_KICAD_ROOT>/share/kicad/footprints",
+    "KICAD10_3DMODEL_DIR": "<EXISTING_KICAD_ROOT>/share/kicad/3dmodels",
+    "PYTHONIOENCODING": "utf-8",
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "remove_environment": [
+    "PYTHONPATH",
+    "PYTHONHOME",
+    "KICAD_CLI_IPC_CLIENT_PATH"
+  ],
+  "native_version": "10.0.6",
+  "readonly_consumer_python": "<EXISTING_PYTHON_WITH_PYMUPDF>",
+  "libraries": {
+    "Connector_PinHeader_2.54mm:PinHeader_1x05_P2.54mm_Vertical": {
+      "path": "<EXISTING_KICAD_ROOT>/share/kicad/footprints/Connector_PinHeader_2.54mm.pretty/PinHeader_1x05_P2.54mm_Vertical.kicad_mod",
+      "sha256": "a9beaa5e3bf9f73f4667fd503d8ddc47f81aec7999b51211890c919363099acf"
+    },
+    "Resistor_SMD:R_0603_1608Metric": {
+      "path": "<EXISTING_KICAD_ROOT>/share/kicad/footprints/Resistor_SMD.pretty/R_0603_1608Metric.kicad_mod",
+      "sha256": "03fc7902b2661df01b4d828fdb6eab9eddf974e7130ed2b98892607387a50c4b"
+    },
+    "Capacitor_SMD:C_0603_1608Metric": {
+      "path": "<EXISTING_KICAD_ROOT>/share/kicad/footprints/Capacitor_SMD.pretty/C_0603_1608Metric.kicad_mod",
+      "sha256": "d45eebd5cb9faace255d4ec95a0f9484efde898359507b02e2ba9bbb3ef6d857"
+    },
+    "Device": {
+      "path": "<EXISTING_KICAD_ROOT>/share/kicad/symbols/Device.kicad_sym",
+      "sha256": "e03831d421787531315439a4af4229e5d5d88ee51c7f36ba3f658ddf2978cda9"
+    },
+    "Connector_Generic": {
+      "path": "<EXISTING_KICAD_ROOT>/share/kicad/symbols/Connector_Generic.kicad_sym",
+      "sha256": "1ae3b346fe1c4e874fecb72abc7df4e94a253780db183439dbfefc4e2ff3a0be"
+    }
+  },
+  "rules_source": "requirements/intent-baseline.json plus recorded existing KiCad defaults",
+  "forbidden": "Product source, older acceptance scripts, extracted EXE sources, direct imports of kicad_cli/_driver_sdk, direct engineering-file writes outside public CLI"
+}

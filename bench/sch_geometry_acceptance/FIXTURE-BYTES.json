@@ -1,0 +1,21 @@
+{
+  "fixtures/falcon/falcon.kicad_pro": "559f15d3c01e3497658dad7cbda084296227dd6cbbaaa51b492cb0ebd5fec37e",
+  "fixtures/falcon/falcon.kicad_sch": "34d7cadf175e76c4465e66f1bf62d25e6bf1dada60ca7fbd90e847ed54968e9c",
+  "fixtures/falcon/Independent.kicad_sym": "15f3c64485c0792dc748c389027eb7ff75c61eaf4fac9d42d677e5f288089319",
+  "fixtures/falcon/sym-lib-table": "c050e2686593633e0e976f8770aa8adbc45aed1142f408e78c55a9e210eee331",
+  "fixtures/meadow/Independent.kicad_sym": "15f3c64485c0792dc748c389027eb7ff75c61eaf4fac9d42d677e5f288089319",
+  "fixtures/meadow/meadow.kicad_pro": "62d5d71cd16cab9bc664316cb7e79d3f90a04a18178d9ef08827f8f96bcae483",
+  "fixtures/meadow/meadow.kicad_sch": "efede3276888d4056e9a18a62068ab543e814ec420a3b48751decdc521db7d42",
+  "fixtures/meadow/sym-lib-table": "c050e2686593633e0e976f8770aa8adbc45aed1142f408e78c55a9e210eee331",
+  "fixtures/orbit/Independent.kicad_sym": "15f3c64485c0792dc748c389027eb7ff75c61eaf4fac9d42d677e5f288089319",
+  "fixtures/orbit/orbit.kicad_pro": "60acfa512e6297483785ae9cc64164f84c10a951d9d14a548537b22bf955aab6",
+  "fixtures/orbit/orbit.kicad_sch": "56d5ab4903be5a6383e9548f7d1c088bb8827dc5b6a4807d27226a09aa741303",
+  "fixtures/orbit/sym-lib-table": "c050e2686593633e0e976f8770aa8adbc45aed1142f408e78c55a9e210eee331",
+  "fixtures/shared/cell.kicad_sch": "246206c80702c208e51c26ab90e84ffa5953255951c7a5cb11160bb7add5b01b",
+  "fixtures/shared/Independent.kicad_sym": "15f3c64485c0792dc748c389027eb7ff75c61eaf4fac9d42d677e5f288089319",
+  "fixtures/shared/north.kicad_sch": "32448f4f10800a864f8f200eecb407b0c0eb520f95a48a147e722e8c4eef9aa9",
+  "fixtures/shared/shared.kicad_pro": "33621e52fddecce1df1a533d3242cac78998f01e7c373b5b4c53e7abb2b20d10",
+  "fixtures/shared/shared.kicad_sch": "a5119ffff40bc37b001974ba81511cdecc89075c0838c969287f35124b1c9ad7",
+  "fixtures/shared/south.kicad_sch": "df410353c8344bc3cc0f79138c42531f190c6fb4e175b10bae101ad67cafc430",
+  "fixtures/shared/sym-lib-table": "c050e2686593633e0e976f8770aa8adbc45aed1142f408e78c55a9e210eee331"
+}

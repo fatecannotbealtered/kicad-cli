@@ -1,0 +1,7 @@
+{
+  "src_dir": "C:/path/to/your/kicad/project",
+  "board": "YourBoard.kicad_pcb",
+  "out_dir": "C:/path/to/scratch/demo",
+  "stem": "YourBoard_demo",
+  "pretty": "YourBoard.pretty"
+}

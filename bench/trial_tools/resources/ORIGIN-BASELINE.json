@@ -1,0 +1,122 @@
+{
+  "schema": "prior-public-readonly-resource-byte-copy/v1",
+  "prior_ZIP_sha256": "b1841fee614082415252f2fa53d51124765b84b0118527d85b1ffcf7ce1eab49",
+  "files": {
+    "PRIOR-ALIAS-PROJECTION.json": {
+      "prior_member": "dependencies/ALIAS-PROJECTION.json",
+      "sha256": "007e18435d5c2caf534d76ed7e7d34ea65aab9acc4466ffb79ce26cdc9aac4fa",
+      "size": 3540
+    },
+    "EXTERNAL-DEPENDENCIES.json": {
+      "prior_member": "dependencies/EXTERNAL-DEPENDENCIES.json",
+      "sha256": "1c8d7a445f9782f2c730ec4d114524c4136a8f49c9ab1b6567f009325676f3a4",
+      "size": 103201
+    },
+    "hole/native_hole_read_02.py": {
+      "prior_member": "readonly-methods/hole/native_hole_read_02.py",
+      "sha256": "34b9a56096cd71ac9350d0350f6dd31f8c40b9e421d1b7d51b83736000e624bc",
+      "size": 17430
+    },
+    "native-observer/integration.py": {
+      "prior_member": "readonly-methods/native-observer/integration.py",
+      "sha256": "580178524080a90b1c70e82aa27a51f48c1af1b0af1896a9fae4bd69faab1da4",
+      "size": 1671
+    },
+    "native-observer/observer02_metadata.py": {
+      "prior_member": "readonly-methods/native-observer/observer02_metadata.py",
+      "sha256": "f8acabaf1356bfc0c2472a60b75306d5266bb90519c82d04f7c93f37cf1ca1bb",
+      "size": 12960
+    },
+    "native-observer/observer02_native_observation.py": {
+      "prior_member": "readonly-methods/native-observer/observer02_native_observation.py",
+      "sha256": "fd037caa148603c338419cb14dbc55b92f84b7e27dfedfeada0c4e007c26e0b8",
+      "size": 26768
+    },
+    "native-observer/observer02_owned_process.py": {
+      "prior_member": "readonly-methods/native-observer/observer02_owned_process.py",
+      "sha256": "735b27962a7aa6c82d0849e1bec126bef334f13f4ccb727561aa094c571f7245",
+      "size": 11050
+    },
+    "native-observer/observer02_process_tree.py": {
+      "prior_member": "readonly-methods/native-observer/observer02_process_tree.py",
+      "sha256": "59af865228d2250501cf5dcaea3079bdbdbf6296be5c0bc9d386ac429a109f1e",
+      "size": 19210
+    },
+    "native-observer/observer02_support.py": {
+      "prior_member": "readonly-methods/native-observer/observer02_support.py",
+      "sha256": "aa7502949b5ebfb780c830fa1fc16d0ce0df1d3c80cb3035cc5498e7025c8b56",
+      "size": 892
+    },
+    "native-observer/observer02_win_debugging.py": {
+      "prior_member": "readonly-methods/native-observer/observer02_win_debugging.py",
+      "sha256": "897b57dd73a352922f4bc6e93cb03a9fab78dd3a793921bec5864df7e62521f7",
+      "size": 17168
+    },
+    "reading-tools/FROZEN-INTENT-01.json": {
+      "prior_member": "readonly-methods/reading-tools/FROZEN-INTENT-01.json",
+      "sha256": "a15826d771ddcf2adf7c66a9b6784c3405c31101f9ed220f85966a07ff357cd6",
+      "size": 12220
+    },
+    "reading-tools/ORIGINS.json": {
+      "prior_member": "readonly-methods/reading-tools/ORIGINS.json",
+      "sha256": "1a210da25c8737ae40a9d7444166f2dd0da3a7a3567c81a3b12c1fbf1fcf06e8",
+      "size": 3601
+    },
+    "reading-tools/RUNTIME-123.json": {
+      "prior_member": "readonly-methods/reading-tools/RUNTIME-123.json",
+      "sha256": "e6fd129825fd6e5e21683290a9409cff7f8184e3750263a6ace4de6e92d66609",
+      "size": 32739
+    },
+    "reading-tools/SYSTEM-52.json": {
+      "prior_member": "readonly-methods/reading-tools/SYSTEM-52.json",
+      "sha256": "4f1a6a68352e3071b78e637e93c0fde7d0602a5b5463ef5e8a10807c20a835de",
+      "size": 10166
+    },
+    "reading-tools/hier_dual_rc.json": {
+      "prior_member": "readonly-methods/reading-tools/hier_dual_rc.json",
+      "sha256": "7d6496fb555064d284c570e7b54648f75270f99c9de5bf5a1f16171646e62bf4",
+      "size": 8453
+    },
+    "reading-tools/pages-qualification.json": {
+      "prior_member": "readonly-methods/reading-tools/pages-qualification.json",
+      "sha256": "998bf036585422910e324cfb6fa7b95735258303b4ac1a928fee21e0d7e15b14",
+      "size": 46421
+    },
+    "reading-tools/pcb-qualification.json": {
+      "prior_member": "readonly-methods/reading-tools/pcb-qualification.json",
+      "sha256": "9ce813dd15ac56f0c62c615dbebe5b272998827b5cb34cf07a47e424118f355a",
+      "size": 31215
+    },
+    "reading-tools/render_pages.cjs": {
+      "prior_member": "readonly-methods/reading-tools/render_pages.cjs",
+      "sha256": "9f5f57abe9853e40c218b6ecb6f008512ef9105b87fa6642f169c8946f6d37fe",
+      "size": 12745
+    },
+    "reading-tools/render_pcb.cjs": {
+      "prior_member": "readonly-methods/reading-tools/render_pcb.cjs",
+      "sha256": "eb7a28b501712357331bfa5f87d21af1f75af186d8894d2cc32b8cefe4e9f605",
+      "size": 12699
+    },
+    "reading-tools/svg_page_identity.py": {
+      "prior_member": "readonly-methods/reading-tools/svg_page_identity.py",
+      "sha256": "72132524247e15333d1cfd191bafb1f2e60ffe743a530942c204b393679135a9",
+      "size": 10650
+    },
+    "reading-tools/svg_reading.py": {
+      "prior_member": "readonly-methods/reading-tools/svg_reading.py",
+      "sha256": "6a1dcac194ce219241c117829f12c2f3eb815a50432593eb21194b107ae6e4f0",
+      "size": 16001
+    },
+    "HOLE-INTENT.json": {
+      "prior_member": "readonly-methods/resources/HOLE-INTENT.json",
+      "sha256": "34272182715e225e412a7e30e7d17826738aa452cf76956adc85ac69ab75f02e",
+      "size": 886
+    },
+    "PUBLIC-DRIVER-SCHEMAS.json": {
+      "prior_member": "schemas/PUBLIC-DRIVER-SCHEMAS.json",
+      "sha256": "f0615bdf640baf534c7e6811282d80c9cf653a4b123925548e29fccc19af431d",
+      "size": 493636
+    }
+  },
+  "limit": "Method/qualification provenance only. New preparation and formal commands must generate their own plans, dependency alias identity evidence and results; no old operation or unknown state is consumed."
+}

@@ -1,0 +1,15 @@
+tests/test_module_operations.py
+tests/test_module_geometry.py
+tests/test_module_discovery.py
+tests/test_module_observation_drift.py
+tests/test_copper_classification.py
+tests/test_sch_export.py
+tests/test_driver_engineering_runtime.py
+tests/test_driver_exports.py
+tests/test_package_bootstrap.py
+tests/test_skill.py
+tests/test_sheet_pin_text.py
+tests/test_symbol_cache_fidelity.py
+tests/test_knowledge_distribution.py
+tests/test_engineering_resource_capture.py
+tests/test_internal_runtime_bundle.py

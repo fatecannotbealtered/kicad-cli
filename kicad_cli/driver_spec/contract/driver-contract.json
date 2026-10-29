@@ -1,0 +1,445 @@
+{
+  "$comment": "Machine-readable driver layer of tool-driver-cli-spec. A driver CLI first satisfies the pinned ai-native-cli-spec contract exactly (base/ai-native-cli-spec/contract.json): envelope keys, core error codes with their exit codes and retryable flags, self-description keys, pagination, batch and _untrusted. This file only adds what driving applications, application files and devices needs; it never redefines a base key, code or command. Prose: docs/LAYERING.md and docs/CORE-SPEC.md.",
+  "contract": "tool-driver-cli-spec",
+  "contract_version": "2.0",
+  "spec_version": "1.0.2",
+  "schema_version": "2.0",
+  "base": {
+    "spec": "ai-native-cli-spec",
+    "tag": "v1.6.3",
+    "contract_version": "1.0",
+    "lock": "base/base-lock.json",
+    "contract": "base/ai-native-cli-spec/contract.json"
+  },
+  "driver_profile": {
+    "reference_key": "driver_profile",
+    "context_key": "driver_profile",
+    "required_keys": [
+      "spec",
+      "spec_version",
+      "schema_version",
+      "base",
+      "record"
+    ],
+    "spec_value": "tool-driver-cli-spec",
+    "note": "The base envelope keeps schema_version 1.0. A consumer recognizes a driver CLI by reference.driver_profile and context.driver_profile, never by extra envelope keys."
+  },
+  "profiles": {
+    "core": "dry-run plan, confirm receipt, operation records",
+    "batch": "base batch contract (items[] + summary) with a receipt or operation_id per dispatched item",
+    "workflow": "dependent multi-step workflow in data.workflow",
+    "operation_status": "long-running operation status in data.operation_status",
+    "query_page": "base pagination with driver completeness fields in data"
+  },
+  "error_codes": {
+    "enforcement": "exact-for-driver-codes",
+    "note": "Core codes come from the base contract unchanged. A driver CLI that emits one of these driver codes uses exactly this exit and retryable value; other product codes follow the base extension rules. The base E_TIMEOUT and E_INTERRUPTED are retryable, so a driver CLI uses them only when nothing was dispatched or nothing lasting happened; after dispatch an unobserved result is E_OUTCOME_UNKNOWN.",
+    "extensions": {
+      "E_UNSUPPORTED": {
+        "exit": 2,
+        "retryable": false,
+        "meaning": "A valid request this build, mode or session cannot carry out; choose another capability."
+      },
+      "E_BACKEND_UNAVAILABLE": {
+        "exit": 4,
+        "retryable": false,
+        "meaning": "The application, its service, plugin or device is absent, unreachable, unlicensed or speaks another protocol; nothing was dispatched."
+      },
+      "E_PROTOCOL": {
+        "exit": 1,
+        "retryable": false,
+        "meaning": "The backend replied with something the CLI cannot read; read details.dispatch_state before any further write."
+      },
+      "E_BUSY": {
+        "exit": 7,
+        "retryable": true,
+        "meaning": "The application main thread or the target is busy; nothing was dispatched; retry after a short wait."
+      },
+      "E_NATIVE_FAILURE": {
+        "exit": 1,
+        "retryable": false,
+        "meaning": "The application rejected the operation and nothing lasting remained; read the receipt."
+      },
+      "E_PARTIAL": {
+        "exit": 1,
+        "retryable": false,
+        "meaning": "Some requested stages or items took effect and others did not; read the receipt; never resend the whole request."
+      },
+      "E_OUTCOME_UNKNOWN": {
+        "exit": 6,
+        "retryable": false,
+        "meaning": "The operation may have run and its result could not be established; query the operation and read back the target before anything else."
+      },
+      "E_VERIFY_FAILED": {
+        "exit": 1,
+        "retryable": false,
+        "meaning": "The operation took effect and a required read-back check failed."
+      },
+      "E_VERIFY_INCOMPLETE": {
+        "exit": 1,
+        "retryable": false,
+        "meaning": "The operation took effect and a required read-back check could not be completed."
+      },
+      "E_HUMAN_REQUIRED": {
+        "exit": 9,
+        "retryable": false,
+        "meaning": "A person must act first: a dialog, a sign-in or licence prompt, an approval or a physical step. Relay details.action, wait, then run details.resume."
+      }
+    }
+  },
+  "receipt_codes": {
+    "note": "Evaluate the rules in order against the receipt that a modifying call returns (data.receipt when ok is true, error.details.receipt when ok is false). The first rule whose conditions all hold decides ok and the allowed error codes.",
+    "conditions": {
+      "unknown": "execution, change, persistence or delivery is unknown",
+      "running": "execution is running",
+      "partial": "change, persistence or delivery is partial",
+      "stopped": "execution is failed, interrupted or not_started",
+      "lasting": "change is applied, persistence is saved, delivery is delivered, or the receipt declares the artifact effect and lists an artifact this call produced",
+      "verification_failed": "verification.status is failed",
+      "verification_missing": "verification.status is incomplete, or change is applied and verification.status is not_run"
+    },
+    "rules": [
+      {
+        "when": [
+          "unknown"
+        ],
+        "ok": false,
+        "codes": [
+          "E_OUTCOME_UNKNOWN"
+        ]
+      },
+      {
+        "when": [
+          "running"
+        ],
+        "ok": false,
+        "codes": [
+          "E_OUTCOME_UNKNOWN"
+        ]
+      },
+      {
+        "when": [
+          "partial"
+        ],
+        "ok": false,
+        "codes": [
+          "E_PARTIAL"
+        ]
+      },
+      {
+        "when": [
+          "stopped",
+          "lasting"
+        ],
+        "ok": false,
+        "codes": [
+          "E_PARTIAL"
+        ]
+      },
+      {
+        "when": [
+          "stopped"
+        ],
+        "ok": false,
+        "codes": [
+          "E_NATIVE_FAILURE",
+          "E_CONFLICT",
+          "E_BUSY",
+          "E_BACKEND_UNAVAILABLE",
+          "E_HUMAN_REQUIRED",
+          "E_FORBIDDEN",
+          "E_UNSUPPORTED",
+          "E_PROTOCOL",
+          "E_INTERRUPTED",
+          "E_TIMEOUT",
+          "E_NOT_FOUND",
+          "E_IO",
+          "E_CONFIG",
+          "E_VALIDATION"
+        ]
+      },
+      {
+        "when": [
+          "verification_failed"
+        ],
+        "ok": false,
+        "codes": [
+          "E_VERIFY_FAILED"
+        ]
+      },
+      {
+        "when": [
+          "verification_missing"
+        ],
+        "ok": false,
+        "codes": [
+          "E_VERIFY_INCOMPLETE"
+        ]
+      },
+      {
+        "when": [],
+        "ok": true,
+        "codes": []
+      }
+    ]
+  },
+  "error_details": {
+    "dispatch_state": [
+      "not_started",
+      "dispatched",
+      "unknown"
+    ],
+    "required": {
+      "every_error": [
+        "dispatch_state",
+        "next_action"
+      ],
+      "E_USAGE": [
+        "problem",
+        "next_action"
+      ],
+      "E_VALIDATION": [
+        "problem",
+        "next_action"
+      ],
+      "E_CONFIRMATION_REQUIRED": [
+        "problem",
+        "next_action"
+      ],
+      "E_CONFLICT": [
+        "conflict",
+        "next_action"
+      ],
+      "E_FORBIDDEN": [
+        "scope",
+        "next_action"
+      ],
+      "E_OUTCOME_UNKNOWN": [
+        "dispatch_state",
+        "operation_id",
+        "lookup",
+        "next_action"
+      ],
+      "E_PARTIAL": [
+        "receipt|workflow",
+        "next_action"
+      ],
+      "E_VERIFY_FAILED": [
+        "receipt",
+        "next_action"
+      ],
+      "E_VERIFY_INCOMPLETE": [
+        "receipt",
+        "next_action"
+      ],
+      "E_HUMAN_REQUIRED": [
+        "action",
+        "resume",
+        "next_action"
+      ]
+    },
+    "problem": [
+      "unknown_command",
+      "unknown_flag",
+      "missing_parameter",
+      "invalid_value",
+      "conflicting_flags",
+      "confirmation_required",
+      "dangerous_flag_required",
+      "unknown_capability",
+      "unknown_operation",
+      "input_too_large"
+    ],
+    "conflict_reason": [
+      "state_drift",
+      "token_expired",
+      "token_used",
+      "token_mismatch",
+      "scope_changed",
+      "unresolved_operation",
+      "lock_held",
+      "idempotency_mismatch"
+    ],
+    "human_action": [
+      "dismiss_dialog",
+      "sign_in",
+      "licence",
+      "approve",
+      "physical_step",
+      "install_component",
+      "other"
+    ],
+    "note": "A key written a|b needs one of the alternatives. Diagnostics name the failed constraint and the next step; they do not echo input values. Native messages copied into details are listed in details._untrusted.",
+    "conflict_requires": {
+      "unresolved_operation": [
+        "active_operation"
+      ],
+      "lock_held": [
+        "active_operation"
+      ]
+    }
+  },
+  "control_flags": {
+    "note": "Driver CLIs add no global flag. Plan is the base --dry-run; apply and submit are the base --confirm <token>; dangerous commands also need the base --dangerous on both calls. --request-id and --idempotency-key keep their base meaning; a repeated key with the same content returns the original receipt with replayed: true and does not dispatch again, and the same key with different content is E_CONFLICT (idempotency_mismatch).",
+    "inherited": [
+      "--format",
+      "--json",
+      "--fields",
+      "--compact",
+      "--quiet",
+      "--dry-run",
+      "--confirm",
+      "--dangerous",
+      "--request-id",
+      "--idempotency-key",
+      "--version"
+    ],
+    "removed_in_2_0": [
+      "--phase"
+    ]
+  },
+  "effects": {
+    "all": [
+      "observe",
+      "session",
+      "artifact",
+      "change",
+      "persist",
+      "deliver",
+      "configure",
+      "physical"
+    ],
+    "confirm_gated": [
+      "session",
+      "artifact",
+      "change",
+      "persist",
+      "deliver",
+      "configure",
+      "physical"
+    ],
+    "scope_gated": [
+      "session",
+      "artifact",
+      "change",
+      "persist",
+      "deliver",
+      "configure",
+      "physical"
+    ],
+    "dangerous": [
+      "deliver",
+      "configure",
+      "physical"
+    ],
+    "write_type": "A command is type write exactly when it has an effect other than observe; every write goes through --dry-run and --confirm. The base update command is the one exception (see exempt).",
+    "minimum_risk_tier": {
+      "observe": "T0",
+      "session": "T1",
+      "artifact": "T1",
+      "change": "T1",
+      "persist": "T1",
+      "deliver": "T1",
+      "configure": "T1",
+      "physical": "T2"
+    },
+    "exempt": {
+      "update": "Base CLI-SPEC §14 self-update: a single command without --confirm and without a task scope. It changes the tool, not a target, so it is declared type write with effects [observe]."
+    },
+    "tool_state": "The tool's own records (operation store, confirm secret, update cache) are not targets and carry no effect. operation resolve is the only built-in that writes them and needs the scope that allowed the operation."
+  },
+  "self_description": {
+    "reference": {
+      "required_extra_top_keys": [
+        "driver_profile"
+      ],
+      "command_extra_key": "driver",
+      "command_driver_required_keys": [
+        "capability_id",
+        "effects",
+        "phases",
+        "modes",
+        "maturity",
+        "environments",
+        "limits",
+        "recovery",
+        "profiles",
+        "error_codes",
+        "evidence_refs"
+      ],
+      "discovery": {
+        "reference": "full reference (base), schema reference",
+        "reference --index": "one line per command: path, type, dangerous, description, effects, maturity; schema reference-index",
+        "reference --command <path>": "one command with its schema entry, its error codes and the product JSON Schemas it names; schema reference-command"
+      },
+      "public_schemas": "Public driver schemas (urn:tool-driver-cli-spec:<name>:2.0) are referenced by identifier from the pinned specification and never inlined in a reference."
+    },
+    "context": {
+      "required_extra_keys": [
+        "driver_profile",
+        "authorization",
+        "environment",
+        "state"
+      ]
+    },
+    "doctor": {
+      "required_checks": [
+        "release_readiness",
+        "authorization",
+        "native_backend",
+        "state_store"
+      ]
+    },
+    "builtin_commands": {
+      "operation show": "read one operation record by --id: plan, status, receipt, resolution",
+      "operation list": "read recent operation records; --status filters, --limit bounds",
+      "operation resolve": "record what an independent read-back showed about an unknown or partial operation: --id, --outcome applied|not_applied|partial, --evidence; writes only the tool's own record, refuses while the operation is still running, needs the scope that allowed the operation"
+    }
+  },
+  "scope": {
+    "schema": "urn:tool-driver-cli-spec:scope:2.0",
+    "env_var": "<TOOL>_SCOPE_FILE",
+    "env_var_rule": "TOOL is the tool name upper-cased with '-' replaced by '_'",
+    "default_file": "~/.<tool>/scope.json",
+    "written_by": "a person, or an agent only when that person explicitly directs it; the CLI never creates or edits the file",
+    "absent": "read_only: only the observe effect is allowed",
+    "denial_code": "E_FORBIDDEN",
+    "fields": {
+      "roots": "absolute directories whose files may be changed or saved",
+      "outputs": "absolute directories where new artifacts may be written",
+      "destinations": "prefixes of allowed delivery destinations, compared by URL scheme, host and whole path segments (local paths and file URIs as resolved paths); user info, queries, fragments and dot segments never match",
+      "targets": "optional selectors (engine_id, instance_id, object_id, locator_prefix); locator_prefix compares like destinations",
+      "limits.max_operations": "confirmed operations allowed under this scope, counted per scope_id for as long as the tool keeps its state"
+    }
+  },
+  "untrusted": {
+    "key": "_untrusted",
+    "driver_sources": [
+      "names of documents, objects, layers, features, components and nets",
+      "properties, annotations, notes, title-block and drawing text",
+      "content read from target files",
+      "native dialog, log and diagnostic messages",
+      "linked knowledge-base or requirement text"
+    ]
+  },
+  "deviations": {
+    "store_unavailable": "Base CLI-SPEC §9 lets a tool degrade when its token store fails. A driver CLI refuses to dispatch instead (LAY-007): an unrecorded dispatch cannot be reconciled after a lost reply.",
+    "distribution": "Base REPO-SPEC §4b npm shell is replaced by GitHub Release packaging and SkillHub distribution (LAY-008); actual install and upgrade paths still require validation."
+  },
+  "long_operation_status": {
+    "base": [
+      "pending",
+      "running",
+      "succeeded",
+      "failed",
+      "cancelled"
+    ],
+    "added": [
+      "planned",
+      "cancel_requested",
+      "partial",
+      "unknown"
+    ],
+    "note": "The base §16.2 names are kept; the driver layer only adds states."
+  }
+}

@@ -1,0 +1,8 @@
+(kicad_pcb (version 20240108) (generator "drc-baseline-fixture")
+  (general (thickness 1.6))
+  (layers (0 "F.Cu" signal) (31 "B.Cu" signal) (44 "Edge.Cuts" user))
+  (setup (pad_to_mask_clearance 0))
+  (net 0 "") (net 1 "N")
+  (segment (start 10 10) (end 20 10) (width 0.1) (layer "F.Cu") (net 1)
+    (uuid "22222222-2222-4222-8222-222222222222"))
+)

@@ -1,0 +1,1254 @@
+{
+  "registry_version": "2.0",
+  "name": "kicad-cli",
+  "product_version": "2.0.0",
+  "description": "Incremental real saved-board writes, project sync and four saved-document observations.",
+  "risk_tier": "T1",
+  "builtins": {
+    "maturity": "experimental",
+    "evidence_refs": []
+  },
+  "record": {
+    "store": "SQLite in KICAD_CLI_STATE_DIR, default ~/.kicad-cli",
+    "retain_days": 30,
+    "survives_cli_exit": true,
+    "survives_reconnect": true,
+    "survives_instance_restart": true,
+    "limitations": [
+      "Machine-local records; a killed synchronous writer becomes unknown after its 30-second lease.",
+      "Listed writes and operation management need valid on-disk local state; four observations do not open the operation store."
+    ]
+  },
+  "schemas": {
+    "move_receipt": {
+      "shape": "object",
+      "fields": [
+        "receipt",
+        "preview",
+        "confirm_token",
+        "expires_at"
+      ],
+      "untrusted_fields": [
+        "receipt.changed_items",
+        "preview.changes"
+      ],
+      "json_schema": {
+        "$ref": "urn:tool-driver-cli-spec:receipt:2.0"
+      }
+    },
+    "zone_receipt": {
+      "shape": "object",
+      "fields": [
+        "receipt",
+        "preview",
+        "confirm_token",
+        "expires_at"
+      ],
+      "untrusted_fields": [
+        "receipt.changed_items",
+        "receipt.extensions.readback",
+        "receipt.extensions.finding_comparison",
+        "preview.changes"
+      ],
+      "json_schema": {
+        "$ref": "urn:tool-driver-cli-spec:receipt:2.0"
+      }
+    },
+    "sync_receipt": {
+      "shape": "object",
+      "fields": [
+        "receipt",
+        "preview",
+        "confirm_token",
+        "expires_at"
+      ],
+      "untrusted_fields": [
+        "receipt.changed_items",
+        "receipt.extensions",
+        "preview.changes",
+        "preview.extensions"
+      ],
+      "json_schema": {
+        "$ref": "urn:tool-driver-cli-spec:receipt:2.0"
+      }
+    },
+    "board_check_observation": {
+      "shape": "object",
+      "fields": [
+        "board",
+        "counts",
+        "custom_rules",
+        "engine",
+        "excluded_count",
+        "ignored",
+        "limited_checks_passed",
+        "not_checked",
+        "note",
+        "observation",
+        "ok_to_fabricate",
+        "partial",
+        "truncated",
+        "unconnected",
+        "unconnected_count",
+        "unconnected_total",
+        "violations",
+        "violations_matching_severity",
+        "violations_shown",
+        "violations_total"
+      ],
+      "untrusted_fields": [
+        "board",
+        "counts",
+        "custom_rules",
+        "engine",
+        "excluded_count",
+        "ignored",
+        "limited_checks_passed",
+        "not_checked",
+        "note",
+        "ok_to_fabricate",
+        "partial",
+        "truncated",
+        "unconnected",
+        "unconnected_count",
+        "unconnected_total",
+        "violations",
+        "violations_matching_severity",
+        "violations_shown",
+        "violations_total",
+        "observation.inputs"
+      ],
+      "json_schema": {
+        "type": "object",
+        "required": [
+          "observation"
+        ],
+        "properties": {
+          "observation": {
+            "type": "object",
+            "required": [
+              "source",
+              "inputs",
+              "snapshot",
+              "coverage",
+              "state",
+              "input_drift_checked",
+              "live_editor_observed"
+            ],
+            "properties": {
+              "source": {
+                "type": "object",
+                "required": [
+                  "version",
+                  "code_sha256",
+                  "origin",
+                  "completed",
+                  "completed_at",
+                  "official_native"
+                ],
+                "properties": {
+                  "completed": {
+                    "const": true
+                  },
+                  "official_native": {
+                    "const": false
+                  }
+                }
+              },
+              "inputs": {
+                "type": "array",
+                "minItems": 1
+              },
+              "snapshot": {
+                "type": "object",
+                "required": [
+                  "revision",
+                  "basis",
+                  "observed_at"
+                ]
+              },
+              "coverage": {
+                "type": "object",
+                "required": [
+                  "checked",
+                  "not_checked",
+                  "native"
+                ]
+              },
+              "state": {
+                "const": "saved_files"
+              },
+              "input_drift_checked": {
+                "const": true
+              },
+              "live_editor_observed": {
+                "const": false
+              }
+            }
+          }
+        }
+      }
+    },
+    "sch_check_observation": {
+      "shape": "object",
+      "fields": [
+        "as_configured",
+        "configured_exclusions",
+        "cross_sheet_connectivity",
+        "detail_samples",
+        "exclusions_applied",
+        "findings",
+        "footprint_filters",
+        "not_checked",
+        "observation",
+        "schematic",
+        "sheets",
+        "silenced_rules",
+        "status",
+        "with_rules_enabled"
+      ],
+      "untrusted_fields": [
+        "as_configured",
+        "configured_exclusions",
+        "cross_sheet_connectivity",
+        "detail_samples",
+        "exclusions_applied",
+        "findings",
+        "footprint_filters",
+        "not_checked",
+        "schematic",
+        "sheets",
+        "silenced_rules",
+        "status",
+        "with_rules_enabled",
+        "observation.inputs"
+      ],
+      "json_schema": {
+        "type": "object",
+        "required": [
+          "observation"
+        ],
+        "properties": {
+          "observation": {
+            "type": "object",
+            "required": [
+              "source",
+              "inputs",
+              "snapshot",
+              "coverage",
+              "state",
+              "input_drift_checked",
+              "live_editor_observed"
+            ],
+            "properties": {
+              "source": {
+                "type": "object",
+                "required": [
+                  "version",
+                  "code_sha256",
+                  "origin",
+                  "completed",
+                  "completed_at",
+                  "official_native"
+                ],
+                "properties": {
+                  "completed": {
+                    "const": true
+                  },
+                  "official_native": {
+                    "const": false
+                  }
+                }
+              },
+              "inputs": {
+                "type": "array",
+                "minItems": 1
+              },
+              "snapshot": {
+                "type": "object",
+                "required": [
+                  "revision",
+                  "basis",
+                  "observed_at"
+                ]
+              },
+              "coverage": {
+                "type": "object",
+                "required": [
+                  "checked",
+                  "not_checked",
+                  "native"
+                ]
+              },
+              "state": {
+                "const": "saved_files"
+              },
+              "input_drift_checked": {
+                "const": true
+              },
+              "live_editor_observed": {
+                "const": false
+              }
+            }
+          }
+        }
+      }
+    },
+    "project_links_inspect_observation": {
+      "shape": "object",
+      "fields": [
+        "at_risk",
+        "board",
+        "board_only",
+        "dangling",
+        "details",
+        "findings",
+        "footprints",
+        "footprints_from_schematic",
+        "linked",
+        "mismatched",
+        "multi_unit_parts",
+        "not_checked",
+        "observation",
+        "observed_footprints",
+        "observed_symbol_instances",
+        "orphan_symbols",
+        "root_schematic",
+        "schematic_files",
+        "status",
+        "symbols",
+        "unannotated",
+        "unlinked",
+        "virtual_symbols"
+      ],
+      "untrusted_fields": [
+        "at_risk",
+        "board",
+        "board_only",
+        "dangling",
+        "details",
+        "findings",
+        "footprints",
+        "footprints_from_schematic",
+        "linked",
+        "mismatched",
+        "multi_unit_parts",
+        "not_checked",
+        "observed_footprints",
+        "observed_symbol_instances",
+        "orphan_symbols",
+        "root_schematic",
+        "schematic_files",
+        "status",
+        "symbols",
+        "unannotated",
+        "unlinked",
+        "virtual_symbols",
+        "observation.inputs"
+      ],
+      "json_schema": {
+        "type": "object",
+        "required": [
+          "observation"
+        ],
+        "properties": {
+          "observation": {
+            "type": "object",
+            "required": [
+              "source",
+              "inputs",
+              "snapshot",
+              "coverage",
+              "state",
+              "input_drift_checked",
+              "live_editor_observed"
+            ],
+            "properties": {
+              "source": {
+                "type": "object",
+                "required": [
+                  "version",
+                  "code_sha256",
+                  "origin",
+                  "completed",
+                  "completed_at",
+                  "official_native"
+                ],
+                "properties": {
+                  "completed": {
+                    "const": true
+                  },
+                  "official_native": {
+                    "const": false
+                  }
+                }
+              },
+              "inputs": {
+                "type": "array",
+                "minItems": 1
+              },
+              "snapshot": {
+                "type": "object",
+                "required": [
+                  "revision",
+                  "basis",
+                  "observed_at"
+                ]
+              },
+              "coverage": {
+                "type": "object",
+                "required": [
+                  "checked",
+                  "not_checked",
+                  "native"
+                ]
+              },
+              "state": {
+                "const": "saved_files"
+              },
+              "input_drift_checked": {
+                "const": true
+              },
+              "live_editor_observed": {
+                "const": false
+              }
+            }
+          }
+        }
+      }
+    },
+    "project_parity_observation": {
+      "shape": "object",
+      "fields": [
+        "board",
+        "comparison_basis",
+        "diffs",
+        "limits",
+        "metadata_pin_differences",
+        "netlist_source",
+        "observation",
+        "observed_footprints",
+        "pcb_components",
+        "pcb_nets",
+        "schematic_components",
+        "schematic_nets",
+        "schematic_pins",
+        "status",
+        "unconnected"
+      ],
+      "untrusted_fields": [
+        "board",
+        "comparison_basis",
+        "diffs",
+        "limits",
+        "metadata_pin_differences",
+        "netlist_source",
+        "observed_footprints",
+        "pcb_components",
+        "pcb_nets",
+        "schematic_components",
+        "schematic_nets",
+        "schematic_pins",
+        "status",
+        "unconnected",
+        "observation.inputs"
+      ],
+      "json_schema": {
+        "type": "object",
+        "required": [
+          "observation"
+        ],
+        "properties": {
+          "observation": {
+            "type": "object",
+            "required": [
+              "source",
+              "inputs",
+              "snapshot",
+              "coverage",
+              "state",
+              "input_drift_checked",
+              "live_editor_observed"
+            ],
+            "properties": {
+              "source": {
+                "type": "object",
+                "required": [
+                  "version",
+                  "code_sha256",
+                  "origin",
+                  "completed",
+                  "completed_at",
+                  "official_native"
+                ],
+                "properties": {
+                  "completed": {
+                    "const": true
+                  },
+                  "official_native": {
+                    "const": false
+                  }
+                }
+              },
+              "inputs": {
+                "type": "array",
+                "minItems": 1
+              },
+              "snapshot": {
+                "type": "object",
+                "required": [
+                  "revision",
+                  "basis",
+                  "observed_at"
+                ]
+              },
+              "coverage": {
+                "type": "object",
+                "required": [
+                  "checked",
+                  "not_checked",
+                  "native"
+                ]
+              },
+              "state": {
+                "const": "saved_files"
+              },
+              "input_drift_checked": {
+                "const": true
+              },
+              "live_editor_observed": {
+                "const": false
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "commands": [
+    {
+      "path": "board footprint move",
+      "type": "write",
+      "description": "Move explicit footprints and independently read the saved poses back.",
+      "params": [
+        {
+          "name": "board",
+          "type": "string",
+          "required": true,
+          "multiple": false,
+          "description": "Explicit existing .kicad_pcb file; resolved file URI is the target."
+        },
+        {
+          "name": "moves",
+          "type": "string",
+          "required": true,
+          "multiple": false,
+          "description": "REF:x,y separated by semicolons; millimetres."
+        }
+      ],
+      "output_schema": "move_receipt",
+      "driver": {
+        "capability_id": "board-footprint-move",
+        "effects": [
+          "change",
+          "persist"
+        ],
+        "phases": [
+          "plan",
+          "apply",
+          "verify"
+        ],
+        "modes": [
+          "file"
+        ],
+        "maturity": "experimental",
+        "environments": [
+          {
+            "application": "KiCad saved board file",
+            "application_version": "10.0.6 readback checkpoint; other versions untested",
+            "platform": "windows",
+            "arch": "x64",
+            "adapter_version": "2.0.0",
+            "mode": "file",
+            "limitations": [
+              "No GUI write or native DRC in this adapter; independent bounded file consumer."
+            ]
+          }
+        ],
+        "limits": [
+          "Named unique footprint references only; translation in millimetres, 1 nm readback tolerance.",
+          "No side/angle/DRC/connectivity/manufacturing acceptance; non-pose content must remain byte-identical.",
+          "Only move, zone create/refill and project sync writers use driver runtime 2.0; other writers remain explicitly legacy.",
+          "Recovery records an actual re-observation; never repeats a lost write or restores an externally changed board."
+        ],
+        "recovery": {
+          "atomicity": "unknown",
+          "undo": false,
+          "idempotent": false,
+          "cancel": false
+        },
+        "profiles": [
+          "core"
+        ],
+        "error_codes": [
+          "E_USAGE",
+          "E_VALIDATION",
+          "E_NOT_FOUND",
+          "E_IO",
+          "E_CONFIG",
+          "E_FORBIDDEN",
+          "E_CONFIRMATION_REQUIRED",
+          "E_CONFLICT",
+          "E_BUSY",
+          "E_NATIVE_FAILURE",
+          "E_PARTIAL",
+          "E_OUTCOME_UNKNOWN",
+          "E_VERIFY_FAILED",
+          "E_VERIFY_INCOMPLETE",
+          "E_UNKNOWN"
+        ],
+        "evidence_refs": []
+      },
+      "examples": [
+        "kicad-cli board footprint move --board <file> --moves R1:101.25,100.5 --dry-run",
+        "kicad-cli board footprint move --board <file> --moves R1:101.25,100.5 --confirm <confirm_token>"
+      ]
+    },
+    {
+      "path": "board zone create",
+      "type": "write",
+      "description": "Create an unfilled copper zone with fresh saved-file observation and bounded custom findings.",
+      "params": [
+        {
+          "name": "board",
+          "type": "string",
+          "required": true,
+          "multiple": false,
+          "description": "Explicit existing saved .kicad_pcb; resolved URI and byte revision bind the target."
+        },
+        {
+          "name": "net",
+          "type": "string",
+          "required": true,
+          "multiple": false,
+          "description": "Existing board net, exact name."
+        },
+        {
+          "name": "layer",
+          "type": "string",
+          "required": true,
+          "multiple": false,
+          "description": "Existing copper layer or its user alias."
+        },
+        {
+          "name": "margin",
+          "type": "number",
+          "required": false,
+          "multiple": false,
+          "default": 0.5,
+          "unit": "mm",
+          "description": "Nonnegative inset from Edge.Cuts bounding box."
+        },
+        {
+          "name": "clearance",
+          "type": "number",
+          "required": false,
+          "multiple": false,
+          "default": 0.3,
+          "unit": "mm",
+          "description": "Positive zone clearance."
+        },
+        {
+          "name": "min-width",
+          "type": "number",
+          "required": false,
+          "multiple": false,
+          "default": 0.25,
+          "unit": "mm",
+          "description": "Positive minimum zone copper width."
+        },
+        {
+          "name": "connect",
+          "type": "string",
+          "required": false,
+          "multiple": false,
+          "default": "thermal",
+          "enum": [
+            "thermal",
+            "solid"
+          ],
+          "description": "Pad connection mode."
+        }
+      ],
+      "output_schema": "zone_receipt",
+      "driver": {
+        "capability_id": "board-zone-create",
+        "effects": [
+          "change",
+          "persist"
+        ],
+        "phases": [
+          "plan",
+          "apply",
+          "verify"
+        ],
+        "modes": [
+          "file"
+        ],
+        "maturity": "experimental",
+        "environments": [
+          {
+            "application": "KiCad saved board file",
+            "application_version": "10.0.6 readback checkpoint; other versions untested",
+            "platform": "windows",
+            "arch": "x64",
+            "adapter_version": "2.0.0",
+            "mode": "file",
+            "limitations": [
+              "Saved-byte consumer plus bounded custom finding gate; writer geometry/parser shared by checker.",
+              "Native SDK loading and official DRC remain separate evidence."
+            ]
+          }
+        ],
+        "limits": [
+          "Create an unfilled board-outline bounding rectangle for one existing net/layer; or refill selected existing copper-zone UUIDs.",
+          "Non-target parsed semantics and refill definitions preserved; serialization can change whitespace.",
+          "Bind board byte snapshot, complete scope, prepared result and present/absent project/rule dependencies before dispatch.",
+          "Custom finding multiset gate excludes warnings/unconnected and unsupported rules; not official DRC or geometry/manufacturing acceptance.",
+          "Recovery re-observes current board and never retries or restores an external edit.",
+          "Create declares modern filled_areas_thickness=no; refill refuses selected missing/yes legacy/stroked markers without changing their definitions."
+        ],
+        "recovery": {
+          "atomicity": "unknown",
+          "undo": false,
+          "idempotent": false,
+          "cancel": false
+        },
+        "profiles": [
+          "core"
+        ],
+        "error_codes": [
+          "E_USAGE",
+          "E_VALIDATION",
+          "E_NOT_FOUND",
+          "E_IO",
+          "E_CONFIG",
+          "E_FORBIDDEN",
+          "E_CONFIRMATION_REQUIRED",
+          "E_CONFLICT",
+          "E_BUSY",
+          "E_NATIVE_FAILURE",
+          "E_PARTIAL",
+          "E_OUTCOME_UNKNOWN",
+          "E_VERIFY_FAILED",
+          "E_VERIFY_INCOMPLETE",
+          "E_UNKNOWN"
+        ],
+        "evidence_refs": []
+      },
+      "examples": [
+        "kicad-cli board zone create --board <file> --net GND --layer F.Cu --dry-run",
+        "kicad-cli board zone create --board <file> --net GND --layer F.Cu --confirm <confirm_token>"
+      ]
+    },
+    {
+      "path": "board zone refill",
+      "type": "write",
+      "description": "Refill selected copper-zone UUIDs in the saved board and observe actual definitions and fill representation.",
+      "params": [
+        {
+          "name": "board",
+          "type": "string",
+          "required": true,
+          "multiple": false,
+          "description": "Explicit existing saved .kicad_pcb; resolved URI and byte revision bind the target."
+        },
+        {
+          "name": "zones",
+          "type": "string",
+          "required": false,
+          "multiple": false,
+          "description": "Comma-separated unique existing copper-zone UUIDs; choose this or --all."
+        },
+        {
+          "name": "all",
+          "type": "boolean",
+          "required": false,
+          "multiple": false,
+          "default": false,
+          "description": "Select all existing copper zones; mutually exclusive with --zones."
+        }
+      ],
+      "output_schema": "zone_receipt",
+      "driver": {
+        "capability_id": "board-zone-refill",
+        "effects": [
+          "change",
+          "persist"
+        ],
+        "phases": [
+          "plan",
+          "apply",
+          "verify"
+        ],
+        "modes": [
+          "file"
+        ],
+        "maturity": "experimental",
+        "environments": [
+          {
+            "application": "KiCad saved board file",
+            "application_version": "10.0.6 readback checkpoint; other versions untested",
+            "platform": "windows",
+            "arch": "x64",
+            "adapter_version": "2.0.0",
+            "mode": "file",
+            "limitations": [
+              "Saved-byte consumer plus bounded custom finding gate; writer geometry/parser shared by checker.",
+              "Native SDK loading and official DRC remain separate evidence."
+            ]
+          }
+        ],
+        "limits": [
+          "Create an unfilled board-outline bounding rectangle for one existing net/layer; or refill selected existing copper-zone UUIDs.",
+          "Non-target parsed semantics and refill definitions preserved; serialization can change whitespace.",
+          "Bind board byte snapshot, complete scope, prepared result and present/absent project/rule dependencies before dispatch.",
+          "Custom finding multiset gate excludes warnings/unconnected and unsupported rules; not official DRC or geometry/manufacturing acceptance.",
+          "Recovery re-observes current board and never retries or restores an external edit.",
+          "Create declares modern filled_areas_thickness=no; refill refuses selected missing/yes legacy/stroked markers without changing their definitions."
+        ],
+        "recovery": {
+          "atomicity": "unknown",
+          "undo": false,
+          "idempotent": false,
+          "cancel": false
+        },
+        "profiles": [
+          "core"
+        ],
+        "error_codes": [
+          "E_USAGE",
+          "E_VALIDATION",
+          "E_NOT_FOUND",
+          "E_IO",
+          "E_CONFIG",
+          "E_FORBIDDEN",
+          "E_CONFIRMATION_REQUIRED",
+          "E_CONFLICT",
+          "E_BUSY",
+          "E_NATIVE_FAILURE",
+          "E_PARTIAL",
+          "E_OUTCOME_UNKNOWN",
+          "E_VERIFY_FAILED",
+          "E_VERIFY_INCOMPLETE",
+          "E_UNKNOWN"
+        ],
+        "evidence_refs": []
+      },
+      "examples": [
+        "kicad-cli board zone refill --board <file> --all --dry-run",
+        "kicad-cli board zone refill --board <file> --all --confirm <confirm_token>"
+      ]
+    },
+    {
+      "path": "project sync",
+      "type": "write",
+      "description": "Plan/apply a complete captured schematic defaults task to one PCB, refusing dependency drift and independently consuming saved results.",
+      "params": [
+        {
+          "name": "board",
+          "type": "string",
+          "required": true,
+          "multiple": false,
+          "description": "Explicit existing saved PCB; the only write target."
+        },
+        {
+          "name": "schematic",
+          "type": "string",
+          "required": true,
+          "multiple": false,
+          "description": "Explicit root schematic; entire referenced hierarchy is observed and bound."
+        }
+      ],
+      "output_schema": "sync_receipt",
+      "driver": {
+        "capability_id": "project-sync",
+        "effects": [
+          "change",
+          "persist"
+        ],
+        "phases": [
+          "plan",
+          "apply",
+          "verify"
+        ],
+        "modes": [
+          "file"
+        ],
+        "maturity": "experimental",
+        "environments": [
+          {
+            "application": "KiCad saved board file",
+            "application_version": "10.0.6 readback checkpoint; other versions untested",
+            "platform": "windows",
+            "arch": "x64",
+            "adapter_version": "2.0.0",
+            "mode": "file",
+            "limitations": [
+              "One PCB write from captured source inputs; no native GUI update or runtime DRC/parity.",
+              "Fresh saved lexical/Decimal consumer; prepared geometry expectations share consumer/serialization."
+            ]
+          }
+        ],
+        "limits": [
+          "Default UUID-path matching, fields/marks/pad nets, uniform copper net rename, front replacement/addition; keep extra footprints.",
+          "Reject complete dependency byte/existence/resolved-identity/path-variable drift before dispatch, arm and save.",
+          "Missing required footprint/sheet/pin, ambiguous identity, changed locked footprint or bottom replacement refuses without partial write.",
+          "Source expectations use custom schematic/netlist model; native SDK and official parity are separate acceptance evidence.",
+          "Scope/HMAC/durable operation and owned rollback shared with board tasks; recovery observes actual saved state and never retries writes."
+        ],
+        "recovery": {
+          "atomicity": "unknown",
+          "undo": false,
+          "idempotent": false,
+          "cancel": false
+        },
+        "profiles": [
+          "core"
+        ],
+        "error_codes": [
+          "E_USAGE",
+          "E_VALIDATION",
+          "E_NOT_FOUND",
+          "E_IO",
+          "E_CONFIG",
+          "E_FORBIDDEN",
+          "E_CONFIRMATION_REQUIRED",
+          "E_CONFLICT",
+          "E_BUSY",
+          "E_NATIVE_FAILURE",
+          "E_PARTIAL",
+          "E_OUTCOME_UNKNOWN",
+          "E_VERIFY_FAILED",
+          "E_VERIFY_INCOMPLETE",
+          "E_UNKNOWN"
+        ],
+        "evidence_refs": []
+      },
+      "examples": [
+        "kicad-cli project sync --board <pcb> --schematic <root-sch> --dry-run",
+        "kicad-cli project sync --board <pcb> --schematic <root-sch> --confirm <confirm_token>"
+      ]
+    },
+    {
+      "path": "board check",
+      "type": "read",
+      "params": [
+        {
+          "name": "board",
+          "type": "string",
+          "required": true,
+          "multiple": false
+        },
+        {
+          "name": "severity",
+          "type": "string",
+          "required": false,
+          "multiple": false,
+          "default": "all",
+          "enum": [
+            "all",
+            "error",
+            "warning"
+          ]
+        },
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "multiple": false,
+          "default": 50,
+          "description": "Detail limit, 1 through 10000; complete report counts are always returned."
+        }
+      ],
+      "examples": [
+        "kicad-cli board check --board board.kicad_pcb --compact",
+        "kicad-cli board check --board board.kicad_pcb --severity error --compact"
+      ],
+      "description": "Check captured saved PCB/project/custom rules with bounded custom DRC; counts and coverage are explicit, no manufacturing approval.",
+      "output_schema": "board_check_observation",
+      "driver": {
+        "capability_id": "board-check",
+        "effects": [
+          "observe"
+        ],
+        "phases": [
+          "observe"
+        ],
+        "modes": [
+          "file"
+        ],
+        "maturity": "experimental",
+        "environments": [
+          {
+            "application": "KiCad saved documents",
+            "application_version": "10.0.6 readback checkpoint; other versions untested",
+            "platform": "windows",
+            "arch": "x64",
+            "adapter_version": "2.0.0",
+            "mode": "file",
+            "limitations": [
+              "Custom saved-file observation; external installed KiCad is used only for separate bounded acceptance."
+            ]
+          }
+        ],
+        "limits": [
+          "Complete bounded immutable saved bytes, existence and resolved identities rechecked after computation.",
+          "2048 files, 64 MiB/file, 256 MiB total; no network file dependencies.",
+          "Custom parser/checker; official native acceptance is separate. No editor-memory or manufacturing approval.",
+          "Installed-library comparisons deferred; ERC project exclusions recorded but not applied.",
+          "Thermal counterexamples remain partial custom coverage; detail samples/truncation are explicitly reported."
+        ],
+        "recovery": {
+          "atomicity": "none",
+          "undo": false,
+          "idempotent": true,
+          "cancel": false
+        },
+        "profiles": [
+          "core"
+        ],
+        "error_codes": [
+          "E_USAGE",
+          "E_VALIDATION",
+          "E_NOT_FOUND",
+          "E_IO",
+          "E_CONFLICT",
+          "E_CONFIG",
+          "E_UNKNOWN"
+        ],
+        "evidence_refs": []
+      }
+    },
+    {
+      "path": "sch check",
+      "type": "read",
+      "params": [
+        {
+          "name": "schematic",
+          "type": "string",
+          "required": true,
+          "multiple": false
+        }
+      ],
+      "examples": [
+        "kicad-cli sch check --schematic board.kicad_sch --compact"
+      ],
+      "description": "Check the complete captured saved schematic hierarchy and project ERC configuration, including a disabled-rule diagnostic.",
+      "output_schema": "sch_check_observation",
+      "driver": {
+        "capability_id": "sch-check",
+        "effects": [
+          "observe"
+        ],
+        "phases": [
+          "observe"
+        ],
+        "modes": [
+          "file"
+        ],
+        "maturity": "experimental",
+        "environments": [
+          {
+            "application": "KiCad saved documents",
+            "application_version": "10.0.6 readback checkpoint; other versions untested",
+            "platform": "windows",
+            "arch": "x64",
+            "adapter_version": "2.0.0",
+            "mode": "file",
+            "limitations": [
+              "Custom saved-file observation; external installed KiCad is used only for separate bounded acceptance."
+            ]
+          }
+        ],
+        "limits": [
+          "Complete bounded immutable saved bytes, existence and resolved identities rechecked after computation.",
+          "2048 files, 64 MiB/file, 256 MiB total; no network file dependencies.",
+          "Custom parser/checker; official native acceptance is separate. No editor-memory or manufacturing approval.",
+          "Installed-library comparisons deferred; ERC project exclusions recorded but not applied.",
+          "Thermal counterexamples remain partial custom coverage; detail samples/truncation are explicitly reported."
+        ],
+        "recovery": {
+          "atomicity": "none",
+          "undo": false,
+          "idempotent": true,
+          "cancel": false
+        },
+        "profiles": [
+          "core"
+        ],
+        "error_codes": [
+          "E_USAGE",
+          "E_VALIDATION",
+          "E_NOT_FOUND",
+          "E_IO",
+          "E_CONFLICT",
+          "E_CONFIG",
+          "E_UNKNOWN"
+        ],
+        "evidence_refs": []
+      }
+    },
+    {
+      "path": "project links inspect",
+      "type": "read",
+      "params": [
+        {
+          "name": "board",
+          "type": "string",
+          "required": true,
+          "multiple": false
+        },
+        {
+          "name": "schematic",
+          "type": "string",
+          "required": false,
+          "multiple": false,
+          "description": "Explicit root; otherwise the board sibling .kicad_sch. All referenced sheets are required."
+        }
+      ],
+      "examples": [
+        "kicad-cli project links inspect --board board.kicad_pcb --compact"
+      ],
+      "description": "Observe saved footprint UUID paths against the complete reachable schematic instance hierarchy.",
+      "output_schema": "project_links_inspect_observation",
+      "driver": {
+        "capability_id": "project-links-inspect",
+        "effects": [
+          "observe"
+        ],
+        "phases": [
+          "observe"
+        ],
+        "modes": [
+          "file"
+        ],
+        "maturity": "experimental",
+        "environments": [
+          {
+            "application": "KiCad saved documents",
+            "application_version": "10.0.6 readback checkpoint; other versions untested",
+            "platform": "windows",
+            "arch": "x64",
+            "adapter_version": "2.0.0",
+            "mode": "file",
+            "limitations": [
+              "Custom saved-file observation; external installed KiCad is used only for separate bounded acceptance."
+            ]
+          }
+        ],
+        "limits": [
+          "Complete bounded immutable saved bytes, existence and resolved identities rechecked after computation.",
+          "2048 files, 64 MiB/file, 256 MiB total; no network file dependencies.",
+          "Custom parser/checker; official native acceptance is separate. No editor-memory or manufacturing approval.",
+          "Installed-library comparisons deferred; ERC project exclusions recorded but not applied.",
+          "Thermal counterexamples remain partial custom coverage; detail samples/truncation are explicitly reported."
+        ],
+        "recovery": {
+          "atomicity": "none",
+          "undo": false,
+          "idempotent": true,
+          "cancel": false
+        },
+        "profiles": [
+          "core"
+        ],
+        "error_codes": [
+          "E_USAGE",
+          "E_VALIDATION",
+          "E_NOT_FOUND",
+          "E_IO",
+          "E_CONFLICT",
+          "E_CONFIG",
+          "E_UNKNOWN"
+        ],
+        "evidence_refs": []
+      }
+    },
+    {
+      "path": "project parity",
+      "type": "read",
+      "params": [
+        {
+          "name": "board",
+          "type": "string",
+          "required": true,
+          "multiple": false
+        },
+        {
+          "name": "schematic",
+          "type": "string",
+          "required": false,
+          "multiple": false
+        }
+      ],
+      "examples": [
+        "kicad-cli project parity --board board.kicad_pcb --compact"
+      ],
+      "description": "Compare actual saved PCB components, source fields/marks and every pin net against the complete captured schematic.",
+      "output_schema": "project_parity_observation",
+      "driver": {
+        "capability_id": "project-parity",
+        "effects": [
+          "observe"
+        ],
+        "phases": [
+          "observe"
+        ],
+        "modes": [
+          "file"
+        ],
+        "maturity": "experimental",
+        "environments": [
+          {
+            "application": "KiCad saved documents",
+            "application_version": "10.0.6 readback checkpoint; other versions untested",
+            "platform": "windows",
+            "arch": "x64",
+            "adapter_version": "2.0.0",
+            "mode": "file",
+            "limitations": [
+              "Custom saved-file observation; external installed KiCad is used only for separate bounded acceptance."
+            ]
+          }
+        ],
+        "limits": [
+          "Complete bounded immutable saved bytes, existence and resolved identities rechecked after computation.",
+          "2048 files, 64 MiB/file, 256 MiB total; no network file dependencies.",
+          "Custom parser/checker; official native acceptance is separate. No editor-memory or manufacturing approval.",
+          "Installed-library comparisons deferred; ERC project exclusions recorded but not applied.",
+          "Thermal counterexamples remain partial custom coverage; detail samples/truncation are explicitly reported."
+        ],
+        "recovery": {
+          "atomicity": "none",
+          "undo": false,
+          "idempotent": true,
+          "cancel": false
+        },
+        "profiles": [
+          "core"
+        ],
+        "error_codes": [
+          "E_USAGE",
+          "E_VALIDATION",
+          "E_NOT_FOUND",
+          "E_IO",
+          "E_CONFLICT",
+          "E_CONFIG",
+          "E_UNKNOWN"
+        ],
+        "evidence_refs": []
+      }
+    }
+  ]
+}

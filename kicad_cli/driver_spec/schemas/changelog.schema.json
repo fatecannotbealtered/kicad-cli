@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:tool-driver-cli-spec:changelog:2.0",
+  "title": "changelog",
+  "description": "The data of the base changelog command (unchanged base shape).",
+  "type": "object",
+  "properties": {
+    "current_version": {
+      "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/semver"
+    },
+    "since": {
+      "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/semver"
+    },
+    "count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "entries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/semver"
+          },
+          "date": {
+            "anyOf": [
+              {
+                "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/date"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "changes": {
+            "type": "object",
+            "properties": {
+              "added": {
+                "type": "array",
+                "items": {
+                  "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+                }
+              },
+              "changed": {
+                "type": "array",
+                "items": {
+                  "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+                }
+              },
+              "fixed": {
+                "type": "array",
+                "items": {
+                  "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+                }
+              },
+              "deprecated": {
+                "type": "array",
+                "items": {
+                  "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+                }
+              },
+              "removed": {
+                "type": "array",
+                "items": {
+                  "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+                }
+              },
+              "security": {
+                "type": "array",
+                "items": {
+                  "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+                }
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "version",
+          "date",
+          "changes"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "current_version",
+    "entries"
+  ],
+  "additionalProperties": true
+}

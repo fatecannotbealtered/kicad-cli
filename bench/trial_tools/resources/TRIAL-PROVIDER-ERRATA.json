@@ -1,0 +1,104 @@
+{
+  "schema": "prospective-trial-provider-errata/v1",
+  "files": [
+    {
+      "label": "cmd.exe",
+      "dev": "5514171933627126590",
+      "file_id": "3377699721960809",
+      "size": 344064,
+      "mtime_ns": 1790658302268550500,
+      "path_ctime_ns": 1790658302260544400,
+      "handle_ctime_ns": 1790755699845021300,
+      "sha256": "97ac98b1a92c286054cce55239cfccdfc23a5517bd07fe693072c9ca96c7dabb",
+      "path": "C:\\Windows\\System32\\cmd.exe"
+    },
+    {
+      "label": "msctf.dll",
+      "dev": "5514171933627126590",
+      "file_id": "2533274791878180",
+      "size": 1435360,
+      "mtime_ns": 1790658313883026400,
+      "path_ctime_ns": 1790658313845002000,
+      "handle_ctime_ns": 1790755705066230600,
+      "sha256": "efcaff195f990235a506f72749019f0be312627cc4ac1464455e6e2ac118b156",
+      "path": "C:\\Windows\\System32\\msctf.dll"
+    },
+    {
+      "label": "vcruntime140.dll",
+      "dev": "5514171933627126590",
+      "file_id": "844424930474411",
+      "size": 124544,
+      "mtime_ns": 1749590518000000000,
+      "path_ctime_ns": 1749590518000000000,
+      "handle_ctime_ns": 1780067217769583700,
+      "sha256": "d5e4d9a3e835fa679450145d6a7d94e36573a509317111904d9b3712c30d9066",
+      "path": "C:\\Windows\\System32\\vcruntime140.dll"
+    },
+    {
+      "label": "vcruntime140_1.dll",
+      "dev": "5514171933627126590",
+      "file_id": "562949953763756",
+      "size": 49792,
+      "mtime_ns": 1749590518000000000,
+      "path_ctime_ns": 1749590518000000000,
+      "handle_ctime_ns": 1780067217769583700,
+      "sha256": "1f2d41c4aa5db0bc33ebf7b66d72943a817d7ce6cbe880502a9403823633093f",
+      "path": "C:\\Windows\\System32\\vcruntime140_1.dll"
+    },
+    {
+      "label": "wldp.dll",
+      "dev": "5514171933627126590",
+      "file_id": "1125899908274960",
+      "size": 443664,
+      "mtime_ns": 1790658301949689400,
+      "path_ctime_ns": 1790658301939688300,
+      "handle_ctime_ns": 1790755704456774100,
+      "sha256": "ecf34c9c64b2e6be9f622f0ca3a6ca7b95dcfdb88eb0419b045b853934bae0ba",
+      "path": "C:\\Windows\\System32\\wldp.dll"
+    },
+    {
+      "label": "native/_ctypes.pyd",
+      "dev": "13168537950295592621",
+      "file_id": "1407374885052548",
+      "size": 129376,
+      "mtime_ns": 1787941762000000000,
+      "path_ctime_ns": 1787941762000000000,
+      "handle_ctime_ns": 1788875213390144100,
+      "sha256": "68e617f2a6d9aac290625f57b4b9338af727f28d8e466a54da97ab443fa4da34",
+      "path": "D:\\software\\kicad\\home\\bin\\DLLs\\_ctypes.pyd"
+    },
+    {
+      "label": "native/ffi-8.dll",
+      "dev": "13168537950295592621",
+      "file_id": "1407374885052563",
+      "size": 41312,
+      "mtime_ns": 1787941734000000000,
+      "path_ctime_ns": 1787941734000000000,
+      "handle_ctime_ns": 1788875213490072900,
+      "sha256": "d2e0866b160573c3ea9ab2cca9b8b220a61a3d0dd7f4655ebf154fd81725530e",
+      "path": "D:\\software\\kicad\\home\\bin\\DLLs\\ffi-8.dll"
+    }
+  ],
+  "public_refusal_helpers": [
+    {
+      "path": "C:\\Windows\\System32\\conhost.exe",
+      "argv": [
+        "\\??\\C:\\Windows\\System32\\conhost.exe",
+        "0x4"
+      ],
+      "parent": "root"
+    },
+    {
+      "path": "C:\\Windows\\System32\\cmd.exe",
+      "argv": [
+        "C:\\Windows\\System32\\cmd.exe",
+        "/c",
+        "ver"
+      ],
+      "parent": "worker"
+    }
+  ],
+  "scope": "Seven stable paths observed outside original package03 finite declaration. Qualify exact bytes before new execution only. Do not upgrade old CAD provenance or READY.",
+  "excludes": "Per-process _MEI extracted modules remain bounded by the exact product EXE and actual module observations, not declared as 253 external providers or load-time memory authentication.",
+  "Native_or_CAD_calls": 0
+}

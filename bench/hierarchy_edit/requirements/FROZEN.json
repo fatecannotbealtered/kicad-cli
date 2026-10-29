@@ -1,0 +1,440 @@
+{
+  "format": "bounded-hierarchy-edit-intent.v1",
+  "frozen_before_public_edits": true,
+  "input_preparation": {
+    "source_commit": "9c39c74ce790391d34faeec6700b2dfade7c51bc",
+    "source_fixture": "tests/fixtures/sch_edit",
+    "method": "Copy existing authored synthetic fixture and materialize the embedded fixture library; no CLI creation claim",
+    "native_preflight": "KiCad 10.0.6 XML and fresh pcbnew saved-file observation",
+    "fixture_files": {
+      "edit.kicad_pcb": "59b5c3a7f5569031c2c098c01cdee5c5be2c71aed77d33eb5992126ac7b5cb1f",
+      "edit.kicad_pro": "1ae5eadae20d00b18fb02b6a5e60711a41631493c0850ab65858e15e788b957a",
+      "edit.kicad_sch": "a09670ef0296e2f8d1f04cd03d988bc51af8d8fad533ee1850bdbee0b17588b9",
+      "edit_child.kicad_sch": "6715fe5edc5331bc7f057402d4880e27016c298cca21b51e485ce234c61e520c",
+      "fixture.kicad_sym": "ba28467a5e77ec3cbedaf7cdb869b0ddb5740e93311bc4cef026e113b9bafed3",
+      "fixture.pretty/R_0603.kicad_mod": "beca418a4b278bf5349d1cea36d8f8f099162aaa5535ef61429385ef3b65e6f0",
+      "fixture.pretty/R_0805.kicad_mod": "6a5cf66eaccbce89e33c19b03dfc2193449719dc4db0048cb6af41d1c0ec55cf",
+      "fixture.pretty/SO8.kicad_mod": "d40f7614c38d42bcb294dd3f322617e2c2c849bedebeaefedc0188b67ca6fed3",
+      "fp-lib-table": "c4bf377f22a68eb34f7386058c893bed2c08fd6b6b4c6eb5cdaeacd3dc724689",
+      "sym-lib-table": "e0fb8de8ebc7cd1d7dc532a8953ce5577e42a3b87fe703cd36cc4c1ab9cfc7b4"
+    },
+    "baseline_observation_sha256": "befad4eb59fae88d91ec05f07e99012e57b7db30aea4c1e8b202e862c7a1ab03"
+  },
+  "units": {
+    "positions": "mm for schematic, integer nm for PCB",
+    "angles": "saved KiCad counter-clockwise degrees",
+    "tolerance": "unchanged saved geometry compared exactly"
+  },
+  "expected_structure": {
+    "sheet_instances": 3,
+    "reused_child_instances": [
+      "/CHILD_A/",
+      "/CHILD_B/"
+    ],
+    "footprints": 12,
+    "physical_pads": 30,
+    "component_units": 13,
+    "power_symbol_instances": 2,
+    "multi_unit_reference": "U1",
+    "multi_unit_units": [
+      1,
+      2
+    ]
+  },
+  "physical_mapping": {
+    "rule": "Every physical pad retained separately by UUID/number; each nonpower symbol instance/physical pin must match official XML and the saved PCB, with all unit source paths preserved",
+    "fixture_SO8_unmapped_pads": [
+      "4",
+      "8"
+    ],
+    "unmapped_pad_policy": "Pads 4/8 intentionally exist in this synthetic SO8 but have no logical pins in fixture:DUAL. They remain unnetted; this is not a complete LM358 device model.",
+    "power_symbol_policy": "Power symbols remain identical. Native XML omits their node entries; +3V3/GND are checked through R3 physical pins."
+  },
+  "protected": "All baseline symbol identities/instance paths/units/poses/fields except the listed values; all physical pad identities/geometries; all footprint UUIDs/source paths/poses/layers/locks; all existing tracks/vias/board graphics/zones/rules/library inputs. No layout or copper edits are requested.",
+  "stages": {
+    "H0": {
+      "meaning": "Unchanged prepared baseline",
+      "values": {},
+      "net_renames": {},
+      "pin_connections": {}
+    },
+    "H1": {
+      "meaning": "Shared-child and multi-unit field edit then public PCB sync",
+      "values": {
+        "R10": "2k2",
+        "R20": "2k2",
+        "U1": "LM358A"
+      },
+      "net_renames": {},
+      "pin_connections": {}
+    },
+    "H2": {
+      "meaning": "Rename child-local LOCAL to SENSE; both reused instances affected; sync",
+      "values": {
+        "R10": "2k2",
+        "R20": "2k2",
+        "U1": "LM358A"
+      },
+      "net_renames": {
+        "/CHILD_A/LOCAL": "/CHILD_A/SENSE",
+        "/CHILD_B/LOCAL": "/CHILD_B/SENSE"
+      },
+      "pin_connections": {}
+    },
+    "H3": {
+      "meaning": "Connect R11 physical pin 1 to its SENSE net; shared drawing also connects R21.1 to its own SENSE; sync",
+      "values": {
+        "R10": "2k2",
+        "R20": "2k2",
+        "U1": "LM358A"
+      },
+      "net_renames": {
+        "/CHILD_A/LOCAL": "/CHILD_A/SENSE",
+        "/CHILD_B/LOCAL": "/CHILD_B/SENSE"
+      },
+      "pin_connections": {
+        "R11.1": "/CHILD_A/SENSE",
+        "R21.1": "/CHILD_B/SENSE"
+      }
+    },
+    "H4": {
+      "meaning": "Disconnect via the shared passive pin alias ~ (both numbered pins match); leave both pins NC on R11/R21, including already-NC pin 2; sync",
+      "values": {
+        "R10": "2k2",
+        "R20": "2k2",
+        "U1": "LM358A"
+      },
+      "net_renames": {
+        "/CHILD_A/LOCAL": "/CHILD_A/SENSE",
+        "/CHILD_B/LOCAL": "/CHILD_B/SENSE"
+      },
+      "pin_connections": {}
+    }
+  },
+  "native_findings": {
+    "rules": "Unchanged fixture project and KiCad 10.0.6 native defaults; no added ignores or relaxed constraints",
+    "erc_baseline": {
+      "$schema": "https://schemas.kicad.org/erc.v1.json",
+      "coordinate_units": "mm",
+      "date": "2026-10-12T15:02:43",
+      "ignored_checks": [
+        {
+          "description": "Global label only appears once in the schematic",
+          "key": "single_global_label"
+        },
+        {
+          "description": "Four connection points are joined together",
+          "key": "four_way_junction"
+        },
+        {
+          "description": "SPICE model issue",
+          "key": "simulation_model_issue"
+        },
+        {
+          "description": "Assigned footprint doesn't match footprint filters",
+          "key": "footprint_filter"
+        }
+      ],
+      "included_severities": [
+        "error",
+        "warning",
+        "exclusion"
+      ],
+      "kicad_version": "10.0.6",
+      "sheets": [
+        {
+          "path": "/",
+          "uuid_path": "/580ac6fe-81b6-53f3-8b01-c074a56f485a",
+          "violations": [
+            {
+              "description": "Input Power pin not driven by any Output Power pins",
+              "items": [
+                {
+                  "description": "Symbol #PWR11 隐藏的引脚 1 [PWR, Power input, Line]",
+                  "pos": {
+                    "x": 0.762,
+                    "y": 0.4699
+                  },
+                  "uuid": "11cab448-01ad-5e08-a92d-05a6f25bc882"
+                }
+              ],
+              "severity": "error",
+              "type": "power_pin_not_driven"
+            },
+            {
+              "description": "Input Power pin not driven by any Output Power pins",
+              "items": [
+                {
+                  "description": "Symbol #PWR12 隐藏的引脚 1 [PWR, Power input, Line]",
+                  "pos": {
+                    "x": 0.762,
+                    "y": 0.5461
+                  },
+                  "uuid": "611c4729-351b-5420-a67d-0944a0befff9"
+                }
+              ],
+              "severity": "error",
+              "type": "power_pin_not_driven"
+            },
+            {
+              "description": "Pin not connected",
+              "items": [
+                {
+                  "description": "层次图纸引脚 'IN'",
+                  "pos": {
+                    "x": 1.27,
+                    "y": 0.6604
+                  },
+                  "uuid": "8c9c3515-6030-513a-b271-3a41fc3a52bf"
+                }
+              ],
+              "severity": "error",
+              "type": "pin_not_connected"
+            }
+          ]
+        },
+        {
+          "path": "/CHILD_A/",
+          "uuid_path": "/580ac6fe-81b6-53f3-8b01-c074a56f485a/43040844-219b-5afe-956b-f02b17d3693a",
+          "violations": []
+        },
+        {
+          "path": "/CHILD_B/",
+          "uuid_path": "/580ac6fe-81b6-53f3-8b01-c074a56f485a/cc4316f9-1336-533b-887c-887029e43744",
+          "violations": []
+        }
+      ],
+      "source": "edit.kicad_sch"
+    },
+    "drc_baseline": {
+      "$schema": "https://schemas.kicad.org/drc.v1.json",
+      "coordinate_units": "mm",
+      "date": "2026-10-12T15:04:40",
+      "ignored_checks": [
+        {
+          "description": "Footprint has no courtyard defined",
+          "key": "missing_courtyard"
+        },
+        {
+          "description": "Track endpoint not centered on via",
+          "key": "track_not_centered_on_via"
+        },
+        {
+          "description": "Tuning profile track geometries",
+          "key": "tuning_profile_track_geometries"
+        },
+        {
+          "description": "Footprint doesn't match symbol's footprint filters",
+          "key": "footprint_filters_mismatch"
+        },
+        {
+          "description": "Footprint component type doesn't match footprint pads",
+          "key": "footprint_type_mismatch"
+        }
+      ],
+      "included_severities": [
+        "error",
+        "warning",
+        "exclusion"
+      ],
+      "kicad_version": "10.0.6",
+      "schematic_parity": [],
+      "source": "edit.kicad_pcb",
+      "unconnected_items": [
+        {
+          "description": "Missing connection between items",
+          "items": [
+            {
+              "description": "过孔 [/SIG] (F.Cu - B.Cu)",
+              "pos": {
+                "x": 99.0875,
+                "y": 102.0
+              },
+              "uuid": "f510283f-ec3c-5db2-9e68-f71324b70ad5"
+            },
+            {
+              "description": "F.Cu 上 R10 的焊盘 1 [/SIG]",
+              "pos": {
+                "x": 99.0875,
+                "y": 120.0
+              },
+              "uuid": "83ed57e3-78f7-5e55-a335-850177d80cb6"
+            }
+          ],
+          "severity": "error",
+          "type": "unconnected_items"
+        },
+        {
+          "description": "Missing connection between items",
+          "items": [
+            {
+              "description": "F.Cu 上 R1 的焊盘 2 [/OUT]",
+              "pos": {
+                "x": 100.9125,
+                "y": 100.0
+              },
+              "uuid": "4af096ca-59e1-5018-a93c-c3aaa5cd3957"
+            },
+            {
+              "description": "F.Cu 上 U1 的焊盘 1 [/OUT]",
+              "pos": {
+                "x": 119.525,
+                "y": 102.095
+              },
+              "uuid": "e042066d-1387-5783-a87c-c4f2f3f2656e"
+            }
+          ],
+          "severity": "error",
+          "type": "unconnected_items"
+        },
+        {
+          "description": "Missing connection between items",
+          "items": [
+            {
+              "description": "F.Cu 上 R2 的焊盘 2 [EN]",
+              "pos": {
+                "x": 105.9125,
+                "y": 100.0
+              },
+              "uuid": "970c6eca-ebde-5240-87d3-e527b34c070e"
+            },
+            {
+              "description": "F.Cu 上 C10 的焊盘 2 [EN]",
+              "pos": {
+                "x": 105.9125,
+                "y": 120.0
+              },
+              "uuid": "d6645bea-6405-5137-b186-14d1e2483ac8"
+            }
+          ],
+          "severity": "error",
+          "type": "unconnected_items"
+        },
+        {
+          "description": "Missing connection between items",
+          "items": [
+            {
+              "description": "F.Cu 上 C10 的焊盘 2 [EN]",
+              "pos": {
+                "x": 105.9125,
+                "y": 120.0
+              },
+              "uuid": "d6645bea-6405-5137-b186-14d1e2483ac8"
+            },
+            {
+              "description": "F.Cu 上 C20 的焊盘 2 [EN]",
+              "pos": {
+                "x": 105.9125,
+                "y": 130.0
+              },
+              "uuid": "1a9d5d34-9943-5cec-9115-1107d43b002e"
+            }
+          ],
+          "severity": "error",
+          "type": "unconnected_items"
+        },
+        {
+          "description": "Missing connection between items",
+          "items": [
+            {
+              "description": "F.Cu 上 R4 的焊盘 2 [Net-(R4-Pad2)]",
+              "pos": {
+                "x": 100.9125,
+                "y": 110.0
+              },
+              "uuid": "cfde6d55-5dd4-5ae1-a970-624324c50f75"
+            },
+            {
+              "description": "F.Cu 上 R5 的焊盘 2 [Net-(R4-Pad2)]",
+              "pos": {
+                "x": 105.9125,
+                "y": 110.0
+              },
+              "uuid": "4b634433-1194-5a3a-9557-242ae941f9c4"
+            }
+          ],
+          "severity": "error",
+          "type": "unconnected_items"
+        },
+        {
+          "description": "Missing connection between items",
+          "items": [
+            {
+              "description": "F.Cu 上 R10 的焊盘 2 [/CHILD_A/LOCAL]",
+              "pos": {
+                "x": 100.9125,
+                "y": 120.0
+              },
+              "uuid": "084e6c4d-63bd-5a38-a2d7-905dbd2bed6a"
+            },
+            {
+              "description": "F.Cu 上 C10 的焊盘 1 [/CHILD_A/LOCAL]",
+              "pos": {
+                "x": 104.0875,
+                "y": 120.0
+              },
+              "uuid": "460a9112-6fab-51de-9787-3baa1b76be9f"
+            }
+          ],
+          "severity": "error",
+          "type": "unconnected_items"
+        },
+        {
+          "description": "Missing connection between items",
+          "items": [
+            {
+              "description": "F.Cu 上 R20 的焊盘 2 [/CHILD_B/LOCAL]",
+              "pos": {
+                "x": 100.9125,
+                "y": 130.0
+              },
+              "uuid": "8acc67a0-70dd-51af-9dd6-b7879aaecd65"
+            },
+            {
+              "description": "F.Cu 上 C20 的焊盘 1 [/CHILD_B/LOCAL]",
+              "pos": {
+                "x": 104.0875,
+                "y": 130.0
+              },
+              "uuid": "c8b5f166-ca02-5cc5-a46d-a2f6fdc3c9e2"
+            }
+          ],
+          "severity": "error",
+          "type": "unconnected_items"
+        }
+      ],
+      "violations": []
+    },
+    "expected_erc_counts": {
+      "power_pin_not_driven": 2,
+      "pin_not_connected": 1
+    },
+    "expected_drc_violations": 0,
+    "expected_native_parity": 0,
+    "unconnected_counts": {
+      "H0": 7,
+      "H1": 7,
+      "H2": 7,
+      "H3": 9,
+      "H4": 7
+    },
+    "acceptance_boundary": "Nonzero baseline/ERC and unrouted PCB findings stay failed native checks. Field/network/sync preservation is a separate bounded contract, never electrical/manufacturing approval."
+  },
+  "required_refusals": [
+    "Unknown per-instance selector for shared-child set",
+    "Unsupported per-unit field selector",
+    "Invalid physical pin",
+    "Already-connected pin/name group conflict",
+    "Cross-instance local-net target",
+    "Explicit hierarchical footprint removal remains unsupported; default retains unmatched"
+  ],
+  "intent_negative": "In an owned H2 fork, connect R11 pin 2 instead of pin 1 and sync. H3 independent intent must reject despite valid source/PCB correspondence; no wrong-pin result may replace the accepted branch.",
+  "visual": "Review root, CHILD_A, CHILD_B schematic pages and full PCB front/back after every accepted stage; disclose findings and any assistance. A changed input requires a new check/render/visual cycle.",
+  "not_claimed": [
+    "CLI creation of the hierarchy or library assets",
+    "General single-instance override of a reused physical sheet",
+    "Per-unit independent value fields",
+    "Hierarchical or arbitrary footprint deletion",
+    "Electrical completeness, production layout, complete manufacturing or full FCC"
+  ]
+}

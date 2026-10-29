@@ -1,0 +1,285 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:tool-driver-cli-spec:response:2.0",
+  "title": "response",
+  "description": "The base ai-native envelope (exact keys) as a driver CLI emits it. Driver objects live inside data on success and inside error.details on failure; nothing is added at the top level or to meta.",
+  "type": "object",
+  "properties": {
+    "ok": {
+      "type": "boolean"
+    },
+    "schema_version": {
+      "const": "1.0"
+    },
+    "data": {
+      "type": "object",
+      "properties": {
+        "receipt": {
+          "$ref": "urn:tool-driver-cli-spec:receipt:2.0"
+        },
+        "preview": {
+          "$ref": "urn:tool-driver-cli-spec:plan:2.0"
+        },
+        "confirm_token": {
+          "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+        },
+        "expires_at": {
+          "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/timestamp"
+        },
+        "operation_status": {
+          "$ref": "urn:tool-driver-cli-spec:operation-status:2.0"
+        },
+        "workflow": {
+          "$ref": "urn:tool-driver-cli-spec:workflow:2.0"
+        },
+        "verification": {
+          "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/verification"
+        },
+        "_untrusted": {
+          "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/untrusted"
+        }
+      },
+      "dependentRequired": {
+        "confirm_token": [
+          "preview",
+          "expires_at"
+        ],
+        "preview": [
+          "confirm_token",
+          "expires_at"
+        ]
+      },
+      "additionalProperties": true
+    },
+    "error": {
+      "allOf": [
+        {
+          "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/error"
+        }
+      ],
+      "properties": {
+        "details": {
+          "$ref": "#/$defs/details"
+        }
+      }
+    },
+    "meta": {
+      "type": "object",
+      "properties": {
+        "duration_ms": {
+          "type": "number",
+          "minimum": 0
+        },
+        "notices": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/notice"
+          }
+        }
+      },
+      "required": [
+        "duration_ms"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "ok",
+    "schema_version",
+    "meta"
+  ],
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "ok": {
+            "const": true
+          }
+        },
+        "required": [
+          "ok"
+        ]
+      },
+      "then": {
+        "required": [
+          "data"
+        ],
+        "not": {
+          "required": [
+            "error"
+          ]
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "ok": {
+            "const": false
+          }
+        },
+        "required": [
+          "ok"
+        ]
+      },
+      "then": {
+        "required": [
+          "error"
+        ],
+        "not": {
+          "required": [
+            "data"
+          ]
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "details": {
+      "type": "object",
+      "properties": {
+        "dispatch_state": {
+          "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/dispatch_state"
+        },
+        "next_action": {
+          "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+        },
+        "problem": {
+          "enum": [
+            "unknown_command",
+            "unknown_flag",
+            "missing_parameter",
+            "invalid_value",
+            "conflicting_flags",
+            "confirmation_required",
+            "dangerous_flag_required",
+            "unknown_capability",
+            "unknown_operation",
+            "input_too_large"
+          ]
+        },
+        "parameter": {
+          "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+        },
+        "expected": {},
+        "conflict": {
+          "enum": [
+            "state_drift",
+            "token_expired",
+            "token_used",
+            "token_mismatch",
+            "scope_changed",
+            "unresolved_operation",
+            "lock_held",
+            "idempotency_mismatch"
+          ]
+        },
+        "operation_id": {
+          "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/id"
+        },
+        "plan_id": {
+          "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/id"
+        },
+        "request_id": {
+          "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/id"
+        },
+        "capability_id": {
+          "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/id"
+        },
+        "lookup": {
+          "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+        },
+        "lookup_argv": {
+          "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/argv"
+        },
+        "receipt": {
+          "$ref": "urn:tool-driver-cli-spec:receipt:2.0"
+        },
+        "workflow": {
+          "$ref": "urn:tool-driver-cli-spec:workflow:2.0"
+        },
+        "operation_status": {
+          "$ref": "urn:tool-driver-cli-spec:operation-status:2.0"
+        },
+        "scope": {
+          "type": "object",
+          "properties": {
+            "authorization": {
+              "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/authorization"
+            },
+            "missing": {
+              "type": "object",
+              "properties": {
+                "effects": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/effect"
+                  },
+                  "uniqueItems": true
+                },
+                "paths": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+                  }
+                },
+                "targets": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+                  }
+                },
+                "dangerous": {
+                  "type": "boolean"
+                },
+                "destinations": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+                  }
+                },
+                "limit": {
+                  "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+                }
+              },
+              "additionalProperties": false
+            },
+            "grant_file": {
+              "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+            },
+            "grant_example": {
+              "type": "object"
+            }
+          },
+          "required": [
+            "authorization",
+            "missing",
+            "grant_file"
+          ],
+          "additionalProperties": false
+        },
+        "action": {
+          "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/human_action"
+        },
+        "resume": {
+          "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+        },
+        "resume_argv": {
+          "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/argv"
+        },
+        "blocked_by": {
+          "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+        },
+        "active_operation": {
+          "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/id"
+        },
+        "_untrusted": {
+          "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/untrusted"
+        }
+      },
+      "additionalProperties": true
+    }
+  }
+}

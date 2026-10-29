@@ -1,0 +1,44 @@
+{
+  "module": "kicad-review",
+  "install_name": "kicad-review",
+  "source_code_sha256": "20374c0317ac3b01ef3a33ebed64b259b1e94502932d7009b744fc01c5005fba",
+  "protocol": "driver-board.v2.20-integer-nm-library",
+  "command_contract_sha256": "5295761d444eb4fdc162f0e72f4928b9f9f82f6ce06c715c15b0a651111a5fb8",
+  "executable_sha256": null,
+  "capability": {
+    "commands": [
+      "board routing inspect",
+      "board check",
+      "sch check",
+      "project parity",
+      "project links inspect",
+      "board analyze ampacity",
+      "board analyze reference-plane",
+      "session inspect"
+    ],
+    "scope": "Read-only diagnostics; duplicate straight segments, separated length metrics, open-end candidates; native report comparison in routing preview",
+    "unsupported": [
+      "hardware signoff",
+      "SI validation",
+      "automatic repair",
+      "schematic-review tool equivalence"
+    ],
+    "internal_1_0_supported_commands": [
+      "board routing inspect",
+      "board check",
+      "sch check",
+      "project parity",
+      "project links inspect"
+    ],
+    "state": "implemented_bounded_experimental",
+    "regression_group": [
+      "test_module_operations.py",
+      "test_driver_read_runtime.py",
+      "test_copper_classification.py"
+    ],
+    "qualification": "Requires evidence bound to this exact artifact; historical qualification does not transfer automatically"
+  },
+  "skill_dependencies": [],
+  "shared_resources": "reference/common.md (generated from docs/modules/common.md)",
+  "compatibility": "Match source, contract, protocol and optional executable; version alone is insufficient"
+}

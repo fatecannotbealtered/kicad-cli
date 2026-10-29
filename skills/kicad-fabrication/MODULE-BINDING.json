@@ -1,0 +1,34 @@
+{
+  "module": "kicad-fabrication",
+  "install_name": "kicad-fabrication",
+  "source_code_sha256": "20374c0317ac3b01ef3a33ebed64b259b1e94502932d7009b744fc01c5005fba",
+  "protocol": "driver-board.v2.20-integer-nm-library",
+  "command_contract_sha256": "cc4dce3ce6ece118a45ad947a24c8fe592845db5d43d1e61ea740aae1d2d4370",
+  "executable_sha256": null,
+  "capability": {
+    "commands": [
+      "fab gerber",
+      "fab drill",
+      "board plot"
+    ],
+    "scope": "Existing scoped manufacturing/plot output; artifact hashes and original bounded coverage retained",
+    "unsupported": [
+      "manufacturing release approval",
+      "assembly process qualification",
+      "board power-on validation"
+    ],
+    "internal_1_0_supported_commands": [
+      "fab gerber",
+      "fab drill",
+      "board plot"
+    ],
+    "state": "implemented_bounded_experimental",
+    "regression_group": [
+      "test_driver_exports.py"
+    ],
+    "qualification": "Requires evidence bound to this exact artifact; historical qualification does not transfer automatically"
+  },
+  "skill_dependencies": [],
+  "shared_resources": "reference/common.md (generated from docs/modules/common.md)",
+  "compatibility": "Match source, contract, protocol and optional executable; version alone is insufficient"
+}

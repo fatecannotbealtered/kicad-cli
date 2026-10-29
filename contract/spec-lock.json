@@ -1,0 +1,32 @@
+{
+  "seed": {
+    "repository": "https://github.com/fatecannotbealtered/ai-native-cli-spec",
+    "tag": "v1.6.2",
+    "commit": "abbebfdf03dbfa28d1378b2fe3dd55ac34b22981",
+    "normalization": "CRLF to LF only",
+    "files": {
+      ".agent/AGENT.md": "fb5f822b71f3897ad107a985304597e04d229f9b3cb873e2b6e9313783e50ce3",
+      ".agent/AGENT_zh.md": "25e37880e3ff0f5053d5d8342d73f9526869aaae3ebaa33c877aa02e2ad7c11d",
+      ".agent/CLI-SPEC.md": "4d802c47f48f4ca6c8aea89518d5749ee4547b515c9ced81c0dd7308103be0f3",
+      ".agent/CLI-SPEC_zh.md": "7e35bb713334cc4ac2afb3994cdc8b744fdfa58f583d87a143fa01ebe4b773ff",
+      ".agent/SEC-SPEC.md": "c125224399038cfa66ce69ba6a3e82ba13f8c9414030aea9443a23457b70d550",
+      ".agent/SEC-SPEC_zh.md": "ed3d43f82472ba2597c5dfef9e5589e8e584a7c5dad7d409799f1cbf7bbebd6c",
+      ".agent/SKILL-SPEC.md": "73cafd55258387a84fc6a464b08e8ad11da82d3777b4b9dcff760e1fbe013254",
+      ".agent/SKILL-SPEC_zh.md": "f1224f441cdbac67f993f5f5d3c223d3405d7157151cf108a4ed16867aa06445",
+      "contract/contract.json": "8a7f8d93825b69a53b8dfe6c605498d21708709e9db8730b87b23eb262447752",
+      "scripts/spec-files.js": "0f209eee0910fa3d934f97323755e0a90a24688933142bef015867b12a4c41ca",
+      "scripts/gen-contract.js": "0e586c6e5e9acf735114a1492456eda56cde3713a96fb2cacb139a7114b24c73",
+      "scripts/sync-spec.js": "63fce26f41341d7eb98e8c27a43313502cc7826fc8259a09d9572ba4a47ed527",
+      "scripts/check-spec.js": "1a34539e6b743c1f51a29de8a7959b53cddab21959bcf591a1625872893514b3"
+    }
+  },
+  "driver": {
+    "repository": "https://github.com/fatecannotbealtered/tool-driver-cli-spec",
+    "version": "1.0.2",
+    "commit": "9607a35fe0ea33fe822e1f2ad2704eae260d4018"
+  },
+  "base": {
+    "tag": "v1.6.3",
+    "commit": "d6733433e2a9b93a4e6fb169c6927f6604ec89c7"
+  }
+}

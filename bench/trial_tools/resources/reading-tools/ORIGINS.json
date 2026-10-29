@@ -1,0 +1,87 @@
+{
+  "schema": "byte-equivalent-reading-method-reuse/v1",
+  "members": [
+    {
+      "new_method": "svg_reading.py",
+      "original": {
+        "path": "D:\\personalSpace\\kicad-preview-eco-readability-20261019\\reading-method-08\\svg_reading.py",
+        "sha256": "6a1dcac194ce219241c117829f12c2f3eb815a50432593eb21194b107ae6e4f0",
+        "size": 16001
+      }
+    },
+    {
+      "new_method": "svg_page_identity.py",
+      "original": {
+        "path": "D:\\personalSpace\\kicad-preview-eco-readability-20261019\\reading-method-08\\retained\\svg_page_identity.py",
+        "sha256": "72132524247e15333d1cfd191bafb1f2e60ffe743a530942c204b393679135a9",
+        "size": 10650
+      }
+    },
+    {
+      "new_method": "hier_dual_rc.json",
+      "original": {
+        "path": "D:\\personalSpace\\kicad-preview-eco-readability-20261019\\reading-method-08\\retained\\hier_dual_rc.json",
+        "sha256": "7d6496fb555064d284c570e7b54648f75270f99c9de5bf5a1f16171646e62bf4",
+        "size": 8453
+      }
+    },
+    {
+      "new_method": "FROZEN-INTENT-01.json",
+      "original": {
+        "path": "D:\\personalSpace\\kicad-preview-eco-readability-20261019\\reading-method-08\\retained\\FROZEN-INTENT-01.json",
+        "sha256": "a15826d771ddcf2adf7c66a9b6784c3405c31101f9ed220f85966a07ff357cd6",
+        "size": 12220
+      }
+    },
+    {
+      "new_method": "render_pcb.cjs",
+      "original": {
+        "path": "D:\\personalSpace\\kicad-preview-eco-readability-20261019\\reading-host-08\\render.cjs",
+        "sha256": "eb7a28b501712357331bfa5f87d21af1f75af186d8894d2cc32b8cefe4e9f605",
+        "size": 12699
+      }
+    },
+    {
+      "new_method": "render_pages.cjs",
+      "original": {
+        "path": "D:\\personalSpace\\kicad-preview-eco-readability-20261019\\reading-pages-09\\render_native_pages.cjs",
+        "sha256": "9f5f57abe9853e40c218b6ecb6f008512ef9105b87fa6642f169c8946f6d37fe",
+        "size": 12745
+      }
+    },
+    {
+      "new_method": "pcb-qualification.json",
+      "original": {
+        "path": "D:\\personalSpace\\kicad-preview-eco-readability-20261019\\renderer-requalification-08b\\qualification\\RESULT.json",
+        "sha256": "9ce813dd15ac56f0c62c615dbebe5b272998827b5cb34cf07a47e424118f355a",
+        "size": 31215
+      }
+    },
+    {
+      "new_method": "pages-qualification.json",
+      "original": {
+        "path": "D:\\personalSpace\\kicad-preview-eco-readability-20261019\\page-renderer-requalification-09\\qualification\\RESULT.json",
+        "sha256": "998bf036585422910e324cfb6fa7b95735258303b4ac1a928fee21e0d7e15b14",
+        "size": 46421
+      }
+    },
+    {
+      "new_method": "RUNTIME-123.json",
+      "original": {
+        "path": "D:\\personalSpace\\kicad-preview-eco-readability-20261019\\reading-host-08\\DEPENDENCIES.json",
+        "sha256": "e6fd129825fd6e5e21683290a9409cff7f8184e3750263a6ace4de6e92d66609",
+        "size": 32739
+      }
+    },
+    {
+      "new_method": "SYSTEM-52.json",
+      "original": {
+        "path": "D:\\personalSpace\\kicad-preview-eco-readability-20261019\\renderer-runtime08-binding\\ACTUAL-SYSTEM-52.json",
+        "sha256": "4f1a6a68352e3071b78e637e93c0fde7d0602a5b5463ef5e8a10807c20a835de",
+        "size": 10166
+      }
+    }
+  ],
+  "guarantee": "Reuse exact bounded Host method/fixture qualification only. Every new candidate and final SVG/PNG is generated afresh from its own prospectively frozen engineering snapshot. No historical image substitutes for current review.",
+  "font_scope": "Known stroked Native SVG handling and bounded123Node/runtime plus52actualOS files; no complete system font provenance."
+}

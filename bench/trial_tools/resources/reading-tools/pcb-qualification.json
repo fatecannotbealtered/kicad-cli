@@ -1,0 +1,745 @@
+{
+  "schema": "finite-sharp-host-renderer/v1",
+  "phase": "qualify",
+  "plan_sha256": "3070530fa4ba7746221871ea243b13df4713729e8ad9f10af46f5867b2a81161",
+  "method": {
+    "path": "D:\\personalSpace\\kicad-preview-eco-readability-20261019\\reading-host-08\\render.cjs",
+    "sha256": "eb7a28b501712357331bfa5f87d21af1f75af186d8894d2cc32b8cefe4e9f605",
+    "size": 12699
+  },
+  "renderer": "sharp 0.35.5",
+  "versions": {
+    "aom": "3.15.1",
+    "archive": "3.8.9",
+    "cairo": "1.18.6",
+    "cgif": "0.5.4",
+    "exif": "0.6.26",
+    "expat": "2.8.5",
+    "ffi": "3.8.0",
+    "fontconfig": "2.18.3",
+    "freetype": "2.14.3",
+    "fribidi": "1.0.17",
+    "glib": "2.90.0",
+    "harfbuzz": "14.5.0",
+    "heif": "1.23.5",
+    "highway": "1.4.0",
+    "imagequant": "2.4.1",
+    "lcms": "2.19.1",
+    "mozjpeg": "0826579",
+    "pango": "1.58.2",
+    "pixman": "0.46.4",
+    "png": "1.6.58",
+    "proxy-libintl": "0.5",
+    "rsvg": "2.63.2",
+    "tiff": "4.7.2",
+    "uhdr": "2.0.2",
+    "vips": "8.18.7",
+    "webp": "1.6.0",
+    "xml2": "2.15.4",
+    "zlib-ng": "2.3.3",
+    "sharp": "0.35.5"
+  },
+  "qualification": {
+    "status": "passed_bounded_host_renderer_fixture",
+    "checks": [
+      "background",
+      "red-rect",
+      "mirrored-green",
+      "blue-circle",
+      "yellow-path",
+      "full-viewport",
+      "physical-mm-576dpi-full-viewport-and-pixels",
+      "exact-title-transfer",
+      "geometry-change-refused"
+    ],
+    "limits": "Finite stroked SVG fixture; not arbitrary fonts, KiCad Native acceptance or engineering authorization."
+  },
+  "outputs": [
+    {
+      "output": {
+        "path": "D:\\personalSpace\\kicad-preview-eco-readability-20261019\\renderer-requalification-08b\\qualification\\fixture.png",
+        "sha256": "616124e332bdea3169cacaf646986e3e9294baa15bd8d0d0488bfe545463ce0d",
+        "size": 355
+      },
+      "width": 64,
+      "height": 48,
+      "channels": 4,
+      "density": 72,
+      "raster_viewport": {
+        "width": {
+          "svg": "width=\"64px\"",
+          "pixels": 64
+        },
+        "height": {
+          "svg": "height=\"48px\"",
+          "pixels": 48
+        }
+      },
+      "loader_density": 72,
+      "render_buffer_sha256": "37a1a2c4ccc2974f292c1e19140467326c692d5d1a63ef3a7b623dcf474deb3f",
+      "coverage": "Only root physical dimensions converted to explicit output pixels; original viewBox/all content preserved. No resize/extract/crop/flip.",
+      "memory": {
+        "rss": 147050496,
+        "heapTotal": 12185600,
+        "heapUsed": 8336368,
+        "external": 96902508,
+        "arrayBuffers": 93036579
+      }
+    },
+    {
+      "output": {
+        "path": "D:\\personalSpace\\kicad-preview-eco-readability-20261019\\renderer-requalification-08b\\qualification\\physical-576dpi.png",
+        "sha256": "4f55192d81d9b6174c95469453dcc8ecb4555d89738117d3d123cee332e0999c",
+        "size": 8211
+      },
+      "width": 576,
+      "height": 432,
+      "channels": 4,
+      "density": 576,
+      "raster_viewport": {
+        "width": {
+          "svg": "width=\"25.4mm\"",
+          "pixels": 576
+        },
+        "height": {
+          "svg": "height=\"19.05mm\"",
+          "pixels": 432
+        }
+      },
+      "loader_density": 72,
+      "render_buffer_sha256": "2df7b2bb06feb0ecab6c7244739e02d5128178d92feb55052b527523eade2be4",
+      "coverage": "Only root physical dimensions converted to explicit output pixels; original viewBox/all content preserved. No resize/extract/crop/flip.",
+      "memory": {
+        "rss": 149495808,
+        "heapTotal": 12972032,
+        "heapUsed": 7660768,
+        "external": 95182404,
+        "arrayBuffers": 93048875
+      }
+    }
+  ],
+  "actual_JS_or_addon_sources": [
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\sharp\\dist\\index.cjs",
+      "sha256": "d69f275bc49fcd2a6188b26b35c986d4db32a1b008653fef88adb4598688232a",
+      "size": 620
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\sharp\\dist\\constructor.cjs",
+      "sha256": "6b8978e0f1614d83a219cbbd455e3eed7922bc4212a5b3b99c5d37c3af3b3226",
+      "size": 20364
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\sharp\\dist\\is.cjs",
+      "sha256": "46fa32e93964d8a31d6e851dc3bb7f3ec36935f9e8323b59603ff6cd84a7faa7",
+      "size": 3042
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\sharp\\dist\\sharp.cjs",
+      "sha256": "76120d3971051fcc469c0bfa36e7b23d3c388b6a2f5785bf1491bbdb90ff0176",
+      "size": 6262
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\detect-libc\\lib\\detect-libc.js",
+      "sha256": "5de6a1c1abec8bba5ea1261cf819d83a73c92ebe72b879ae48c59ca12320a462",
+      "size": 7503
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\detect-libc\\lib\\process.js",
+      "sha256": "f37dd0ead9f70b50c6f5529c600e1cdf076e3c3bc8e6b4a0a9820a8d65244628",
+      "size": 569
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\detect-libc\\lib\\filesystem.js",
+      "sha256": "5c98fb66b559d0b4fa82c7a3e39d9ab6840f022c4c73e6b1a73ac6d16ec13fd7",
+      "size": 1097
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\detect-libc\\lib\\elf.js",
+      "sha256": "0e8820f00ee11d179d94894d4f97a6e87c34ab59e5dd4d3a571dfabcecf043af",
+      "size": 982
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\sharp\\dist\\libvips.cjs",
+      "sha256": "3419f6cb4303feaf4a76abe122ce1caf5dc755f9f17fa013afd5561827b61062",
+      "size": 5833
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\index.js",
+      "sha256": "4b3e57d3d40e29e0706002eba113d09f35aea593578376bbeec83b777b9912ab",
+      "size": 2691
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\internal\\re.js",
+      "sha256": "5833262888e2b5d843a69193f83c05e374818dbe55379b497819b5bf58e48cd8",
+      "size": 8139
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\internal\\constants.js",
+      "sha256": "38a112baf27ceca0260082ff26ac2fd7a9861cab1af12dd65e720277f68e6ce9",
+      "size": 873
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\internal\\debug.js",
+      "sha256": "8a9f420572260f3cf944463b5090d62a60f0730589dc23a7ec4ca25e2ee41bb3",
+      "size": 240
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\classes\\semver.js",
+      "sha256": "813b2c185512d30c9b931c2fed8140889d9d7490ceeeedc370da30337dc8ca57",
+      "size": 9891
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\internal\\parse-options.js",
+      "sha256": "fdf51d0de8d5442c35a997ef58cd530d239ce206f961d14c5121354451b01d01",
+      "size": 338
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\internal\\identifiers.js",
+      "sha256": "b4916b09dc7869ae0eb05e71c855c942a3a7365f7e6e89185d59a9e45a2451d7",
+      "size": 525
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\functions\\parse.js",
+      "sha256": "29a69e15b6d02fe381d573f861881a89590e9d0f0f0ca740c5f85eaf0234c4ad",
+      "size": 331
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\functions\\valid.js",
+      "sha256": "0de7ea736cb7807179d46dfac09c830a9338e02b6a07db12d7040cde2def6025",
+      "size": 176
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\functions\\clean.js",
+      "sha256": "4eadb0892844cf3ae295121a86163a66c73f89acd1b7f0b114ec115b4539512f",
+      "size": 205
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\functions\\inc.js",
+      "sha256": "952069fc8690b7d3af0fe9d55f7c54fe2ac067b48c5e74f6a54f9ce19a334493",
+      "size": 478
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\functions\\diff.js",
+      "sha256": "7a11fd39b987cdf06c65e928cb1aca49bec583feb86fb5c8fe47a6fd61d7de31",
+      "size": 1423
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\functions\\major.js",
+      "sha256": "5c678480d882f511200fed2c16ec3847dfedb08a1d70328dc2f031d35d825276",
+      "size": 136
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\functions\\minor.js",
+      "sha256": "1b051794f1713adec2a236517196691687c35f82e0b596ff3316a78b3cc10ae6",
+      "size": 136
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\functions\\patch.js",
+      "sha256": "f02d3c1b059fe3d96ce124886f7eef321d381a95638fd3c4a8d5ccd8e76ffadd",
+      "size": 136
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\functions\\prerelease.js",
+      "sha256": "baedbf503d5610ad041bfb56071efa48feb331ca278295c399537d35d3ffb593",
+      "size": 234
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\functions\\compare.js",
+      "sha256": "d404b5aa48aaddc8a654c5da8fb7d4443404b7948589b21ac4b045d1cee4e34c",
+      "size": 170
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\functions\\rcompare.js",
+      "sha256": "84fa5e88adf08d15c993cac8cdec6d1a65045b7e95a9c55184230a7f807f4dc0",
+      "size": 132
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\functions\\compare-loose.js",
+      "sha256": "07b6a3a1db0a5210ceb784c1708bd4679f3a94fc73a9c9eb349349e7070a6f78",
+      "size": 132
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\functions\\compare-build.js",
+      "sha256": "5ab651d5b40af289bd85c645a92b6d8cfe1a986dc413c797cfcc8d623d7c844c",
+      "size": 281
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\functions\\sort.js",
+      "sha256": "c2fe2d3ed0be8a4e9de8f02abdfd5d9c0d3bcc510d88e87af84185592882c4b8",
+      "size": 161
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\functions\\rsort.js",
+      "sha256": "6ec659ce3b6c2b173c719286caab04409adba046c0917874ec3b5e36ddfbc7e3",
+      "size": 163
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\functions\\gt.js",
+      "sha256": "135523704aa48cd98834dd170ee9f74f0e68043b379f32d021db11e6304c5c93",
+      "size": 124
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\functions\\lt.js",
+      "sha256": "1c897a9bc849320e2e9dc0f6c09555c01ee3ddf30734515d717b88ad7740ea25",
+      "size": 124
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\functions\\eq.js",
+      "sha256": "b6e30a7168e52723216fc163d300e2bbabf92ec0251f9ac5438bb6ccf57c8936",
+      "size": 126
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\functions\\neq.js",
+      "sha256": "a662883751918822c162183b46b9e20d09489132f82686c92ab78bee67f3a127",
+      "size": 128
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\functions\\gte.js",
+      "sha256": "991c5bbe48ecb210a562646872f05862ad9fc0d42186d85aa60bdc6fa323eb9d",
+      "size": 127
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\functions\\lte.js",
+      "sha256": "3a8d0b1d00423f60cc7cb810b36ab77b61330831ad237dbe73eb5cecfa412800",
+      "size": 127
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\functions\\cmp.js",
+      "sha256": "a63d74e87b73788e78e9ce0a4892b5333d6b809c0de88b31e4ed76cbf17f94b3",
+      "size": 961
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\functions\\coerce.js",
+      "sha256": "28a251c5ab210ddf9e97551b9f37a53329fcce91f0c3943dcbc02de1a1de915a",
+      "size": 2004
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\functions\\truncate.js",
+      "sha256": "e145833a250311927c92f424f56498c52f1b7bb1271ce6afbf006db87773ff43",
+      "size": 1021
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\classes\\comparator.js",
+      "sha256": "054202956430d63d5ff4599fae09760ce465b489e4f0b5ef5ce7cc7ac21157ac",
+      "size": 3631
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\classes\\range.js",
+      "sha256": "a6544485aa8575aa9854c67e2caa67726815de18a482d0ceb8a1003244de3bc1",
+      "size": 15647
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\internal\\lrucache.js",
+      "sha256": "14d087c87da87b6f5c36fc4cdd7d2d14077874b14a68e20fce5b6138fa2ca34f",
+      "size": 802
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\functions\\satisfies.js",
+      "sha256": "8cf5e122b757251671ed6c9d9680904b71cd375845853f05312e608cf2cc2946",
+      "size": 247
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\ranges\\to-comparators.js",
+      "sha256": "6c5e966210cff270fa2850668aaf8460fac7759f8d99f282521ef7a78f4564e9",
+      "size": 282
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\ranges\\max-satisfying.js",
+      "sha256": "e1a2c0d6144cc772cd20bbc8ecb9e8a3a4074e9172a3d8e794838b591cdeb416",
+      "size": 593
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\ranges\\min-satisfying.js",
+      "sha256": "2681abf54098aa670f12826b76a6ec77a2441186ae4243afde3be8ae4908f7ca",
+      "size": 591
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\ranges\\min-version.js",
+      "sha256": "fefba0a88c2bf74d5cede504b5ae50a8dc3edfd69cf0174a491e2cf3e442614b",
+      "size": 1514
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\ranges\\valid.js",
+      "sha256": "5ef6f995af801868925940cf8df5735d565ebabb090b068695cae65218bcd3ac",
+      "size": 326
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\ranges\\outside.js",
+      "sha256": "3a2b0b23593d2f49419c06af2af75450cab103b0c25d665d48fe5bca495a21ca",
+      "size": 2204
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\ranges\\gtr.js",
+      "sha256": "8fadad28e36d28e93d498ac7ac20badba2a407312845eabc18e82e90a0732b19",
+      "size": 231
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\ranges\\ltr.js",
+      "sha256": "e5186fcc03018acf9be6d968755d4c49727aeb0d981d179eb568ae5fbe983038",
+      "size": 227
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\ranges\\intersects.js",
+      "sha256": "fe87ac5d3020010ad3ec00636dadbf0c669ff07d0f57e0a8165a8264f79a676f",
+      "size": 224
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\ranges\\simplify.js",
+      "sha256": "7b78581c13322bc68ece2088685386b2a9b51c15b94d0a2063bdf2546bd41934",
+      "size": 1355
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\ranges\\subset.js",
+      "sha256": "ceb9eb6ed5bfc6c7ac7af7f47e5c3535444a4e66a0e2b58cdad4bd02a35d454d",
+      "size": 7478
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\sharp\\package.json",
+      "sha256": "ad4a2535d72eb638053a38867b1abf43c328cd1c1dbae5cf4172d498365a8b97",
+      "size": 8115
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\@img\\sharp-win32-x64\\index.cjs",
+      "sha256": "6ecbd583f45e914233410fe83a614e4f5ff1a6875a7eb828b03b7258e8ba6944",
+      "size": 62
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\@img\\sharp-win32-x64\\lib\\sharp-win32-x64-0.35.5.node",
+      "sha256": "5e964d883ecca55b8df6af4236950b8f50a9ed95a57506a31f740368a9372199",
+      "size": 459568
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\sharp\\dist\\input.cjs",
+      "sha256": "e5eb5c891c0893098dbe8bc0358a2f2c7e800581018923a7956732fe1a5ddf8f",
+      "size": 33741
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\sharp\\dist\\resize.cjs",
+      "sha256": "e03dce87aaee233fecf191ec3c713a9f856e13d0d9ccd7b0a7dbf35b65e36538",
+      "size": 22840
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\sharp\\dist\\composite.cjs",
+      "sha256": "6e0837309d25c2b642d42b557f3e1292c2b057af09746647a3a6d54de772a157",
+      "size": 9332
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\sharp\\dist\\operation.cjs",
+      "sha256": "11eb4921f37e4e06c0b349f55e186852cdd094203cc3c5651681801eea5d80f8",
+      "size": 32930
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\sharp\\dist\\colour.cjs",
+      "sha256": "da760186e75d4fd8b6da0a617ecf122deec2fa6d95fdcc194bbee0cb1c5e4605",
+      "size": 5622
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\@img\\colour\\index.cjs",
+      "sha256": "e6e93e7fb209420a20fdf2ec676e9c67413be8d5ace99eec64f9468480f0368d",
+      "size": 49
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\@img\\colour\\color.cjs",
+      "sha256": "f7c3efcf482624007f2019fffee3e1dec56b8cb893faa9a420b2832805888dce",
+      "size": 45136
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\sharp\\dist\\channel.cjs",
+      "sha256": "7445567e8001f4be3126374e4c17e282777ed14c718acca875c91bec69a2d7a1",
+      "size": 5383
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\sharp\\dist\\output.cjs",
+      "sha256": "4c2878241a264095b661fb321accf86fa9be033bfe541d5a70ac2f8d80150893",
+      "size": 65469
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\sharp\\dist\\utility.cjs",
+      "sha256": "0f7a14858dfa8ebd01b2c6c2272297f7a34c4af3d84f0c0b926146c49a2655b1",
+      "size": 9786
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\@img\\sharp-win32-x64\\versions.json",
+      "sha256": "e2611d5d854815a8b33c8a3d2ec649511a9596ccf16844e8eae7cf81e79881c4",
+      "size": 596
+    }
+  ],
+  "actual_shared_objects": [
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+      "sha256": "3602f2bb1a10f2cbab4c36886218a33c1ab3db87290e73b033c46c77147d0237",
+      "size": 92825416
+    },
+    {
+      "path": "C:\\WINDOWS\\SYSTEM32\\ntdll.dll",
+      "sha256": "a74f7482085eab125ccc09152ab7e0b5994bcb13e1a7b29880bdbb24179ecb8b",
+      "size": 2522080
+    },
+    {
+      "path": "C:\\WINDOWS\\System32\\KERNEL32.DLL",
+      "sha256": "8f8629741558b5df71def4e1dd8ef9645d4f806b949762c47757c50fea1a9e6d",
+      "size": 844496
+    },
+    {
+      "path": "C:\\WINDOWS\\System32\\KERNELBASE.dll",
+      "sha256": "becad014fb8efa8cb5e314931cca92778ad42c649b12a6909632cacd68af4f40",
+      "size": 4212112
+    },
+    {
+      "path": "C:\\WINDOWS\\System32\\CRYPT32.dll",
+      "sha256": "c720af58976a3624dbc5b74ec4e470d8fec8a4645dc06947906c49e929862dc3",
+      "size": 1559296
+    },
+    {
+      "path": "C:\\WINDOWS\\System32\\ucrtbase.dll",
+      "sha256": "5c52e3a303baaac0e0af8bd9b96134993da34bc9d834a31ef37e1d2cdc7fe192",
+      "size": 1377512
+    },
+    {
+      "path": "C:\\WINDOWS\\System32\\WS2_32.dll",
+      "sha256": "535d7a8336ddbae77b1f2c68339e5e7dbeb5f06445d6e42b19c794ef0e26f6a3",
+      "size": 534592
+    },
+    {
+      "path": "C:\\WINDOWS\\System32\\RPCRT4.dll",
+      "sha256": "89af87b6387bde4243306036fce2be89c67a328f93c25c53542e4c665b114747",
+      "size": 1162656
+    },
+    {
+      "path": "C:\\WINDOWS\\System32\\USER32.dll",
+      "sha256": "93a4310e66a47fa359f588c2ebda64fe3651771c6f9ff30d462a77215a2e558e",
+      "size": 1914656
+    },
+    {
+      "path": "C:\\WINDOWS\\System32\\win32u.dll",
+      "sha256": "9cd636e8a1b300e2f4b16f339d650eda71fa02b92b100e4b2f89ce7c04811767",
+      "size": 170952
+    },
+    {
+      "path": "C:\\WINDOWS\\System32\\GDI32.dll",
+      "sha256": "772c73e294a4c5f5e0d4146288af95287a85c074d3aee3fa9f320dc010d7dbfe",
+      "size": 187456
+    },
+    {
+      "path": "C:\\WINDOWS\\System32\\gdi32full.dll",
+      "sha256": "bde2077a56c90f68c5fa1ce5ebd4a40755c97a5080b91a87d2beff47349dd01e",
+      "size": 1220496
+    },
+    {
+      "path": "C:\\WINDOWS\\System32\\msvcp_win.dll",
+      "sha256": "c50165e6aaf74395c059564d65fa78b0911844828cbcf791d78f80d964a60f4e",
+      "size": 642016
+    },
+    {
+      "path": "C:\\WINDOWS\\System32\\ADVAPI32.dll",
+      "sha256": "e036c9baecd170d7ef4759a5a7eb76036158cacc4cd9e3f697dbf410a3457224",
+      "size": 778344
+    },
+    {
+      "path": "C:\\WINDOWS\\System32\\msvcrt.dll",
+      "sha256": "a1bd0acd64e1a60368b8878d3987f603d966ed45be2252d2d4d0f92feb10fa8e",
+      "size": 699848
+    },
+    {
+      "path": "C:\\WINDOWS\\SYSTEM32\\dbghelp.dll",
+      "sha256": "cbb0c77b812e09f6ae66f482e8eae94fd2e232bbbc3825d12668f3d2ed97e78e",
+      "size": 2307568
+    },
+    {
+      "path": "C:\\WINDOWS\\System32\\sechost.dll",
+      "sha256": "c760d6c0dfa2705446aa7a2260206c9076182d92231854c04aa526403217eb9a",
+      "size": 704008
+    },
+    {
+      "path": "C:\\WINDOWS\\System32\\SHELL32.dll",
+      "sha256": "57231c16611c536a5905395858af37120bce730092786238b1a9dfab0db7afac",
+      "size": 8009440
+    },
+    {
+      "path": "C:\\WINDOWS\\System32\\combase.dll",
+      "sha256": "39a2e2ba1ca6012953c94c10011fff5a18783120a2a34f5b66deb2d374a362c9",
+      "size": 3716184
+    },
+    {
+      "path": "C:\\WINDOWS\\System32\\OLEAUT32.dll",
+      "sha256": "e276bb09983606469c50f0f03c9604bbeffd7d669d996526c8c1af89042fbae0",
+      "size": 898200
+    },
+    {
+      "path": "C:\\WINDOWS\\SYSTEM32\\IPHLPAPI.DLL",
+      "sha256": "8521026d021cc5193a7cd7c0256bd14c7ab39738d22c019e6d544b37deee12c0",
+      "size": 220528
+    },
+    {
+      "path": "C:\\WINDOWS\\System32\\ole32.dll",
+      "sha256": "4b81e4a4cb982915ceb3ebef0148227689306c274d5b2f6068ea143ae4db3e40",
+      "size": 1695680
+    },
+    {
+      "path": "C:\\WINDOWS\\SYSTEM32\\USERENV.dll",
+      "sha256": "e5e77885cbac08ac247fa45916eca36d2fde292a8527ac2c428f36a691827fea",
+      "size": 224656
+    },
+    {
+      "path": "C:\\WINDOWS\\SYSTEM32\\WINMM.dll",
+      "sha256": "b79ba5420f10d76fddc718534c37db671b04fdb07d3bef4152a799b85a4368b7",
+      "size": 224688
+    },
+    {
+      "path": "C:\\WINDOWS\\SYSTEM32\\dbgcore.DLL",
+      "sha256": "af89686bd88030aa0a1d4bdca95e3265b6b8c5bf985f264fd148894844f677e8",
+      "size": 241664
+    },
+    {
+      "path": "C:\\WINDOWS\\SYSTEM32\\CRYPTBASE.DLL",
+      "sha256": "d77b19df871b5a2f02e826ebeb5de86735f5cd0806294fe9143ba138c964ee16",
+      "size": 59392
+    },
+    {
+      "path": "C:\\WINDOWS\\System32\\IMM32.DLL",
+      "sha256": "7e45f12c1c555e2407c5ca082bd925b34655278fde4dbfac53a0468cc1e77411",
+      "size": 212288
+    },
+    {
+      "path": "C:\\WINDOWS\\SYSTEM32\\powrprof.dll",
+      "sha256": "096b3c77ad7fece122be0362c72530b1edc024fe7107d1d40d8bcd8fa5428a0e",
+      "size": 398160
+    },
+    {
+      "path": "C:\\WINDOWS\\SYSTEM32\\UMPDC.dll",
+      "sha256": "b3407a812c7f34ac6b5beefb2a78e8f2d7c4376f7c7012f880aab4fe07235e4e",
+      "size": 96552
+    },
+    {
+      "path": "C:\\WINDOWS\\System32\\bcryptprimitives.dll",
+      "sha256": "46c06a0f0323d25a32c2b16da1a4a09e9234d282be7714469b7985bb98031ab6",
+      "size": 716408
+    },
+    {
+      "path": "C:\\WINDOWS\\system32\\uxtheme.dll",
+      "sha256": "6a55672f8ab09bbe36d5376e109dd89f263b37cf478412ff5b9e8bd0e1ab77a0",
+      "size": 679936
+    },
+    {
+      "path": "C:\\WINDOWS\\system32\\mswsock.dll",
+      "sha256": "1229de88fce9fd1a3dad4d61ed6c047eaa3e10edeed2bf00a0819b7950425d5e",
+      "size": 451920
+    },
+    {
+      "path": "C:\\WINDOWS\\SYSTEM32\\CRYPTSP.dll",
+      "sha256": "4c5d4a26fc916392d3d478174fb4ed32e0d1141f12dff3eee5a2a3fc71c0483c",
+      "size": 121408
+    },
+    {
+      "path": "C:\\WINDOWS\\system32\\rsaenh.dll",
+      "sha256": "731771049467b6d01c7028a1269df17da37af8d323621e01a32856e306795400",
+      "size": 245264
+    },
+    {
+      "path": "C:\\WINDOWS\\SYSTEM32\\kernel.appcore.dll",
+      "sha256": "ed6d62f2555d260547cc94a5cdfe2a6fcb684f18b8e182f78f9e4de224321fc9",
+      "size": 121360
+    },
+    {
+      "path": "\\\\?\\D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\@img\\sharp-win32-x64\\lib\\sharp-win32-x64-0.35.5.node",
+      "sha256": "5e964d883ecca55b8df6af4236950b8f50a9ed95a57506a31f740368a9372199",
+      "size": 459568
+    },
+    {
+      "path": "\\\\?\\D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\@img\\sharp-win32-x64\\lib\\libvips-cpp-8.18.7.dll",
+      "sha256": "1181c21fc0c2d55962dceb4408588db64c8d3cc85afac105f2dbb09ce6381286",
+      "size": 348976
+    },
+    {
+      "path": "\\\\?\\D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\@img\\sharp-win32-x64\\lib\\libvips-42.dll",
+      "sha256": "889647519374aa951c72e384e745fbf2564fb8b557ce78bf3efa315effcadb16",
+      "size": 19033904
+    },
+    {
+      "path": "C:\\WINDOWS\\System32\\SHLWAPI.dll",
+      "sha256": "6b86e4abc06ae40b2b8c1ceebcd300cbcaa5790c3ba377c630f1f0e8b36fb92c",
+      "size": 427152
+    },
+    {
+      "path": "C:\\WINDOWS\\SYSTEM32\\bcrypt.dll",
+      "sha256": "b5691584e857caf0c6c590dda13779966b383d66be3c87d5b3cbbc2f5005495b",
+      "size": 183376
+    },
+    {
+      "path": "C:\\WINDOWS\\SYSTEM32\\DNSAPI.dll",
+      "sha256": "717eed809c8b79df7258c51e46c8fbb876f29f4cf35ea2875ae19fc35c2c69a4",
+      "size": 1422944
+    },
+    {
+      "path": "C:\\WINDOWS\\SYSTEM32\\DSPARSE.dll",
+      "sha256": "c78ac36d970b6fa79206a161d4ded0886879c4df80791dd22650a8a7afd9c2eb",
+      "size": 53248
+    },
+    {
+      "path": "C:\\WINDOWS\\System32\\NSI.dll",
+      "sha256": "d22f4cc243548dda81e274f95e92433ae8187eddfde39adaaf5996985bb41ef3",
+      "size": 51128
+    },
+    {
+      "path": "C:\\WINDOWS\\SYSTEM32\\dhcpcsvc6.DLL",
+      "sha256": "28de0eab8d19a65a46b21c380829f1f0b0efa688c19b3b81ec88c37a80cd8a09",
+      "size": 128496
+    },
+    {
+      "path": "C:\\WINDOWS\\SYSTEM32\\dhcpcsvc.DLL",
+      "sha256": "4577f32da5e1f01e59be10fd09dadf848d9e70347a11d2c30187501919f4af7e",
+      "size": 161256
+    },
+    {
+      "path": "C:\\WINDOWS\\system32\\napinsp.dll",
+      "sha256": "f5574418f2192ef615a45f39f1dbff08735f5ce17ad8e6d43c527dde19aa27fe",
+      "size": 108792
+    },
+    {
+      "path": "C:\\WINDOWS\\System32\\winrnr.dll",
+      "sha256": "00069e41c7b862de00f781c83d912d343a202fce5e41e424b843d689ef70d230",
+      "size": 88328
+    },
+    {
+      "path": "C:\\WINDOWS\\system32\\nlansp_c.dll",
+      "sha256": "a622b6d71a0f5194b3f304252429db700cca4b0a8c852ff5c40ee37e43d3b1b4",
+      "size": 159744
+    },
+    {
+      "path": "C:\\WINDOWS\\system32\\wshbth.dll",
+      "sha256": "68a7a030b352bee8c30374e5f7bb286a0d5d822ec2d178ef4023f71a12c3c587",
+      "size": 90112
+    }
+  ],
+  "node": {
+    "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+    "sha256": "3602f2bb1a10f2cbab4c36886218a33c1ab3db87290e73b033c46c77147d0237",
+    "size": 92825416
+  },
+  "execArgv": [
+    "--max-old-space-size=128",
+    "--max-semi-space-size=4",
+    "--no-compilation-cache"
+  ],
+  "cache": {
+    "memory": {
+      "current": 0,
+      "high": 2,
+      "max": 0
+    },
+    "files": {
+      "current": 0,
+      "max": 0
+    },
+    "items": {
+      "current": 0,
+      "max": 0
+    }
+  },
+  "concurrency": 1,
+  "child_dispatches": 0,
+  "KiCad_Native_calls": 0,
+  "formal_engineering_writes": 0,
+  "limits": "Declared five-package renderer boundary plus actual OS shared-object observation; not whole-machine or full font-file provenance. Visible KiCad glyphs are stroked paths; visible font text/external references refuse. Expired sync2 confirmation is not renewed."
+}

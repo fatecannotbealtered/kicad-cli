@@ -1,0 +1,224 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:tool-driver-cli-spec:query-page:2.0",
+  "title": "query-page",
+  "description": "The data of a list command: base pagination plus what the agent needs to judge completeness.",
+  "type": "object",
+  "properties": {
+    "items": {
+      "type": "array"
+    },
+    "count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "has_more": {
+      "type": "boolean"
+    },
+    "truncated": {
+      "type": "boolean"
+    },
+    "next_cursor": {
+      "anyOf": [
+        {
+          "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "offset": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "next_offset": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "scope": {
+      "type": "object",
+      "properties": {
+        "description": {
+          "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+        },
+        "targets": {
+          "type": "array",
+          "items": {
+            "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+          }
+        },
+        "selector": {
+          "type": "object"
+        }
+      },
+      "required": [
+        "description"
+      ],
+      "additionalProperties": false
+    },
+    "snapshot": {
+      "anyOf": [
+        {
+          "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/snapshot"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "snapshot_unavailable_reason": {
+      "anyOf": [
+        {
+          "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "sort": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "field": {
+            "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+          },
+          "direction": {
+            "enum": [
+              "asc",
+              "desc"
+            ]
+          }
+        },
+        "required": [
+          "field",
+          "direction"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "consistency": {
+      "type": "object",
+      "properties": {
+        "mode": {
+          "enum": [
+            "snapshot",
+            "live",
+            "best_effort"
+          ]
+        },
+        "drift_policy": {
+          "enum": [
+            "reject",
+            "report"
+          ]
+        },
+        "limitations": {
+          "type": "array",
+          "items": {
+            "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+          }
+        }
+      },
+      "required": [
+        "mode",
+        "drift_policy",
+        "limitations"
+      ],
+      "additionalProperties": false
+    },
+    "limits": {
+      "type": "object",
+      "properties": {
+        "requested": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "effective": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "truncation_reason": {
+          "anyOf": [
+            {
+              "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "requested",
+        "effective",
+        "truncation_reason"
+      ],
+      "additionalProperties": false
+    },
+    "unread_scopes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "scope": {
+            "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+          },
+          "reason": {
+            "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+          }
+        },
+        "required": [
+          "scope",
+          "reason"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "_untrusted": {
+      "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/untrusted"
+    },
+    "extensions": {
+      "type": "object"
+    }
+  },
+  "required": [
+    "items",
+    "count",
+    "has_more",
+    "truncated",
+    "scope",
+    "snapshot",
+    "snapshot_unavailable_reason",
+    "sort"
+  ],
+  "anyOf": [
+    {
+      "required": [
+        "next_cursor"
+      ]
+    },
+    {
+      "required": [
+        "offset"
+      ]
+    }
+  ],
+  "additionalProperties": false
+}

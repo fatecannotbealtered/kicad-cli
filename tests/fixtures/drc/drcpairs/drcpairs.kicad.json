@@ -1,0 +1,78 @@
+{
+ "kicad_version": "10.0.6",
+ "violations": [
+  {
+   "type": "diff_pair_gap_out_of_range",
+   "severity": "error",
+   "items": [
+    "0d3a4cb9-574d-598c-8f5d-d28b473462cf",
+    "a20eef2d-1826-5e5c-ad47-039bf126bcad"
+   ]
+  },
+  {
+   "type": "diff_pair_gap_out_of_range",
+   "severity": "error",
+   "items": [
+    "4b31fd25-c924-594d-8da5-5c42412f5bbd",
+    "addcc944-4a35-5ef3-98e2-7b035d34b0a7"
+   ]
+  },
+  {
+   "type": "diff_pair_gap_out_of_range",
+   "severity": "error",
+   "items": [
+    "5e31055a-8923-5bed-8540-495f3aa625fb",
+    "3ceb1d95-0ec6-58a0-91b0-f4ad8ab97d23"
+   ]
+  },
+  {
+   "type": "diff_pair_gap_out_of_range",
+   "severity": "error",
+   "items": [
+    "6118be8d-2f1b-5ca1-b9c7-fe99477ced17",
+    "1cc64316-7a50-585e-82ef-1ed7710e8a5a"
+   ]
+  },
+  {
+   "type": "diff_pair_gap_out_of_range",
+   "severity": "error",
+   "items": [
+    "68cfee8b-1376-5654-a389-e786755b6d98",
+    "21dd9a48-e092-5f1c-8d60-5f7ce68d635d"
+   ]
+  },
+  {
+   "type": "diff_pair_gap_out_of_range",
+   "severity": "error",
+   "items": [
+    "721f90ab-7327-51eb-bcd9-5d02055508d6",
+    "c7d81e24-51ea-5e93-8f69-bde52a092fef"
+   ]
+  },
+  {
+   "type": "diff_pair_gap_out_of_range",
+   "severity": "error",
+   "items": [
+    "7e72c1d9-f9c2-526f-a7b0-82d5819ee218",
+    "c152b743-f9fa-529e-8434-947492b95603"
+   ]
+  },
+  {
+   "type": "diff_pair_gap_out_of_range",
+   "severity": "error",
+   "items": [
+    "a1ca7092-c0d5-5daa-9ab9-73fb87b92db1",
+    "89dc211d-7e71-58e4-8214-7f8b2a2e6247"
+   ]
+  },
+  {
+   "type": "diff_pair_gap_out_of_range",
+   "severity": "error",
+   "items": [
+    "decbd866-6d11-5349-913e-343dd057839f",
+    "adf1cd47-f746-5a3a-bfb2-c0e4a04f2cc5"
+   ]
+  }
+ ],
+ "unconnected_items": []
+}

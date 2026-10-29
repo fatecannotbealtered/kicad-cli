@@ -1,0 +1,4 @@
+# Source runtime dependencies are declared in pyproject.toml (jsonschema and
+# referencing). This historical audit input is not an installation manifest.
+# The frozen candidate embeds its Python/validator dependencies; its external
+# SDK/spec and KiCad requirements are listed in docs/first-trial/DEPENDENCIES.md.

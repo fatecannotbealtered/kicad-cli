@@ -1,0 +1,13 @@
+{
+  "scope": "Frozen synthetic three-part refusal fixture already used in final EXE49; copied for independent regression reproducibility, no engineering operation executed.",
+  "recorded_generator_baseline_commit": "cf6ea33e08adad4322341b4286fe7417df7ebaea",
+  "original_byte_binding": "bench/engineering_change_intent.json:baseline_files",
+  "files_sha256": {
+    "decoupling.kicad_pcb": "1bb2e483ed10028aac7e71f710a8124bc576c34e95e826cb603d60b3f1447ad2",
+    "decoupling.kicad_pro": "959d3d49cf01e908516903efc926ccc2e79a6de3bcc9492f52adfb92c74274d5",
+    "decoupling.kicad_sch": "c4f2288a6738e8435aa2af59a2d75c5019ef14a8351be63350b75faa27bada5f"
+  },
+  "archive_sha256": "01be164f13a1134064a7a80be8e3044e4637ae041782d5179bf1a29254443484",
+  "contains": "Three synthetic KiCad design files only; no SDK, native binaries, state, tokens, raw logs or dumps.",
+  "historical_acceptance_transferred": false
+}

@@ -1,0 +1,6 @@
+(sym_lib_table
+(lib (name "Device") (type "KiCad") (uri "${KICAD10_SYMBOL_DIR}/Device.kicad_sym") (options "") (descr "Existing external KiCad library"))
+(lib (name "Connector_Generic") (type "KiCad") (uri "${KICAD10_SYMBOL_DIR}/Connector_Generic.kicad_sym") (options "") (descr "Existing external KiCad library"))
+(lib (name "Amplifier_Operational") (type "KiCad") (uri "${KICAD10_SYMBOL_DIR}/Amplifier_Operational.kicad_sym") (options "") (descr "Existing external KiCad library"))
+(lib (name "power") (type "KiCad") (uri "${KICAD10_SYMBOL_DIR}/power.kicad_sym") (options "") (descr "Existing external KiCad library"))
+)

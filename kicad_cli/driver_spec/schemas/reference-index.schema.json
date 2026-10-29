@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:tool-driver-cli-spec:reference-index:2.0",
+  "title": "reference-index",
+  "description": "The data of reference --index: one line per command, for choosing what to read in full (COR-007).",
+  "type": "object",
+  "properties": {
+    "view": {
+      "const": "index"
+    },
+    "tool": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$"
+    },
+    "version": {
+      "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/semver"
+    },
+    "risk_tier": {
+      "enum": [
+        "T0",
+        "T1",
+        "T2"
+      ]
+    },
+    "driver_profile": {
+      "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/driver_profile"
+    },
+    "commands": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+          },
+          "type": {
+            "enum": [
+              "read",
+              "write"
+            ]
+          },
+          "dangerous": {
+            "type": "boolean"
+          },
+          "description": {
+            "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+          },
+          "effects": {
+            "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/effects"
+          },
+          "maturity": {
+            "enum": [
+              "draft",
+              "experimental",
+              "verified",
+              "stable"
+            ]
+          }
+        },
+        "required": [
+          "path",
+          "type",
+          "dangerous",
+          "description",
+          "effects",
+          "maturity"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "view",
+    "tool",
+    "version",
+    "risk_tier",
+    "driver_profile",
+    "commands"
+  ],
+  "additionalProperties": false
+}

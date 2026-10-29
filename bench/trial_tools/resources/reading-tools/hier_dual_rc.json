@@ -1,0 +1,373 @@
+{
+  "title": "Dual RC Buffer - Three-page Synthetic Acceptance",
+  "parts": [
+    {
+      "ref": "U1",
+      "symbol": "Amplifier_Operational:TLV9062xD",
+      "value": "TLV9062IDR",
+      "footprint": "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm",
+      "sheet_id": "root",
+      "in_bom": true,
+      "on_board": true,
+      "dnp": false
+    },
+    {
+      "ref": "J1",
+      "symbol": "Connector_Generic:Conn_01x02",
+      "value": "A_IN / GND",
+      "footprint": "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical_SMD_Pin1Left",
+      "sheet_id": "A",
+      "in_bom": true,
+      "on_board": true,
+      "dnp": false
+    },
+    {
+      "ref": "J2",
+      "symbol": "Connector_Generic:Conn_01x02",
+      "value": "A_OUT / GND",
+      "footprint": "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical_SMD_Pin1Left",
+      "sheet_id": "A",
+      "in_bom": true,
+      "on_board": true,
+      "dnp": false
+    },
+    {
+      "ref": "J3",
+      "symbol": "Connector_Generic:Conn_01x02",
+      "value": "B_IN / GND",
+      "footprint": "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical_SMD_Pin1Left",
+      "sheet_id": "B",
+      "in_bom": true,
+      "on_board": true,
+      "dnp": false
+    },
+    {
+      "ref": "J4",
+      "symbol": "Connector_Generic:Conn_01x02",
+      "value": "B_OUT / GND",
+      "footprint": "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical_SMD_Pin1Left",
+      "sheet_id": "B",
+      "in_bom": true,
+      "on_board": true,
+      "dnp": false
+    },
+    {
+      "ref": "J5",
+      "symbol": "Connector_Generic:Conn_01x02",
+      "value": "+3V3 / GND",
+      "footprint": "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical_SMD_Pin1Left",
+      "sheet_id": "root",
+      "in_bom": true,
+      "on_board": true,
+      "dnp": false
+    },
+    {
+      "ref": "R10",
+      "symbol": "Device:R",
+      "value": "12k",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "sheet_id": "A",
+      "in_bom": true,
+      "on_board": true,
+      "dnp": false
+    },
+    {
+      "ref": "R11",
+      "symbol": "Device:R",
+      "value": "100",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "sheet_id": "A",
+      "in_bom": true,
+      "on_board": true,
+      "dnp": false
+    },
+    {
+      "ref": "R20",
+      "symbol": "Device:R",
+      "value": "10k",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "sheet_id": "B",
+      "in_bom": true,
+      "on_board": true,
+      "dnp": false
+    },
+    {
+      "ref": "R21",
+      "symbol": "Device:R",
+      "value": "100",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "sheet_id": "B",
+      "in_bom": true,
+      "on_board": true,
+      "dnp": false
+    },
+    {
+      "ref": "C10",
+      "symbol": "Device:C",
+      "value": "10n",
+      "footprint": "Capacitor_SMD:C_0805_2012Metric",
+      "sheet_id": "A",
+      "in_bom": true,
+      "on_board": true,
+      "dnp": false
+    },
+    {
+      "ref": "C11",
+      "symbol": "Device:C",
+      "value": "100p",
+      "footprint": "Capacitor_SMD:C_0805_2012Metric",
+      "sheet_id": "A",
+      "in_bom": true,
+      "on_board": true,
+      "dnp": false
+    },
+    {
+      "ref": "C20",
+      "symbol": "Device:C",
+      "value": "10n",
+      "footprint": "Capacitor_SMD:C_0805_2012Metric",
+      "sheet_id": "B",
+      "in_bom": true,
+      "on_board": true,
+      "dnp": false
+    },
+    {
+      "ref": "C21",
+      "symbol": "Device:C",
+      "value": "100p",
+      "footprint": "Capacitor_SMD:C_0805_2012Metric",
+      "sheet_id": "B",
+      "in_bom": true,
+      "on_board": true,
+      "dnp": false
+    },
+    {
+      "ref": "C1",
+      "symbol": "Device:C",
+      "value": "100n",
+      "footprint": "Capacitor_SMD:C_0805_2012Metric",
+      "sheet_id": "root",
+      "in_bom": true,
+      "on_board": true,
+      "dnp": false
+    },
+    {
+      "ref": "C2",
+      "symbol": "Device:C",
+      "value": "1u",
+      "footprint": "Capacitor_SMD:C_0805_2012Metric",
+      "sheet_id": "root",
+      "in_bom": true,
+      "on_board": true,
+      "dnp": false
+    },
+    {
+      "ref": "TP1",
+      "symbol": "Connector:TestPoint",
+      "value": "A_RC",
+      "footprint": "TestPoint:TestPoint_Pad_2.0x2.0mm",
+      "sheet_id": "A",
+      "in_bom": false,
+      "on_board": true,
+      "dnp": false
+    },
+    {
+      "ref": "TP2",
+      "symbol": "Connector:TestPoint",
+      "value": "A_OUT",
+      "footprint": "TestPoint:TestPoint_Pad_2.0x2.0mm",
+      "sheet_id": "A",
+      "in_bom": false,
+      "on_board": true,
+      "dnp": false
+    },
+    {
+      "ref": "TP3",
+      "symbol": "Connector:TestPoint",
+      "value": "B_RC",
+      "footprint": "TestPoint:TestPoint_Pad_2.0x2.0mm",
+      "sheet_id": "B",
+      "in_bom": false,
+      "on_board": true,
+      "dnp": false
+    },
+    {
+      "ref": "TP4",
+      "symbol": "Connector:TestPoint",
+      "value": "B_OUT",
+      "footprint": "TestPoint:TestPoint_Pad_2.0x2.0mm",
+      "sheet_id": "B",
+      "in_bom": false,
+      "on_board": true,
+      "dnp": false
+    }
+  ],
+  "nets": [
+    {
+      "name": "+3V3",
+      "connect": [
+        "C1.1",
+        "C2.1",
+        "J5.1",
+        "U1.8"
+      ]
+    },
+    {
+      "name": "A_BUF",
+      "connect": [
+        "R11.1",
+        "U1.1",
+        "U1.2"
+      ]
+    },
+    {
+      "name": "A_IN",
+      "connect": [
+        "J1.1",
+        "R10.1"
+      ]
+    },
+    {
+      "name": "A_OUT",
+      "connect": [
+        "C11.1",
+        "J2.1",
+        "R11.2",
+        "TP2.1"
+      ]
+    },
+    {
+      "name": "A_RC",
+      "connect": [
+        "C10.1",
+        "R10.2",
+        "TP1.1",
+        "U1.3"
+      ]
+    },
+    {
+      "name": "B_BUF",
+      "connect": [
+        "R21.1",
+        "U1.6",
+        "U1.7"
+      ]
+    },
+    {
+      "name": "B_IN",
+      "connect": [
+        "J3.1",
+        "R20.1"
+      ]
+    },
+    {
+      "name": "B_OUT",
+      "connect": [
+        "C21.1",
+        "J4.1",
+        "R21.2",
+        "TP4.1"
+      ]
+    },
+    {
+      "name": "B_RC",
+      "connect": [
+        "C20.1",
+        "R20.2",
+        "TP3.1",
+        "U1.5"
+      ]
+    },
+    {
+      "name": "GND",
+      "connect": [
+        "C1.2",
+        "C10.2",
+        "C11.2",
+        "C2.2",
+        "C20.2",
+        "C21.2",
+        "J1.2",
+        "J2.2",
+        "J3.2",
+        "J4.2",
+        "J5.2",
+        "U1.4"
+      ]
+    }
+  ],
+  "hierarchy": {
+    "schema": "direct-two-child/v1",
+    "namespace_uuid": "91bf12f5-d37c-4c53-8e04-1bc238d8057b",
+    "root": {
+      "id": "root",
+      "title": "Dual RC Buffer - Root, Power and U1A/U1B/U1C"
+    },
+    "children": [
+      {
+        "id": "A",
+        "name": "CHANNEL_A",
+        "file": "channel_a.kicad_sch",
+        "title": "Channel A - Input RC and Output Interface",
+        "local_nets": {
+          "A_IN": "IN",
+          "A_RC": "RC",
+          "A_BUF": "BUF",
+          "A_OUT": "OUT"
+        },
+        "ports": [
+          {
+            "name": "RC",
+            "direction": "output",
+            "net": "A_RC"
+          },
+          {
+            "name": "BUF",
+            "direction": "input",
+            "net": "A_BUF"
+          }
+        ]
+      },
+      {
+        "id": "B",
+        "name": "CHANNEL_B",
+        "file": "channel_b.kicad_sch",
+        "title": "Channel B - Input RC and Output Interface",
+        "local_nets": {
+          "B_IN": "IN",
+          "B_RC": "RC",
+          "B_BUF": "BUF",
+          "B_OUT": "OUT"
+        },
+        "ports": [
+          {
+            "name": "RC",
+            "direction": "output",
+            "net": "B_RC"
+          },
+          {
+            "name": "BUF",
+            "direction": "input",
+            "net": "B_BUF"
+          }
+        ]
+      }
+    ],
+    "shared_power_nets": [
+      "+3V3",
+      "GND"
+    ],
+    "canonical_nets": {
+      "+3V3": "+3V3",
+      "GND": "GND",
+      "A_IN": "/CHANNEL_A/IN",
+      "A_RC": "/CHANNEL_A/RC",
+      "A_BUF": "/CHANNEL_A/BUF",
+      "A_OUT": "/CHANNEL_A/OUT",
+      "B_IN": "/CHANNEL_B/IN",
+      "B_RC": "/CHANNEL_B/RC",
+      "B_BUF": "/CHANNEL_B/BUF",
+      "B_OUT": "/CHANNEL_B/OUT"
+    }
+  }
+}

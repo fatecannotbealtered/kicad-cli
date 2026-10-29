@@ -1,0 +1,67 @@
+{
+  "schema": "explicit-declared-provider-alias-projection/v1",
+  "status": "passed",
+  "original_declaration_sha256": "5ea8a51713e27c6e144a5b99b0b8bcbaf4b0feec9613f9c4fcc1528b137e5bef",
+  "original_rows": 344,
+  "distinct_selected_files": 341,
+  "alias_groups": [
+    {
+      "representations": [
+        {
+          "path": "\\\\?\\D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\@img\\sharp-win32-x64\\lib\\libvips-42.dll",
+          "device": 13168537950295592621,
+          "file_id": 281474980808904,
+          "size": 19033904,
+          "sha256": "889647519374aa951c72e384e745fbf2564fb8b557ce78bf3efa315effcadb16"
+        },
+        {
+          "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\@img\\sharp-win32-x64\\lib\\libvips-42.dll",
+          "device": 13168537950295592621,
+          "file_id": 281474980808904,
+          "size": 19033904,
+          "sha256": "889647519374aa951c72e384e745fbf2564fb8b557ce78bf3efa315effcadb16"
+        }
+      ],
+      "selected_for_package": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\@img\\sharp-win32-x64\\lib\\libvips-42.dll"
+    },
+    {
+      "representations": [
+        {
+          "path": "\\\\?\\D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\@img\\sharp-win32-x64\\lib\\libvips-cpp-8.18.7.dll",
+          "device": 13168537950295592621,
+          "file_id": 281474980808905,
+          "size": 348976,
+          "sha256": "1181c21fc0c2d55962dceb4408588db64c8d3cc85afac105f2dbb09ce6381286"
+        },
+        {
+          "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\@img\\sharp-win32-x64\\lib\\libvips-cpp-8.18.7.dll",
+          "device": 13168537950295592621,
+          "file_id": 281474980808905,
+          "size": 348976,
+          "sha256": "1181c21fc0c2d55962dceb4408588db64c8d3cc85afac105f2dbb09ce6381286"
+        }
+      ],
+      "selected_for_package": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\@img\\sharp-win32-x64\\lib\\libvips-cpp-8.18.7.dll"
+    },
+    {
+      "representations": [
+        {
+          "path": "\\\\?\\D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\@img\\sharp-win32-x64\\lib\\sharp-win32-x64-0.35.5.node",
+          "device": 13168537950295592621,
+          "file_id": 281474980808906,
+          "size": 459568,
+          "sha256": "5e964d883ecca55b8df6af4236950b8f50a9ed95a57506a31f740368a9372199"
+        },
+        {
+          "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\@img\\sharp-win32-x64\\lib\\sharp-win32-x64-0.35.5.node",
+          "device": 13168537950295592621,
+          "file_id": 281474980808906,
+          "size": 459568,
+          "sha256": "5e964d883ecca55b8df6af4236950b8f50a9ed95a57506a31f740368a9372199"
+        }
+      ],
+      "selected_for_package": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\@img\\sharp-win32-x64\\lib\\sharp-win32-x64-0.35.5.node"
+    }
+  ],
+  "scope": "No new provider, no original plan modification. Same declared files represented by extended/plain Windows spellings; ordinary serial file identity/size/hash observations before package. Original Root formal declaration and completed evidence remain344 rows."
+}

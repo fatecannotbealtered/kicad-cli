@@ -1,0 +1,12 @@
+{
+  "test_root": "C:/owned-kicad-tests",
+  "exe": "C:/private-candidate/bin/kicad-cli.exe",
+  "exe_sha256": "REPLACE_WITH_VERIFIED_FINAL_EXE_SHA256",
+  "build_source_commit": "REPLACE_WITH_FULL_BUILD_SOURCE_SHA",
+  "sdk": "C:/external-contract/_driver_sdk",
+  "native_root": "C:/Program Files/KiCad/10.0",
+  "native_debug": false,
+  "native_python": "C:/Program Files/KiCad/10.0/bin/python.exe",
+  "official_cli": "C:/Program Files/KiCad/10.0/bin/kicad-cli.exe",
+  "configuration": "C:/owned-seeds/configuration"
+}

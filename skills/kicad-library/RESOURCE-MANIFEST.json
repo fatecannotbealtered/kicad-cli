@@ -1,0 +1,13 @@
+{
+  "LICENSE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+  "MODULE-BINDING.json": "1ccef931dce7613bf6e915c10ac0b383decb1f870a196d58aad75eb2ce9229c5",
+  "NOTICE.txt": "ce11968069298d37a746fe5a6971b7938fe9c6ef2c39fefd6872f305cdb119b1",
+  "SKILL.md": "0cb08d6807c3b239d9755641dc70d29faeb2c4078b8c28cc0a8fd01240e8bd5d",
+  "reference/KNOWLEDGE.md": "8ef37a0edb8ba12159eee7862fa729d82ebe644e726c4a90b7d786da87e50717",
+  "reference/common.md": "9fb9310c639f9869fe1df36ced9e31c881318800046b2eba0b91e9e7bd53fc56",
+  "reference/knowledge/CAD_RESOURCES.md": "b3f1beb80063e559e17661805269952c409478c2fbcb56da48cc30b7f3b6cc7d",
+  "reference/knowledge/INDEX.json": "a6407df3680d4ab8c117cb02905bbd72f88ddd212552f02a7182658cfa60299e",
+  "reference/knowledge/external.example.json": "4c7216deb95f4cc63e4d3e4612ee7b7ae4415e0a0202e37adbdb316079934b93",
+  "reference/knowledge/team/SCHEMATIC_RULES.example.md": "da8d21b59d893b66749f122dad270672141fcaaba49b263f053a88ca5a5e137f",
+  "test-prompts.json": "e5bd42b84f54764634db9be6486f0fc29793686725429496a09576ccb9ba40f3"
+}

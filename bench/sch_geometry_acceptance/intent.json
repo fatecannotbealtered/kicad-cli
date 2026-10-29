@@ -1,0 +1,272 @@
+{
+  "meadow": {
+    "selected_uuids": [
+      "b6f9d427-9e86-5930-9aa1-f6c875dcab11",
+      "3ee583cb-ef64-5046-960c-e99a10b1ef13",
+      "6b230ea1-aa58-50fd-bae7-5bca37cc1558",
+      "8faf172f-6676-5844-a49e-75f9e7217ea4",
+      "0712915d-c9fa-51b5-be04-a8dca0e92063",
+      "90b987f7-0f93-547d-a398-081d19118d66",
+      "40033249-af9e-5d4e-96c5-f0e0d618984d",
+      "db7e6e41-b64f-50b9-804b-fd21302f828f",
+      "7c5b2ccb-7ca9-53a8-bc35-b74c6b930cce",
+      "877c5dd6-ab4c-5356-b233-d4fe4ed1e008",
+      "8576119b-c9dc-5c6d-bc44-8d892ff74c49",
+      "b67cb60f-5550-5518-9901-69f512840fc1"
+    ],
+    "symbols": [
+      {
+        "uuid": "b6f9d427-9e86-5930-9aa1-f6c875dcab11",
+        "reference": "J17",
+        "unit": 1,
+        "at": [
+          60,
+          70
+        ],
+        "angle": 0,
+        "mirror": null,
+        "kind": "Pair"
+      },
+      {
+        "uuid": "3ee583cb-ef64-5046-960c-e99a10b1ef13",
+        "reference": "J24",
+        "unit": 1,
+        "at": [
+          80.0,
+          70
+        ],
+        "angle": 0,
+        "mirror": null,
+        "kind": "Pair"
+      },
+      {
+        "uuid": "6b230ea1-aa58-50fd-bae7-5bca37cc1558",
+        "reference": "J38",
+        "unit": 1,
+        "at": [
+          85.08,
+          90.0
+        ],
+        "angle": 0,
+        "mirror": null,
+        "kind": "Pair"
+      }
+    ],
+    "protected_symbol": "726d963e-9f72-5d90-86bf-21b40463cfa8",
+    "refs": [
+      "J17",
+      "J24",
+      "J38"
+    ]
+  },
+  "falcon": {
+    "selected_uuids": [
+      "74e39bcf-9d88-5bc5-80bf-0a828a6b2e3c",
+      "887de6fe-55bd-5494-9ddb-61362e7d9912",
+      "eaca4cd7-60bd-56fd-b7b0-2a565f56bf8e",
+      "1a3ff63a-432c-5ca1-a879-64a24d712c3b",
+      "fb0e4f28-a0f5-5de5-9075-9ca3c67997a0",
+      "7897c5d9-85ec-50cc-a2df-7043e205712c",
+      "dd3ce8ed-6f19-595d-949c-03bb2cf26623",
+      "57c78834-884b-59ca-a0c9-a3b6b07df819",
+      "948f502e-c15f-54c6-ad5f-f657f7a0f38a",
+      "5c8c986f-954a-5c64-ba1d-fef5d3a04f01",
+      "51d78a97-7e80-560f-8039-f8757c66fe68",
+      "8f5d6376-55da-56bf-8475-8626dc1a466f",
+      "c057653e-73a3-5c1a-90f6-c6bef7dc2492",
+      "22d698b9-d78a-54a1-b6da-796815473035",
+      "9c0c604a-e227-5bb3-b9bb-c5540a3ec200",
+      "0f0693fb-b26e-58d1-a737-08233fa42bce"
+    ],
+    "symbols": [
+      {
+        "uuid": "74e39bcf-9d88-5bc5-80bf-0a828a6b2e3c",
+        "reference": "J208",
+        "unit": 1,
+        "at": [
+          70.16,
+          57.3
+        ],
+        "angle": 0,
+        "mirror": null,
+        "kind": "Pair"
+      },
+      {
+        "uuid": "887de6fe-55bd-5494-9ddb-61362e7d9912",
+        "reference": "J305",
+        "unit": 1,
+        "at": [
+          90.16,
+          57.3
+        ],
+        "angle": 0,
+        "mirror": null,
+        "kind": "Pair"
+      },
+      {
+        "uuid": "eaca4cd7-60bd-56fd-b7b0-2a565f56bf8e",
+        "reference": "J412",
+        "unit": 1,
+        "at": [
+          95.24,
+          77.3
+        ],
+        "angle": 0,
+        "mirror": null,
+        "kind": "Pair"
+      },
+      {
+        "uuid": "1a3ff63a-432c-5ca1-a879-64a24d712c3b",
+        "reference": "J529",
+        "unit": 1,
+        "at": [
+          100.32,
+          87.46
+        ],
+        "angle": 0,
+        "mirror": null,
+        "kind": "Pair"
+      }
+    ],
+    "protected_symbol": "79056c03-19fc-5697-a33e-61d72dc670d8",
+    "refs": [
+      "J208",
+      "J305",
+      "J412",
+      "J529"
+    ]
+  },
+  "orbit": {
+    "symbols": [
+      {
+        "uuid": "baae45d0-35fe-5dd5-9a59-62a3446b5660",
+        "reference": "U33",
+        "unit": 1,
+        "at": [
+          65,
+          65
+        ],
+        "angle": 90,
+        "mirror": "x",
+        "kind": "Twin",
+        "selection": [
+          "baae45d0-35fe-5dd5-9a59-62a3446b5660",
+          "acdb45fa-56c1-5e95-99e2-8074e7e171bc",
+          "e0ca47fe-f5f9-5286-a590-acee6116f7cd",
+          "972a7a50-0662-5a44-90c8-da7a4ae3f9ab",
+          "8c2082d7-7680-5295-a5c3-153b47ecbbad"
+        ]
+      },
+      {
+        "uuid": "aa108c5d-2675-5cd3-b1d6-c72fd520c48e",
+        "reference": "U33",
+        "unit": 2,
+        "at": [
+          120,
+          80
+        ],
+        "angle": 270,
+        "mirror": null,
+        "kind": "Twin",
+        "selection": [
+          "aa108c5d-2675-5cd3-b1d6-c72fd520c48e",
+          "d2574fd9-ec56-5c55-b3cc-76d877b38a11",
+          "bd488e9f-9214-52a0-b683-9f34b0b7040f"
+        ]
+      },
+      {
+        "uuid": "4eed8cc7-c68b-5144-bec7-3de1d82c0623",
+        "reference": "J644",
+        "unit": 1,
+        "at": [
+          160,
+          110
+        ],
+        "angle": 180,
+        "mirror": "y",
+        "kind": "Pair",
+        "selection": [
+          "4eed8cc7-c68b-5144-bec7-3de1d82c0623",
+          "586257e5-9679-5dba-b8a8-1557157280dc",
+          "2858de2e-cf43-53fe-a81e-955fdd86a7e8"
+        ]
+      }
+    ],
+    "unit_a_selection": [
+      "baae45d0-35fe-5dd5-9a59-62a3446b5660",
+      "acdb45fa-56c1-5e95-99e2-8074e7e171bc",
+      "e0ca47fe-f5f9-5286-a590-acee6116f7cd",
+      "972a7a50-0662-5a44-90c8-da7a4ae3f9ab",
+      "8c2082d7-7680-5295-a5c3-153b47ecbbad"
+    ],
+    "single_selection": [
+      "4eed8cc7-c68b-5144-bec7-3de1d82c0623",
+      "586257e5-9679-5dba-b8a8-1557157280dc",
+      "2858de2e-cf43-53fe-a81e-955fdd86a7e8"
+    ]
+  },
+  "shared": {
+    "selected_uuids": [
+      "94e39cc7-927c-591b-8058-05f36f897d87",
+      "09c7132e-7895-50be-9d23-0e8a6d7c6634",
+      "1d06feb6-8ae2-541d-b381-954087b938b2",
+      "e458162c-6a25-51d2-8f1e-6d4e69ef860e",
+      "61e38fe8-0a07-51f2-acbe-946b80ea94f7",
+      "c131f0d4-2ade-55a8-9419-be845dfb0b83",
+      "5376bcff-82e2-5d73-a3c9-bba8bc8f01c4",
+      "a8ac78d7-a075-522f-b981-c1fc56f5be0f",
+      "3934b810-f84c-5d9e-bad6-85abe5cfd438",
+      "013072f7-efe1-5a4f-90da-6320b0343e64",
+      "0ac1b04f-6d93-54d9-b4ec-bbf6404f774b",
+      "df4f36ce-97d0-5c79-9ea5-8dbc0279c5f2"
+    ],
+    "symbols": [
+      {
+        "uuid": "94e39cc7-927c-591b-8058-05f36f897d87",
+        "reference": "J208",
+        "unit": 1,
+        "at": [
+          54.92,
+          77.62
+        ],
+        "angle": 0,
+        "mirror": null,
+        "kind": "Pair"
+      },
+      {
+        "uuid": "09c7132e-7895-50be-9d23-0e8a6d7c6634",
+        "reference": "J305",
+        "unit": 1,
+        "at": [
+          74.92,
+          77.62
+        ],
+        "angle": 0,
+        "mirror": null,
+        "kind": "Pair"
+      },
+      {
+        "uuid": "1d06feb6-8ae2-541d-b381-954087b938b2",
+        "reference": "J412",
+        "unit": 1,
+        "at": [
+          80.0,
+          97.62
+        ],
+        "angle": 0,
+        "mirror": null,
+        "kind": "Pair"
+      }
+    ],
+    "protected_symbol": "ef0c5c1b-2b1b-5d67-9bdc-88d306fb0c0c",
+    "refs": [
+      "J208",
+      "J305",
+      "J412"
+    ],
+    "instance_paths": [
+      "/e70e6270-ced3-5c80-a5ec-3553b0074c4a/f1b311e4-5ffc-57a8-ab37-b405f7830ce4/a00f2791-736d-5358-9d79-a28e04c85d75",
+      "/e70e6270-ced3-5c80-a5ec-3553b0074c4a/340b6299-fa8b-5477-a344-b86758de2237/4203147e-a452-52d1-96ec-d1ee87e37d67"
+    ]
+  }
+}

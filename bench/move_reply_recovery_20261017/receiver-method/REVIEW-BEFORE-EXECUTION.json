@@ -1,0 +1,155 @@
+{
+  "kind": "receiver-method-independent-preexecution-review-v1",
+  "baseline": "bcf5",
+  "decision": "changes_required_before_harmless_execution",
+  "p1_count": 0,
+  "p2_count": 2,
+  "reviewer": "independent contract reviewer",
+  "review_scope": "Four Python method files and METHOD-REVIEW.md only; no implementation changes.",
+  "reviewed_files": {
+    "response_relay.py": "42b9d7d47d7606c22e186178505843ae660f90418b1d0936ee2e8bef51f3fe8f",
+    "receiver_probe.py": "0acddba30a48a50798dac4d9b56a47f21bc1fdb3adf3743d35dfb5e0cdb3e2c8",
+    "harmless_service.py": "547817fff2480f199c222c522f4876e224619803e73be397183ab66a6e644204",
+    "validate_receiver.py": "a9746106517f410e741e1451e183c20455c0e170723fb7ff7402fc8a32736499",
+    "METHOD-REVIEW.md": "cc5c3228e0460eeb0df8cab067cbacc5e8370ee984f31ba805d960c9d6e6a2a9"
+  },
+  "execution": {
+    "python": 0,
+    "reviewed_code": 0,
+    "pytest_or_collection": 0,
+    "product": 0,
+    "official_native": 0,
+    "live_pid_queries": 0,
+    "state_or_database_reads": 0,
+    "F4_access": 0,
+    "implementation_edits": 0
+  },
+  "findings": [
+    {
+      "id": "P2-01",
+      "priority": 2,
+      "title": "Frozen source records do not bind the actual ROOT files executed",
+      "file": "validate_receiver.py",
+      "line": 98,
+      "related_lines": [
+        47,
+        106,
+        123,
+        124,
+        141
+      ],
+      "problem": "verify_plan hashes each path stored in plan.method_files, but load_raw and the probe/service commands use the executing script's current ROOT. There is no equality requirement between each planned path and ROOT/name, nor between the planned validator path and __file__. A copied method directory can consume the original plan while the original source files still match; the copied relay/service files may then be loaded without matching those frozen records.",
+      "example": "Keep the original frozen method directory unchanged; copy the four filenames to a new directory, change only the copied relay or service, and invoke the copied validator with the original plan and digest. source_members still has the same four names and verify_plan checks the original file paths, while load_raw reads the copy.",
+      "impact": "The 'all method bytes verified before any child starts' claim is not enforced. This is a method/input provenance issue, not a request to rerun product evidence.",
+      "minimal_fix": [
+        "Require plan.method_files keys, each canonical source path, the plan validator path and the executing ROOT/__file__ to match exactly. Output relocation may remain allowed; source relocation must refuse.",
+        "Read and SHA-check each module's actual raw bytes against its exact planned record, then compile/execute that same byte buffer. Do not verify one path/buffer and later compile a different read.",
+        "Use the same planned canonical probe/service paths for child commands, and reject linked/junction input aliases if the frozen-source policy requires physical membership."
+      ],
+      "verification_needed": "A finite metadata-only copied-source/path-drift negative should refuse before any child dispatch; no product/native execution is needed."
+    },
+    {
+      "id": "P2-02",
+      "priority": 2,
+      "title": "JSON escaping makes the caller evidence-path absence check ineffective on Windows",
+      "file": "validate_receiver.py",
+      "line": 213,
+      "related_lines": [
+        150
+      ],
+      "problem": "caller_inputs is JSON-encoded argv/environment, so Windows backslashes are escaped. The code then searches it for unescaped str(case_output).encode('utf-8'). A path supplied through an allowed environment field such as TEMP/TMP can therefore reach the caller while caller_received_no_evidence_paths is reported true.",
+      "example": "Freeze an allowed TEMP value equal to a future selected case/evidence directory, then choose that fresh output. The actual caller environment contains the path; its JSON representation contains doubled backslashes, so the current substring predicate misses it.",
+      "impact": "The matrix can overstate the declared argv/env evidence-path isolation. The ASCII canary scan is not affected by this particular escaping bug.",
+      "minimal_fix": [
+        "Inspect the decoded argv and environment string fields directly rather than searching a JSON serialization.",
+        "Normalize Windows case, separators and directory boundaries before comparing against the private case/service/relay evidence roots.",
+        "Retain the explicit allowance for the caller's own initially empty cwd, while ensuring the service/evidence path is not passed in argv/env.",
+        "Add a finite metadata-only TEMP/TMP path-leak negative to prove this refusal; it need not start a service or target."
+      ]
+    }
+  ],
+  "static_positive_findings": [
+    {
+      "topic": "Real EOF and zero response",
+      "files": [
+        "receiver_probe.py:37",
+        "response_relay.py:181",
+        "response_relay.py:221"
+      ],
+      "finding": "The separate probe actually blocks on stdin, reads to EOF and accumulates byte count/SHA. The relay exposes no response write action and only closes stdin. Caller success requires exact request and completion rows, zero bytes, empty-content SHA, EOF, exit0, no pump errors and an empty stderr."
+    },
+    {
+      "topic": "Raw service output is not forwarded to the simulated caller",
+      "files": [
+        "response_relay.py:272",
+        "response_relay.py:278",
+        "response_relay.py:294"
+      ],
+      "finding": "The service callback returns to the controller. Its descriptor, errors, stdout/stderr references and relay result stay in private controller files/return values. They are not written to caller stdin, argv or environment by this method. The probe does not receive the relay result object."
+    },
+    {
+      "topic": "Single dispatch and honest failure scope",
+      "files": [
+        "response_relay.py:272",
+        "validate_receiver.py:156",
+        "validate_receiver.py:208"
+      ],
+      "finding": "There is one callback invocation site and no retry loop. The harmless executor independently rejects a second dispatch. exit7 is preserved as the service's actual exit; matrix success means boundary behavior, not service business success."
+    },
+    {
+      "topic": "Whole Job intent and parent limit",
+      "files": [
+        "response_relay.py:123",
+        "response_relay.py:215",
+        "validate_receiver.py:173",
+        "validate_receiver.py:183",
+        "METHOD-REVIEW.md"
+      ],
+      "finding": "Caller/service launch suspended and assign their own Windows Job before resume; normal paths wait and close their specific Jobs. Their finalization data are retained. METHOD-REVIEW correctly says the parent must observe the controller's whole Job and this directory's RESULT alone cannot prove the entire cycle's natural completion."
+    },
+    {
+      "topic": "No cached method execution intended",
+      "files": [
+        "validate_receiver.py:47",
+        "METHOD-REVIEW.md"
+      ],
+      "finding": "Method and WindowsJob modules are loaded with compile/exec from source and controller/children require -B -S. P2-01 must still make those raw buffers correspond to the exact actual planned sources."
+    }
+  ],
+  "matrix_scope": {
+    "exact_ids": [
+      "chunked-ascii",
+      "unicode",
+      "nonzero",
+      "empty-stdout"
+    ],
+    "statically_covered": [
+      "Chunked ASCII output",
+      "UTF-8 raw byte preservation",
+      "Service normal return with actual exit7",
+      "Empty stdout with independent stderr canary",
+      "Actual separate caller EOF/zero bytes",
+      "One-dispatch assertion"
+    ],
+    "not_executed_in_this_review": true,
+    "not_proven_by_four_cases": [
+      "Callback raising an exception: current no-retry support is static only; exit7 is a normal callback return and does not exercise that branch.",
+      "Caller/service timeout, launch/assignment failure or cleanup failure.",
+      "Real product request identity or operation state, real service callback binding, save durability, kill/power-loss recovery.",
+      "OS-level sandbox or denial of the caller's filesystem access.",
+      "The complete parent controller Job or total OS process census."
+    ],
+    "scope_rule": "Do not expand the four-case pass into any of these untested claims. If such branches are later tested, use a separately frozen finite harmless scope rather than silently extending the four IDs."
+  },
+  "preexecution_dependencies_not_part_of_this_five_file_review": [
+    "The actual frozen plan and its digest must be reviewed after both P2 repairs.",
+    "The chosen owned_process.py source/interface and any non-standard local import closure must be pinned and independently justified before its WindowsJob result is trusted.",
+    "The parent's exact controller source/argv/runtime/input hashes and its actual complete natural or controlled Job record remain mandatory.",
+    "A future real service adapter must bind the actual operation ID/canonical request, command, environment, immutable inputs, raw output and original whole-Job observation. This synthetic method review does not authorize a product service dispatch."
+  ],
+  "required_preservation": [
+    "No old state/DB/F4 is read, resumed, queried or cleared.",
+    "No product/native call or retry is needed to fix these method issues.",
+    "Keep this initial reviewed-file SHA set as review history if the four implementation files are revised."
+  ]
+}

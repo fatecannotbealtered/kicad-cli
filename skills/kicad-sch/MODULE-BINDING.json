@@ -1,0 +1,45 @@
+{
+  "module": "kicad-sch",
+  "install_name": "kicad-sch",
+  "source_code_sha256": "20374c0317ac3b01ef3a33ebed64b259b1e94502932d7009b744fc01c5005fba",
+  "protocol": "driver-board.v2.20-integer-nm-library",
+  "command_contract_sha256": "0fe9f3751b14aa48c2d35851a14d0ad822a1f8176b87960d9869ab9256b810ea",
+  "executable_sha256": null,
+  "capability": {
+    "commands": [
+      "sch create",
+      "sch edit",
+      "sch symbols",
+      "sch objects",
+      "sch connections",
+      "sch export"
+    ],
+    "scope": "Preserved blank/exact construction, scalar hierarchy/reuse, fields, connection-preserving transforms; single-root native netlist/SVG/PDF artifacts",
+    "unsupported": [
+      "bus design",
+      "automatic wiring",
+      "general library cache refresh",
+      "hierarchical SCH export"
+    ],
+    "internal_1_0_supported_commands": [
+      "sch create",
+      "sch edit",
+      "sch symbols",
+      "sch objects",
+      "sch connections",
+      "sch export"
+    ],
+    "state": "implemented_bounded_experimental",
+    "regression_group": [
+      "test_sheet_pin_text.py",
+      "test_symbol_cache_fidelity.py",
+      "test_driver_engineering_runtime.py",
+      "test_sch_hierarchy_build.py",
+      "test_sch_export.py"
+    ],
+    "qualification": "Requires evidence bound to this exact artifact; historical qualification does not transfer automatically"
+  },
+  "skill_dependencies": [],
+  "shared_resources": "reference/common.md (generated from docs/modules/common.md)",
+  "compatibility": "Match source, contract, protocol and optional executable; version alone is insufficient"
+}

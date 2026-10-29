@@ -1,0 +1,228 @@
+# Release workflow for the Python flavour of kicad-cli.
+#
+# Manually invoked for an explicitly selected semver tag. Builds a PyInstaller binary
+# per OS/arch, merges per-platform checksums into one checksums.txt, signs it
+# with Sigstore/Cosign keyless signing, and attaches everything to a GitHub
+# Release.
+#
+# Placeholders (see SHARED PLACEHOLDER DICTIONARY in template/INSTANTIATE.md):
+#   kicad-cli kebab-case CLI/binary/repo name, e.g. my-cli
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Stable tag to admit; bounded internal beta is refused
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  preflight:
+    name: Admit stable release candidate
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ inputs.tag }}
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "20"
+      - name: Verify tag and all derived versions before building
+        env:
+          RELEASE_TAG: ${{ inputs.tag }}
+        run: |
+          node scripts/check-version.js
+          python scripts/check_release.py --tag "$RELEASE_TAG"
+
+  build:
+    needs: preflight
+    strategy:
+      fail-fast: false
+      matrix:
+        # PyInstaller binaries are not cross-compiled: one runner per OS/arch.
+        # macos-15-intel = darwin-amd64 (macos-13 retired 2025-12), macos-14 =
+        # darwin-arm64 (Apple Silicon),
+        # ubuntu-24.04-arm = linux-arm64. win32-arm64 reuses the amd64 binary
+        # via Windows x64 emulation (see prepare-npm-platform-packages.js).
+        os: [ubuntu-24.04, ubuntu-24.04-arm, macos-15-intel, macos-14, windows-2022]
+        python-version: ["3.12"]
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ inputs.tag }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: |
+          python -m pip install -r requirements-build.lock
+          python -m pip install --no-build-isolation -e ".[dev]"
+
+      - name: Test
+        run: pytest tests/ -q
+
+      # SEC-SPEC §5: the release path gates on the same dependency audit the
+      # merge path does. Without this, a CVE published after the last green run
+      # on main ships: this job re-runs the tests at tag time but never asked
+      # whether the code it is about to sign has a known vulnerability. A
+      # release blocked by a fresh upstream advisory is the intended outcome.
+      - name: Audit Python dependencies
+        if: runner.os == 'Linux'
+        run: python scripts/audit_dependencies.py --audit
+
+      # REPO-SPEC §5c: refuse to publish a binary whose vendored spec or
+      # generated contract module has drifted from the pinned tag. ruff comes
+      # from the dev extra installed above, which gen-contract.js needs.
+      - uses: actions/setup-node@v7
+        if: runner.os == 'Linux'
+        with:
+          node-version: "20"
+
+      - name: Verify spec/contract sync
+        if: runner.os == 'Linux'
+        run: |
+          node scripts/check-spec.js --local-only
+          python scripts/check_fixed_specs.py
+      - name: Audit Node wrapper dependencies
+        if: runner.os == 'Linux'
+        run: npm audit --omit=dev
+
+      - name: Fetch the vendored IPC client
+        # board live needs it, and build.py puts this directory on
+        # PyInstaller's import path so it is analysed rather than merely copied.
+        run: pip install --target .vendor kicad-python
+
+      - name: Audit the actual vendored IPC distributions before building
+        if: runner.os == 'Linux'
+        run: python -m pip_audit --strict --path .vendor
+
+      - name: Build binary
+        run: python build.py
+
+      - name: Smoke test the binary
+        # The suite runs `python -m kicad_cli.main`, which has a package context
+        # the frozen binary does not. That gap once shipped a binary that built
+        # cleanly and then died on its first relative import, printing a Python
+        # traceback instead of an envelope for every command. Never archive an
+        # artifact nothing has executed.
+        shell: bash
+        run: |
+          if [ "${{ runner.os }}" = "Windows" ]; then
+            python scripts/smoke_binary.py dist/kicad-cli.exe
+          else
+            python scripts/smoke_binary.py dist/kicad-cli
+          fi
+
+      - name: Admit the actual frozen candidate
+        shell: bash
+        env:
+          RELEASE_TAG: ${{ inputs.tag }}
+        run: |
+          if [ "${{ runner.os }}" = "Windows" ]; then
+            python scripts/check_release.py --tag "$RELEASE_TAG" --binary dist/kicad-cli.exe
+          else
+            python scripts/check_release.py --tag "$RELEASE_TAG" --binary dist/kicad-cli
+          fi
+
+      - name: Package release archive
+        shell: pwsh
+        run: |
+          $version = node -p "require('./package.json').version"
+          $platformMap = @{
+            "Linux" = "linux"
+            "macOS" = "darwin"
+            "Windows" = "windows"
+          }
+          $platform = $platformMap["${{ runner.os }}"]
+          $arch = if ("${{ runner.arch }}" -eq "ARM64") { "arm64" } else { "amd64" }
+          $base = "kicad-cli-$version-$platform-$arch"
+          New-Item -ItemType Directory -Force -Path release | Out-Null
+          if ("${{ runner.os }}" -eq "Windows") {
+            Copy-Item dist/kicad-cli.exe release/kicad-cli.exe
+            Compress-Archive -Path release/kicad-cli.exe -DestinationPath "release/$base.zip" -Force
+            $hash = (Get-FileHash "release/$base.zip" -Algorithm SHA256).Hash.ToLower()
+            "$hash  $base.zip" | Out-File -Encoding utf8 "release/checksums-$platform-$arch.txt"
+          } else {
+            Copy-Item dist/kicad-cli release/kicad-cli
+            tar -C release -czf "release/$base.tar.gz" kicad-cli
+            $hash = (Get-FileHash "release/$base.tar.gz" -Algorithm SHA256).Hash.ToLower()
+            "$hash  $base.tar.gz" | Out-File -Encoding utf8 "release/checksums-$platform-$arch.txt"
+          }
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: "kicad-cli-${{ matrix.os }}"
+          path: release/*
+
+  release:
+    name: Publish release assets
+    needs: build
+    permissions:
+      contents: write
+      id-token: write
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ inputs.tag }}
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v7
+        with:
+          path: release-dist
+
+      - name: Prepare release assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p release
+          find release-dist -type f \( -name "*.tar.gz" -o -name "*.zip" \) -exec cp {} release/ \;
+          find release-dist -type f -name "checksums-*.txt" -exec cat {} \; > release/checksums.txt
+          test -s release/checksums.txt
+
+      - name: Install cosign
+        uses: sigstore/cosign-installer@v3
+
+      - name: Sign checksums
+        shell: bash
+        run: cosign sign-blob --new-bundle-format --bundle release/checksums.txt.sigstore.json release/checksums.txt --yes
+
+      - name: Extract release notes from CHANGELOG
+        shell: bash
+        env:
+          RELEASE_TAG: ${{ inputs.tag }}
+        run: |
+          VERSION="${RELEASE_TAG#v}"
+          # Slice the '## [VERSION]' section out of CHANGELOG.md for this tag (awk: portable).
+          awk -v ver="$VERSION" '
+            /^## \[/ { if (found) exit; if (index($0, "[" ver "]")) found=1 }
+            found { print }
+          ' CHANGELOG.md > release-notes.md
+          # Defensive fallback: if the slice is empty, point at the changelog.
+          if [ ! -s release-notes.md ]; then
+            printf '## v%s\n\nSee [CHANGELOG.md](CHANGELOG.md) for details.\n' "$VERSION" > release-notes.md
+          fi
+
+      - name: Upload GitHub Release assets
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ inputs.tag }}
+          files: release/*
+          body_path: release-notes.md

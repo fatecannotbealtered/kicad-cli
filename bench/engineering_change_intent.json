@@ -1,0 +1,29 @@
+{
+  "case": "decoupling-change-v1",
+  "basis": "Frozen software acceptance configuration, before execution; no load/ampacity or supplier approval",
+  "baseline_commit": "cf6ea33e08adad4322341b4286fe7417df7ebaea",
+  "baseline_files": {
+    "decoupling.kicad_pcb": "1bb2e483ed10028aac7e71f710a8124bc576c34e95e826cb603d60b3f1447ad2",
+    "decoupling.kicad_pro": "959d3d49cf01e908516903efc926ccc2e79a6de3bcc9492f52adfb92c74274d5",
+    "decoupling.kicad_sch": "c4f2288a6738e8435aa2af59a2d75c5019ef14a8351be63350b75faa27bada5f"
+  },
+  "parts": [
+    {"ref": "J1", "symbol": "Connector_Generic:Conn_01x02", "value": "VIN", "footprint": "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical"},
+    {"ref": "C1", "symbol": "Device:C", "value": "220nF", "footprint": "Capacitor_SMD:C_0805_2012Metric"},
+    {"ref": "R1", "symbol": "Device:R", "value": "10k", "footprint": "Resistor_SMD:R_0805_2012Metric"}
+  ],
+  "nets": {"VIN": ["C1.1", "J1.1", "R1.1"], "GND": ["C1.2", "J1.2", "R1.2"]},
+  "physical_pad_mapping": {
+    "C1": [{"number": "1", "logical_pin": "1", "net": "VIN", "occurrences": 1}, {"number": "2", "logical_pin": "2", "net": "GND", "occurrences": 1}],
+    "J1": [{"number": "1", "logical_pin": "1", "net": "VIN", "occurrences": 1}, {"number": "2", "logical_pin": "2", "net": "GND", "occurrences": 1}],
+    "R1": [{"number": "1", "logical_pin": "1", "net": "VIN", "occurrences": 1}, {"number": "2", "logical_pin": "2", "net": "GND", "occurrences": 1}]
+  },
+  "edit": {"C1.Value": {"before": "220nF", "after": "470nF"}},
+  "baseline_positions_mm": {"J1": [20.0, 10.0], "C1": [15.440, 9.761], "R1": [15.460, 12.781]},
+  "final_positions_mm": {"J1": [20.0, 10.0], "C1": [15.440, 9.761], "R1": [15.460, 14.281]},
+  "pose": {"rotation_deg": 0, "layer": "F.Cu", "tolerance_nm": 1, "locked_refs": [], "protected_refs": ["J1", "C1"], "policy": "R1 translation only; existing copper may detach and must subsequently be repaired"},
+  "copper": {"nets": ["VIN"], "class": "VIN_Change", "width_mm": 0.25, "clearance_mm": 0.20, "via_diameter_mm": 0.60, "via_drill_mm": 0.30, "protected_nets": ["GND"], "layers": ["F.Cu", "B.Cu"], "tolerance_nm": 1, "policy": "repair retains old copper; widen changes existing straight widths; do not rebuild"},
+  "ground": {"net": "GND", "layers": ["F.Cu", "B.Cu"], "connect": "thermal", "clearance_mm": 0.2, "minimum_width_mm": 0.25, "thermal_gap_mm": 0.5, "thermal_spoke_mm": 0.5, "via_diameter_mm": 0.6, "via_drill_mm": 0.3, "boundary": "Preserve both original zone outlines and Edge.Cuts", "keepout": "No rule-area keepout in frozen input"},
+  "silk": {"clearance_mm": 0.15, "basis": "Existing explicit test configuration, native bounds and actual rendered front silk"},
+  "not_covered": ["load capacity", "complete manufacturing geometry", "supplier approval", "rotation/flip/footprint replacement", "cross-platform"]
+}

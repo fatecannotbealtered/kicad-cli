@@ -1,0 +1,2198 @@
+{
+  "schema": "finite-prospective-physical-footprint-dependencies/v1",
+  "files": [
+    {
+      "path": "C:\\Windows\\System32\\advapi32.dll",
+      "sha256": "e036c9baecd170d7ef4759a5a7eb76036158cacc4cd9e3f697dbf410a3457224",
+      "size": 778344,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "C:\\Windows\\System32\\bcrypt.dll",
+      "sha256": "b5691584e857caf0c6c590dda13779966b383d66be3c87d5b3cbbc2f5005495b",
+      "size": 183376,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "C:\\Windows\\System32\\bcryptprimitives.dll",
+      "sha256": "46c06a0f0323d25a32c2b16da1a4a09e9234d282be7714469b7985bb98031ab6",
+      "size": 716408,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "C:\\Windows\\System32\\cfgmgr32.dll",
+      "sha256": "3842054f8a402a8fc6906c31cff6cc6f4eb2bf4b3443a12b363f0469c72cd9bc",
+      "size": 344488,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "C:\\Windows\\System32\\combase.dll",
+      "sha256": "39a2e2ba1ca6012953c94c10011fff5a18783120a2a34f5b66deb2d374a362c9",
+      "size": 3716184,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "C:\\Windows\\System32\\comdlg32.dll",
+      "sha256": "7758fbe9b0ec1df7c845cc773e07edad34627266e294a0f4f7fbbe0a734cddc8",
+      "size": 983040,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "C:\\Windows\\System32\\conhost.exe",
+      "sha256": "e449bce01f275cd08f3d4e64bb73b3b43ae845a0dbdb3e6131426e66537705e5",
+      "size": 1003520,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "C:\\Windows\\System32\\crypt32.dll",
+      "sha256": "c720af58976a3624dbc5b74ec4e470d8fec8a4645dc06947906c49e929862dc3",
+      "size": 1559296,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "C:\\Windows\\System32\\cryptbase.dll",
+      "sha256": "d77b19df871b5a2f02e826ebeb5de86735f5cd0806294fe9143ba138c964ee16",
+      "size": 59392,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "C:\\Windows\\System32\\cryptsp.dll",
+      "sha256": "4c5d4a26fc916392d3d478174fb4ed32e0d1141f12dff3eee5a2a3fc71c0483c",
+      "size": 121408,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "C:\\Windows\\System32\\dbgcore.dll",
+      "sha256": "af89686bd88030aa0a1d4bdca95e3265b6b8c5bf985f264fd148894844f677e8",
+      "size": 241664,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "C:\\Windows\\System32\\dbghelp.dll",
+      "sha256": "cbb0c77b812e09f6ae66f482e8eae94fd2e232bbbc3825d12668f3d2ed97e78e",
+      "size": 2307568,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "C:\\Windows\\System32\\dhcpcsvc.dll",
+      "sha256": "4577f32da5e1f01e59be10fd09dadf848d9e70347a11d2c30187501919f4af7e",
+      "size": 161256,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "C:\\Windows\\System32\\dhcpcsvc6.dll",
+      "sha256": "28de0eab8d19a65a46b21c380829f1f0b0efa688c19b3b81ec88c37a80cd8a09",
+      "size": 128496,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "C:\\Windows\\System32\\dnsapi.dll",
+      "sha256": "717eed809c8b79df7258c51e46c8fbb876f29f4cf35ea2875ae19fc35c2c69a4",
+      "size": 1422944,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "C:\\Windows\\System32\\dpapi.dll",
+      "sha256": "f1c4c0719336b952e838119be42df427d67621a265323593449a7a832f90cb20",
+      "size": 40960,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "C:\\Windows\\System32\\dsparse.dll",
+      "sha256": "c78ac36d970b6fa79206a161d4ded0886879c4df80791dd22650a8a7afd9c2eb",
+      "size": 53248,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "C:\\Windows\\System32\\DXCore.dll",
+      "sha256": "7dbabbd215d1e93ba8904540033d3bb71dc795c0c58371c8905583e105311b3c",
+      "size": 278400,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "C:\\Windows\\System32\\gdi32.dll",
+      "sha256": "772c73e294a4c5f5e0d4146288af95287a85c074d3aee3fa9f320dc010d7dbfe",
+      "size": 187456,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "C:\\Windows\\System32\\gdi32full.dll",
+      "sha256": "bde2077a56c90f68c5fa1ce5ebd4a40755c97a5080b91a87d2beff47349dd01e",
+      "size": 1220496,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "C:\\Windows\\System32\\glu32.dll",
+      "sha256": "faaf404d90bc761c61cad6c6d7188c6e0b1d1996af2fbac0b39b5feb8ee0e159",
+      "size": 180224,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "C:\\Windows\\System32\\imm32.dll",
+      "sha256": "7e45f12c1c555e2407c5ca082bd925b34655278fde4dbfac53a0468cc1e77411",
+      "size": 212288,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "C:\\Windows\\System32\\IPHLPAPI.DLL",
+      "sha256": "8521026d021cc5193a7cd7c0256bd14c7ab39738d22c019e6d544b37deee12c0",
+      "size": 220528,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "C:\\Windows\\System32\\kernel.appcore.dll",
+      "sha256": "ed6d62f2555d260547cc94a5cdfe2a6fcb684f18b8e182f78f9e4de224321fc9",
+      "size": 121360,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "C:\\Windows\\System32\\kernel32.dll",
+      "sha256": "8f8629741558b5df71def4e1dd8ef9645d4f806b949762c47757c50fea1a9e6d",
+      "size": 844496,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "C:\\Windows\\System32\\KernelBase.dll",
+      "sha256": "becad014fb8efa8cb5e314931cca92778ad42c649b12a6909632cacd68af4f40",
+      "size": 4212112,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "C:\\Windows\\System32\\msimg32.dll",
+      "sha256": "05fd8f6ccf4025ed4841c6d7f2264d6ff33d22b3470db47628c933b0096ed3fd",
+      "size": 32768,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "C:\\Windows\\System32\\msvcp_win.dll",
+      "sha256": "c50165e6aaf74395c059564d65fa78b0911844828cbcf791d78f80d964a60f4e",
+      "size": 642016,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "C:\\Windows\\System32\\msvcrt.dll",
+      "sha256": "a1bd0acd64e1a60368b8878d3987f603d966ed45be2252d2d4d0f92feb10fa8e",
+      "size": 699848,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "C:\\Windows\\System32\\mswsock.dll",
+      "sha256": "1229de88fce9fd1a3dad4d61ed6c047eaa3e10edeed2bf00a0819b7950425d5e",
+      "size": 451920,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "C:\\Windows\\System32\\NapiNSP.dll",
+      "sha256": "f5574418f2192ef615a45f39f1dbff08735f5ce17ad8e6d43c527dde19aa27fe",
+      "size": 108792,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "C:\\Windows\\System32\\nlansp_c.dll",
+      "sha256": "a622b6d71a0f5194b3f304252429db700cca4b0a8c852ff5c40ee37e43d3b1b4",
+      "size": 159744,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "C:\\Windows\\System32\\nsi.dll",
+      "sha256": "d22f4cc243548dda81e274f95e92433ae8187eddfde39adaaf5996985bb41ef3",
+      "size": 51128,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "C:\\Windows\\System32\\ntdll.dll",
+      "sha256": "a74f7482085eab125ccc09152ab7e0b5994bcb13e1a7b29880bdbb24179ecb8b",
+      "size": 2522080,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "C:\\Windows\\System32\\odbc32.dll",
+      "sha256": "a91bd1383dae3dbfdafb37f0c42e71cb8e3c2a78886b15928715a5433843e738",
+      "size": 794624,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "C:\\Windows\\System32\\ole32.dll",
+      "sha256": "4b81e4a4cb982915ceb3ebef0148227689306c274d5b2f6068ea143ae4db3e40",
+      "size": 1695680,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "C:\\Windows\\System32\\oleacc.dll",
+      "sha256": "0402576f3e54c00c0bb2a7d94f40da169d134843b9a5521579e8fe55d952cb2e",
+      "size": 475136,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "C:\\Windows\\System32\\oleaut32.dll",
+      "sha256": "e276bb09983606469c50f0f03c9604bbeffd7d669d996526c8c1af89042fbae0",
+      "size": 898200,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "C:\\Windows\\System32\\opengl32.dll",
+      "sha256": "659be03cf2b88b5063a35b2637d9ef38122d7f6f30dafff118fa41b273aa5ece",
+      "size": 983040,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "C:\\Windows\\System32\\powrprof.dll",
+      "sha256": "096b3c77ad7fece122be0362c72530b1edc024fe7107d1d40d8bcd8fa5428a0e",
+      "size": 398160,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "C:\\Windows\\System32\\rpcrt4.dll",
+      "sha256": "89af87b6387bde4243306036fce2be89c67a328f93c25c53542e4c665b114747",
+      "size": 1162656,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "C:\\Windows\\System32\\rsaenh.dll",
+      "sha256": "731771049467b6d01c7028a1269df17da37af8d323621e01a32856e306795400",
+      "size": 245264,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "C:\\Windows\\System32\\sechost.dll",
+      "sha256": "c760d6c0dfa2705446aa7a2260206c9076182d92231854c04aa526403217eb9a",
+      "size": 704008,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "C:\\Windows\\System32\\secur32.dll",
+      "sha256": "4050dfd0d4e04e8d013cb16c09d90c2177e2b7e4f102f5931187b2bd0c9d14fc",
+      "size": 53248,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "C:\\Windows\\System32\\SHCore.dll",
+      "sha256": "e7b47e7b381849dd1b32fd67deedd16ad46b50aaf614cdd28e03a7bac7fd72c8",
+      "size": 1022152,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "C:\\Windows\\System32\\shell32.dll",
+      "sha256": "57231c16611c536a5905395858af37120bce730092786238b1a9dfab0db7afac",
+      "size": 8009440,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "C:\\Windows\\System32\\shfolder.dll",
+      "sha256": "13c479b1a4e2da092811ec64179eb12689eb1a5a4078c59eee890f1dfb90eb24",
+      "size": 32768,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "C:\\Windows\\System32\\shlwapi.dll",
+      "sha256": "6b86e4abc06ae40b2b8c1ceebcd300cbcaa5790c3ba377c630f1f0e8b36fb92c",
+      "size": 427152,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "C:\\Windows\\System32\\sspicli.dll",
+      "sha256": "45b06eb4050fb92d859664d98aa3bc89f732d87f72fbb721e0c99af3d2d2c807",
+      "size": 307328,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "C:\\Windows\\System32\\ucrtbase.dll",
+      "sha256": "5c52e3a303baaac0e0af8bd9b96134993da34bc9d834a31ef37e1d2cdc7fe192",
+      "size": 1377512,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "C:\\Windows\\System32\\umpdc.dll",
+      "sha256": "b3407a812c7f34ac6b5beefb2a78e8f2d7c4376f7c7012f880aab4fe07235e4e",
+      "size": 96552,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "C:\\Windows\\System32\\user32.dll",
+      "sha256": "93a4310e66a47fa359f588c2ebda64fe3651771c6f9ff30d462a77215a2e558e",
+      "size": 1914656,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "C:\\Windows\\System32\\userenv.dll",
+      "sha256": "e5e77885cbac08ac247fa45916eca36d2fde292a8527ac2c428f36a691827fea",
+      "size": 224656,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "C:\\Windows\\System32\\uxtheme.dll",
+      "sha256": "6a55672f8ab09bbe36d5376e109dd89f263b37cf478412ff5b9e8bd0e1ab77a0",
+      "size": 679936,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "C:\\Windows\\System32\\version.dll",
+      "sha256": "cea99f212af557a9613150c5509631403ed0f05f5d9a06ac42039bd59b40e39a",
+      "size": 55192,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "C:\\Windows\\System32\\win32u.dll",
+      "sha256": "9cd636e8a1b300e2f4b16f339d650eda71fa02b92b100e4b2f89ce7c04811767",
+      "size": 170952,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "C:\\Windows\\System32\\windows.storage.dll",
+      "sha256": "cf4793b9e7570f1c6621515d634e2fee115b51f6009a19e0d1a5d24cefb55703",
+      "size": 9158096,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "C:\\Windows\\System32\\winhttp.dll",
+      "sha256": "d15f756221196eea7d2d8099bdb68f9500d8f2ad45ab7a0fb68bea100c44e7f8",
+      "size": 1232864,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "C:\\Windows\\System32\\winmm.dll",
+      "sha256": "b79ba5420f10d76fddc718534c37db671b04fdb07d3bef4152a799b85a4368b7",
+      "size": 224688,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "C:\\Windows\\System32\\winrnr.dll",
+      "sha256": "00069e41c7b862de00f781c83d912d343a202fce5e41e424b843d689ef70d230",
+      "size": 88328,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "C:\\Windows\\System32\\winspool.drv",
+      "sha256": "63434f5d384efa9e386abb7d56aa331fe4c22d6958c11ef0c67bf091e94f7bcb",
+      "size": 712704,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "C:\\Windows\\System32\\ws2_32.dll",
+      "sha256": "535d7a8336ddbae77b1f2c68339e5e7dbeb5f06445d6e42b19c794ef0e26f6a3",
+      "size": 534592,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "C:\\Windows\\System32\\wshbth.dll",
+      "sha256": "68a7a030b352bee8c30374e5f7bb286a0d5d822ec2d178ef4023f71a12c3c587",
+      "size": 90112,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "C:\\Windows\\System32\\wsock32.dll",
+      "sha256": "7c6658e8ddb19e10679c13050bc7febc33d190b162b653ebafb0da6e7d292519",
+      "size": 40960,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "C:\\Windows\\WinSxS\\amd64_microsoft.windows.common-controls_6595b64144ccf1df_6.0.26100.9278_none_3e0d1ba8e3303201\\comctl32.dll",
+      "sha256": "17de1830bb674729486f229c8dd7041695696700bc4f8810c2b49be33bd9ecfc",
+      "size": 2684408,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "C:\\Windows\\WinSxS\\amd64_microsoft.windows.gdiplus_6595b64144ccf1df_1.1.26100.9444_none_6ef568883dc4f9e8\\GdiPlus.dll",
+      "sha256": "ce338c682031358a3f599430b6c7f3baa80a72ae392e8a885489bb02a5231a8c",
+      "size": 1937408,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+      "sha256": "3602f2bb1a10f2cbab4c36886218a33c1ab3db87290e73b033c46c77147d0237",
+      "size": 92825416,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\@img\\colour\\color.cjs",
+      "sha256": "f7c3efcf482624007f2019fffee3e1dec56b8cb893faa9a420b2832805888dce",
+      "size": 45136,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\@img\\colour\\index.cjs",
+      "sha256": "e6e93e7fb209420a20fdf2ec676e9c67413be8d5ace99eec64f9468480f0368d",
+      "size": 49,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\@img\\colour\\index.d.ts",
+      "sha256": "2467b00d963828f540f4acd7910f4c04cfe4b489550e6bb682212f65583bca5b",
+      "size": 21569,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\@img\\colour\\LICENSE.md",
+      "sha256": "e2eaa4603c14cb26f301e88648c12a853fa3f0f5da6d4b0972958c666e7f2ab8",
+      "size": 4433,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\@img\\colour\\package.json",
+      "sha256": "bc38c5097693ed53b91c32f35fb0a52569736c7854ba2eb6d080f3252071f75c",
+      "size": 1515,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\@img\\colour\\README.md",
+      "sha256": "be7edf3bc6467f761168cef3bb2b9b3def2532c98a86249848376ea00338ad1d",
+      "size": 562,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\@img\\sharp-win32-x64\\index.cjs",
+      "sha256": "6ecbd583f45e914233410fe83a614e4f5ff1a6875a7eb828b03b7258e8ba6944",
+      "size": 62,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\@img\\sharp-win32-x64\\lib\\libvips-42.dll",
+      "sha256": "889647519374aa951c72e384e745fbf2564fb8b557ce78bf3efa315effcadb16",
+      "size": 19033904,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\@img\\sharp-win32-x64\\lib\\libvips-cpp-8.18.7.dll",
+      "sha256": "1181c21fc0c2d55962dceb4408588db64c8d3cc85afac105f2dbb09ce6381286",
+      "size": 348976,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\@img\\sharp-win32-x64\\lib\\sharp-win32-x64-0.35.5.node",
+      "sha256": "5e964d883ecca55b8df6af4236950b8f50a9ed95a57506a31f740368a9372199",
+      "size": 459568,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\@img\\sharp-win32-x64\\LICENSE",
+      "sha256": "dc1f5d2d43c5531dfe0acaf4e950ea5dbe3e61e1850cf0e983bda7efc10d6693",
+      "size": 10464,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\@img\\sharp-win32-x64\\package.json",
+      "sha256": "697b3d89590e3b988b51764bd22dfd6f4a1b35cd4eb12c664eca7987e8ee6115",
+      "size": 888,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\@img\\sharp-win32-x64\\README.md",
+      "sha256": "3d083ada5ebafe1e6c227daa7b061d4254b61df4a3901c359ffdeac817ce5866",
+      "size": 4913,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\@img\\sharp-win32-x64\\versions.json",
+      "sha256": "e2611d5d854815a8b33c8a3d2ec649511a9596ccf16844e8eae7cf81e79881c4",
+      "size": 596,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\detect-libc\\index.d.ts",
+      "sha256": "9500090533aafe039c41d8d368a44959f04482bb75636d96bc843c06f3d6a348",
+      "size": 436,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\detect-libc\\lib\\detect-libc.js",
+      "sha256": "5de6a1c1abec8bba5ea1261cf819d83a73c92ebe72b879ae48c59ca12320a462",
+      "size": 7503,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\detect-libc\\lib\\elf.js",
+      "sha256": "0e8820f00ee11d179d94894d4f97a6e87c34ab59e5dd4d3a571dfabcecf043af",
+      "size": 982,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\detect-libc\\lib\\filesystem.js",
+      "sha256": "5c98fb66b559d0b4fa82c7a3e39d9ab6840f022c4c73e6b1a73ac6d16ec13fd7",
+      "size": 1097,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\detect-libc\\lib\\process.js",
+      "sha256": "f37dd0ead9f70b50c6f5529c600e1cdf076e3c3bc8e6b4a0a9820a8d65244628",
+      "size": 569,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\detect-libc\\LICENSE",
+      "sha256": "b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1",
+      "size": 11357,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\detect-libc\\package.json",
+      "sha256": "ee88e5b954fdf3a8480b1d01ef767d68d8ca2c6da269f58c5cf1c5550e9aa2a7",
+      "size": 1278,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\detect-libc\\README.md",
+      "sha256": "51a97449c443889155bc872522e6de5a91a5fa73edeffa03d749e186bf0eebca",
+      "size": 3215,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\bin\\semver.js",
+      "sha256": "bd6c871026985937dc945011fc54b74b47f5998154216d7b8d40d5ed782e4402",
+      "size": 4957,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\classes\\comparator.js",
+      "sha256": "054202956430d63d5ff4599fae09760ce465b489e4f0b5ef5ce7cc7ac21157ac",
+      "size": 3631,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\classes\\index.js",
+      "sha256": "3bb69280c2a788d0eb16f915bb9df4dbe812075182024c753dca2283bcea1b17",
+      "size": 143,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\classes\\range.js",
+      "sha256": "a6544485aa8575aa9854c67e2caa67726815de18a482d0ceb8a1003244de3bc1",
+      "size": 15647,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\classes\\semver.js",
+      "sha256": "813b2c185512d30c9b931c2fed8140889d9d7490ceeeedc370da30337dc8ca57",
+      "size": 9891,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\functions\\clean.js",
+      "sha256": "4eadb0892844cf3ae295121a86163a66c73f89acd1b7f0b114ec115b4539512f",
+      "size": 205,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\functions\\cmp.js",
+      "sha256": "a63d74e87b73788e78e9ce0a4892b5333d6b809c0de88b31e4ed76cbf17f94b3",
+      "size": 961,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\functions\\coerce.js",
+      "sha256": "28a251c5ab210ddf9e97551b9f37a53329fcce91f0c3943dcbc02de1a1de915a",
+      "size": 2004,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\functions\\compare-build.js",
+      "sha256": "5ab651d5b40af289bd85c645a92b6d8cfe1a986dc413c797cfcc8d623d7c844c",
+      "size": 281,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\functions\\compare-loose.js",
+      "sha256": "07b6a3a1db0a5210ceb784c1708bd4679f3a94fc73a9c9eb349349e7070a6f78",
+      "size": 132,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\functions\\compare.js",
+      "sha256": "d404b5aa48aaddc8a654c5da8fb7d4443404b7948589b21ac4b045d1cee4e34c",
+      "size": 170,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\functions\\diff.js",
+      "sha256": "7a11fd39b987cdf06c65e928cb1aca49bec583feb86fb5c8fe47a6fd61d7de31",
+      "size": 1423,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\functions\\eq.js",
+      "sha256": "b6e30a7168e52723216fc163d300e2bbabf92ec0251f9ac5438bb6ccf57c8936",
+      "size": 126,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\functions\\gt.js",
+      "sha256": "135523704aa48cd98834dd170ee9f74f0e68043b379f32d021db11e6304c5c93",
+      "size": 124,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\functions\\gte.js",
+      "sha256": "991c5bbe48ecb210a562646872f05862ad9fc0d42186d85aa60bdc6fa323eb9d",
+      "size": 127,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\functions\\inc.js",
+      "sha256": "952069fc8690b7d3af0fe9d55f7c54fe2ac067b48c5e74f6a54f9ce19a334493",
+      "size": 478,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\functions\\lt.js",
+      "sha256": "1c897a9bc849320e2e9dc0f6c09555c01ee3ddf30734515d717b88ad7740ea25",
+      "size": 124,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\functions\\lte.js",
+      "sha256": "3a8d0b1d00423f60cc7cb810b36ab77b61330831ad237dbe73eb5cecfa412800",
+      "size": 127,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\functions\\major.js",
+      "sha256": "5c678480d882f511200fed2c16ec3847dfedb08a1d70328dc2f031d35d825276",
+      "size": 136,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\functions\\minor.js",
+      "sha256": "1b051794f1713adec2a236517196691687c35f82e0b596ff3316a78b3cc10ae6",
+      "size": 136,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\functions\\neq.js",
+      "sha256": "a662883751918822c162183b46b9e20d09489132f82686c92ab78bee67f3a127",
+      "size": 128,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\functions\\parse.js",
+      "sha256": "29a69e15b6d02fe381d573f861881a89590e9d0f0f0ca740c5f85eaf0234c4ad",
+      "size": 331,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\functions\\patch.js",
+      "sha256": "f02d3c1b059fe3d96ce124886f7eef321d381a95638fd3c4a8d5ccd8e76ffadd",
+      "size": 136,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\functions\\prerelease.js",
+      "sha256": "baedbf503d5610ad041bfb56071efa48feb331ca278295c399537d35d3ffb593",
+      "size": 234,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\functions\\rcompare.js",
+      "sha256": "84fa5e88adf08d15c993cac8cdec6d1a65045b7e95a9c55184230a7f807f4dc0",
+      "size": 132,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\functions\\rsort.js",
+      "sha256": "6ec659ce3b6c2b173c719286caab04409adba046c0917874ec3b5e36ddfbc7e3",
+      "size": 163,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\functions\\satisfies.js",
+      "sha256": "8cf5e122b757251671ed6c9d9680904b71cd375845853f05312e608cf2cc2946",
+      "size": 247,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\functions\\sort.js",
+      "sha256": "c2fe2d3ed0be8a4e9de8f02abdfd5d9c0d3bcc510d88e87af84185592882c4b8",
+      "size": 161,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\functions\\truncate.js",
+      "sha256": "e145833a250311927c92f424f56498c52f1b7bb1271ce6afbf006db87773ff43",
+      "size": 1021,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\functions\\valid.js",
+      "sha256": "0de7ea736cb7807179d46dfac09c830a9338e02b6a07db12d7040cde2def6025",
+      "size": 176,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\index.js",
+      "sha256": "4b3e57d3d40e29e0706002eba113d09f35aea593578376bbeec83b777b9912ab",
+      "size": 2691,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\internal\\constants.js",
+      "sha256": "38a112baf27ceca0260082ff26ac2fd7a9861cab1af12dd65e720277f68e6ce9",
+      "size": 873,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\internal\\debug.js",
+      "sha256": "8a9f420572260f3cf944463b5090d62a60f0730589dc23a7ec4ca25e2ee41bb3",
+      "size": 240,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\internal\\identifiers.js",
+      "sha256": "b4916b09dc7869ae0eb05e71c855c942a3a7365f7e6e89185d59a9e45a2451d7",
+      "size": 525,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\internal\\lrucache.js",
+      "sha256": "14d087c87da87b6f5c36fc4cdd7d2d14077874b14a68e20fce5b6138fa2ca34f",
+      "size": 802,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\internal\\parse-options.js",
+      "sha256": "fdf51d0de8d5442c35a997ef58cd530d239ce206f961d14c5121354451b01d01",
+      "size": 338,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\internal\\re.js",
+      "sha256": "5833262888e2b5d843a69193f83c05e374818dbe55379b497819b5bf58e48cd8",
+      "size": 8139,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\LICENSE",
+      "sha256": "4ec3d4c66cd87f5c8d8ad911b10f99bf27cb00cdfcff82621956e379186b016b",
+      "size": 765,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\package.json",
+      "sha256": "7c94cb7f2a53c27b20d76386ec144c062894dbcc909cfabd0f728c37874b1776",
+      "size": 1661,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\preload.js",
+      "sha256": "edb6808911bebcb324b2df57e5c9935149e56984ff083b74c6cfe215f5b710ba",
+      "size": 83,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\range.bnf",
+      "sha256": "15d0baf9b7b98e6d862c0cb9e822d2533d2bc23e136bb75314d802ca1fcb0392",
+      "size": 702,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\ranges\\gtr.js",
+      "sha256": "8fadad28e36d28e93d498ac7ac20badba2a407312845eabc18e82e90a0732b19",
+      "size": 231,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\ranges\\intersects.js",
+      "sha256": "fe87ac5d3020010ad3ec00636dadbf0c669ff07d0f57e0a8165a8264f79a676f",
+      "size": 224,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\ranges\\ltr.js",
+      "sha256": "e5186fcc03018acf9be6d968755d4c49727aeb0d981d179eb568ae5fbe983038",
+      "size": 227,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\ranges\\max-satisfying.js",
+      "sha256": "e1a2c0d6144cc772cd20bbc8ecb9e8a3a4074e9172a3d8e794838b591cdeb416",
+      "size": 593,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\ranges\\min-satisfying.js",
+      "sha256": "2681abf54098aa670f12826b76a6ec77a2441186ae4243afde3be8ae4908f7ca",
+      "size": 591,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\ranges\\min-version.js",
+      "sha256": "fefba0a88c2bf74d5cede504b5ae50a8dc3edfd69cf0174a491e2cf3e442614b",
+      "size": 1514,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\ranges\\outside.js",
+      "sha256": "3a2b0b23593d2f49419c06af2af75450cab103b0c25d665d48fe5bca495a21ca",
+      "size": 2204,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\ranges\\simplify.js",
+      "sha256": "7b78581c13322bc68ece2088685386b2a9b51c15b94d0a2063bdf2546bd41934",
+      "size": 1355,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\ranges\\subset.js",
+      "sha256": "ceb9eb6ed5bfc6c7ac7af7f47e5c3535444a4e66a0e2b58cdad4bd02a35d454d",
+      "size": 7478,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\ranges\\to-comparators.js",
+      "sha256": "6c5e966210cff270fa2850668aaf8460fac7759f8d99f282521ef7a78f4564e9",
+      "size": 282,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\ranges\\valid.js",
+      "sha256": "5ef6f995af801868925940cf8df5735d565ebabb090b068695cae65218bcd3ac",
+      "size": 326,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\semver\\README.md",
+      "sha256": "f1a789dcec285150be24db2ea04dd3175031554fa9834ec92fab83fb5e025a57",
+      "size": 25669,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\sharp\\dist\\channel.cjs",
+      "sha256": "7445567e8001f4be3126374e4c17e282777ed14c718acca875c91bec69a2d7a1",
+      "size": 5383,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\sharp\\dist\\channel.mjs",
+      "sha256": "6067b0ba5ebcc9682a01d0b450a12b54849a95c8ed017f8485bddb5fd0b9db91",
+      "size": 5376,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\sharp\\dist\\colour.cjs",
+      "sha256": "da760186e75d4fd8b6da0a617ecf122deec2fa6d95fdcc194bbee0cb1c5e4605",
+      "size": 5622,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\sharp\\dist\\colour.mjs",
+      "sha256": "760e7fa8161432a9cc97f0a3d9f3e0b757e66089c967e6b36f3131c9fdafa1b5",
+      "size": 5610,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\sharp\\dist\\composite.cjs",
+      "sha256": "6e0837309d25c2b642d42b557f3e1292c2b057af09746647a3a6d54de772a157",
+      "size": 9332,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\sharp\\dist\\composite.mjs",
+      "sha256": "16eadc26ba57417e90e4bb73aff1116b56ad26766088793ab0b7c4bbdd2bc9fc",
+      "size": 9325,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\sharp\\dist\\constructor.cjs",
+      "sha256": "6b8978e0f1614d83a219cbbd455e3eed7922bc4212a5b3b99c5d37c3af3b3226",
+      "size": 20364,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\sharp\\dist\\constructor.mjs",
+      "sha256": "8be8da679d2a028d0f53b02ce52f07f295134a297caf3068944cd8d0b57ab3d1",
+      "size": 20340,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\sharp\\dist\\index.cjs",
+      "sha256": "d69f275bc49fcd2a6188b26b35c986d4db32a1b008653fef88adb4598688232a",
+      "size": 620,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\sharp\\dist\\index.d.cts",
+      "sha256": "24adc1ebbf6b05fc1434083b899b9ffd7edda0aa85ac0123d7ddb4ff860e5884",
+      "size": 92885,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\sharp\\dist\\index.d.mts",
+      "sha256": "b837d41bb8d39398690458f45cc445160dad36ec0db5ba0463d114e560d49d85",
+      "size": 87987,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\sharp\\dist\\index.mjs",
+      "sha256": "0e8f955c68a1b0bccf0ba5343c924dbfa6a46a76a0d491ec27fe6b328311363e",
+      "size": 573,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\sharp\\dist\\input.cjs",
+      "sha256": "e5eb5c891c0893098dbe8bc0358a2f2c7e800581018923a7956732fe1a5ddf8f",
+      "size": 33741,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\sharp\\dist\\input.mjs",
+      "sha256": "4b0a51e678f9022cec06a1ffb34e17ea3498cfb707492b54de87541ccac54125",
+      "size": 33729,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\sharp\\dist\\is.cjs",
+      "sha256": "46fa32e93964d8a31d6e851dc3bb7f3ec36935f9e8323b59603ff6cd84a7faa7",
+      "size": 3042,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\sharp\\dist\\is.mjs",
+      "sha256": "96a3b1b82d389b7b57569332fed93e46cf9b5aa79f2babb82cbb15fe1581a409",
+      "size": 3040,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\sharp\\dist\\libvips.cjs",
+      "sha256": "3419f6cb4303feaf4a76abe122ce1caf5dc755f9f17fa013afd5561827b61062",
+      "size": 5833,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\sharp\\dist\\libvips.mjs",
+      "sha256": "d9984601b0aafe44c393b29ce4b0712b1c40890c3d740d4fda49842a4ea5873d",
+      "size": 5828,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\sharp\\dist\\operation.cjs",
+      "sha256": "11eb4921f37e4e06c0b349f55e186852cdd094203cc3c5651681801eea5d80f8",
+      "size": 32930,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\sharp\\dist\\operation.mjs",
+      "sha256": "a3b14c3a13305dbe8fde48a263d13b0a104dcb97afc65fe5f55b8e556d054be1",
+      "size": 32923,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\sharp\\dist\\output.cjs",
+      "sha256": "4c2878241a264095b661fb321accf86fa9be033bfe541d5a70ac2f8d80150893",
+      "size": 65469,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\sharp\\dist\\output.mjs",
+      "sha256": "d1be82aace2d7f96bfc29e6e76538521fc8dfe6d4e90f7eda71a8f4c2a1597ba",
+      "size": 65452,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\sharp\\dist\\resize.cjs",
+      "sha256": "e03dce87aaee233fecf191ec3c713a9f856e13d0d9ccd7b0a7dbf35b65e36538",
+      "size": 22840,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\sharp\\dist\\resize.mjs",
+      "sha256": "e3d26f31cf391e28f3f96e708ccb96745cf016e18f8ef4486c837e5efcb3c922",
+      "size": 22833,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\sharp\\dist\\sharp.cjs",
+      "sha256": "76120d3971051fcc469c0bfa36e7b23d3c388b6a2f5785bf1491bbdb90ff0176",
+      "size": 6262,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\sharp\\dist\\sharp.mjs",
+      "sha256": "d0c3ce3837636a140e8363850823e3b8dc2b000928303664cc9fc1aa2ba326ee",
+      "size": 6357,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\sharp\\dist\\utility.cjs",
+      "sha256": "0f7a14858dfa8ebd01b2c6c2272297f7a34c4af3d84f0c0b926146c49a2655b1",
+      "size": 9786,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\sharp\\dist\\utility.mjs",
+      "sha256": "761566e165bc1fc90bc6dd67a3b560c1a63e6cfe98009b726d35288606d629b9",
+      "size": 9862,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\sharp\\install\\build.js",
+      "sha256": "fea92e0d55cce8692413c479021173aa1512304e1b849039949cbee9d6ceb1de",
+      "size": 860,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\sharp\\lib\\index.d.ts",
+      "sha256": "24adc1ebbf6b05fc1434083b899b9ffd7edda0aa85ac0123d7ddb4ff860e5884",
+      "size": 92885,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\sharp\\LICENSE",
+      "sha256": "73ba74dfaa520b49a401b5d21459a8523a146f3b7518a833eea5efa85130bf68",
+      "size": 10273,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\sharp\\package.json",
+      "sha256": "ad4a2535d72eb638053a38867b1abf43c328cd1c1dbae5cf4172d498365a8b97",
+      "size": 8115,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\sharp\\README.md",
+      "sha256": "89772961fcf195b976573874555f2902bfe04a3e57be61af261ac65ce9348735",
+      "size": 3162,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\sharp\\src\\binding.gyp",
+      "sha256": "aa0750bba07e0de556ccdf1463e148a21e373ea43ac0ee622d23ad287890e658",
+      "size": 10818,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\sharp\\src\\common.cc",
+      "sha256": "c3c56a37bb780dfd97ee53d3556d9ba3d674b1b9cf7d57caf94248f982207a75",
+      "size": 41483,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\sharp\\src\\common.h",
+      "sha256": "70a4f13f5e56a956edd8340066240865e39d3039157bd511930de2bf5aa17ba9",
+      "size": 10988,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\sharp\\src\\metadata.cc",
+      "sha256": "a127c134c9e537db9c63962ff1aa1d0762a8d517d746a844e6b43b299e11a581",
+      "size": 15320,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\sharp\\src\\metadata.h",
+      "sha256": "5e02c25ec821a525b0caf31161b1e8675ff32cfd098c17cda0b888440362b057",
+      "size": 1878,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\sharp\\src\\operations.cc",
+      "sha256": "a61e6545cde7d2f2ae508b4eceeeec9db9ef711211d5cba1ed470f9325f914fb",
+      "size": 17412,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\sharp\\src\\operations.h",
+      "sha256": "6f41d329634471dff8e093d12e38ff356293079e2aeecc5b922fc23ba99799e6",
+      "size": 3625,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\sharp\\src\\pipeline.cc",
+      "sha256": "445ed9aa726806dc01188cf13a2866ee47ccd38504cddd049e4e639703edc0e9",
+      "size": 92059,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\sharp\\src\\pipeline.h",
+      "sha256": "e09c3dbd873071a373e6d95679b470a6fe1be5fc2ef781b00fd87958b5ab5e98",
+      "size": 10131,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\sharp\\src\\sharp.cc",
+      "sha256": "9f407b50bb2d02e5eb711b769f05d3e6659028430e055c4271e5ab1593f5a257",
+      "size": 1529,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\sharp\\src\\stats.cc",
+      "sha256": "72f8f2ad0e4315951c88b115511eb96741fd0479385ed094141f7bd254739791",
+      "size": 6756,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\sharp\\src\\stats.h",
+      "sha256": "db854f0c3c4a0db1751021ed676413c6d5ca00becc08bdc13258b29047450b8c",
+      "size": 1267,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\sharp\\src\\utilities.cc",
+      "sha256": "91c164bb740529156e15dedbfcb4236dd2b5fbf94c7a3a4f1639929d034f700e",
+      "size": 9522,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\sharp\\src\\utilities.h",
+      "sha256": "0b126ab63cf1aedf8e71e6cb8179899d3ef02c46419100e847b2ca4284b8901b",
+      "size": 741,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\Python\\Python312\\DLLs\\_bz2.pyd",
+      "sha256": "65f610646d10d5babea080e060d244b546ec52c54012e5e937dc72dcc2e2e7bc",
+      "size": 86896,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\Python\\Python312\\DLLs\\_decimal.pyd",
+      "sha256": "aeacfead2befcc0768063a037bb64bd32109ae09cb144e5f571b04dd7965db9d",
+      "size": 262000,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\Python\\Python312\\DLLs\\_elementtree.pyd",
+      "sha256": "5009a9a53c03ef8387443b5cf6ce08e5c3a79727466a0b931c5bbca915bf89ca",
+      "size": 135160,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\Python\\Python312\\DLLs\\_hashlib.pyd",
+      "sha256": "03d233dbace599168eaffec823de6ed7beec8c2a4ebfe9b8a3d8e042a59af3ba",
+      "size": 68976,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\Python\\Python312\\DLLs\\_lzma.pyd",
+      "sha256": "e3deecc1f59a3b811c608861decd84de1e8df8bafd5e2b39188861318c5a38cf",
+      "size": 161136,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\Python\\Python312\\DLLs\\libcrypto-3.dll",
+      "sha256": "ccfffddcd3defb8d899026298af9af43bc186130f8483d77e97c93233d5f27d7",
+      "size": 5231472,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\Python\\Python312\\DLLs\\pyexpat.pyd",
+      "sha256": "d615e193d1affcdbfe504e90d3621cbdcff94bf72b79d899126534507fd6d27a",
+      "size": 205304,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\Python\\Python312\\python.exe",
+      "sha256": "4d6f5f81a4bca11191c4c7c6b43632694d0a4ce74e068619d8fdc161d469859a",
+      "size": 104952,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\Python\\Python312\\python3.dll",
+      "sha256": "fb975a606e7fbf74f64260e3f60c3490b4f74a183c0926fd6ed1ac4c52ac7b1c",
+      "size": 70376,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\Python\\Python312\\python312.dll",
+      "sha256": "9a0e3435aaa680d868150f87ab3e388ad2eebc22f87e036155c7b4eda8cd2120",
+      "size": 6945272,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\environment\\Python\\Python312\\vcruntime140.dll",
+      "sha256": "052ad6a20d375957e82aa6a3c441ea548d89be0981516ca7eb306e063d5027f4",
+      "size": 120400,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\_cvpcb.dll",
+      "sha256": "9147871f31a59592b9aa541664a26ff011a7efdf7b7c40ca075fc8caadac8952",
+      "size": 11030880,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\_eeschema.dll",
+      "sha256": "cc7327d0cc1a7351ee730cee49f6d89bd08207ef4175748099c8e3142326eb60",
+      "size": 18828128,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\_pcbnew.dll",
+      "sha256": "2b1efc06943544b8c7135cf9beec71bd9c2c243b3562d6cf7d4f35b09bbbbaef",
+      "size": 31555424,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\brotlicommon.dll",
+      "sha256": "687d6702539b74eecba5c5433ef5f72c338b86d7af1e765ee785354478e8f2ce",
+      "size": 149856,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\brotlidec.dll",
+      "sha256": "8bcf0dfc92529088f53f1e707613bf98559997220179214b04b12df3e2718dab",
+      "size": 64352,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\bz2.dll",
+      "sha256": "0406f851ad3852378170dcf0f50ae1c169d06b7f732029a7609a6f918ed4c019",
+      "size": 88928,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\cairo-2.dll",
+      "sha256": "684d33c290ab29f3d32cf05dc00a621725417175ac2a76ffff9ecce23ead2bde",
+      "size": 1011552,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\DLLs\\_bz2.pyd",
+      "sha256": "2a12370fb5e4dcf536c2e33f531f166c431ee3b3b81ac7d9784f624618923721",
+      "size": 36192,
+      "role": "new-prospective-native-hole-required-input; old-independent-PARTIAL-unmodified"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\DLLs\\_decimal.pyd",
+      "sha256": "83333ec27bc10c7ff46cc9716147219ee71e10f6994c9c56cd6dd292443e0199",
+      "size": 298336,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\DLLs\\_hashlib.pyd",
+      "sha256": "8bf37ee869a932a484cabb2021c9750cdebcad4bf9707a7dc44c7fdeaef7b8ae",
+      "size": 60256,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\DLLs\\_lzma.pyd",
+      "sha256": "380c9e636025924cb94257967e8394ca491fece376abcd5c4222ec7fd609569a",
+      "size": 49504,
+      "role": "new-prospective-native-hole-required-input; old-independent-PARTIAL-unmodified"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\DLLs\\bz2.dll",
+      "sha256": "6d8ca0add7ccb25893754c9a163df4c7f620fcf093bd6abee3bbbdcdab250b9e",
+      "size": 88928,
+      "role": "new-prospective-native-hole-required-input; old-independent-PARTIAL-unmodified"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\DLLs\\libcrypto-3-x64.dll",
+      "sha256": "db2ee1fcd41158cbefa1b7cbb98d5d2bb051a34ab6f80353246fc20d2784ae77",
+      "size": 5338464,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\DLLs\\liblzma.dll",
+      "sha256": "43c7a71036271c501e4b16aaa357c50cedf34c712e5880fbeccd6a620f2667b4",
+      "size": 201056,
+      "role": "new-prospective-native-hole-required-input; old-independent-PARTIAL-unmodified"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\fontconfig-1.dll",
+      "sha256": "c9ac6231963980c1596b63ade93e99decfd27cc878b3e423aea314ffc0693e34",
+      "size": 1533280,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\freetype.dll",
+      "sha256": "80fba89c0da5523c8986dee702d4df36f19d6ea5d86cbc161c633d0ec8f0ac40",
+      "size": 704352,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\git2.dll",
+      "sha256": "e51af69a548541f9c16a1ebc61ff1a43c9a3b565d3ae2c4e2abcdbb116a07dab",
+      "size": 1460576,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\harfbuzz.dll",
+      "sha256": "c1f1d8f3bce5bb371d453782cd3fa21978f255f37877ec4bf2952ae66cdebdc9",
+      "size": 1199456,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\jpeg62.dll",
+      "sha256": "8c0463c380d332d9ac29696b5080a703c9aed2dceb25290b9f3f8924c81c9ac7",
+      "size": 696160,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\kiapi.dll",
+      "sha256": "f990a0b8a0b51dee1f6c4750afba512267241f755116065c13246c0b9286821c",
+      "size": 2410848,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\kicad-cli.exe",
+      "sha256": "393525236969434e24bc710334efe244fb285ef6596a1aea8e74353ef4db5477",
+      "size": 2698592,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\kicad_3dsg.dll",
+      "sha256": "b15674b2999271e6eaeb4ec0148a4d2ed374e9ebacdc64ef928cc547cd7bfd39",
+      "size": 284000,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\kicommon.dll",
+      "sha256": "c156881a983926b82daf4e2dd954da31915e399e3cccddb444f0a09b51eef9aa",
+      "size": 10107232,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\kigal.dll",
+      "sha256": "3a0f0eee83751ab7ee9adfa99207d64673c1ca432d108ebde361037d712614f4",
+      "size": 4823904,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\Lib\\_collections_abc.py",
+      "sha256": "ec646ef7e27aae261adef3c57b9d18822c6526b3e9562dabb9f3cb4e6803066c",
+      "size": 30193,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\Lib\\_compression.py",
+      "sha256": "3ad5d60627477a60939ee44fc1bb3a05dbe8fb52f0f75039b8f5d8f1a278b981",
+      "size": 5681,
+      "role": "new-prospective-native-hole-required-input; old-independent-PARTIAL-unmodified"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\Lib\\abc.py",
+      "sha256": "e558702a95cdce3febd289da021715d2b92bc43995b8a1bc58dfa1c3d8010287",
+      "size": 6538,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\Lib\\argparse.py",
+      "sha256": "dc1eba8adfdf615986421f981337458ba1072d3e718a0f76e3224940fd74118b",
+      "size": 99661,
+      "role": "new-prospective-native-hole-required-input; old-independent-PARTIAL-unmodified"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\Lib\\bz2.py",
+      "sha256": "76ab3252924e71e859d7d90e8d3db13b6554975cfcac0fdadced4de7f8779330",
+      "size": 11847,
+      "role": "new-prospective-native-hole-required-input; old-independent-PARTIAL-unmodified"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\Lib\\codecs.py",
+      "sha256": "166ffd0f0fe40631bb7adef898ebfe59c7fb9efeb25f635b0fd50b68e9353b6a",
+      "size": 36714,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\Lib\\collections\\__init__.py",
+      "sha256": "303701de55e434c0fbcc478ae8a79a28537d9ebe83b3150508438ffd6e3e14c7",
+      "size": 52018,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\Lib\\collections\\abc.py",
+      "sha256": "9cb4208f99128a0489b6c8e6c61637617dd7d4250c59e065491957eda084dd10",
+      "size": 119,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\Lib\\copyreg.py",
+      "sha256": "5499e1be7ba52d4715a911ae65ef2d703db9379d21fff2a07fad8877c318e070",
+      "size": 7677,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\Lib\\decimal.py",
+      "sha256": "000c00bad31d126b054c6ec7f3e02b27c0f9a4d579f987d3c4f879cee1bacb81",
+      "size": 320,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\Lib\\encodings\\__init__.py",
+      "sha256": "78c4744d407690f321565488710b5aaf6486b5afa8d185637aa1e7633ab59cd8",
+      "size": 5884,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\Lib\\encodings\\aliases.py",
+      "sha256": "6fdcc49ba23a0203ae6cf28e608f8e6297d7c4d77d52e651db3cb49b9564c6d2",
+      "size": 15677,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\Lib\\encodings\\utf_8.py",
+      "sha256": "ba0cac060269583523ca9506473a755203037c57d466a11aa89a30a5f6756f3d",
+      "size": 1005,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\Lib\\encodings\\utf_8_sig.py",
+      "sha256": "1ef3da8d8aa08149e7f274dc64dbfce2155da812e5258ca8e8f832428d3b5c2d",
+      "size": 4133,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\Lib\\enum.py",
+      "sha256": "8ab474102e3240600749088d26f3724b6005661492fe2608223e2dace93c710c",
+      "size": 78669,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\Lib\\fnmatch.py",
+      "sha256": "6683da36e47af523f3f41e18ad244d837783e19e98911cc0b7415dea81494ebc",
+      "size": 5999,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\Lib\\functools.py",
+      "sha256": "6d80018a3fa9fed44c5b78f881987ee3ab3fb1238b077b4e6dcb4b76da7db73b",
+      "size": 38413,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\Lib\\genericpath.py",
+      "sha256": "9d58ad64056a89f12258a62596c2073cd9e52b459dde152f710edc0cffcd865b",
+      "size": 4975,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\Lib\\gettext.py",
+      "sha256": "0b514d40ef926694815e063da2696037cc9925f622adb27a243498eb87a5013e",
+      "size": 21073,
+      "role": "new-prospective-native-hole-required-input; old-independent-PARTIAL-unmodified"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\Lib\\hashlib.py",
+      "sha256": "e2bffb462e4d43e6637b9450e259e8ba2a56626ba3037d68aa1cee68b3f61d4a",
+      "size": 11765,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\Lib\\importlib\\_bootstrap_external.py",
+      "sha256": "5b7f704fd3198cb474fea0e74cb21df2d159ceb6bde78aad5db3eb5efa883ccf",
+      "size": 68856,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\Lib\\io.py",
+      "sha256": "0bb3f9ba75c78b4ad69dedcfb0b360b4503188cf17a632579a70d398bd9ca0e4",
+      "size": 4240,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\Lib\\ipaddress.py",
+      "sha256": "c4a22d96741ef70d49120cd31f942a35094e666021af9b663446bd68dacdb9bd",
+      "size": 75002,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\Lib\\json\\__init__.py",
+      "sha256": "d5d41e2c29049515d295d81a6d40b4890fbec8d8482cfb401630f8ef2f77e4d5",
+      "size": 14020,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\Lib\\json\\decoder.py",
+      "sha256": "9f02654649816145bc76f8c210a5fe3ba1de142d4d97a1c93105732e747c285b",
+      "size": 12473,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\Lib\\json\\encoder.py",
+      "sha256": "7c358788fbb2a6a07f66f1f8446c52396f35fc201108f666d5be002d86f31af2",
+      "size": 16080,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\Lib\\json\\scanner.py",
+      "sha256": "8604d9d03786d0d509abb49e9f069337278ea988c244069ae8ca2c89acc2cb08",
+      "size": 2425,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\Lib\\keyword.py",
+      "sha256": "afbe73afb68d32fa998e5ff3d081090deec457152470f5331cc2bd430a0e9d2a",
+      "size": 1061,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\Lib\\locale.py",
+      "sha256": "2bca02e9fc154dbec3f33bb9c71bcc8c08694f1dbfd31e079d692993bf3dca0c",
+      "size": 78998,
+      "role": "new-prospective-native-hole-required-input; old-independent-PARTIAL-unmodified"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\Lib\\lzma.py",
+      "sha256": "58fb9d2fdc8a8af7b25e218f17ea3b51bdfa53bdf40f440ab33c605974ca5c2e",
+      "size": 13277,
+      "role": "new-prospective-native-hole-required-input; old-independent-PARTIAL-unmodified"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\Lib\\ntpath.py",
+      "sha256": "030fdd768135c4de3b4c56ca0f13d2f4801ccbcde4144382334cf75a477dd0de",
+      "size": 30222,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\Lib\\numbers.py",
+      "sha256": "6d70991643a109e9c99e94d6ea2734a995fa8e89114a70ea09737413fa9ae292",
+      "size": 10348,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\Lib\\operator.py",
+      "sha256": "b2af20f67667203c1730e686cc5d0427becc94db4c97f1d3efe3ed2158473f6a",
+      "size": 10965,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\Lib\\os.py",
+      "sha256": "021bfb21a96fdaac4b2c034d40636f5e18148a8a95282661a9bc14f3fa979a99",
+      "size": 39504,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\Lib\\pathlib.py",
+      "sha256": "3b21ac188fd9ac20bacc8ccd976fabd5d8ccf5000f8e157d3dfff005b228fb3d",
+      "size": 48566,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\Lib\\posixpath.py",
+      "sha256": "115bb3d2051318ee3d951cdb13c60f118f15cea837cb69fb52cf543c12fe25c3",
+      "size": 17013,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\Lib\\re\\__init__.py",
+      "sha256": "029ead61f362489e9bb034f4c2503abee95462056541e9ad07715de3c353b0da",
+      "size": 15889,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\Lib\\re\\_casefix.py",
+      "sha256": "41572ac50cf96b04496e676d8a6708898bb8e752e06dad34ed4c50c5d8f1fe40",
+      "size": 5446,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\Lib\\re\\_compiler.py",
+      "sha256": "23b13f6c11c3343aff2b701b5844a6c82a1a0add70e5aa839d6855d57f691af7",
+      "size": 26013,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\Lib\\re\\_constants.py",
+      "sha256": "3e4463dc8ba87c4a3563be46d2d593e82ca9a0fb91768cfe5a07554ed3de82c5",
+      "size": 5930,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\Lib\\re\\_parser.py",
+      "sha256": "f8dfee5093475d3454ca70299880540673443eb99547d001b47af3f56eb91a3d",
+      "size": 42197,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\Lib\\reprlib.py",
+      "sha256": "264433cc232332db871666b3bb6e4c2cb97b092cb8d5056a45ec2e53daea2b1c",
+      "size": 5437,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\Lib\\shutil.py",
+      "sha256": "837ab5e8abb70d203f70377b4b85cceb40187d481db47e8b0a0583e48602ddbc",
+      "size": 55287,
+      "role": "new-prospective-native-hole-required-input; old-independent-PARTIAL-unmodified"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\Lib\\site-packages\\_pcbnew.pyd",
+      "sha256": "fe5bde4fe8ca53795cfd1c5fff40f52bc3f0ebf21383e3bf76b7a4b88d3cabe3",
+      "size": 31555424,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\Lib\\site-packages\\pcbnew.py",
+      "sha256": "24763cdc717a1a30e664d83a7e6a3fadc20446b00ecfdac3bb00dc566c49a7ae",
+      "size": 1030110,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\Lib\\stat.py",
+      "sha256": "052af0327eae6941b69b05c088b3e748f79995635f80ac4cc7125eb333eb4c77",
+      "size": 5485,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\Lib\\types.py",
+      "sha256": "0c08fbb650c37535a7d8361fc12029e3f4c72a418cf564e8779dae14b979e5ba",
+      "size": 10067,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\Lib\\urllib\\__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\Lib\\urllib\\parse.py",
+      "sha256": "0e67e2f5a301d0b573698e75a4e2d37c843b48cfe0e29fef894eda90d2189c27",
+      "size": 44075,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\Lib\\warnings.py",
+      "sha256": "3c36ff80a66718e3fc8449f06730e9d7bcef87d1e7f91b626b42ca4d1f30eab0",
+      "size": 21025,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\Lib\\zipimport.py",
+      "sha256": "e84b98dd13d3a8ae3ff2094ef2889dcead41d754f0531686f0b70b8d225676cc",
+      "size": 30897,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\libcrypto-3-x64.dll",
+      "sha256": "b9a380e963e1bae032da6d7b0ec13868bf9068dc5aba9f256526bed0cd4d8352",
+      "size": 5338464,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\libcurl.dll",
+      "sha256": "6f9188191d648252efc365132524d083ef77e5c237bbd251e9a75c554518d26b",
+      "size": 665440,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\libexpat.dll",
+      "sha256": "b941966bc01dd53031635841379eaf7a810a53509463804053eaaf98ab4bb321",
+      "size": 179040,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\liblzma.dll",
+      "sha256": "68fdfdaebacad6624d6db2b8917fb5ad53a5cc7234a1e1634fe1bd8d1a0023ce",
+      "size": 201056,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\libpng16.dll",
+      "sha256": "9563859abd25130dd4cca4423dd10ffb17f2d2c1d4d666226162af50d12b8bed",
+      "size": 209760,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\libprotobuf.dll",
+      "sha256": "9e59de9c608dd6889a264d36ce07db3048384daf1e6bb688f86f2ea3fd7e2687",
+      "size": 2557792,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\libsharpyuv.dll",
+      "sha256": "6dd35ff47e19806226a8a53297a2c29ce98db637139cb806d8ac25d5e1bcda84",
+      "size": 37728,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\libssh2.dll",
+      "sha256": "a7813dae19ed25caf3a3f22aebe0ef0f002e91c25d85d4f1510af79ec4265552",
+      "size": 273248,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\libwebp.dll",
+      "sha256": "2680d542ffc81c39e525461c6564da5c54883ec1bc6ed6e4812d75a3cff3cc29",
+      "size": 384864,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\libwebpdecoder.dll",
+      "sha256": "8e1b9d70fe81af0490ac89eef0a4a67e913b30eb9f5dec42c5b5a2ef88f76a19",
+      "size": 174432,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\libwebpdemux.dll",
+      "sha256": "6319c311cc842cabc8068e7b1c189c383a7c86b8555f135c4b6ba722a9125ddb",
+      "size": 32608,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\msvcp140.dll",
+      "sha256": "0f885b509a685d2bbfa652fed26b5fb31d88fbdab0a978c641d1c7b8aa460aa9",
+      "size": 557728,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\msvcp140_atomic_wait.dll",
+      "sha256": "640b2aefced484d0368eea5bdd06addd0658a3a70a49256e560d6923b404a479",
+      "size": 50304,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\nng.dll",
+      "sha256": "5447aa6edc1facc3c49cf4d39db6f9a4d9b475eeb7b763723be8263fbe95dab2",
+      "size": 367456,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\pcre.dll",
+      "sha256": "99c9f35f6621ebea4b4a30b90af3950ba400848d389b2134921abad8df1b4877",
+      "size": 417120,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\pcre2-16.dll",
+      "sha256": "b647d3b6c47e5dd65ec6331e1d6d4348973eaca336cf81e28e779992ade7c5c5",
+      "size": 578400,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\pixman-1-0.dll",
+      "sha256": "600ffba0767acae0c65b6aa4e836de2ca50f7cfa292d538e8bfaa981ebad73ab",
+      "size": 581472,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\python.exe",
+      "sha256": "79826db0c9261339ffe5d410662c8aad2dd210e4211b83ab2f7622da7b34ebcb",
+      "size": 103776,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\python3.dll",
+      "sha256": "ca12c17c9de207876a1cedfeef27f432f91fc44215cf449241cca99295b2369e",
+      "size": 67424,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\python311.dll",
+      "sha256": "c57d080b5cddc03621383e0f622849a8174b2c7949133b16d3abb57e0af11a17",
+      "size": 6029664,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\tiff.dll",
+      "sha256": "bba319dccbafb9c8bd51ccd38e73f92d4be7ef306556109e1dc1486b0c796fae",
+      "size": 481120,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\TKBO.dll",
+      "sha256": "b2ab1ec1b7b1615fd8deb4289dfc7dc0fc51468a9aaba94d3de771bb22d1316a",
+      "size": 1927008,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\TKBool.dll",
+      "sha256": "c43369c29afc8fe765d3ca9c56a6508fdf6541e13870e4bcae136ed90148ad98",
+      "size": 3396448,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\TKBRep.dll",
+      "sha256": "f14296234dda816625d5d41bfd577b62be731dcd3f9a3003726eb99058278d9d",
+      "size": 849248,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\TKCAF.dll",
+      "sha256": "34e658d7a92b7823e16777f297c130a0c013998d5f66449996edae4f6d6da37c",
+      "size": 490336,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\TKCDF.dll",
+      "sha256": "e6cd0f9af0ca447a84a5ceef8181f7455d6cee24d1b89bebf468411f78f0b607",
+      "size": 276320,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\TKDE.dll",
+      "sha256": "d90e2225db50b9d4dfcc924e80f5bd1587db4893b43c987e84a79e468d2152a2",
+      "size": 148320,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\TKDEGLTF.dll",
+      "sha256": "3a0b985222e27d31a9332455f33c15eff879d978fab74603804730a0170d706e",
+      "size": 463200,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\TKDEIGES.dll",
+      "sha256": "593d49ae1b7b60ef33cbfd74233d200e94ccc6d8feea514f0b7b82a6776fd289",
+      "size": 2806112,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\TKDEPLY.dll",
+      "sha256": "449bd82d6c8d80f482adeaf19c22109278372db6dcc7cc651bdb1273792d7ec6",
+      "size": 110432,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\TKDESTEP.dll",
+      "sha256": "0b70d7b8b925ede7788cc22f4237593486db23662e62e5753f46e444cadc7940",
+      "size": 5538144,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\TKDESTL.dll",
+      "sha256": "9e028a874e05dc66550767af5eccfbda4b3169128aba56f598d5b8dcb352570c",
+      "size": 120672,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\TKDEVRML.dll",
+      "sha256": "56ed58f6d9ff49d15685b96c2a1122ea0491a701299223c8590ad7fd21d3925d",
+      "size": 490336,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\TKernel.dll",
+      "sha256": "6af1a06197d34d27c1ff9c1c4eba9eddaef1c380f0cc9f19e6f09aed0b130c7f",
+      "size": 1584992,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\TKG2d.dll",
+      "sha256": "02911a45769295890ae87b36dfe4ea36ab8f6cc6dbb5d558b89eeb6b1a0bfe52",
+      "size": 282976,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\TKG3d.dll",
+      "sha256": "de24fd8fffcf0c9c015b77d7ec55b5964b78084d21c923dea9706ac4c311ec01",
+      "size": 879456,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\TKGeomAlgo.dll",
+      "sha256": "c0449ca65193f4e29c0889d69eab6134c6d48fbb7be7dfbc87e2414058e9f453",
+      "size": 3764064,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\TKGeomBase.dll",
+      "sha256": "a0ec24b546f87d899a8efd2e8e00c3d9fdf1d0f3fb6576e5b661816e33b2d884",
+      "size": 3846496,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\TKHLR.dll",
+      "sha256": "9ece85bbc1557b9ecad201f22afc5cebb14fc485a90cd6454fa5231334cc8f74",
+      "size": 892256,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\TKLCAF.dll",
+      "sha256": "f23ad506bf9677c026f33aeeed70e0af500e4a1208f0aff4b13e37a4f76f2639",
+      "size": 642400,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\TKMath.dll",
+      "sha256": "8336543d503c07d669a391e2fdf6435862a2461bdbc9451873bd9783f2a3e08c",
+      "size": 1323360,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\TKMesh.dll",
+      "sha256": "dc54a7e34dc9f42f0bc915cae640029c86e8958db077dc492930c7133229c2da",
+      "size": 598368,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\TKPrim.dll",
+      "sha256": "11c534a6ee74fbe8eb997b1789ec9e6c554f658a3156ae6b3a6d3c7f4322e1b7",
+      "size": 297824,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\TKRWMesh.dll",
+      "sha256": "2ec38f64a03a2f44526f225a69c1a56547f895003df68a78afc5436d16e23dc4",
+      "size": 157536,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\TKService.dll",
+      "sha256": "a5506caa3d9ff34a4274f2ca3607e284b99d4c914d8e9db3ed06d78204f72874",
+      "size": 1004384,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\TKShHealing.dll",
+      "sha256": "46f08dea47c613d2e5f2113f0396e0d2a5314aa44049f3bc853caca6e0d2b838",
+      "size": 2453344,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\TKTopAlgo.dll",
+      "sha256": "939e96491916917bf44aa4a53b969940aba551977c25363d32bcf8b2ead3cf40",
+      "size": 2258272,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\TKV3d.dll",
+      "sha256": "6f7cc1a6170b2740710dd08376eefb1c09a33de340e009da892d803087290658",
+      "size": 2484064,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\TKVCAF.dll",
+      "sha256": "654cfa2aa74bbafa95e47984a0acd7a1d53f80c6e279456aa25f310cf06a04e8",
+      "size": 199008,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\TKXCAF.dll",
+      "sha256": "bce5a9cad6e32325640d26d5de1622005fa4ca919ce9bbf0e623c8f86df5eda2",
+      "size": 780128,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\TKXSBase.dll",
+      "sha256": "e332c8226d73f98e7d5fb55b3288f4be9b4a8acc4e80842e0d22b6e8824c4c62",
+      "size": 1506144,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\vcruntime140.dll",
+      "sha256": "d5e4d9a3e835fa679450145d6a7d94e36573a509317111904d9b3712c30d9066",
+      "size": 124544,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\vcruntime140_1.dll",
+      "sha256": "1f2d41c4aa5db0bc33ebf7b66d72943a817d7ce6cbe880502a9403823633093f",
+      "size": 49792,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\wxbase332u_net_vc_x64_custom.dll",
+      "sha256": "c1819a9493d5017f62940557b9c48694bcf5ee8ac6ae69d1eaf19a5b8c936795",
+      "size": 308576,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\wxbase332u_vc_x64_custom.dll",
+      "sha256": "1a7cc585a5e26c12e7dc214ae68db52a7d97afd29b0a5a38f877bfe8de60e0fa",
+      "size": 2556768,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\wxbase332u_xml_vc_x64_custom.dll",
+      "sha256": "eb0b9dbd72077ba5711f44bed13c72b7a921eae9de13fb67b1a98f2fcdd17324",
+      "size": 72032,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\wxmsw332u_aui_vc_x64_custom.dll",
+      "sha256": "39cadc8fbbe075ea6b5f823f5a13126b01b7a5a04076a8ed381135aa4a218174",
+      "size": 576352,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\wxmsw332u_core_vc_x64_custom.dll",
+      "sha256": "cede3a70a18a55eb7071b5e5bc5dc3254b5741c71d956950ec50e567959b9e7e",
+      "size": 7471456,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\wxmsw332u_gl_vc_x64_custom.dll",
+      "sha256": "0a11366bc7054886a120d65eba30324cedbaa6cb7f604a6a68a8b048ccd5e46f",
+      "size": 108896,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\wxmsw332u_html_vc_x64_custom.dll",
+      "sha256": "426a95d5da694b2dbb280743173038fa1e45d1c452478d4636b01252a2102545",
+      "size": 745312,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\wxmsw332u_propgrid_vc_x64_custom.dll",
+      "sha256": "4efb836a58deaf8e090f5657475fd371e4c7b2bfe613aeec1001e3c06c51826c",
+      "size": 856928,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\wxmsw332u_stc_vc_x64_custom.dll",
+      "sha256": "98c5a483bb914a364dff0f9e42ceabb18fd566bcb8ec9fc936e210ffc18d8c69",
+      "size": 2096992,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\wxmsw332u_webview_vc_x64_custom.dll",
+      "sha256": "28a9e281bfaf0b7f5425ee0f17eb8099b8ba47f57fa4e03875c2a4552bb7d5e9",
+      "size": 315232,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\zlib1.dll",
+      "sha256": "629412e5fae3e68a1dcb2175b8ea1542c7c12b5589900b796debc53a69764bdc",
+      "size": 102240,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\bin\\zstd.dll",
+      "sha256": "8b9d033bbca0de67c45d4d9ec856d09c36973f19bc79b62bb13697d922f2c08b",
+      "size": 671072,
+      "role": "prospectively-reused-finite-execution-provider"
+    },
+    {
+      "path": "D:\\software\\kicad\\home\\share\\kicad\\footprints\\Capacitor_SMD.pretty\\C_0603_1608Metric.kicad_mod",
+      "sha256": "d45eebd5cb9faace255d4ec95a0f9484efde898359507b02e2ba9bbb3ef6d857",
+      "size": 2040,
+      "role": "selected-C10-replacement-library-actual-file"
+    }
+  ],
+  "trees": [
+    {
+      "files_sha256": {
+        "__init__.py": "a6a61753063d17aaaeb7768713fab94dfec59cb700bbdd6666f4a8b7f026644e",
+        "changelog.py": "ac0d11f670476f2b22200687e422f2dc636efe5342361d2e562628df8df65e3f",
+        "models.py": "7491229df60561dac1c4123c26b1375105fc7e188e69ff390a7f86131f6e85e8",
+        "runtime.py": "08324576657e7250495dfea21c671a67fbc8fdb42c9d099efe9d72f3ba12eb07",
+        "scope.py": "69f0c135c10a193337960eec468c46863f6c640aac8aff8e65726e13b5ed4f32",
+        "store.py": "7bd525ed89c98ad8cb2195abfafbe14e5ee7cc913dade4f6b0d6b4ca1c55fa19",
+        "tokens.py": "f41340e7bdd15d1b92441529af0715fc03a474fad93dcc94eede31a5fe0b201a",
+        "validation.py": "16917a8c4c38f99346afdaf7243fca35fafaa400565a6fbeca6e8562192e8cee",
+        "verification.py": "c0ffa2b17b6c2779ae916f217f06efe96da320b3a0867e4ca6df9bf9dae072f7"
+      },
+      "path": "D:\\personalSpace\\kicad-contract-recovery-20261013\\external-dependencies\\_driver_sdk",
+      "role": "authenticated-external-driver-SDK",
+      "predeclared_again_for_new_cycle": true
+    },
+    {
+      "files_sha256": {
+        "PIN.json": "e26dabd06dd559f70ce07535f1b589497dba0a002b5cee59049ff855671b432f",
+        "base/ai-native-cli-spec/contract.json": "8a7f8d93825b69a53b8dfe6c605498d21708709e9db8730b87b23eb262447752",
+        "base/base-lock.json": "de4742060ad11502f83bdad0091d6308858e0a8aacfbb988a4f2a1ab3e865ef5",
+        "contract/driver-contract.json": "2d0bce8e7053ed2a8424126afe9fd1c4555602b1be7cb03a510a20b4e789daa2",
+        "packages/tool_driver_sdk/verification.py": "c0ffa2b17b6c2779ae916f217f06efe96da320b3a0867e4ca6df9bf9dae072f7",
+        "schemas/adoption-lock.schema.json": "d473c98fb0ac692cc837c5b06e69117a52d09354fe9ec191d6e5e18e474089d0",
+        "schemas/agent-eval.schema.json": "6a4cc44691e635ec72c6693e11e4fdf188adc79fce7ef8f98a94daef65df0578",
+        "schemas/batch.schema.json": "6c7cc33251a267b90e2f99411c2ea85dfc59f3ca5efc016f319baa131f01bfd2",
+        "schemas/changelog.schema.json": "25dd93a0524c6d5d22bb9a42945801efd88082e6cd047165fbef2b53e9351665",
+        "schemas/common.schema.json": "2e7911303440f362fd588637a2ec8bcebddf8e91621502bdec8b83a5ed318ae3",
+        "schemas/context.schema.json": "815582605344370b640361cb383f699c83362a878774d9f33d0c1199a9a9422f",
+        "schemas/doctor.schema.json": "e00d4c4eea919412c8d2a00a3dd0bf8cd575ee4ca24241005bc245f3c9593e7a",
+        "schemas/evidence.schema.json": "a7d1f9299a2d6f43bfa9111e58f598c3290fa383c8bc7e5bf1ff1068b00e228d",
+        "schemas/operation-status.schema.json": "bd09a6043183fcadcea72d3de6a651ee9f62208d0631b2692716b51182fde532",
+        "schemas/plan.schema.json": "b24a17934f4f9e5fdc9279869ea9c3a3a6c1ba2c01e38a65aa1565a17c76b123",
+        "schemas/product-design.schema.json": "64f637e06166dab1a2482110040c87a4231f3d3deebe91a0f2cd143f19c84d4e",
+        "schemas/product-registry.schema.json": "e09b885a72b1953ad50506c7d73715c4ead704b032a92f683aba20f6e1fa0823",
+        "schemas/query-page.schema.json": "b4ff6da14a45e5e3952b7076bc3cbb37cd106df07f323828e644782129b69632",
+        "schemas/receipt.schema.json": "33559ef2e2dc096b3c4938fa45ca8ac3d7b0c9b62a7d595bb79f1632ee49c4a5",
+        "schemas/reference-command.schema.json": "45d1eae0379e006549f0fd779c2b2856e578c25edcd3dce211254ff394d9b57d",
+        "schemas/reference-index.schema.json": "5d5d604ce86c243ccfbc6e7aaab37eb2c5012fb9744433567ec8dac0d68b2e65",
+        "schemas/reference.schema.json": "b86fff8bc0116afd8f003bbcdd742852101a180527de6236aa632dda34d92ba6",
+        "schemas/release-manifest.schema.json": "3cd4ef80566c32b4774d7129264e149c2e880df8d676c287b41a49fd5d0ee48b",
+        "schemas/response.schema.json": "ec560493413f1e7245581093c98257a801562a7c4f3f9cb7ad3dc8fc6da72efd",
+        "schemas/scope.schema.json": "d3953cd0a704f6b165ee9bc095de190953eb85e7d5d9d7eab7683fcef92728fb",
+        "schemas/verification-result.schema.json": "123dce77e838f0e68dfd30efcfea1ad2a85f6c5b55c025d14047577b03d26f0b",
+        "schemas/workflow.schema.json": "ac4414b50ec6f53b3946a5955fcb13c687e3f1ab9564545016f35481accd3236",
+        "scripts/check_spec.py": "8f535f2c625ae3aebaa2c9b57603a1a5a8faed7bfc7092ec14c15d39bf91b088",
+        "scripts/contract_io.py": "00b83f1e05ee85611670af45cb9259d98f84dc8ac278787b99ff4f21ec5a034b"
+      },
+      "path": "D:\\personalSpace\\kicad-contract-recovery-20261013\\external-dependencies\\driver_spec",
+      "role": "authenticated-adjacent-driver-spec",
+      "predeclared_again_for_new_cycle": true
+    }
+  ],
+  "old11": "Old undeclared-file result remains PARTIAL. These exact11 sources are declared here before NEW formal execution, not retroactively appended to old inventory.",
+  "preparation": {
+    "path": "D:\\personalSpace\\kicad-physical-footprint-eco-20261019\\preparation-01\\RESULT.json",
+    "sha256": "88f9429bae050b5e00de5f0beefdb09c823b044ec93f3a0560f44a4dcd814bf0",
+    "size": 21336
+  },
+  "actual_method_inputs": "New methods and frozen requirements are bound by each formal plan in addition to these external files.",
+  "scope": "Exact known Native/official/Host/Node execution providers and required libraries only. Serial hash observations, not atomic host inventory; no exhaustive Host stdlib/font or whole-machine guarantee.",
+  "post_execution_policy": "Unknown actual provider limits the affected check; do not silently extend or requalify completed plan.",
+  "source_or_CAD_mutation": false,
+  "pre_formal_projection": {
+    "original_declaration": {
+      "path": "D:\\personalSpace\\kicad-physical-footprint-eco-20261019\\dependencies\\EXTERNAL-DEPENDENCIES-01.json",
+      "sha256": "c86ee3f05e4d32155d071c04e88cfd90ef5eddae30e730474955ff73e19d6964",
+      "size": 99950
+    },
+    "excluded_own_preparation_method": [
+      {
+        "path": "D:\\personalSpace\\kicad-physical-footprint-eco-20261019\\native_prepare_01.py",
+        "sha256": "e3c548794cdc483c02d22921422ff6292a6f946d41c4c1e543b904514700b2e4",
+        "size": 2177,
+        "role": "observed-during-own-preparation-before-formal-freeze"
+      }
+    ],
+    "reason": "Preparation __main__ is not an installed external runtime dependency. It remains separately bound in the preparation plan/result; future actual Native methods are independently frozen. This change precedes every formal engineering plan and call."
+  },
+  "package_projection": {
+    "schema": "explicit-declared-provider-alias-projection/v1",
+    "status": "passed",
+    "original_declaration_sha256": "5ea8a51713e27c6e144a5b99b0b8bcbaf4b0feec9613f9c4fcc1528b137e5bef",
+    "original_rows": 344,
+    "distinct_selected_files": 341,
+    "alias_groups": [
+      {
+        "representations": [
+          {
+            "path": "\\\\?\\D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\@img\\sharp-win32-x64\\lib\\libvips-42.dll",
+            "device": 13168537950295592621,
+            "file_id": 281474980808904,
+            "size": 19033904,
+            "sha256": "889647519374aa951c72e384e745fbf2564fb8b557ce78bf3efa315effcadb16"
+          },
+          {
+            "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\@img\\sharp-win32-x64\\lib\\libvips-42.dll",
+            "device": 13168537950295592621,
+            "file_id": 281474980808904,
+            "size": 19033904,
+            "sha256": "889647519374aa951c72e384e745fbf2564fb8b557ce78bf3efa315effcadb16"
+          }
+        ],
+        "selected_for_package": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\@img\\sharp-win32-x64\\lib\\libvips-42.dll"
+      },
+      {
+        "representations": [
+          {
+            "path": "\\\\?\\D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\@img\\sharp-win32-x64\\lib\\libvips-cpp-8.18.7.dll",
+            "device": 13168537950295592621,
+            "file_id": 281474980808905,
+            "size": 348976,
+            "sha256": "1181c21fc0c2d55962dceb4408588db64c8d3cc85afac105f2dbb09ce6381286"
+          },
+          {
+            "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\@img\\sharp-win32-x64\\lib\\libvips-cpp-8.18.7.dll",
+            "device": 13168537950295592621,
+            "file_id": 281474980808905,
+            "size": 348976,
+            "sha256": "1181c21fc0c2d55962dceb4408588db64c8d3cc85afac105f2dbb09ce6381286"
+          }
+        ],
+        "selected_for_package": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\@img\\sharp-win32-x64\\lib\\libvips-cpp-8.18.7.dll"
+      },
+      {
+        "representations": [
+          {
+            "path": "\\\\?\\D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\@img\\sharp-win32-x64\\lib\\sharp-win32-x64-0.35.5.node",
+            "device": 13168537950295592621,
+            "file_id": 281474980808906,
+            "size": 459568,
+            "sha256": "5e964d883ecca55b8df6af4236950b8f50a9ed95a57506a31f740368a9372199"
+          },
+          {
+            "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\@img\\sharp-win32-x64\\lib\\sharp-win32-x64-0.35.5.node",
+            "device": 13168537950295592621,
+            "file_id": 281474980808906,
+            "size": 459568,
+            "sha256": "5e964d883ecca55b8df6af4236950b8f50a9ed95a57506a31f740368a9372199"
+          }
+        ],
+        "selected_for_package": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\@img\\sharp-win32-x64\\lib\\sharp-win32-x64-0.35.5.node"
+      }
+    ],
+    "scope": "No new provider, no original plan modification. Same declared files represented by extended/plain Windows spellings; ordinary serial file identity/size/hash observations before package. Original Root formal declaration and completed evidence remain344 rows."
+  }
+}

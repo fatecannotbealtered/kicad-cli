@@ -1,0 +1,22 @@
+{
+  "ic_url": "https://www.ti.com/lit/ds/symlink/sn74lvc1g14.pdf",
+  "ic_revision": "SCES218AA October 2025",
+  "ic_download_sha256": "3d59568b16a2b7abb63d33ebe6f8ddd37e12dd3ca2616dd803872c509a583283",
+  "dbv_pins": {"1": "NC", "2": "A", "3": "GND", "4": "Y", "5": "VCC"},
+  "supply_range_v": [1.65, 5.5],
+  "max_input_leakage_ua": 5,
+  "bypass_recommendation_nf": 100,
+  "r1_url": "https://www.yageogroup.com/component-documentation/download/specsheet/RC0603FR-0710KL",
+  "r1_facts": "10kohm, 1%, 0603/1608, 0.1W at 70C, 1.6x0.8mm body",
+  "r1_eco_url": "https://www.yageogroup.com/component-documentation/download/specsheet/RC0603FR-0722KL",
+  "r1_eco_facts": "22kohm, 1%, 0603/1608, 0.1W at 70C; same body dimensions; manufacturer sheet checked 2026-10-27",
+  "independent_eco_url": "https://www.yageogroup.com/component-documentation/download/specsheet/RC0603FR-0715KL",
+  "independent_eco_facts": "15kohm, 1%, 0603/1608, 0.1W at 70C; manufacturer sheet checked 2026-10-27",
+  "c1_url": "https://search.murata.co.jp/Ceramy/image/img/A01X/G101/ENG/GRM188R71C104KA01-01.pdf",
+  "c1_facts": "GRM188R71C104KA01D, 0.1uF nominal, X7R, DC16V, 0603/1608",
+  "c1_primary_index": "https://www.murata.com/-/media/webrenewal/tool/library/common-pdf/static-model/component-list-s-mlcc-2506.ashx?cvid=20250805040438000000&la=ko-kr",
+  "c1_retrieval": "Manufacturer indexed part-number list confirms nominal 100000pF,16V,X7R,0603 for GRM188R71C104KA01. Direct detail PDF returned HTTP403 and list download404 during this run; no new PDF download or exact packing suffix qualification is claimed.",
+  "passive_land_source": "Selected existing legal KiCad Resistor_SMD:R_0603_1608Metric and Capacitor_SMD:C_0603_1608Metric; their geometry is read and bound, not hand-replaced",
+  "test_pad": {"basis": "project engineering geometry, not a vendor component", "pad_mm": [1, 1], "nominal_body_mm": [0.8, 0.8], "courtyard_free_margin_mm": 0.25},
+  "qualification": "Facts and design calculations only; no measured electrical behavior"
+}

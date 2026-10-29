@@ -1,0 +1,58 @@
+{
+  "module": "kicad-pcb",
+  "install_name": "kicad-layout",
+  "source_code_sha256": "20374c0317ac3b01ef3a33ebed64b259b1e94502932d7009b744fc01c5005fba",
+  "protocol": "driver-board.v2.20-integer-nm-library",
+  "command_contract_sha256": "9518290d5ee9cad05ddc2872d2c3f5502e3ac8bdd5b685470da25d8d1bb9a5f3",
+  "executable_sha256": null,
+  "capability": {
+    "commands": [
+      "board from-netlist",
+      "project sync",
+      "project links repair",
+      "board footprint move",
+      "board footprint place",
+      "board route patch",
+      "board route repair",
+      "board route rebuild",
+      "board route rewidth",
+      "board track widen",
+      "board zone create",
+      "board zone refill",
+      "board zone stitch",
+      "project netclass set",
+      "board silkscreen place"
+    ],
+    "scope": "New explicit identity/baseline/region/layer-scoped segment patch with native candidate DRC; historical commands retain their own bounded qualification",
+    "unsupported": [
+      "arc/via removal in explicit route patch",
+      "new vias in patch",
+      "automatic dense escape",
+      "push/shove",
+      "controlled impedance acceptance",
+      "arbitrary stackup editing",
+      "route search in patch"
+    ],
+    "internal_1_0_supported_commands": [
+      "board from-netlist",
+      "project sync",
+      "project links repair",
+      "board footprint move",
+      "board route patch"
+    ],
+    "state": "implemented_bounded_experimental",
+    "regression_group": [
+      "test_module_operations.py",
+      "test_driver_power_runtime.py",
+      "test_native_route.py",
+      "test_move_guard.py",
+      "test_move_preflight_inputs.py",
+      "test_module_geometry.py",
+      "native phone scoped routing/reopen"
+    ],
+    "qualification": "Requires evidence bound to this exact artifact; historical qualification does not transfer automatically"
+  },
+  "skill_dependencies": [],
+  "shared_resources": "reference/common.md (generated from docs/modules/common.md)",
+  "compatibility": "Match source, contract, protocol and optional executable; version alone is insufficient"
+}

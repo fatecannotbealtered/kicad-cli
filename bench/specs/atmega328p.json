@@ -1,0 +1,33 @@
+{
+  "title": "ATmega328P minimal board",
+  "parts": [
+    {"ref": "U1", "symbol": "MCU_Microchip_ATmega:ATmega328P-A", "footprint": "Package_QFP:TQFP-32_7x7mm_P0.8mm"},
+    {"ref": "U2", "symbol": "Regulator_Linear:AMS1117-5.0", "footprint": "Package_TO_SOT_SMD:SOT-223-3_TabPin2"},
+    {"ref": "Y1", "symbol": "Device:Crystal", "value": "16MHz", "footprint": "Crystal:Crystal_SMD_HC49-SD"},
+    {"ref": "C1", "symbol": "Device:C", "value": "22pF", "footprint": "Capacitor_SMD:C_0603_1608Metric"},
+    {"ref": "C2", "symbol": "Device:C", "value": "22pF", "footprint": "Capacitor_SMD:C_0603_1608Metric"},
+    {"ref": "C3", "symbol": "Device:C", "value": "100nF", "footprint": "Capacitor_SMD:C_0603_1608Metric"},
+    {"ref": "C4", "symbol": "Device:C", "value": "100nF", "footprint": "Capacitor_SMD:C_0603_1608Metric"},
+    {"ref": "C5", "symbol": "Device:C", "value": "100nF", "footprint": "Capacitor_SMD:C_0603_1608Metric"},
+    {"ref": "C6", "symbol": "Device:C", "value": "10uF", "footprint": "Capacitor_SMD:C_0805_2012Metric"},
+    {"ref": "C7", "symbol": "Device:C", "value": "10uF", "footprint": "Capacitor_SMD:C_0805_2012Metric"},
+    {"ref": "J1", "symbol": "Connector_Generic:Conn_02x03_Odd_Even", "value": "ICSP", "footprint": "Connector_PinHeader_2.54mm:PinHeader_2x03_P2.54mm_Vertical"},
+    {"ref": "J2", "symbol": "Connector_Generic:Conn_01x02", "value": "VIN", "footprint": "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical"},
+    {"ref": "R1", "symbol": "Device:R", "value": "10k", "footprint": "Resistor_SMD:R_0603_1608Metric"},
+    {"ref": "R2", "symbol": "Device:R", "value": "1k", "footprint": "Resistor_SMD:R_0603_1608Metric"},
+    {"ref": "D1", "symbol": "Device:LED", "footprint": "LED_SMD:LED_0603_1608Metric"}
+  ],
+  "nets": [
+    {"name": "VIN", "connect": ["J2.1", "U2.VI", "C6.1"]},
+    {"name": "+5V", "connect": ["U2.VO", "C7.1", "U1.VCC", "U1.AVCC", "C3.1", "C4.1", "R1.1", "J1.2"]},
+    {"name": "GND", "connect": ["J2.2", "U2.GND", "C6.2", "C7.2", "U1.GND", "C1.2", "C2.2", "C3.2", "C4.2", "C5.2", "J1.6", "D1.1"]},
+    {"name": "AREF", "connect": ["U1.AREF", "C5.1"]},
+    {"name": "XTAL1", "connect": ["U1.XTAL1/PB6", "Y1.1", "C1.1"]},
+    {"name": "XTAL2", "connect": ["U1.XTAL2/PB7", "Y1.2", "C2.1"]},
+    {"name": "RESET", "connect": ["U1.~{RESET}/PC6", "R1.2", "J1.5"]},
+    {"name": "MOSI", "connect": ["U1.PB3", "J1.4"]},
+    {"name": "MISO", "connect": ["U1.PB4", "J1.1"]},
+    {"name": "SCK", "connect": ["U1.PB5", "J1.3", "R2.1"]},
+    {"name": "LED_A", "connect": ["R2.2", "D1.2"]}
+  ]
+}

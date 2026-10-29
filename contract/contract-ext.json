@@ -1,0 +1,16 @@
+{
+  "error_codes": {
+    "E_VERIFY_FAILED": {
+      "exit": 1,
+      "retryable": false
+    },
+    "E_VERIFY_INCOMPLETE": {
+      "exit": 1,
+      "retryable": false
+    },
+    "E_OUTCOME_UNKNOWN": {
+      "exit": 6,
+      "retryable": false
+    }
+  }
+}

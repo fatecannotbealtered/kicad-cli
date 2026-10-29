@@ -1,0 +1,535 @@
+{
+ "kicad_version": "10.0.6",
+ "violations": [
+  {
+   "type": "bus_to_net_conflict",
+   "severity": "error",
+   "items": [
+    "1ce35dbd-3f28-566d-9f18-0d75c9d098b4",
+    "e472124e-b2ab-52c4-86be-67461ca12280"
+   ]
+  },
+  {
+   "type": "bus_to_net_conflict",
+   "severity": "error",
+   "items": [
+    "311fb860-157e-51d5-a1ec-f952bbc171a6",
+    "24a5b1a2-1180-5dd1-a01f-bb63212fc107"
+   ]
+  },
+  {
+   "type": "bus_to_net_conflict",
+   "severity": "error",
+   "items": [
+    "41eebf12-7f4a-50d2-993c-cfaab41bd629",
+    "92ecf9ad-56be-56ce-a58e-c5726e8ac921"
+   ]
+  },
+  {
+   "type": "bus_to_net_conflict",
+   "severity": "error",
+   "items": [
+    "824b4f16-e258-52f8-a000-85dd6b6f519c",
+    "05864cfd-7016-58c3-a9a8-e847b8f6b676"
+   ]
+  },
+  {
+   "type": "bus_to_net_conflict",
+   "severity": "error",
+   "items": [
+    "b929d784-96e0-50e8-bee9-f6464c57dcf9",
+    "80d3c6e5-3c63-562a-bcd7-7caff2dee7c0"
+   ]
+  },
+  {
+   "type": "different_unit_footprint",
+   "severity": "error",
+   "items": [
+    "8d376007-9a12-5df6-9ecd-6f2fae0e1b39",
+    "4b5ce863-b5d9-5877-a9f5-485fa39e1c43"
+   ]
+  },
+  {
+   "type": "different_unit_net",
+   "severity": "error",
+   "items": [
+    "1450dfb4-4a51-5973-b57e-08c7a94e5464",
+    "7a89184e-1cd7-5ceb-a4a3-02bb9c98d2d8"
+   ]
+  },
+  {
+   "type": "different_unit_net",
+   "severity": "error",
+   "items": [
+    "1a4532ce-446a-5006-b8c9-3fb5eac49191",
+    "7a4264b0-78e3-587a-83fb-234ef5172e52"
+   ]
+  },
+  {
+   "type": "different_unit_net",
+   "severity": "error",
+   "items": [
+    "1d350544-a3fe-5c16-b0f2-44b76ef57331",
+    "9f4845a9-2b28-5d84-8b53-2ce1a154aab7"
+   ]
+  },
+  {
+   "type": "different_unit_net",
+   "severity": "error",
+   "items": [
+    "2f7f90a3-1ec9-5419-be40-16f5e9973d97",
+    "2f69cbbf-b9f7-5de1-badc-0014d0137aa6"
+   ]
+  },
+  {
+   "type": "different_unit_net",
+   "severity": "error",
+   "items": [
+    "4a4327b9-a942-5b27-a56b-759078c2aa25",
+    "00127359-0002-552e-8f8e-5614e32b1214"
+   ]
+  },
+  {
+   "type": "different_unit_net",
+   "severity": "error",
+   "items": [
+    "656a7849-7f88-5bb5-921b-f7009757ee36",
+    "122574c2-1eb0-5fc4-8553-bffecdb1b370"
+   ]
+  },
+  {
+   "type": "different_unit_net",
+   "severity": "error",
+   "items": [
+    "8559450a-e04c-560c-89e4-0e5d8f7e1d9e",
+    "08dab735-a2fc-525c-870d-946d17ff674e"
+   ]
+  },
+  {
+   "type": "duplicate_sheet_names",
+   "severity": "error",
+   "items": [
+    "cea1e507-57f7-5b87-8468-b5eb72b00fa1",
+    "e8e4bb86-bc1b-5406-aa24-4d795aa0f55f"
+   ]
+  },
+  {
+   "type": "hier_label_mismatch",
+   "severity": "error",
+   "items": [
+    "6fb4a686-a862-5fe7-adeb-6836ea2d34b7"
+   ]
+  },
+  {
+   "type": "hier_label_mismatch",
+   "severity": "error",
+   "items": [
+    "b89b2a33-fe12-5d8f-a692-8c5699555d6e"
+   ]
+  },
+  {
+   "type": "isolated_pin_label",
+   "severity": "warning",
+   "items": [
+    "0d4f40c5-b5c7-5d50-9328-8219d15aa2ca"
+   ]
+  },
+  {
+   "type": "isolated_pin_label",
+   "severity": "warning",
+   "items": [
+    "1a5b704f-835b-5779-abf8-56ab41196c75"
+   ]
+  },
+  {
+   "type": "isolated_pin_label",
+   "severity": "warning",
+   "items": [
+    "24a5b1a2-1180-5dd1-a01f-bb63212fc107"
+   ]
+  },
+  {
+   "type": "isolated_pin_label",
+   "severity": "warning",
+   "items": [
+    "311fb860-157e-51d5-a1ec-f952bbc171a6"
+   ]
+  },
+  {
+   "type": "isolated_pin_label",
+   "severity": "warning",
+   "items": [
+    "3ad58bbf-5500-5f75-b5a2-f25b87067b4f"
+   ]
+  },
+  {
+   "type": "isolated_pin_label",
+   "severity": "warning",
+   "items": [
+    "5f63421b-8436-5dfb-ab55-44917eaa8a3a"
+   ]
+  },
+  {
+   "type": "isolated_pin_label",
+   "severity": "warning",
+   "items": [
+    "69da8a35-f5ec-579a-87fe-381a3eebc9b8"
+   ]
+  },
+  {
+   "type": "isolated_pin_label",
+   "severity": "warning",
+   "items": [
+    "6fb4a686-a862-5fe7-adeb-6836ea2d34b7"
+   ]
+  },
+  {
+   "type": "isolated_pin_label",
+   "severity": "warning",
+   "items": [
+    "8cbbdd5c-0f13-5cc5-938c-5429693adf13"
+   ]
+  },
+  {
+   "type": "isolated_pin_label",
+   "severity": "warning",
+   "items": [
+    "b6b0c57a-f2d7-5322-85af-bd5b0df04cf2"
+   ]
+  },
+  {
+   "type": "isolated_pin_label",
+   "severity": "warning",
+   "items": [
+    "e475d96f-9952-5a8e-91c4-939fa6f655b9"
+   ]
+  },
+  {
+   "type": "label_dangling",
+   "severity": "error",
+   "items": [
+    "2a6586c0-04cd-5826-a6db-7b970439e922"
+   ]
+  },
+  {
+   "type": "label_dangling",
+   "severity": "error",
+   "items": [
+    "41eebf12-7f4a-50d2-993c-cfaab41bd629"
+   ]
+  },
+  {
+   "type": "label_dangling",
+   "severity": "error",
+   "items": [
+    "462ee750-f63f-579e-82ef-f9df357d11db"
+   ]
+  },
+  {
+   "type": "label_dangling",
+   "severity": "error",
+   "items": [
+    "b929d784-96e0-50e8-bee9-f6464c57dcf9"
+   ]
+  },
+  {
+   "type": "label_dangling",
+   "severity": "error",
+   "items": [
+    "f6bcf6ae-1fdc-5964-9c2e-22d5ee0494b3"
+   ]
+  },
+  {
+   "type": "missing_bidi_pin",
+   "severity": "warning",
+   "items": [
+    "033948c3-75c3-588f-a2f0-77351010f6a3"
+   ]
+  },
+  {
+   "type": "missing_input_pin",
+   "severity": "warning",
+   "items": [
+    "931ac23a-4cf9-5d1b-9c23-f47eb2f5d93d"
+   ]
+  },
+  {
+   "type": "missing_input_pin",
+   "severity": "warning",
+   "items": [
+    "eb729066-5d6f-53b6-9963-8465da5c3ef5"
+   ]
+  },
+  {
+   "type": "missing_power_pin",
+   "severity": "error",
+   "items": [
+    "931ac23a-4cf9-5d1b-9c23-f47eb2f5d93d"
+   ]
+  },
+  {
+   "type": "missing_power_pin",
+   "severity": "error",
+   "items": [
+    "a780dd1d-e959-55c3-b1e0-ac5df42e336e"
+   ]
+  },
+  {
+   "type": "missing_power_pin",
+   "severity": "error",
+   "items": [
+    "eb729066-5d6f-53b6-9963-8465da5c3ef5"
+   ]
+  },
+  {
+   "type": "missing_unit",
+   "severity": "warning",
+   "items": [
+    "033948c3-75c3-588f-a2f0-77351010f6a3"
+   ]
+  },
+  {
+   "type": "missing_unit",
+   "severity": "warning",
+   "items": [
+    "3c1d7989-5e04-5eff-b4fe-fa0c69a8e11e"
+   ]
+  },
+  {
+   "type": "missing_unit",
+   "severity": "warning",
+   "items": [
+    "931ac23a-4cf9-5d1b-9c23-f47eb2f5d93d"
+   ]
+  },
+  {
+   "type": "missing_unit",
+   "severity": "warning",
+   "items": [
+    "a780dd1d-e959-55c3-b1e0-ac5df42e336e"
+   ]
+  },
+  {
+   "type": "missing_unit",
+   "severity": "warning",
+   "items": [
+    "eb729066-5d6f-53b6-9963-8465da5c3ef5"
+   ]
+  },
+  {
+   "type": "multiple_net_names",
+   "severity": "warning",
+   "items": [
+    "311fb860-157e-51d5-a1ec-f952bbc171a6",
+    "24a5b1a2-1180-5dd1-a01f-bb63212fc107"
+   ]
+  },
+  {
+   "type": "multiple_net_names",
+   "severity": "warning",
+   "items": [
+    "604d196b-1cac-5a35-bf26-d63274138056",
+    "512fd6d4-6203-5a9a-ac81-1f20f8e426b7"
+   ]
+  },
+  {
+   "type": "multiple_net_names",
+   "severity": "warning",
+   "items": [
+    "b3195821-a91f-58c9-b3ff-65faeda0a9a8",
+    "b6474589-802b-554f-ac6a-d6f5a9461e3a"
+   ]
+  },
+  {
+   "type": "multiple_net_names",
+   "severity": "warning",
+   "items": [
+    "d303c3f1-3d06-5e92-b64e-02b3f59704e4",
+    "7c7ba7cc-a3b9-5722-98f9-256a361067ec"
+   ]
+  },
+  {
+   "type": "net_not_bus_member",
+   "severity": "warning",
+   "items": [
+    "3589be26-8fdd-5f61-a852-a79da2bdf72b",
+    "3a478bda-23e2-56f3-94a7-7d6adfc4d463"
+   ]
+  },
+  {
+   "type": "no_connect_dangling",
+   "severity": "warning",
+   "items": [
+    "232327e3-3224-5a20-a9b1-be340b09d3be"
+   ]
+  },
+  {
+   "type": "no_connect_dangling",
+   "severity": "warning",
+   "items": [
+    "9f6619cf-45a8-5be4-805c-a3a4747ac058"
+   ]
+  },
+  {
+   "type": "no_connect_dangling",
+   "severity": "warning",
+   "items": [
+    "a4872833-c56c-5a3f-bf73-a102ad96e51b"
+   ]
+  },
+  {
+   "type": "pin_not_connected",
+   "severity": "error",
+   "items": [
+    "0811e918-eabe-5b91-a3a3-85734dd168b9"
+   ]
+  },
+  {
+   "type": "pin_not_connected",
+   "severity": "error",
+   "items": [
+    "36c3ff2c-3beb-5d38-8072-9af89b4ca162"
+   ]
+  },
+  {
+   "type": "pin_not_connected",
+   "severity": "error",
+   "items": [
+    "74e53aeb-6cf5-5478-8fc8-b4b1f78f8ac3"
+   ]
+  },
+  {
+   "type": "pin_not_connected",
+   "severity": "error",
+   "items": [
+    "d6e941fa-23b2-5779-aa5a-50a14b002403"
+   ]
+  },
+  {
+   "type": "pin_not_connected",
+   "severity": "error",
+   "items": [
+    "ed581dfa-55cd-548b-b24f-7c34f7891cba"
+   ]
+  },
+  {
+   "type": "power_pin_not_driven",
+   "severity": "error",
+   "items": [
+    "0811e918-eabe-5b91-a3a3-85734dd168b9"
+   ]
+  },
+  {
+   "type": "power_pin_not_driven",
+   "severity": "error",
+   "items": [
+    "1a4532ce-446a-5006-b8c9-3fb5eac49191"
+   ]
+  },
+  {
+   "type": "power_pin_not_driven",
+   "severity": "error",
+   "items": [
+    "78a1377c-e666-56d7-a22e-a5e9a4a643c9"
+   ]
+  },
+  {
+   "type": "power_pin_not_driven",
+   "severity": "error",
+   "items": [
+    "7a4264b0-78e3-587a-83fb-234ef5172e52"
+   ]
+  },
+  {
+   "type": "single_global_label",
+   "severity": "warning",
+   "items": [
+    "41eebf12-7f4a-50d2-993c-cfaab41bd629"
+   ]
+  },
+  {
+   "type": "single_global_label",
+   "severity": "warning",
+   "items": [
+    "8cbbdd5c-0f13-5cc5-938c-5429693adf13"
+   ]
+  },
+  {
+   "type": "unconnected_wire_endpoint",
+   "severity": "warning",
+   "items": [
+    "0197363c-7cc4-55bc-8e38-778bb098cf3e"
+   ]
+  },
+  {
+   "type": "unconnected_wire_endpoint",
+   "severity": "warning",
+   "items": [
+    "22ac1686-c478-5e21-ae34-14d9caf99a7e"
+   ]
+  },
+  {
+   "type": "unconnected_wire_endpoint",
+   "severity": "warning",
+   "items": [
+    "52331fd6-ce76-54f2-b918-3650172866cc"
+   ]
+  },
+  {
+   "type": "unconnected_wire_endpoint",
+   "severity": "warning",
+   "items": [
+    "6c897046-8208-573d-b229-d20ba170ff89"
+   ]
+  },
+  {
+   "type": "unconnected_wire_endpoint",
+   "severity": "warning",
+   "items": [
+    "73198c6d-4c74-5bcf-931c-dc7adec2978c"
+   ]
+  },
+  {
+   "type": "unconnected_wire_endpoint",
+   "severity": "warning",
+   "items": [
+    "824b4f16-e258-52f8-a000-85dd6b6f519c"
+   ]
+  },
+  {
+   "type": "unconnected_wire_endpoint",
+   "severity": "warning",
+   "items": [
+    "cbf0e1dc-ec32-5f3c-8e2d-68f10e46c7f2"
+   ]
+  },
+  {
+   "type": "unconnected_wire_endpoint",
+   "severity": "warning",
+   "items": [
+    "e6e6a2f1-09d6-57a8-be3f-b30bfb983f84"
+   ]
+  },
+  {
+   "type": "undefined_netclass",
+   "severity": "error",
+   "items": [
+    "a07dac8f-9e7c-526b-ab45-946a6254393d"
+   ]
+  },
+  {
+   "type": "unresolved_variable",
+   "severity": "error",
+   "items": [
+    "60e4da17-80ed-59b3-b8e6-30ba07e7cbef"
+   ]
+  },
+  {
+   "type": "unresolved_variable",
+   "severity": "error",
+   "items": [
+    "6e30277a-faf0-53d9-8710-22bca115d782"
+   ]
+  }
+ ]
+}

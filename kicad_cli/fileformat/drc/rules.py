@@ -1,0 +1,392 @@
+"""A board's custom rules: the `.kicad_dru` file beside it.
+
+A rule names its constraints -- `(constraint clearance (min 0.5mm))` -- and
+when they apply: on which layers, `(layer outer)`, and to which items, a
+condition in KiCad's expression language (`expression.py`). Measured on
+`tests/fixtures/drc/drcrules` and KiCad's demo boards:
+
+- of the rules constraining an item, the last in the file wins;
+- a rule can loosen what the board setup and the net classes demand as well
+  as tighten it -- `(constraint clearance (min 0.1mm))` under an FPGA;
+- a condition about two items is asked both ways round, A and B swapped;
+- a pad's or footprint's own clearance still takes precedence over any rule;
+- the message names the rule: "(rule 'NAME' clearance 0.5000 mm; ...)".
+
+The constraints read so far are `SUPPORTED`; a check another kind decides
+is not made while that kind is not read, and is said not to be, as is one a
+rule decides by a property or function this does not know.
+"""
+
+from __future__ import annotations
+
+import re
+from dataclasses import dataclass, field
+from pathlib import Path
+
+from ..sexpr import Document, SexprError
+from . import expression
+from .expression import ExpressionError, Node, Unknown
+
+# Which checks each kind of constraint decides.
+CHECKS = {
+    "clearance": ("clearance",),
+    "physical_clearance": ("clearance",),
+    "hole_clearance": ("hole_clearance",),
+    "physical_hole_clearance": ("hole_clearance",),
+    "edge_clearance": ("copper_edge_clearance", "silk_edge_clearance"),
+    "hole_size": ("drill_out_of_range", "microvia_drill_out_of_range"),
+    "hole_to_hole": ("hole_to_hole",),
+    "courtyard_clearance": ("courtyards_overlap",),
+    "silk_clearance": ("silk_overlap", "silk_over_copper"),
+    "text_height": ("text_height",),
+    "text_thickness": ("text_thickness",),
+    "track_width": ("track_width",),
+    "annular_width": ("annular_width",),
+    "via_diameter": ("via_diameter",),
+    "disallow": ("items_not_allowed",),
+    "length": ("length_out_of_range",),
+    "skew": ("skew_out_of_range",),
+    "diff_pair_gap": ("diff_pair_gap_out_of_range",),
+    "diff_pair_uncoupled": ("diff_pair_uncoupled_length_too_long",),
+    "via_count": ("too_many_vias",),
+    "connection_width": ("connection_width",),
+    "track_angle": ("track_angle",),
+    "track_segment_length": ("track_segment_length",),
+    "min_resolved_spokes": ("starved_thermal",),
+    "thermal_spoke_width": ("starved_thermal",),
+    "thermal_relief_gap": ("starved_thermal",),
+    "zone_connection": ("starved_thermal",),
+    "creepage": ("creepage",),
+    "solder_mask_expansion": ("solder_mask_bridge",),
+    "bridged_mask": ("solder_mask_bridge",),
+}
+
+# The kinds of constraint the checks here take from the rules.
+SUPPORTED = (
+    "clearance", "track_width", "via_diameter", "annular_width", "hole_size", "hole_clearance",
+    "edge_clearance", "hole_to_hole", "disallow", "courtyard_clearance", "text_height",
+    "text_thickness", "track_segment_length", "via_count", "track_angle",
+)  # fmt: skip
+
+# What a condition may ask of an item, as `Subject` answers it.
+PROPERTIES = frozenset({"Type", "NetName", "NetClass", "Layer", "Width", "Pad_Type", "Reference"})
+FUNCTIONS = frozenset({
+    "intersectsArea", "insideArea", "enclosedByArea", "inDiffPair", "isPlated", "existsOnLayer",
+    "memberOfFootprint", "hasNetclass", "isMicroVia", "isBlindBuriedVia",
+})  # fmt: skip
+
+# A length in a rule carries its unit, one of these three: KiCad reads
+# "0.5", "500um" or "0.5MM" as no rule file at all.
+_LENGTH = re.compile(r"^(-?\d+(?:\.\d*)?|-?\.\d+)(mm|mil|in)$")
+_NUMBER = re.compile(r"^-?\d+(?:\.\d*)?$|^-?\.\d+$")
+
+# The kinds of constraint KiCad knows, by what their values are.
+LENGTHS = frozenset({
+    "annular_width", "clearance", "connection_width", "courtyard_clearance", "creepage",
+    "diff_pair_gap", "diff_pair_uncoupled", "edge_clearance", "hole_clearance", "hole_size",
+    "hole_to_hole", "length", "physical_clearance", "physical_hole_clearance", "silk_clearance",
+    "skew", "solder_mask_expansion", "solder_paste_abs_margin", "text_height", "text_thickness",
+    "thermal_relief_gap", "thermal_spoke_width", "track_segment_length", "track_width",
+    "via_diameter",
+})  # fmt: skip
+NUMBERS = frozenset({"via_count", "min_resolved_spokes", "track_angle", "solder_paste_rel_margin"})
+WORDS = frozenset({"disallow", "zone_connection", "assertion", "bridged_mask"})
+
+
+@dataclass
+class Constraint:
+    kind: str
+    min: int | None = None
+    max: int | None = None
+    opt: int | None = None
+    words: tuple[str, ...] = ()
+
+
+@dataclass
+class Rule:
+    name: str
+    layer: str | None = None
+    condition: Node | None = None
+    constraints: dict[str, Constraint] = field(default_factory=dict)
+    severity: str | None = None
+    unread: str = ""  # what of its condition is not understood
+    # whether its condition asks only what an item is, not where: its answer
+    # for two items is the answer for any two alike
+    static: bool = False
+    # whether its condition asks only of A: its answer for a pair is either
+    # item's alone
+    unary: bool = False
+
+
+@dataclass
+class Rules:
+    rules: list[Rule] = field(default_factory=list)
+    unreadable: bool = False
+    why: str = ""  # what KiCad would not read, when it does not
+    source: Path | None = None
+    _memo: dict = field(default_factory=dict, repr=False, compare=False)
+
+    def find(
+        self, kind: str, a, b=None, layer: str | None = None, bound: str | None = None
+    ) -> tuple[Rule, Constraint] | None:
+        """The rule deciding a kind of constraint for an item, or a pair of
+        them, on a layer: the last in the file whose layers and condition
+        hold -- a pair's condition either way round. With `bound`, "min" or
+        "max", the last that sets that bound: a rule that sets only a
+        maximum leaves the minimum to the rules before it, and the board."""
+        for rule in reversed(self.rules):
+            constraint = rule.constraints.get(kind)
+            if constraint is None or rule.unread:
+                continue
+            if bound is not None and getattr(constraint, bound) is None:
+                continue
+            if not _on(rule.layer, layer, a):
+                continue
+            if rule.condition is None or self._applies(rule, a, b, layer):
+                return rule, constraint
+        return None
+
+    def _applies(self, rule: Rule, a, b, layer: str | None) -> bool:
+        """Whether a rule's condition holds for the items, either way round
+        -- remembered, for a condition that asks only what items are, or
+        asks only of A."""
+        if rule.unary:
+            return self._one(rule, a, layer) or (b is not None and self._one(rule, b, layer))
+        key = None
+        if rule.static:
+            key = (id(rule), _signature(a), _signature(b), layer)
+            found = self._memo.get(key)
+            if found is not None:
+                return found
+        held = _holds(rule.condition, a, b, layer) or (
+            b is not None and _holds(rule.condition, b, a, layer)
+        )
+        if key is not None:
+            self._memo[key] = held
+        return held
+
+    def _one(self, rule: Rule, item, layer: str | None) -> bool:
+        """A condition's answer for one item, kept with the item: an item
+        made afresh for each question is answered afresh."""
+        key = ("rule", id(rule), layer)
+        found = item.answers.get(key)
+        if found is None:
+            found = item.answers[key] = _holds(rule.condition, item, None, layer)
+        return found
+
+
+def _signature(item):
+    return None if item is None else item.signature
+
+
+# What a condition may ask that depends on what an item is, not where it is.
+STATIC = frozenset({
+    "Type", "NetName", "NetClass", "Layer", "Width", "Pad_Type", "Reference", "inDiffPair",
+    "isPlated", "existsOnLayer", "memberOfFootprint", "hasNetclass", "isMicroVia",
+    "isBlindBuriedVia",
+})  # fmt: skip
+
+
+def _owners(node: Node) -> set:
+    """The items a condition asks of: "A", "B"."""
+    found = {node.value[0]} if node.kind in ("property", "call") else set()
+    for arg in node.args:
+        found |= _owners(arg)
+    return found
+
+
+def _static(node: Node) -> bool:
+    if node.kind in ("property", "call") and node.value[1] not in STATIC:
+        return False
+    return all(_static(arg) for arg in node.args)
+
+
+def least(rules: Rules | None, kind: str, a, b=None, layer=None, board: int = 0,
+          board_name: str = "board setup constraints"):  # fmt: skip
+    """The least a kind of constraint allows an item or a pair: (value, who
+    says so, the severity its rule gives) -- the last rule to set a minimum,
+    else the board's."""
+    if rules is not None and rules.rules and a is not None:
+        found = rules.find(kind, a, b, layer, bound="min")
+        if found is not None:
+            rule, constraint = found
+            return constraint.min, f"rule '{rule.name}'", rule.severity
+    return board, board_name, None
+
+
+def largest(rules: Rules | None, kind: str) -> int:
+    """The largest minimum any rule sets for a kind: how far to look."""
+    if rules is None:
+        return 0
+    return max(
+        (c.min for rule in rules.rules for k, c in rule.constraints.items()
+         if k == kind and c.min is not None),
+        default=0,
+    )  # fmt: skip
+
+
+def _on(scope: str | None, layer: str | None, item=None) -> bool:
+    """Whether a rule's layers take in the layer a check is on -- or, for a
+    check on no one layer, any layer of the item: a via is on the inner
+    layers it passes."""
+    if scope is None:
+        return True
+    layers = [layer] if layer is not None else sorted(getattr(item, "layers", ()) or ())
+    for name in layers:
+        if scope == "outer" and name in ("F.Cu", "B.Cu"):
+            return True
+        if scope == "inner" and name.startswith("In") and name.endswith(".Cu"):
+            return True
+        if scope == name:
+            return True
+    return not layers
+
+
+def _holds(condition: Node, a, b, layer: str | None) -> bool:
+    def scope(name: str):
+        if name == "A":
+            return a.on(layer) if a is not None else None
+        if name == "B":
+            return b.on(layer) if b is not None else None
+        return None
+
+    try:
+        return expression._truth(expression.evaluate(condition, scope))
+    except Unknown:
+        return False
+
+
+def _source(project: Path | None, reader=None) -> Path | None:
+    if project is None:
+        return None
+    source = project.with_suffix(".kicad_dru")
+    present = reader(source) is not None if reader is not None else source.is_file()
+    return source if present else None
+
+
+def _root(source: Path, reader=None):
+    text = reader(source).decode("utf-8") if reader else source.read_text(encoding="utf-8")
+    # A line starting with # is a comment.
+    text = "\n".join(line for line in text.splitlines() if not line.lstrip().startswith("#"))
+    return Document.parse(f"(rules {text})", lazy=False).root
+
+
+def load(project: Path | None, *, reader=None) -> Rules:
+    """The project's rules, read; none when it has no `.kicad_dru`. A file
+    KiCad does not read -- a kind of constraint it does not know, a length
+    without its unit, a condition that does not parse -- it ignores whole,
+    every rule in it (`tests/fixtures/drc/drcrules`), and so does this."""
+    source = _source(project, reader)
+    if source is None:
+        return Rules()
+    try:
+        root = _root(source, reader)
+        rules = _rules(root)
+    except (OSError, UnicodeDecodeError, SexprError) as exc:
+        return Rules(unreadable=True, why=f"it does not parse ({exc})", source=source)
+    except _Unreadable as exc:
+        return Rules(unreadable=True, why=str(exc), source=source)
+    return Rules(rules, source=source)
+
+
+class _Unreadable(ValueError):
+    """What makes KiCad ignore a rules file whole."""
+
+
+def _rules(root) -> list[Rule]:
+    rules = []
+    for node in root.find_all("rule"):
+        rule = Rule(node.value(1) or "")
+        layer = node.find("layer")
+        if layer is not None:
+            rule.layer = layer.value(1)
+        severity = node.find("severity")
+        if severity is not None:
+            rule.severity = severity.value(1)
+        condition = node.find("condition")
+        if condition is not None and (condition.value(1) or "").strip():
+            try:
+                rule.condition = expression.parse(condition.value(1) or "")
+            except ExpressionError as exc:
+                raise _Unreadable(
+                    f"rule '{rule.name}': its condition does not parse ({exc})"
+                ) from exc
+            rule.unread = _unread(rule.condition)
+            rule.static = _static(rule.condition)
+            rule.unary = "B" not in _owners(rule.condition)
+        for item in node.find_all("constraint"):
+            kind = item.atom(1) or ""
+            if kind not in LENGTHS | NUMBERS | WORDS:
+                raise _Unreadable(f"rule '{rule.name}': KiCad knows no constraint '{kind}'")
+            constraint = Constraint(kind)
+            words = []
+            for part in item.items[2:]:
+                if isinstance(part, str):
+                    words.append(part)
+                    continue
+                if part.head not in ("min", "max", "opt"):
+                    continue
+                text = (part.atom(1) or "").strip()
+                if kind in LENGTHS:
+                    value = _length(text)
+                    if value is None:
+                        raise _Unreadable(
+                            f"rule '{rule.name}': the length {text!r} has no unit KiCad reads "
+                            "(mm, mil or in)"
+                        )
+                else:
+                    if not _NUMBER.match(text):
+                        raise _Unreadable(f"rule '{rule.name}': {text!r} is not a number")
+                    value = float(text)
+                setattr(constraint, part.head, value)
+            constraint.words = tuple(words)
+            rule.constraints[kind] = constraint
+        rules.append(rule)
+    return rules
+
+
+def _length(text: str) -> int | None:
+    m = _LENGTH.match(text.strip())
+    if m is None:
+        return None
+    return round(float(m.group(1)) * expression.UNITS[m.group(2)])
+
+
+def _unread(node: Node) -> str:
+    """What of a condition this does not know, if anything."""
+    if node.kind == "property" and node.value[1] not in PROPERTIES:
+        return f"{node.value[0]}.{node.value[1]}"
+    if node.kind == "call" and node.value[1] not in FUNCTIONS:
+        return f"{node.value[0]}.{node.value[1]}()"
+    if node.kind == "name":
+        return node.value
+    for arg in node.args:
+        found = _unread(arg)
+        if found:
+            return found
+    return ""
+
+
+def constrained(project: Path | None, *, reader=None) -> dict[str, str]:
+    """The checks the project's custom rules decide and this does not take
+    from them: check -> why, naming the first rule that does."""
+    source = _source(project, reader)
+    if source is None:
+        return {}
+    rules = load(project, reader=reader)
+    if rules.unreadable:
+        return {}  # KiCad ignores the file whole: every check is made without it
+    out: dict[str, str] = {}
+    for rule in rules.rules:
+        for kind in rule.constraints:
+            if kind in SUPPORTED and not rule.unread:
+                continue
+            why = (
+                f"the project's custom rule '{rule.name}' decides it by asking {rule.unread}, "
+                "which is not read yet" if rule.unread
+                else f"the project's custom rule '{rule.name}' decides it by a {kind} "
+                "constraint, which is not read yet"
+            )  # fmt: skip
+            for check in CHECKS.get(kind, ()):
+                out.setdefault(check, why)
+    return out

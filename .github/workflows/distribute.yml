@@ -1,0 +1,153 @@
+name: Prepare platform release assets
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing product tag
+        required: true
+        type: string
+      source_sha:
+        description: Exact reviewed product commit
+        required: true
+        type: string
+permissions:
+  contents: read
+jobs:
+  native:
+    permissions:
+      contents: write
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - {target: linux-x64, runner: ubuntu-24.04}
+          - {target: darwin-arm64, runner: macos-14}
+          - {target: darwin-x64, runner: macos-15-intel}
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 25
+    defaults:
+      run:
+        shell: bash
+    env:
+      RELEASE_TAG: ${{ inputs.tag }}
+      SOURCE_SHA: ${{ inputs.source_sha }}
+      RELEASE_TARGET: ${{ matrix.target }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ inputs.source_sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '20'
+      - name: Verify the selected repository, distribution permission, tag and source
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          [[ "$SOURCE_SHA" =~ ^[0-9a-f]{40}$ ]]
+          [[ "$RELEASE_TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]
+          test "$(git rev-parse HEAD)" = "$SOURCE_SHA"
+          test "$GITHUB_REPOSITORY" = "fatecannotbealtered/kicad-cli"
+          test "$(gh api "repos/$GITHUB_REPOSITORY" --jq .full_name)" = "$GITHUB_REPOSITORY"
+          test "$(node -p "require('./release/PROFILE.json').public_distribution")" = true
+          read -r kind target < <(gh api "repos/$GITHUB_REPOSITORY/git/ref/tags/$RELEASE_TAG" --jq '[.object.type,.object.sha]|@tsv')
+          while [ "$kind" = tag ]; do
+            read -r kind target < <(gh api "repos/$GITHUB_REPOSITORY/git/tags/$target" --jq '[.object.type,.object.sha]|@tsv')
+          done
+          test "$kind" = commit
+          test "$target" = "$SOURCE_SHA"
+          test "$RELEASE_TAG" = "v$(node -p "require('./package.json').version")"
+          test "$(gh release view "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" --json isDraft --jq .isDraft)" = true
+      - name: Isolate and check fixed build dependencies
+        run: |
+          python -m venv "$RUNNER_TEMP/release-build-venv"
+          echo "$RUNNER_TEMP/release-build-venv/bin" >> "$GITHUB_PATH"
+      - name: Install and audit the fixed inputs
+        run: |
+          python -m pip install -r requirements-build.lock
+          python -m pip install --no-build-isolation -e '.[dev]'
+          node scripts/check-version.js
+          node scripts/check-spec.js --local-only
+          python scripts/check_fixed_specs.py
+          python scripts/audit_dependencies.py --audit
+          npm audit --omit=dev
+      - name: Select official KiCad
+        run: |
+          set -euo pipefail
+          if [ "$RUNNER_OS" = Linux ]; then
+            sudo add-apt-repository --yes --no-update ppa:kicad/kicad-10.0-releases
+            sudo apt-get update
+            sudo apt-get install --yes --no-install-recommends kicad kicad-symbols kicad-footprints xvfb
+            echo 'KICAD_PROBE_ROOT=/usr' >> "$GITHUB_ENV"
+          else
+            curl --fail --location --retry 2 --max-time 600 https://github.com/KiCad/kicad-source-mirror/releases/download/10.0.7/kicad-unified-universal-10.0.7.dmg --output "$RUNNER_TEMP/kicad.dmg"
+            mkdir "$RUNNER_TEMP/kicad-volume"
+            hdiutil attach -readonly -nobrowse -mountpoint "$RUNNER_TEMP/kicad-volume" "$RUNNER_TEMP/kicad.dmg"
+            echo "KICAD_PROBE_ROOT=$RUNNER_TEMP/kicad-volume/KiCad/KiCad.app" >> "$GITHUB_ENV"
+          fi
+      - name: Freeze and execute the existing basic package smoke
+        run: |
+          set -euo pipefail
+          python scripts/build_module_candidate.py "$RUNNER_TEMP/platform-build" --python "$(command -v python)"
+          if [ "$RUNNER_OS" = Linux ]; then
+            xvfb-run -a python scripts/smoke_native_package.py --build "$RUNNER_TEMP/platform-build" --kicad-root "$KICAD_PROBE_ROOT" --destination "$RUNNER_TEMP/platform-smoke"
+          else
+            python scripts/smoke_native_package.py --build "$RUNNER_TEMP/platform-build" --kicad-root "$KICAD_PROBE_ROOT" --destination "$RUNNER_TEMP/platform-smoke"
+          fi
+      - name: Upload accepted files, re-download and check a fresh installation
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python - <<'PY'
+          import hashlib, json, os, subprocess, tarfile
+          from pathlib import Path
+          from scripts.smoke_native_package import Trial, verify_files
+          root = Path(os.environ["RUNNER_TEMP"])
+          dist = root / "platform-smoke/distribution"
+          artifact = json.loads((dist / "ARTIFACTS.json").read_bytes())
+          smoke = json.loads((root / "platform-smoke/SMOKE-RESULT.json").read_bytes())
+          assert smoke["status"] == "passed" and smoke["product_source"] == os.environ["SOURCE_SHA"]
+          expected = {artifact[key]: artifact[key + "_sha256"] for key in ("archive", "zip", "tgz")}
+          def gh(*args):
+              return subprocess.run(["gh", "release", *args, "--repo", os.environ["GITHUB_REPOSITORY"]], check=True)
+          # No clobber: a conflicting or partially uploaded release is inspected before retry.
+          gh("upload", os.environ["RELEASE_TAG"], *[str(dist / name) for name in expected])
+          downloaded = root / "release-download"
+          downloaded.mkdir()
+          patterns = [part for name in expected for part in ("--pattern", name)]
+          gh("download", os.environ["RELEASE_TAG"], "--dir", str(downloaded), *patterns)
+          for name, digest in expected.items():
+              assert hashlib.sha256((downloaded / name).read_bytes()).hexdigest() == digest, name
+          installed = root / "release-install"
+          installed.mkdir()
+          with tarfile.open(downloaded / artifact["archive"]) as packed:
+              packed.extractall(installed, filter="data")
+          bundle = installed / "kicad-cli-internal"
+          count = verify_files(bundle)
+          manifest = json.loads((bundle / "INTERNAL-BUNDLE.json").read_bytes())
+          assert manifest["build_source"] == os.environ["SOURCE_SHA"]
+          binary = bundle / "bin" / manifest["binary_name"]
+          assert os.access(binary, os.X_OK)
+          probe = Trial(root / "release-download-startup", binary, Path(os.environ["KICAD_PROBE_ROOT"]))
+          probe.env["PATH"] = "/usr/bin:/bin"
+          probe.cli("reference", "--index")
+          probe.cli("modules")
+          receipt = {"status": "passed", "tag": os.environ["RELEASE_TAG"], "product_source": os.environ["SOURCE_SHA"], "target": os.environ["RELEASE_TARGET"], "download_sha256": expected, "manifest_files_verified": count, "fresh_install_startup": "passed", "pre_upload_smoke": smoke}
+          record = root / ("DOWNLOAD-RESULT-" + os.environ["RELEASE_TARGET"] + ".json")
+          record.write_text(json.dumps(receipt, indent=2) + "\n", encoding="utf-8")
+          gh("upload", os.environ["RELEASE_TAG"], str(record))
+          print(json.dumps(receipt))
+          PY
+      - name: Detach only this job's image
+        if: always() && runner.os == 'macOS'
+        run: |
+          if mount | grep -F "$RUNNER_TEMP/kicad-volume"; then
+            hdiutil detach "$RUNNER_TEMP/kicad-volume"
+          fi
+# Windows is frozen and accepted on the existing licensed local host, then uploaded
+# from that same reviewed source. The controller publishes only after all targets
+# have passed download verification; this workflow does not publish the Release.

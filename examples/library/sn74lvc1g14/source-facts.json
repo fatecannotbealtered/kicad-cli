@@ -1,0 +1,49 @@
+{
+  "manufacturer": "Texas Instruments",
+  "device": "SN74LVC1G14DBVR",
+  "datasheet": "SCES218AA October 2025",
+  "url": "https://www.ti.com/lit/ds/symlink/sn74lvc1g14.pdf",
+  "download_sha256": "3d59568b16a2b7abb63d33ebe6f8ddd37e12dd3ca2616dd803872c509a583283",
+  "pin_table_page": 4,
+  "pins": {
+    "1": "NC",
+    "2": "A",
+    "3": "GND",
+    "4": "Y",
+    "5": "VCC"
+  },
+  "land_pattern": "DBV0005A 4214839/K 08/2024 page37 top view",
+  "units": "mm",
+  "land_centres": {
+    "1": [
+      -1.3,
+      -0.95
+    ],
+    "2": [
+      -1.3,
+      0
+    ],
+    "3": [
+      -1.3,
+      0.95
+    ],
+    "4": [
+      1.3,
+      0.95
+    ],
+    "5": [
+      1.3,
+      -0.95
+    ]
+  },
+  "land_size": [
+    1.1,
+    0.6
+  ],
+  "body_size": [
+    1.6,
+    2.9
+  ],
+  "courtyard": 0.25,
+  "courtyard_basis": "explicit test-library engineering margin; not specified by TI"
+}

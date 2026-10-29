@@ -1,0 +1,43 @@
+{
+  "baseline": {
+    ".kicad_pcb": "d111f94c7d325f005da7188e86017a16894bce5093e1a989be273b56033268a0",
+    ".kicad_pro": "4449d508cf57e16a67474c77d86b07e084277d71fa61a0379723b64f207ac5ca",
+    ".kicad_dru": "absent"
+  },
+  "net": "SIG",
+  "remove_ids": [
+    "2dc7de29-d74c-52f2-8ebb-11358c1e2bf0"
+  ],
+  "allow_locked_ids": [],
+  "allowed_layers": [
+    "F.Cu"
+  ],
+  "bounds_nm": [
+    9000000,
+    9000000,
+    21000000,
+    11000000
+  ],
+  "endpoints": [
+    {
+      "object_uuid": "65f15250-4796-5eac-8858-3d1f1ffde703",
+      "terminal": "start",
+      "at_nm": [
+        10000000,
+        10000000
+      ],
+      "layer": "F.Cu"
+    },
+    {
+      "object_uuid": "65f15250-4796-5eac-8858-3d1f1ffde703",
+      "terminal": "end",
+      "at_nm": [
+        20000000,
+        10000000
+      ],
+      "layer": "F.Cu"
+    }
+  ],
+  "segments": [],
+  "minimum_improvement_mm": 0
+}

@@ -1,0 +1,53 @@
+{
+  "purpose": "Previously accepted saved input copies; no current EXE or inherited visual acceptance",
+  "cases": {
+    "U4": {
+      "historical_snapshot_sha256": "10da9f48c3a96310ec1e1bf8ceb304baa101b0647afc7217ff6b48cffc467371",
+      "source_commit": "9bff883846ce6c91635985c42ad8cad42a8adbbb",
+      "exe_sha256": "75fab3774284f1b51bd58b5b0acff4238b649cfe29a71c191c184d508c10fc9a",
+      "files": {
+        "edit.kicad_pcb": "f89c93c7e722e78f3c247ecd588d44e8f0da421f370722e6b3590badd7aa2793",
+        "edit.kicad_prl": "ab8a6fe0bb5342113d24edb7e00443a475970de4f298fc2ee9a0edeaaa9234ef",
+        "edit.kicad_pro": "f04e69801cde9f23d2b9848b2262b5f066bde7f168aed925e1c041a054f9355a",
+        "edit.kicad_sch": "aab408298cf9cd66d217e0932cbd1bbf646d960ddf235182dfc31c3cc7b06812",
+        "edit_child.kicad_sch": "150d9b0db571bc7d800f89ffc157e6d8758b515474d8b2a3bf7e12ca02478cf3",
+        "fp-lib-table": "d2c6b86404c01938930979a04f1f9422fcd17ad71082400cebbc1797c3805567",
+        "sym-lib-table": "8383948a70fd83d05990c10e647ad0abadafee2d5a0b39ce3499295e994fe0ac"
+      }
+    },
+    "TP-S4": {
+      "historical_snapshot_sha256": "bbfc63243bc2f1c9577c395699ff9b3494d411c73c31f03cc5d844066e11406e",
+      "source_commit": "9bff883846ce6c91635985c42ad8cad42a8adbbb",
+      "exe_sha256": "75fab3774284f1b51bd58b5b0acff4238b649cfe29a71c191c184d508c10fc9a",
+      "files": {
+        "rc4.kicad_pcb": "5e51b0d5fd3bb4fc0eda75308581fc04b8079c0a6d0dd520fc119e70baaa5dd0",
+        "rc4.kicad_prl": "9d0cf778a3fc8e5a221d64bb1c4f0d8ce5e1558c9bc7366d2eea98c683bc4707",
+        "rc4.kicad_pro": "c7a2d6fbc17c6806d70a1da714aaafc612e67570bcb45a913598af3e5e2e7e85",
+        "rc4.kicad_sch": "84d45ecd1ac77b04ec99c336aba9fcf24937e88294cb7feeaa1b92183959c4c8"
+      }
+    },
+    "TP-S5": {
+      "historical_snapshot_sha256": "d9cc6177a8bbc6cc88fe3e64daac99b371f697cd4fa6d9b4dd4c75f5905ce037",
+      "source_commit": "9bff883846ce6c91635985c42ad8cad42a8adbbb",
+      "exe_sha256": "75fab3774284f1b51bd58b5b0acff4238b649cfe29a71c191c184d508c10fc9a",
+      "files": {
+        "rc4.kicad_pcb": "37a9fb03ab5e6ead08c08eabc6e7c9cd65ce90dec5b69b629faaabf9949ca67c",
+        "rc4.kicad_prl": "9d0cf778a3fc8e5a221d64bb1c4f0d8ce5e1558c9bc7366d2eea98c683bc4707",
+        "rc4.kicad_pro": "c7a2d6fbc17c6806d70a1da714aaafc612e67570bcb45a913598af3e5e2e7e85",
+        "rc4.kicad_sch": "24ca23550dd78bd0341e63324a62326fe80ffb34dc7d94987f5bb36c50d5505b"
+      }
+    },
+    "RC-ECO": {
+      "historical_snapshot_sha256": "933f03b843c550af8d44486637f3eddb33f3f9abca614679c899b4b70b94e60b",
+      "source_commit": "9bff883846ce6c91635985c42ad8cad42a8adbbb",
+      "exe_sha256": "75fab3774284f1b51bd58b5b0acff4238b649cfe29a71c191c184d508c10fc9a",
+      "files": {
+        "rc4.kicad_pcb": "e4becf8db95b93d0d05f87940a4359d8aa99e8a38b2fa102099ab901766f6680",
+        "rc4.kicad_prl": "9d0cf778a3fc8e5a221d64bb1c4f0d8ce5e1558c9bc7366d2eea98c683bc4707",
+        "rc4.kicad_pro": "63e870fedbbe34f682689e3d2b1e81834bda0e039f1b38face56b7d903847b95",
+        "rc4.kicad_sch": "8a1d5103619f4279871e5c32a5b8252189f86649c6116dc1e76515255fce9d08",
+        "rc4.net": "4bd989b32ebb0463a22df5fbe34531ee818cb4e4f577bb0c5e492f643a1ce3d3"
+      }
+    }
+  }
+}

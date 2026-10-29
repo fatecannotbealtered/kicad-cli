@@ -1,0 +1,93 @@
+{
+    "$schema": "https://schemas.kicad.org/erc.v1.json",
+    "coordinate_units": "mm",
+    "date": "2026-10-13T05:24:07",
+    "ignored_checks": [
+        {
+            "description": "Global label only appears once in the schematic",
+            "key": "single_global_label"
+        },
+        {
+            "description": "Four connection points are joined together",
+            "key": "four_way_junction"
+        },
+        {
+            "description": "SPICE model issue",
+            "key": "simulation_model_issue"
+        },
+        {
+            "description": "Assigned footprint doesn't match footprint filters",
+            "key": "footprint_filter"
+        }
+    ],
+    "included_severities": [
+        "error",
+        "warning",
+        "exclusion"
+    ],
+    "kicad_version": "10.0.6",
+    "sheets": [
+        {
+            "path": "/",
+            "uuid_path": "/28b031df-89da-50ed-a03a-da57aa471891",
+            "violations": [
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "标签 'BUF_IN_A'",
+                            "pos": {
+                                "x": 1.1684,
+                                "y": 0.8636
+                            },
+                            "uuid": "38ee7f83-b950-5106-83c7-fe904de78e17"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "标签 'BUF_IN_B'",
+                            "pos": {
+                                "x": 1.1684,
+                                "y": 1.4224
+                            },
+                            "uuid": "002bc066-cac3-5fbe-a681-010a518d3287"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "层次标签 'OUT'",
+                            "pos": {
+                                "x": 1.6764,
+                                "y": 0.762
+                            },
+                            "uuid": "309bf5b5-47be-5f5e-b3a0-dfe5c10d605b"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                }
+            ]
+        },
+        {
+            "path": "/CHILD_A/",
+            "uuid_path": "/28b031df-89da-50ed-a03a-da57aa471891/2bbe8de2-5aed-5afe-9d90-41e5efa3fe7b",
+            "violations": []
+        },
+        {
+            "path": "/CHILD_B/",
+            "uuid_path": "/28b031df-89da-50ed-a03a-da57aa471891/0ce2d146-e689-5d25-9406-b1a92c30d190",
+            "violations": []
+        }
+    ],
+    "source": "edit.kicad_sch"
+}

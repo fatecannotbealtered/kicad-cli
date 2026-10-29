@@ -1,0 +1,60 @@
+{
+  "schema": 1,
+  "task_family": "independent-saved-sch-rigid-transform-v1",
+  "authorization": "Root-assigned disposable synthetic fixture validation; generic public object query and transform",
+  "independence": {
+    "allowed_product_reads": ["AGENTS.md", ".agent/AGENT.md", "skills/kicad-cli/SKILL.md", "kicad_cli/driver_contract.json selected sch objects/edit schemas"],
+    "forbidden": ["product implementation", "product parser", "product geometry tests", "old C10/R4/stopped states"],
+    "oracle": "Own character lexer, own generated intent and Decimal coordinate transform; no product imports",
+    "native": "Official installed KiCad 10.0.6 sch export netlist/XML, sch erc/JSON, sch export svg all pages"
+  },
+  "preparation": {
+    "native_calls_before_this_plan": 0,
+    "product_calls_before_this_plan": 0,
+    "warmup_bound": "One own warm fixture, official help/version and three consumers; syntax-only fixture repair at most one, true exception/timeout stops cycle",
+    "configuration": "Fresh owned HOME/USERPROFILE/APPDATA/LOCALAPPDATA/KICAD_CONFIG_HOME; no global preference edit; retain consumer-created prefs, then freeze",
+    "dependencies": "Hash official executable/interpreter, observer modules, SDK/spec pins and final EXE/source before formal calls",
+    "confirmation_review": "Get exact published candidate paths only from public preview.extensions.files, bind hashes, run official consumers and actually view every affected page before confirmation"
+  },
+  "fixture_projects": [
+    {"name":"meadow", "purpose":"3-component T, bent wire vertices, local/global labels, junction, NC, protected independent component"},
+    {"name":"falcon", "purpose":"4-component asymmetric block, different refs, count, coordinates and wire vertices"},
+    {"name":"orbit", "purpose":"nonzero rotations/mirrors, two-unit same-reference symbol, repeated physical pin 7 occurrences, separate protected second unit"},
+    {"name":"shared", "purpose":"4 source sheets, nested branches, 2 logical occurrences of existing shared child source, different per-instance references"}
+  ],
+  "positive_cases": [
+    {"id":"P01", "fixture":"meadow", "operation":"whole connected block translate [7.62,-5.08]"},
+    {"id":"P02", "fixture":"falcon", "operation":"whole connected block rotate 90 about own off-anchor pivot plus [1.27,2.54]"},
+    {"id":"P03", "fixture":"meadow", "operation":"whole connected block rotate 180 about own pivot"},
+    {"id":"P04", "fixture":"falcon", "operation":"whole connected block rotate 270 about own pivot plus [-2.54,1.27]"},
+    {"id":"P05", "fixture":"orbit", "operation":"one unit only including its NCs, rotate 90 preserving existing mirror; protect other same-ref unit"},
+    {"id":"P06", "fixture":"orbit", "operation":"different rotated/mirrored single unit translate then fresh process query; second local rotate/edit/save/query"},
+    {"id":"P07", "fixture":"shared", "operation":"shared child connected block rotate 270 with complete 2-instance acknowledgment; source changed once, all occurrences equivalent"}
+  ],
+  "negative_cases": [
+    {"id":"N01", "case":"attached symbol selected without wire/NC"},
+    {"id":"N02", "case":"one attached wire moved without rest of connected block"},
+    {"id":"N03", "case":"attached NC marker selected without pin"},
+    {"id":"N04", "case":"isolated protected block translated into a new existing wire contact"},
+    {"id":"N05", "case":"shared source incomplete affected_instances"},
+    {"id":"N06", "case":"stale selector after successful save"},
+    {"id":"N07", "case":"foreign root selector"},
+    {"id":"N08", "case":"write scope excludes selected source"},
+    {"id":"N09", "case":"two transforms overlap one source object"},
+    {"id":"N10", "case":"one valid transform plus one invalid angle in batch"},
+    {"id":"N11", "case":"off-quantum translation"},
+    {"id":"N12", "case":"rotation missing pivot"}
+  ],
+  "oracles": [
+    "Freeze all source UUIDs, fields, logical instances, every library pin ordinal, physical pin number, unit, local/world coordinate and NC attachment",
+    "Independently compare numeric transformed points using exact Decimal integer nm and CCW screen rotation (x,y)->(y,-x)",
+    "Preserve unrelated tokens and selected object identity/style; selected field positions move with owner, visible angles normalize 0/90",
+    "Compare independent raw occurrence component partitions, explicit names and NC attachments before/after",
+    "Official XML compares physical (reference,pin) connected groups and qualified local/global names, with XML physical-pin dedup disclosed",
+    "Official ERC findings normalize identity/rule/severity excluding transformed coordinate text; no new findings or ignores",
+    "Official all-page SVG rendered with frozen renderer; actual full images reviewed before confirm and after saved reopening",
+    "Every rejected attempt must leave all engineering source bytes unchanged from its own immediate baseline"
+  ],
+  "stop_rule": "First functional failure retained with exact inputs/outputs; true native exception, timeout or incomplete process-tree observation stops that execution cycle; do not rerun for green",
+  "report": "Source-only checks, Native consumer calls, actual EXE public calls, positive saves, zero-write negatives and actual candidate/saved image views counted separately"
+}

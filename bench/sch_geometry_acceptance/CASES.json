@@ -1,0 +1,36 @@
+{
+  "positive": [
+    {"id":"P01","fixture":"meadow","selection":"selected_uuids","translation":[7.62,-5.08],"angle":0,"pivot":[0,0]},
+    {"id":"P02","fixture":"falcon","selection":"selected_uuids","translation":[1.27,2.54],"angle":90,"pivot":[87.63,70.23]},
+    {"id":"P03","fixture":"meadow","selection":"selected_uuids","translation":[0,0],"angle":180,"pivot":[80,80]},
+    {"id":"P04","fixture":"falcon","selection":"selected_uuids","translation":[-2.54,1.27],"angle":270,"pivot":[87.63,70.23]},
+    {"id":"P05","fixture":"orbit","selection":"unit_a_selection","translation":[12.7,2.54],"angle":90,"pivot":[65,65]},
+    {"id":"P06","fixture":"orbit","selection":"single_selection","translation":[-10.16,7.62],"angle":0,"pivot":[0,0]},
+    {"id":"P06B","continuation_of":"P06","fixture":"orbit","selection":"single_selection","translation":[2.54,-1.27],"angle":270,"pivot":[149.84,117.62]},
+    {"id":"P07","fixture":"shared","selection":"selected_uuids","translation":[-2.54,3.81],"angle":270,"pivot":[85,90]}
+  ],
+  "query_filters": [
+    {"id":"Q01","fixture":"meadow","kind":"wire"},
+    {"id":"Q02","fixture":"orbit","ref":"U33","expected_units":[1,2]},
+    {"id":"Q03","fixture":"shared","instance":"first existing shared logical leaf instance","all_shared_instances_remain_disclosed":true},
+    {"id":"Q04","fixture":"meadow","net":"/LANE_MEADOW"},
+    {"id":"Q05","fixture":"meadow","limit":2,"offset":2},
+    {"id":"Q06","fixture":"falcon","kind":"polyline","expected_editable":false},
+    {"id":"Q07","fixture":"shared","page":"NorthCell"},
+    {"id":"Q08","fixture":"meadow","uuid":"exact initial block symbol UUID"}
+  ],
+  "negative": [
+    {"id":"N01","fixture":"meadow","selection":"first block symbol only","translation":[5.08,0]},
+    {"id":"N02","fixture":"meadow","selection":"first main wire segment only","translation":[1.27,0]},
+    {"id":"N03","fixture":"meadow","selection":"first attached NC only","translation":[0,1.27]},
+    {"id":"N04","fixture":"meadow","selection":"protected symbol and its two NCs","translation":[-74.92,-55]},
+    {"id":"N05","fixture":"shared","selection":"whole connected shared block","affected_instances":"incomplete first occurrence only","translation":[1.27,0]},
+    {"id":"N06","fixture":"saved P01","selection":"stale original P01 selector","translation":[1.27,0]},
+    {"id":"N07","fixture":"meadow","selection":"valid block but foreign root selector","translation":[1.27,0]},
+    {"id":"N08","fixture":"meadow","selection":"valid block with scope roots empty","translation":[1.27,0]},
+    {"id":"N09","fixture":"meadow","selection":"same selected block in two transforms","translation":[1.27,0]},
+    {"id":"N10","fixture":"meadow","selection":"valid block first transform plus invalid45-degree operation","translation":[1.27,0]},
+    {"id":"N11","fixture":"meadow","selection":"valid whole block","translation":[0.00001,0]},
+    {"id":"N12","fixture":"meadow","selection":"valid whole block90-degree without pivot","translation":[0,0]}
+  ]
+}

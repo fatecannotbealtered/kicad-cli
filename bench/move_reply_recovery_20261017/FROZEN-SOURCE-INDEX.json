@@ -1,0 +1,89 @@
+{
+  "purpose": "Exact byte source archive; original execution paths stay bound by original plans",
+  "files": {
+    "inspect_f1.py": {
+      "actual_frozen_source_path": "D:\\personalSpace\\kicad-move-reply-recovery-20261017\\inspect_f1.py",
+      "sha256": "b671b87dac3211a9b67e2d63e40803137d1c36262cd80434b4d73f9b7cd3c39a"
+    },
+    "query_f1.py": {
+      "actual_frozen_source_path": "D:\\personalSpace\\kicad-move-reply-recovery-20261017\\query_f1.py",
+      "sha256": "17b924fb93ec7598d8130c95d342629158ed156947332276f3144bd22e7708cd"
+    },
+    "support.py": {
+      "actual_frozen_source_path": "D:\\personalSpace\\kicad-move-reply-recovery-20261017\\support.py",
+      "sha256": "35a2bc2a67f4ee5b428d5c315e52229d2d7ece057883e228d088e003eb0f3977"
+    },
+    "run_owned.py": {
+      "actual_frozen_source_path": "D:\\personalSpace\\kicad-move-reply-recovery-20261017\\run_owned.py",
+      "sha256": "3aed818e824419fd40af94b0ecb6b21cc5c3a9bd2967115df8e3d81185c5d59d"
+    },
+    "check_assets.py": {
+      "actual_frozen_source_path": "D:\\personalSpace\\kicad-move-reply-recovery-20261017\\check_assets.py",
+      "sha256": "1c33ec324be04aaef54ac8000a720df27f6b7c4aa458ef4a184c576ce8ee01a4"
+    },
+    "qualify_render.py": {
+      "actual_frozen_source_path": "D:\\personalSpace\\kicad-move-reply-recovery-20261017\\qualify_render.py",
+      "sha256": "8548b164402c9b50117401277bc163db3f87b5d47b9aabd09d5390fb5a206b67"
+    },
+    "receiver-method/harmless_service.py": {
+      "actual_frozen_source_path": "D:\\personalSpace\\kicad-move-reply-recovery-20261017\\receiver-method\\harmless_service.py",
+      "sha256": "547817fff2480f199c222c522f4876e224619803e73be397183ab66a6e644204"
+    },
+    "receiver-method/METHOD-REVIEW.md": {
+      "actual_frozen_source_path": "D:\\personalSpace\\kicad-move-reply-recovery-20261017\\receiver-method\\METHOD-REVIEW.md",
+      "sha256": "df88eb158a006bcddaa1285c3e02f1ae57e2b6bde48a8d8a54be837abf2b2a6d"
+    },
+    "receiver-method/receiver_probe.py": {
+      "actual_frozen_source_path": "D:\\personalSpace\\kicad-move-reply-recovery-20261017\\receiver-method\\receiver_probe.py",
+      "sha256": "0acddba30a48a50798dac4d9b56a47f21bc1fdb3adf3743d35dfb5e0cdb3e2c8"
+    },
+    "receiver-method/response_relay.py": {
+      "actual_frozen_source_path": "D:\\personalSpace\\kicad-move-reply-recovery-20261017\\receiver-method\\response_relay.py",
+      "sha256": "42b9d7d47d7606c22e186178505843ae660f90418b1d0936ee2e8bef51f3fe8f"
+    },
+    "receiver-method/REVIEW-AFTER-FIX.json": {
+      "actual_frozen_source_path": "D:\\personalSpace\\kicad-move-reply-recovery-20261017\\receiver-method\\REVIEW-AFTER-FIX.json",
+      "sha256": "fe769e7dd718cbfc34f25be3b8b2bf1f18bb3f452a8c2e3911a264784bd09aef"
+    },
+    "receiver-method/REVIEW-BEFORE-EXECUTION.json": {
+      "actual_frozen_source_path": "D:\\personalSpace\\kicad-move-reply-recovery-20261017\\receiver-method\\REVIEW-BEFORE-EXECUTION.json",
+      "sha256": "1807b0aa9116540af975be6d54641e253807b82abb8dee96ad159e6adb79a96f"
+    },
+    "receiver-method/validate_receiver.py": {
+      "actual_frozen_source_path": "D:\\personalSpace\\kicad-move-reply-recovery-20261017\\receiver-method\\validate_receiver.py",
+      "sha256": "f7a3b4952b45f0c034f9317ec8f54855c1f5c7f20bceec83fd032d3d2a7ffdbd"
+    },
+    "f2-method/controller.py": {
+      "actual_frozen_source_path": "D:\\personalSpace\\kicad-move-reply-recovery-20261017\\f2-method\\controller.py",
+      "sha256": "223a2e48ef83a7047ba4e7d9b81f8bdf636da234108a10f31e92065e357b1b12"
+    },
+    "f2-method/F2-METHOD-REVIEW-01.json": {
+      "actual_frozen_source_path": "D:\\personalSpace\\kicad-move-reply-recovery-20261017\\f2-method\\F2-METHOD-REVIEW-01.json",
+      "sha256": "0d2c835c489d27fdb1eebeb1f182d5c0736176f44a1985f085bc969d2a3bb948"
+    },
+    "f2-method/README.md": {
+      "actual_frozen_source_path": "D:\\personalSpace\\kicad-move-reply-recovery-20261017\\f2-method\\README.md",
+      "sha256": "591dcfe55090cbd048cea71152184b82fd64f9618a019349370f0e8bdbd63b74"
+    },
+    "f2_readonly.py": {
+      "actual_frozen_source_path": "D:\\personalSpace\\kicad-move-reply-recovery-20261017\\f2_readonly.py",
+      "sha256": "09bf16e9cd457ea105404530cccac1e4456578155efa2f26119f3ffd6e6132e9"
+    },
+    "f2_readonly_02.py": {
+      "actual_frozen_source_path": "D:\\personalSpace\\kicad-move-reply-recovery-20261017\\f2_readonly_02.py",
+      "sha256": "33e325a67252341ffb5d0f06c0063130220434fd3f340a50efa421de128b3b26"
+    },
+    "F2R-METHOD-REVIEW.json": {
+      "actual_frozen_source_path": "D:\\personalSpace\\kicad-move-reply-recovery-20261017\\F2R-METHOD-REVIEW.json",
+      "sha256": "f3d02b651aff2b0640986f54ce67e6955a0b973e05d6c47a3d0757398ae4b533"
+    },
+    "F2-FAILURE-QUALIFICATION.json": {
+      "actual_frozen_source_path": "D:\\personalSpace\\kicad-move-reply-recovery-20261017\\F2-FAILURE-QUALIFICATION.json",
+      "sha256": "d278d0478c62f3995f197752ff3178c852c277ee3195cc79d86ddabad5eee107"
+    }
+  },
+  "runtime_state_tokens_secrets_raw_dumps_included": false,
+  "original_F2_producer_status": "failed_optional_field_assertion_after_service_completed; immutable source223 and STOP retained",
+  "f2_readonly_py_status": "draft09bf; freeze01 never consumed; P2 retained",
+  "f2_readonly_02_py_status": "reviewed33e325; exact freeze02 consumed once; remaining reads/refusal passed"
+}

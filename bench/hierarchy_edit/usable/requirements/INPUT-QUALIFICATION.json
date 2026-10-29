@@ -1,0 +1,96 @@
+{
+  "passed": true,
+  "reviewer": "Codex takeover reviewer; actual full current images inspected 2026-10-13 Asia/Shanghai",
+  "images": {
+    "edit.png": {
+      "sha256": "4e7578f3d98d354ad0e4bba49f9bd57a35b72bc2d6e1097592cb6e28f36172d6",
+      "observation": "Complete root: all green wires/junctions visible, distinct A/B feedback loops and U1A/U1B/U1C fields; supply/decoupling and two sheet instances readable without overlaps."
+    },
+    "edit-CHILD_A.png": {
+      "sha256": "19a62803003534b48426df69665d4dab5ecbb35a23224e4160a2feb7a183b713",
+      "observation": "Complete CHILD_A has R10/R11/C10, visible RC wires and junction, distinct 1k/100/100nF fields, IN/OUT/LOCAL clear of components."
+    },
+    "edit-CHILD_B.png": {
+      "sha256": "c0aac2ae27ecacbb6d9f1c6196c6033cfa21eb436341f0bad14b2b5bc16ad10f",
+      "observation": "Complete CHILD_B has R20/R21/C20; same shared drawing with distinct correct references; all wires and labels visible."
+    },
+    "front.png": {
+      "sha256": "cc00d3941ab28882a88f9eff24919c8507fc7f4163e39eebb05f450617b2a3df",
+      "observation": "Complete front view has all ten references and unchanged tracks/vias. Copper under some reference text is separated in the required mask/silk companion view; fitted outline is at viewport edges."
+    },
+    "back.png": {
+      "sha256": "7ba7f6fc849cb2c2fc8cf634901941d6db0de1ad12669abd128977b5e43bf71c",
+      "observation": "Complete back view shows unchanged return/signal copper and vias, no back reference artwork. Fitted outline at viewport edges; no general crop interpretation."
+    },
+    "front-silk.png": {
+      "sha256": "8dc1fa4ce5715de0c864be26686b19b79cfad69fe4009a335de06144b320c1c7",
+      "observation": "All ten reference texts distinct, legible and separate from mask openings; U1 pin-1 and connector pin-1 indicators visible."
+    }
+  },
+  "frozen_sha256": "6dcbcdf780d071833155b294afbfa92ff891d070dc65f0e6692724f5f96841b4",
+  "native_result": {
+    "passed": true,
+    "all_original_engineering_observation_fields_equal_except_project_style": true,
+    "native_erc_findings": 0,
+    "native_drc_findings": {
+      "violations": 0,
+      "unconnected_items": 0,
+      "schematic_parity": 0
+    },
+    "style_addendum_sha256": "3e7298984f4780bba4946a40c2b4c4515a5ed2451d909796ce22b8ff02283ccd",
+    "observation_sha256": "40d2c17be839c334fa0fd24d79b4aa163533c9e6fbb061540d2cad57062d31f3",
+    "images_pending_full_visual_review": true
+  },
+  "images_pending_full_visual_review": false,
+  "inputs": {
+    "edit.kicad_pcb": "3eb580df71c56f01755f35f3610b22cf90f9d6cefa6ca69b4dfe899b18dcc601",
+    "edit.kicad_pro": "f04e69801cde9f23d2b9848b2262b5f066bde7f168aed925e1c041a054f9355a",
+    "edit.kicad_sch": "3ac036889c1ae3abbcb46cff40f6a8315fbf07ac469730e6e6fa71bda5a20a00",
+    "edit_child.kicad_sch": "f9c62dffc6b29720495b67bc14d78099f9a903c92674e28927479b7822035b12",
+    "fp-lib-table": "d2c6b86404c01938930979a04f1f9422fcd17ad71082400cebbc1797c3805567",
+    "sym-lib-table": "8383948a70fd83d05990c10e647ad0abadafee2d5a0b39ce3499295e994fe0ac"
+  },
+  "native_ignored_checks": {
+    "erc": [
+      {
+        "description": "Global label only appears once in the schematic",
+        "key": "single_global_label"
+      },
+      {
+        "description": "Four connection points are joined together",
+        "key": "four_way_junction"
+      },
+      {
+        "description": "SPICE model issue",
+        "key": "simulation_model_issue"
+      },
+      {
+        "description": "Assigned footprint doesn't match footprint filters",
+        "key": "footprint_filter"
+      }
+    ],
+    "drc": [
+      {
+        "description": "Footprint has no courtyard defined",
+        "key": "missing_courtyard"
+      },
+      {
+        "description": "Track endpoint not centered on via",
+        "key": "track_not_centered_on_via"
+      },
+      {
+        "description": "Tuning profile track geometries",
+        "key": "tuning_profile_track_geometries"
+      },
+      {
+        "description": "Footprint doesn't match symbol's footprint filters",
+        "key": "footprint_filters_mismatch"
+      },
+      {
+        "description": "Footprint component type doesn't match footprint pads",
+        "key": "footprint_type_mismatch"
+      }
+    ]
+  },
+  "scope": "Qualified bounded synthetic editing baseline, not electrical-rating or manufacturing signoff. All native reports and images generated after explicit project-style preparation."
+}

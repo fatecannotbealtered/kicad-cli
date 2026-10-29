@@ -1,0 +1,278 @@
+{
+  "schema": "finite-renderer-observed-shared-libraries-for-future-freeze/v1",
+  "origin": {
+    "path": "D:\\personalSpace\\kicad-preview-eco-readability-20261019\\reading\\silk2-host08c\\RESULT.json",
+    "sha256": "2294f4545dbcfac6a3af3e3e9a845a1bd6d00813890765006313bccc4fe2ecfa",
+    "size": 43221
+  },
+  "accepted_observation": {
+    "path": "D:\\personalSpace\\kicad-preview-eco-readability-20261019\\reading\\silk2-host08c\\OBSERVED-INPUTS-CHECK.json",
+    "sha256": "a33146d453e09cd4ed77781657ca3f043c5d21dfd27dd6404ec3f9913363f4b5",
+    "size": 911
+  },
+  "files": [
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+      "sha256": "3602f2bb1a10f2cbab4c36886218a33c1ab3db87290e73b033c46c77147d0237",
+      "size": 92825416
+    },
+    {
+      "path": "C:\\Windows\\System32\\ntdll.dll",
+      "sha256": "a74f7482085eab125ccc09152ab7e0b5994bcb13e1a7b29880bdbb24179ecb8b",
+      "size": 2522080
+    },
+    {
+      "path": "C:\\Windows\\System32\\kernel32.dll",
+      "sha256": "8f8629741558b5df71def4e1dd8ef9645d4f806b949762c47757c50fea1a9e6d",
+      "size": 844496
+    },
+    {
+      "path": "C:\\Windows\\System32\\KernelBase.dll",
+      "sha256": "becad014fb8efa8cb5e314931cca92778ad42c649b12a6909632cacd68af4f40",
+      "size": 4212112
+    },
+    {
+      "path": "C:\\Windows\\System32\\crypt32.dll",
+      "sha256": "c720af58976a3624dbc5b74ec4e470d8fec8a4645dc06947906c49e929862dc3",
+      "size": 1559296
+    },
+    {
+      "path": "C:\\Windows\\System32\\ucrtbase.dll",
+      "sha256": "5c52e3a303baaac0e0af8bd9b96134993da34bc9d834a31ef37e1d2cdc7fe192",
+      "size": 1377512
+    },
+    {
+      "path": "C:\\Windows\\System32\\ws2_32.dll",
+      "sha256": "535d7a8336ddbae77b1f2c68339e5e7dbeb5f06445d6e42b19c794ef0e26f6a3",
+      "size": 534592
+    },
+    {
+      "path": "C:\\Windows\\System32\\rpcrt4.dll",
+      "sha256": "89af87b6387bde4243306036fce2be89c67a328f93c25c53542e4c665b114747",
+      "size": 1162656
+    },
+    {
+      "path": "C:\\Windows\\System32\\user32.dll",
+      "sha256": "93a4310e66a47fa359f588c2ebda64fe3651771c6f9ff30d462a77215a2e558e",
+      "size": 1914656
+    },
+    {
+      "path": "C:\\Windows\\System32\\win32u.dll",
+      "sha256": "9cd636e8a1b300e2f4b16f339d650eda71fa02b92b100e4b2f89ce7c04811767",
+      "size": 170952
+    },
+    {
+      "path": "C:\\Windows\\System32\\gdi32.dll",
+      "sha256": "772c73e294a4c5f5e0d4146288af95287a85c074d3aee3fa9f320dc010d7dbfe",
+      "size": 187456
+    },
+    {
+      "path": "C:\\Windows\\System32\\gdi32full.dll",
+      "sha256": "bde2077a56c90f68c5fa1ce5ebd4a40755c97a5080b91a87d2beff47349dd01e",
+      "size": 1220496
+    },
+    {
+      "path": "C:\\Windows\\System32\\msvcp_win.dll",
+      "sha256": "c50165e6aaf74395c059564d65fa78b0911844828cbcf791d78f80d964a60f4e",
+      "size": 642016
+    },
+    {
+      "path": "C:\\Windows\\System32\\advapi32.dll",
+      "sha256": "e036c9baecd170d7ef4759a5a7eb76036158cacc4cd9e3f697dbf410a3457224",
+      "size": 778344
+    },
+    {
+      "path": "C:\\Windows\\System32\\msvcrt.dll",
+      "sha256": "a1bd0acd64e1a60368b8878d3987f603d966ed45be2252d2d4d0f92feb10fa8e",
+      "size": 699848
+    },
+    {
+      "path": "C:\\Windows\\System32\\sechost.dll",
+      "sha256": "c760d6c0dfa2705446aa7a2260206c9076182d92231854c04aa526403217eb9a",
+      "size": 704008
+    },
+    {
+      "path": "C:\\Windows\\System32\\dbghelp.dll",
+      "sha256": "cbb0c77b812e09f6ae66f482e8eae94fd2e232bbbc3825d12668f3d2ed97e78e",
+      "size": 2307568
+    },
+    {
+      "path": "C:\\Windows\\System32\\combase.dll",
+      "sha256": "39a2e2ba1ca6012953c94c10011fff5a18783120a2a34f5b66deb2d374a362c9",
+      "size": 3716184
+    },
+    {
+      "path": "C:\\Windows\\System32\\shell32.dll",
+      "sha256": "57231c16611c536a5905395858af37120bce730092786238b1a9dfab0db7afac",
+      "size": 8009440
+    },
+    {
+      "path": "C:\\Windows\\System32\\ole32.dll",
+      "sha256": "4b81e4a4cb982915ceb3ebef0148227689306c274d5b2f6068ea143ae4db3e40",
+      "size": 1695680
+    },
+    {
+      "path": "C:\\Windows\\System32\\IPHLPAPI.DLL",
+      "sha256": "8521026d021cc5193a7cd7c0256bd14c7ab39738d22c019e6d544b37deee12c0",
+      "size": 220528
+    },
+    {
+      "path": "C:\\Windows\\System32\\oleaut32.dll",
+      "sha256": "e276bb09983606469c50f0f03c9604bbeffd7d669d996526c8c1af89042fbae0",
+      "size": 898200
+    },
+    {
+      "path": "C:\\Windows\\System32\\userenv.dll",
+      "sha256": "e5e77885cbac08ac247fa45916eca36d2fde292a8527ac2c428f36a691827fea",
+      "size": 224656
+    },
+    {
+      "path": "C:\\Windows\\System32\\winmm.dll",
+      "sha256": "b79ba5420f10d76fddc718534c37db671b04fdb07d3bef4152a799b85a4368b7",
+      "size": 224688
+    },
+    {
+      "path": "C:\\Windows\\System32\\dbgcore.dll",
+      "sha256": "af89686bd88030aa0a1d4bdca95e3265b6b8c5bf985f264fd148894844f677e8",
+      "size": 241664
+    },
+    {
+      "path": "C:\\Windows\\System32\\cryptbase.dll",
+      "sha256": "d77b19df871b5a2f02e826ebeb5de86735f5cd0806294fe9143ba138c964ee16",
+      "size": 59392
+    },
+    {
+      "path": "C:\\Windows\\System32\\imm32.dll",
+      "sha256": "7e45f12c1c555e2407c5ca082bd925b34655278fde4dbfac53a0468cc1e77411",
+      "size": 212288
+    },
+    {
+      "path": "C:\\Windows\\System32\\powrprof.dll",
+      "sha256": "096b3c77ad7fece122be0362c72530b1edc024fe7107d1d40d8bcd8fa5428a0e",
+      "size": 398160
+    },
+    {
+      "path": "C:\\Windows\\System32\\umpdc.dll",
+      "sha256": "b3407a812c7f34ac6b5beefb2a78e8f2d7c4376f7c7012f880aab4fe07235e4e",
+      "size": 96552
+    },
+    {
+      "path": "C:\\Windows\\System32\\bcryptprimitives.dll",
+      "sha256": "46c06a0f0323d25a32c2b16da1a4a09e9234d282be7714469b7985bb98031ab6",
+      "size": 716408
+    },
+    {
+      "path": "C:\\Windows\\System32\\uxtheme.dll",
+      "sha256": "6a55672f8ab09bbe36d5376e109dd89f263b37cf478412ff5b9e8bd0e1ab77a0",
+      "size": 679936
+    },
+    {
+      "path": "C:\\Windows\\System32\\mswsock.dll",
+      "sha256": "1229de88fce9fd1a3dad4d61ed6c047eaa3e10edeed2bf00a0819b7950425d5e",
+      "size": 451920
+    },
+    {
+      "path": "C:\\Windows\\System32\\cryptsp.dll",
+      "sha256": "4c5d4a26fc916392d3d478174fb4ed32e0d1141f12dff3eee5a2a3fc71c0483c",
+      "size": 121408
+    },
+    {
+      "path": "C:\\Windows\\System32\\rsaenh.dll",
+      "sha256": "731771049467b6d01c7028a1269df17da37af8d323621e01a32856e306795400",
+      "size": 245264
+    },
+    {
+      "path": "C:\\Windows\\System32\\kernel.appcore.dll",
+      "sha256": "ed6d62f2555d260547cc94a5cdfe2a6fcb684f18b8e182f78f9e4de224321fc9",
+      "size": 121360
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\@img\\sharp-win32-x64\\lib\\sharp-win32-x64-0.35.5.node",
+      "sha256": "5e964d883ecca55b8df6af4236950b8f50a9ed95a57506a31f740368a9372199",
+      "size": 459568
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\@img\\sharp-win32-x64\\lib\\libvips-cpp-8.18.7.dll",
+      "sha256": "1181c21fc0c2d55962dceb4408588db64c8d3cc85afac105f2dbb09ce6381286",
+      "size": 348976
+    },
+    {
+      "path": "D:\\environment\\cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\@img\\sharp-win32-x64\\lib\\libvips-42.dll",
+      "sha256": "889647519374aa951c72e384e745fbf2564fb8b557ce78bf3efa315effcadb16",
+      "size": 19033904
+    },
+    {
+      "path": "C:\\Windows\\System32\\shlwapi.dll",
+      "sha256": "6b86e4abc06ae40b2b8c1ceebcd300cbcaa5790c3ba377c630f1f0e8b36fb92c",
+      "size": 427152
+    },
+    {
+      "path": "C:\\Windows\\System32\\bcrypt.dll",
+      "sha256": "b5691584e857caf0c6c590dda13779966b383d66be3c87d5b3cbbc2f5005495b",
+      "size": 183376
+    },
+    {
+      "path": "C:\\Windows\\System32\\dnsapi.dll",
+      "sha256": "717eed809c8b79df7258c51e46c8fbb876f29f4cf35ea2875ae19fc35c2c69a4",
+      "size": 1422944
+    },
+    {
+      "path": "C:\\Windows\\System32\\dsparse.dll",
+      "sha256": "c78ac36d970b6fa79206a161d4ded0886879c4df80791dd22650a8a7afd9c2eb",
+      "size": 53248
+    },
+    {
+      "path": "C:\\Windows\\System32\\nsi.dll",
+      "sha256": "d22f4cc243548dda81e274f95e92433ae8187eddfde39adaaf5996985bb41ef3",
+      "size": 51128
+    },
+    {
+      "path": "C:\\Windows\\System32\\shfolder.dll",
+      "sha256": "13c479b1a4e2da092811ec64179eb12689eb1a5a4078c59eee890f1dfb90eb24",
+      "size": 32768
+    },
+    {
+      "path": "C:\\Windows\\System32\\windows.storage.dll",
+      "sha256": "cf4793b9e7570f1c6621515d634e2fee115b51f6009a19e0d1a5d24cefb55703",
+      "size": 9158096
+    },
+    {
+      "path": "C:\\Windows\\System32\\SHCore.dll",
+      "sha256": "e7b47e7b381849dd1b32fd67deedd16ad46b50aaf614cdd28e03a7bac7fd72c8",
+      "size": 1022152
+    },
+    {
+      "path": "C:\\Windows\\System32\\dhcpcsvc6.dll",
+      "sha256": "28de0eab8d19a65a46b21c380829f1f0b0efa688c19b3b81ec88c37a80cd8a09",
+      "size": 128496
+    },
+    {
+      "path": "C:\\Windows\\System32\\dhcpcsvc.dll",
+      "sha256": "4577f32da5e1f01e59be10fd09dadf848d9e70347a11d2c30187501919f4af7e",
+      "size": 161256
+    },
+    {
+      "path": "C:\\Windows\\System32\\NapiNSP.dll",
+      "sha256": "f5574418f2192ef615a45f39f1dbff08735f5ce17ad8e6d43c527dde19aa27fe",
+      "size": 108792
+    },
+    {
+      "path": "C:\\Windows\\System32\\winrnr.dll",
+      "sha256": "00069e41c7b862de00f781c83d912d343a202fce5e41e424b843d689ef70d230",
+      "size": 88328
+    },
+    {
+      "path": "C:\\Windows\\System32\\nlansp_c.dll",
+      "sha256": "a622b6d71a0f5194b3f304252429db700cca4b0a8c852ff5c40ee37e43d3b1b4",
+      "size": 159744
+    },
+    {
+      "path": "C:\\Windows\\System32\\wshbth.dll",
+      "sha256": "68a7a030b352bee8c30374e5f7bb286a0d5d822ec2d178ef4023f71a12c3c587",
+      "size": 90112
+    }
+  ],
+  "file_count": 52,
+  "future_use": "Include all52 exact records into future fixed_files before execution. Origin actual observed spellings remain in the raw report; these are canonical ordinary absolute paths. This new file does not retroactively change any previous plan.",
+  "no_whole_host_inventory_claim": true
+}

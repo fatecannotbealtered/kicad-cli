@@ -1,0 +1,100 @@
+{
+  "kind": "receiver-method-independent-after-fix-review-v1",
+  "baseline": "bcf5",
+  "decision": "approved_for_finite_harmless_method_validation_only",
+  "p1_count": 0,
+  "p2_count": 0,
+  "allow_harmless_freeze": true,
+  "allow_harmless_execution_with_original_bound_plan_and_parent_whole_job": true,
+  "product_dispatch_authorized": false,
+  "reviewer": "independent contract reviewer",
+  "reviewed_files": {
+    "response_relay.py": "42b9d7d47d7606c22e186178505843ae660f90418b1d0936ee2e8bef51f3fe8f",
+    "receiver_probe.py": "0acddba30a48a50798dac4d9b56a47f21bc1fdb3adf3743d35dfb5e0cdb3e2c8",
+    "harmless_service.py": "547817fff2480f199c222c522f4876e224619803e73be397183ab66a6e644204",
+    "validate_receiver.py": "f7a3b4952b45f0c034f9317ec8f54855c1f5c7f20bceec83fd032d3d2a7ffdbd",
+    "METHOD-REVIEW.md": "df88eb158a006bcddaa1285c3e02f1ae57e2b6bde48a8d8a54be837abf2b2a6d"
+  },
+  "prior_review": {
+    "path": "REVIEW-BEFORE-EXECUTION.json",
+    "sha256": "1807b0aa9116540af975be6d54641e253807b82abb8dee96ad159e6adb79a96f",
+    "preserved": true,
+    "original_p1": 0,
+    "original_p2": 2
+  },
+  "execution": {
+    "reviewed_Python": 0,
+    "harmless_validation": 0,
+    "pytest_or_collection": 0,
+    "product": 0,
+    "official_native": 0,
+    "live_pid_query": 0,
+    "state_or_database_reads": 0,
+    "F4_access": 0,
+    "implementation_edits": 0
+  },
+  "closed_findings": [
+    {
+      "id": "P2-01",
+      "status": "closed_by_static_review",
+      "resolution": [
+        "Frozen plan now contains exact method_root and controller_path. verify_plan requires their resolved values to match current ROOT/__file__, and requires every planned source path to equal ROOT/name before any child dispatch.",
+        "verify_plan reads the plan once for its SHA/JSON and reads each frozen source dependency once for its exact record. It returns verified_raw buffers.",
+        "Relay, harmless service data and WindowsJob modules are compiled/executed from those exact verified_raw buffers. Their loader does not reread same-named source bytes or consume pyc.",
+        "Caller probe and service executable scripts use the same now-bound ROOT paths. Their executable/source bytes are checked before dispatch and the original plan is rechecked per case and at completion.",
+        "Output remains a delivery location outside immutable method inputs; copying or moving the method input ROOT cannot consume the old original plan successfully."
+      ]
+    },
+    {
+      "id": "P2-02",
+      "status": "closed_by_static_review",
+      "resolution": [
+        "Path isolation now examines decoded argv/environment strings, not their JSON-escaped serialization.",
+        "The predicate normalizes Windows case and slash direction, applies directory-component/text-list boundaries and checks private case/relay/service roots.",
+        "The caller's own initially empty cwd is explicitly allowed; it is not represented as service evidence.",
+        "The no_private_paths predicate is checked before caller dispatch and retained as the actual case check. ASCII service canary checks still cover caller stdout/stderr/argv/env independently."
+      ]
+    }
+  ],
+  "unchanged_or_preserved": [
+    "response_relay.py, receiver_probe.py and harmless_service.py have the same exact reviewed SHA as the initial review.",
+    "Actual separate probe blocks on stdin until EOF and reports its observed byte count and SHA; relay closes the pipe without a service-response write.",
+    "Service descriptor, original output references, callback exception text and relay results remain private controller evidence. They are not passed back to the simulated caller.",
+    "There is one service callback invocation site, with a second-dispatch guard in the harmless executor and no retry loop.",
+    "The actual exit7 case remains a normally returned service failure; a successful boundary matrix is not a service business success.",
+    "Caller and harmless service assign their specific owned Job before resume and retain their own close/finalization records. No whole-cycle success may be inferred from this standalone RESULT."
+  ],
+  "approved_finite_scope": {
+    "case_ids": [
+      "chunked-ascii",
+      "unicode",
+      "nonzero",
+      "empty-stdout"
+    ],
+    "purpose": "A real separate caller receives stdin EOF and zero response bytes after one observed synthetic service callback, with original service byte/exit evidence retained privately.",
+    "new_product_or_KiCad_native_dispatches": 0,
+    "freeze_child_processes": 0,
+    "freeze_controller_process": "One real metadata Python process still exists and must not be described as zero processes.",
+    "execute_expected_roles": {
+      "controller": 1,
+      "callers": 4,
+      "synthetic_services": 4
+    },
+    "process_census_limit": "WindowsJob metadata-query descendants and the external parent controller are separate actual processes; the role counts are not a total OS-process census."
+  },
+  "coverage_limits": [
+    "This review executed no code. The four-case matrix has not been marked passed here.",
+    "Callback-raises, timeout, launch/assignment failure and cleanup-failure branches are not executed by the four IDs. MD now explicitly records callback-raises as unexecuted; exit7 cannot stand for that branch.",
+    "Closure of the two P2s is a source-level conclusion; no new copied-source or TEMP/TMP negative execution is claimed.",
+    "The method is a finite benign experiment, not a hostile concurrent-file-mutation or OS-security sandbox. Bound script-path execution plus before/after source checks is accepted; this review does not require a -c transport.",
+    "No real product operation/request, save durability, kill/power-loss recovery or old unknown operation is tested or authorized."
+  ],
+  "required_execution_bindings": [
+    "Freeze a new original plan only from this exact reviewed method set, with the actual Python image and reviewed owned_process source pinned; consume its original SHA and exact source ROOT.",
+    "Use an explicit external parent controller that binds its own source/runtime/argv/environment/dependencies and records the entire controller Job. Natural success requires the actual attributed empty Job; controlled/incomplete cleanup must remain incomplete.",
+    "Review and bind the chosen WindowsJob implementation and any local non-standard import dependencies. This five-file review does not claim to have inspected an unspecified future owned_process source.",
+    "Keep the original plan, individual service stdout/stderr/exit, caller EOF evidence, service/caller finalization and parent Job records; retain any failure without retry.",
+    "A future product-service adapter requires its own actual operation ID/canonical request/command/input/output/full-observer binding. Harmless method approval is not product authorization."
+  ],
+  "final_integrity": "The five current reviewed-file SHA values and the unchanged initial review SHA matched immediately before writing this new report."
+}

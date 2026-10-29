@@ -1,0 +1,45 @@
+{
+  "source": "retained independent generic methods; no product CAD implementation import",
+  "files": {
+    "hierarchy_observe.py": {
+      "sha256": "b4877ea8d80018465b4352a2bcccdb8525a2f2501fb12bb34233f37d879e34f5",
+      "source": "docs/evidence/windows-sch-hierarchy-20261022/independent/methods/hierarchy_observe.py"
+    },
+    "observer/__init__.py": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source": "docs/evidence/windows-sch-hierarchy-20261022/independent/methods/observer/__init__.py"
+    },
+    "observer/native_observation.py": {
+      "sha256": "ab7f517089aaef839e04b96b09a5b6ff930ab3515860544aadc1bfc2b29dd40e",
+      "source": "docs/evidence/windows-sch-hierarchy-20261022/independent/methods/observer/native_observation.py"
+    },
+    "observer/owned_process.py": {
+      "sha256": "735b27962a7aa6c82d0849e1bec126bef334f13f4ccb727561aa094c571f7245",
+      "source": "docs/evidence/windows-sch-hierarchy-20261022/independent/methods/observer/owned_process.py"
+    },
+    "observer/process_evidence.py": {
+      "sha256": "4c7d81408c6acf3998a8e5c79ea8a2021f25a898f7883ddd5054fcd68c00b2de",
+      "source": "docs/evidence/windows-sch-hierarchy-20261022/independent/methods/observer/process_evidence.py"
+    },
+    "observer/process_tree.py": {
+      "sha256": "2e7b58997486449822f104a3847b4a3a510c25b23ebd3beaf8addb5903066291",
+      "source": "docs/evidence/windows-sch-hierarchy-20261022/independent/methods/observer/process_tree.py"
+    },
+    "observer/support.py": {
+      "sha256": "c97986eeb3b9e7f8c4d2df4f679e042dacc1d5873ccc954ea34b344745d4cd34",
+      "source": "docs/evidence/windows-sch-hierarchy-20261022/independent/methods/observer/support.py"
+    },
+    "observer/win_debugging.py": {
+      "sha256": "a8e87c0b2c7abfff0c535318dd436b1f9c04d81842b4ebd829d1a87636986bcf",
+      "source": "docs/evidence/windows-sch-hierarchy-20261022/independent/methods/observer/win_debugging.py"
+    },
+    "raw_reader_base.py": {
+      "sha256": "3118d108215d285fee7ff437501ce0596256250797655f0eb998727bbaf80a31",
+      "source": "docs/evidence/windows-sch-hierarchy-20261022/independent/methods/raw_reader_base.py"
+    },
+    "run_observed.py": {
+      "sha256": "a017551e00305e403f2950645e3b608a2b6686baa3c6a187d84b9f58f4813e1f",
+      "source": "docs/evidence/windows-sch-hierarchy-20261022/independent/methods/run_observed.py"
+    }
+  }
+}

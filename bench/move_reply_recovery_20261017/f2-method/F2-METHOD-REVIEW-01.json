@@ -1,0 +1,65 @@
+{
+  "kind": "independent-f2-method-static-review-v1",
+  "baseline": "bcf5",
+  "decision": "approved_for_root_bounded_F2_freeze_and_serial_dispatch",
+  "p1_count": 0,
+  "p2_count": 0,
+  "reviewed_files": {
+    "controller.py": "223a2e48ef83a7047ba4e7d9b81f8bdf636da234108a10f31e92065e357b1b12",
+    "README.md": "591dcfe55090cbd048cea71152184b82fd64f9618a019349370f0e8bdbd63b74"
+  },
+  "execution_by_reviewer": {
+    "Python": 0,
+    "pytest_or_collection": 0,
+    "product": 0,
+    "official_native": 0,
+    "state_or_DB_access": 0,
+    "old_F4_or_source_C1_access": 0,
+    "implementation_edits": 0
+  },
+  "closed_issues": [
+    "Observer raw import closure now explicitly includes process_evidence and handles the bench namespace package. F2 does not rely on ROOT/support.py, pytest, site or PYTHONPATH as an import fallback.",
+    "Native virtual ZIP providers are bound by their recorded archive SHA. Historical baseline/positive SDK, native03 plans/results/DRC/configuration, method/image references and the current parent render qualification are frozen as truth inputs.",
+    "SQLite physical SHA/size/mtime changes are observations, not a logical-query failure gate. Exact operation/token/scope rows and protected engineering metadata remain required.",
+    "Caller argv/environment are decoded and checked for private cycle/evidence paths before caller creation, reusing the reviewed path predicate; only its own empty cwd is allowed.",
+    "Spent confirmation uses exit6/E_CONFLICT/conflict=token_used/dispatch_state=not_started and zero official CLI calls. Native03 raw visual_reuse_pending status is preserved; current visual qualification remains separately attributed."
+  ],
+  "reviewed_controls": [
+    "Original and confirm plans are distinct, exact-hash consumed and tied to one fresh R4 cycle. Preview stdout and TRACE digest are retained before confirm freeze.",
+    "Exclusive stage/invocation markers and STOP checks prevent automatic preview/confirm replay. One normal confirm is dispatched through the external relay; unknown or incomplete results stop the cycle.",
+    "Raw service stdout/stderr, receipt and exceptions stay in the controller's private channel. The separate receiver actually reads EOF and zero response bytes.",
+    "Original-ID public query must return succeeded and the exact durable receipt. Same-state logical rows, token use and scope usage remain unchanged by query and spent refusal; engineering SHA/size/mtime/file identity remain protected.",
+    "Confirm, query and spent refusal require zero official CLI calls. A new independent KiCad SDK process checks the saved SHA, exact R4/pad geometry, other objects and all eight engineering files.",
+    "Public strict JSON and exact functional fields are checked; no new general response-Schema validation is claimed."
+  ],
+  "formal_report_field_check": {
+    "source": "method-source-02/kicad_cli/move_preflight.py",
+    "sha256": "c9cfe510a990f897cff0d7d284c13bb247dd050effbf7d6a9cdbcee9c08ccbee",
+    "finding": "The response constructor explicitly emits formal report/sha256/record, and its public projection preserves these keys. This source read checked field names only; independent SDK/file evidence remains the engineering truth."
+  },
+  "guide_refs": {
+    "MOVE_REPLY_RECOVERY.md": "88d7132f2aef83d9e14151f973efe62be4966eac420659e74b552dd4b8df0eb3",
+    "skills/kicad-cli/SKILL.md": "99d42f78840301499f1e172637d5eb9bd9090c29fb0d842e29ee2012c93ca05e",
+    "receiver-method/REVIEW-AFTER-FIX.json": "fe769e7dd718cbfc34f25be3b8b2bf1f18bb3f452a8c2e3911a264784bd09aef"
+  },
+  "limited_authorization": {
+    "case": "F2.final-exe.service-completed.receiver-lost-response.original-id-query",
+    "engineering": "One disposable eight-file R4 copy:100,110mm to99.5,110mm; expected saved board06d9017e89e9e86533041df9d554289435df6edbe8852569d350acfeddd4176c.",
+    "dispatch": "Root-controlled serial stages only: one preview, one normal confirm, one original-ID query, one spent-token refusal and one independent SDK readback. No automatic retry.",
+    "expected_finite_counts": {
+      "public_EXE": 4,
+      "official_CLI_inside_preview": 4,
+      "independent_SDK_readback": 1,
+      "caller": 1,
+      "new_render": 0,
+      "new_full_image_view": 0
+    },
+    "parent_requirement": "Each stage's exact source/plan/runtime/input/output and complete natural or controlled Job must be retained by the parent. This static report is not execution evidence."
+  },
+  "limits": [
+    "F2 covers completed service with lost receiver reply, not killed-process, write-before-save or power-loss recovery.",
+    "Saved-board DRC uses the exact current preview candidate report; it is not a new post-save DRC run.",
+    "Historical full images use the separately bound parent static qualification; no new render/view, clean-board or manufacturing sign-off is claimed.",
+    "Old F1 failure and interruption-coverage gap remain. No F4, old source-C1 unknown operation or old unknown state is authorized for reading, query, resume or replay."
+  ]
+}

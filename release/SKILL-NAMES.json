@@ -1,0 +1,8 @@
+{
+  "kicad-cli": "kicad-cli",
+  "kicad-library": "kicad-library",
+  "kicad-sch": "kicad-sch",
+  "kicad-pcb": "kicad-layout",
+  "kicad-review": "kicad-review",
+  "kicad-fabrication": "kicad-fabrication"
+}

@@ -1,0 +1,1 @@
+(sym_lib_table (version 7) (lib (name "Independent") (type "KiCad") (uri "${KIPRJMOD}/Independent.kicad_sym") (options "") (descr "Fixture-only synthetic symbols")))

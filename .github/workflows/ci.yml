@@ -1,0 +1,42 @@
+name: Scoped acceptance
+on:
+  push:
+    branches: [main, 'work/*']
+    tags: ['v*']
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  scoped:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '20'
+      - run: |
+          python -m pip install -r requirements-build.lock
+          python -m pip install --no-build-isolation -e ".[dev]"
+      - run: node scripts/check-version.js
+      - name: Fixed seed, inherited base and driver SDK drift
+        run: |
+          node scripts/check-spec.js --local-only
+          python scripts/check_fixed_specs.py
+      - name: Audit actual installed Python dependencies
+        run: python scripts/audit_dependencies.py --audit
+      - name: Audit Node wrapper dependencies
+        run: npm audit --omit=dev
+      - name: Current code lint; historical bench findings remain outside this internal profile
+        run: ruff check kicad_cli tests scripts/package_internal_release.py scripts/build_module_candidate.py scripts/build_module_skills.py scripts/check_fixed_specs.py scripts/audit_dependencies.py
+      - name: Discovery, release boundary and generated Skill contracts
+        run: python -m pytest tests/test_command_tree.py tests/test_release_admission.py tests/test_fixed_specs.py tests/test_dependency_audit.py tests/test_trial_observe_saved.py tests/test_trial_provider_errata.py tests/test_windows_trial_eco.py tests/test_windows_trial_preparation.py -v --tb=short
+      - name: Current scoped checks (native qualification is recorded on the licensed host)
+        shell: pwsh
+        run: |
+          $taskCases = Get-Content release/tests.txt
+          python -u -m pytest @taskCases tests/test_internal_delivery.py -v --tb=short --durations=10
+# The manually invoked release.yml retains stable/full-FCC admission.
+# Tags run checks only; this workflow publishes no Release, npm or Hub artifact.

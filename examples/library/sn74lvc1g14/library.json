@@ -1,0 +1,157 @@
+{
+  "library": "LocalLogic",
+  "revision": "coupon-1",
+  "baseline": {
+    "LocalLogic.kicad_sym": "absent",
+    "LocalLogic.pretty/DBV0005A.kicad_mod": "absent",
+    "sym-lib-table": "absent",
+    "fp-lib-table": "absent",
+    "LocalLogic.provenance.json": "absent"
+  },
+  "sources": [
+    {
+      "url": "https://www.ti.com/lit/ds/symlink/sn74lvc1g14.pdf",
+      "revision": "SCES218AA October 2025",
+      "locator": "pin table p4; DBV land p37; facts record includes original PDF SHA256",
+      "file": "source-facts.json",
+      "sha256": "08464183f2b066b6c111698108d23957aa148196791dac5ee2497de85118f3c2"
+    }
+  ],
+  "mapping": {
+    "1": "1",
+    "2": "2",
+    "3": "3",
+    "4": "4",
+    "5": "5"
+  },
+  "symbol": {
+    "name": "SN74LVC1G14DBV",
+    "reference": "U",
+    "body_mm": [
+      10.16,
+      10.16
+    ],
+    "pins": [
+      {
+        "number": "1",
+        "name": "NC",
+        "type": "no_connect",
+        "at_mm": [
+          -7.62,
+          -2.54
+        ],
+        "angle_deg": 0,
+        "length_mm": 2.54
+      },
+      {
+        "number": "2",
+        "name": "A",
+        "type": "input",
+        "at_mm": [
+          -7.62,
+          0
+        ],
+        "angle_deg": 0,
+        "length_mm": 2.54
+      },
+      {
+        "number": "3",
+        "name": "GND",
+        "type": "power_in",
+        "at_mm": [
+          0,
+          -7.62
+        ],
+        "angle_deg": 90,
+        "length_mm": 2.54
+      },
+      {
+        "number": "4",
+        "name": "Y",
+        "type": "output",
+        "at_mm": [
+          7.62,
+          0
+        ],
+        "angle_deg": 180,
+        "length_mm": 2.54
+      },
+      {
+        "number": "5",
+        "name": "VCC",
+        "type": "power_in",
+        "at_mm": [
+          0,
+          7.62
+        ],
+        "angle_deg": 270,
+        "length_mm": 2.54
+      }
+    ]
+  },
+  "footprint": {
+    "name": "DBV0005A",
+    "body_mm": [
+      1.6,
+      2.9
+    ],
+    "courtyard_mm": 0.25,
+    "pads": [
+      {
+        "number": "1",
+        "at_mm": [
+          -1.3,
+          -0.95
+        ],
+        "size_mm": [
+          1.1,
+          0.6
+        ]
+      },
+      {
+        "number": "2",
+        "at_mm": [
+          -1.3,
+          0
+        ],
+        "size_mm": [
+          1.1,
+          0.6
+        ]
+      },
+      {
+        "number": "3",
+        "at_mm": [
+          -1.3,
+          0.95
+        ],
+        "size_mm": [
+          1.1,
+          0.6
+        ]
+      },
+      {
+        "number": "4",
+        "at_mm": [
+          1.3,
+          0.95
+        ],
+        "size_mm": [
+          1.1,
+          0.6
+        ]
+      },
+      {
+        "number": "5",
+        "at_mm": [
+          1.3,
+          -0.95
+        ],
+        "size_mm": [
+          1.1,
+          0.6
+        ]
+      }
+    ]
+  }
+}

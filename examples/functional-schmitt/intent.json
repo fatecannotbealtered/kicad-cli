@@ -1,0 +1,38 @@
+{
+  "purpose": "3.3V externally driven Schmitt inverter input stage with default-low bias and local bypass",
+  "supply_v": 3.3,
+  "schematic_connection_grid_mm": 1.27,
+  "input_range_v": [0, 3.3],
+  "application": "Low-rate laboratory input/output test pads, output measured at high impedance",
+  "parts": {
+    "U1": {"mpn": "SN74LVC1G14DBVR", "package": "DBV0005A", "value": "SN74LVC1G14DBVR"},
+    "R1": {"mpn": "RC0603FR-0710KL", "value": "10k", "package": "0603", "role": "INPUT pulldown"},
+    "C1": {"mpn": "GRM188R71C104KA01D", "value": "100nF", "package": "0603", "role": "+3V3 to GND bypass"},
+    "TP1": {"value": "3V3", "role": "external regulated supply connection"},
+    "TP2": {"value": "GND", "role": "external supply return"},
+    "TP3": {"value": "INPUT", "role": "external logic stimulus"},
+    "TP4": {"value": "OUTPUT", "role": "high-impedance logic observation"}
+  },
+  "nets": {
+    "+3V3": ["U1.5", "C1.1", "TP1.1"],
+    "GND": ["U1.3", "C1.2", "R1.2", "TP2.1"],
+    "INPUT": ["U1.2", "R1.1", "TP3.1"],
+    "OUTPUT": ["U1.4", "TP4.1"]
+  },
+  "nc": ["U1.1"],
+  "expected_logic": [
+    {"input": "0V or undriven with R1 present", "expected_output": "logic high"},
+    {"input": "3.3V", "expected_output": "logic low"}
+  ],
+  "basis": {
+    "ic": "TI SCES218AA, pin table p4, recommended supply p6, electrical table p7, bypass recommendation p13, DBV land p37",
+    "pulldown": "10k gives 0.33mA at 3.3V, 1.089mW; TI input leakage max 5uA gives 50mV estimate when otherwise undriven. These are design calculations, not measurements.",
+    "bypass": "TI recommends 0.1uF close to VCC; chosen X7R 100nF nominal, 16V part. Effective bias capacitance/transient response unmeasured.",
+    "interfaces": "Four project-designed 1.0x1.0mm copper test/solder contacts, no purchased connector body. Symbol electrical roles describe the external boundary."
+  },
+  "layout_mm": {"U1": [20, 20], "R1": [15, 23], "C1": [24, 19.05], "TP1": [23.225, 15], "TP2": [18.7, 27], "TP3": [11, 20], "TP4": [24, 22.5]},
+  "layout_revision": "Before the fresh frozen-artifact design: move C1 beside VCC; return GND through the clear gap between right-hand IC pads, reducing the source-trial long exterior bypass loop. No plane or via is added. Native clearance and every net must be checked again.",
+  "routing": {"layer": "F.Cu", "signal_width_mm": 0.25, "supply_width_mm": 0.4, "new_vias": 0, "reference_planes_modified": false},
+  "eco": {"target": "R1", "new_value": "22k", "new_mpn": "RC0603FR-0722KL", "purpose": "Reduce high-level external driver load from 0.33mA to 0.15mA; estimated worst leakage bias becomes 0.11V; topology and all physical pads/routes unchanged"},
+  "not_claimed": ["powered operation", "simulation", "EMI/SI", "manufacturing approval", "universal connector qualification"]
+}

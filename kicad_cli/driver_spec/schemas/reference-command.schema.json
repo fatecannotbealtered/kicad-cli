@@ -1,0 +1,92 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:tool-driver-cli-spec:reference-command:2.0",
+  "title": "reference-command",
+  "description": "The data of reference --command <path>: one command, its schema entry, its error codes and the product JSON Schemas it names; public driver schemas are listed by URN only.",
+  "type": "object",
+  "properties": {
+    "view": {
+      "const": "command"
+    },
+    "tool": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$"
+    },
+    "version": {
+      "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/semver"
+    },
+    "driver_profile": {
+      "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/driver_profile"
+    },
+    "command": {
+      "$ref": "urn:tool-driver-cli-spec:reference:2.0#/$defs/command"
+    },
+    "schemas": {
+      "type": "object",
+      "minProperties": 1,
+      "maxProperties": 1,
+      "additionalProperties": {
+        "$ref": "urn:tool-driver-cli-spec:reference:2.0#/$defs/schema_entry"
+      }
+    },
+    "error_codes": {
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": {
+        "pattern": "^E_[A-Z0-9_]+$"
+      },
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "exit": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 255
+          },
+          "retryable": {
+            "type": "boolean"
+          },
+          "description": {
+            "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+          }
+        },
+        "required": [
+          "exit",
+          "retryable"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "json_schemas": {
+      "type": "object",
+      "propertyNames": {
+        "not": {
+          "pattern": "^urn:tool-driver-cli-spec:"
+        }
+      },
+      "additionalProperties": {
+        "type": "object",
+        "minProperties": 1
+      }
+    },
+    "public_schemas": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^urn:tool-driver-cli-spec:[a-z-]+:2\\.0$"
+      }
+    }
+  },
+  "required": [
+    "view",
+    "tool",
+    "version",
+    "driver_profile",
+    "command",
+    "schemas",
+    "error_codes",
+    "json_schemas",
+    "public_schemas"
+  ],
+  "additionalProperties": false
+}

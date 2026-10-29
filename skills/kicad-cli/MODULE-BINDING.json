@@ -1,0 +1,43 @@
+{
+  "module": "kicad-cli",
+  "install_name": "kicad-cli",
+  "source_code_sha256": "20374c0317ac3b01ef3a33ebed64b259b1e94502932d7009b744fc01c5005fba",
+  "protocol": "driver-board.v2.20-integer-nm-library",
+  "command_contract_sha256": "3a1bd28f2a33cbb5d0ce8f70d34cf7647ee71d5f03cf185aab9cf527b0198291",
+  "executable_sha256": null,
+  "capability": {
+    "commands": [
+      "modules",
+      "context",
+      "doctor",
+      "reference",
+      "changelog",
+      "project context",
+      "operation show",
+      "operation list",
+      "operation resolve"
+    ],
+    "scope": "Environment, actual capability/binding discovery, routing and common workflow",
+    "internal_1_0_supported_commands": [
+      "modules",
+      "context",
+      "doctor",
+      "reference",
+      "changelog",
+      "project context",
+      "operation show",
+      "operation list",
+      "operation resolve"
+    ],
+    "state": "implemented_bounded_experimental",
+    "regression_group": [
+      "test_module_operations.py",
+      "test_skill.py",
+      "test_build_sdk_boundary.py"
+    ],
+    "qualification": "Requires evidence bound to this exact artifact; historical qualification does not transfer automatically"
+  },
+  "skill_dependencies": [],
+  "shared_resources": "reference/common.md (generated from docs/modules/common.md)",
+  "compatibility": "Match source, contract, protocol and optional executable; version alone is insufficient"
+}

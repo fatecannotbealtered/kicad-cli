@@ -1,0 +1,7 @@
+[
+  {"command":"project netclass set","args":["--name","PowerVIN","--nets","VIN","--width","0.3","--clearance","0.2","--via-diameter","0.6","--via-drill","0.3"]},
+  {"command":"board route rewidth","args":["--nets","VIN","--neck","0.3"],"require_target_width":true,"require_connected":true},
+  {"command":"project netclass set","args":["--name","Power5V","--nets","+5V","--width","0.25","--clearance","0.2","--via-diameter","0.6","--via-drill","0.3"]},
+  {"command":"board track widen","args":["--nets","+5V","--neck","0.2"],"require_target_width":true,"require_connected":true},
+  {"command":"board route repair","args":["--nets","VIN,+5V","--neck","0.3"],"require_connected":true}
+]

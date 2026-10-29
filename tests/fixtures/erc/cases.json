@@ -1,0 +1,1479 @@
+{
+ "questions": {
+  "pnc_alone": "a part with nothing attached",
+  "pnc_stub": "a pin with a wire to nowhere, the other flagged",
+  "pnc_label_on_pin": "a pin with a label of its own at its end, the other flagged",
+  "pnc_label_wire": "a pin with a wire to a label no other place has",
+  "pnc_joined_by_label": "two pins joined by one label name",
+  "pnc_pin_on_pin": "two pins touching, end on end",
+  "pnc_nc_type": "a no-connect pin with nothing attached",
+  "pnc_free_type": "a free pin with nothing attached",
+  "ppnd_symbol_and_pin": "a power symbol and a power input, nothing driving",
+  "ppnd_flagged": "the same, with a PWR_FLAG",
+  "ppnd_output": "a power input and an output",
+  "ppnd_passive": "a power input and a passive pin",
+  "ppnd_power_out": "a power input and a power output",
+  "ppnd_two_inputs": "two power inputs, nothing else",
+  "ppnd_symbol_alone": "a power symbol on its own",
+  "ppnd_hidden": "a part's hidden supply pin, its input wired to a label",
+  "pnd_input": "an input and a pin of type input",
+  "pnd_passive": "an input and a pin of type passive",
+  "pnd_output": "an input and a pin of type output",
+  "pnd_bidirectional": "an input and a pin of type bidirectional",
+  "pnd_tri_state": "an input and a pin of type tri_state",
+  "pnd_unspecified": "an input and a pin of type unspecified",
+  "pnd_open_collector": "an input and a pin of type open_collector",
+  "pnd_open_emitter": "an input and a pin of type open_emitter",
+  "pnd_power_out": "an input and a pin of type power_out",
+  "pnd_free": "an input and a pin of type free",
+  "pnd_label_only": "an input wired to a label no other place has",
+  "p2p_input_input": "a input pin and a input pin",
+  "p2p_input_output": "a input pin and a output pin",
+  "p2p_input_bidirectional": "a input pin and a bidirectional pin",
+  "p2p_input_tri_state": "a input pin and a tri_state pin",
+  "p2p_input_passive": "a input pin and a passive pin",
+  "p2p_input_free": "a input pin and a free pin",
+  "p2p_input_unspecified": "a input pin and a unspecified pin",
+  "p2p_input_power_in": "a input pin and a power_in pin",
+  "p2p_input_power_out": "a input pin and a power_out pin",
+  "p2p_input_open_collector": "a input pin and a open_collector pin",
+  "p2p_input_open_emitter": "a input pin and a open_emitter pin",
+  "p2p_input_no_connect": "a input pin and a no_connect pin",
+  "p2p_output_output": "a output pin and a output pin",
+  "p2p_output_bidirectional": "a output pin and a bidirectional pin",
+  "p2p_output_tri_state": "a output pin and a tri_state pin",
+  "p2p_output_passive": "a output pin and a passive pin",
+  "p2p_output_free": "a output pin and a free pin",
+  "p2p_output_unspecified": "a output pin and a unspecified pin",
+  "p2p_output_power_in": "a output pin and a power_in pin",
+  "p2p_output_power_out": "a output pin and a power_out pin",
+  "p2p_output_open_collector": "a output pin and a open_collector pin",
+  "p2p_output_open_emitter": "a output pin and a open_emitter pin",
+  "p2p_output_no_connect": "a output pin and a no_connect pin",
+  "p2p_bidirectional_bidirectional": "a bidirectional pin and a bidirectional pin",
+  "p2p_bidirectional_tri_state": "a bidirectional pin and a tri_state pin",
+  "p2p_bidirectional_passive": "a bidirectional pin and a passive pin",
+  "p2p_bidirectional_free": "a bidirectional pin and a free pin",
+  "p2p_bidirectional_unspecified": "a bidirectional pin and a unspecified pin",
+  "p2p_bidirectional_power_in": "a bidirectional pin and a power_in pin",
+  "p2p_bidirectional_power_out": "a bidirectional pin and a power_out pin",
+  "p2p_bidirectional_open_collector": "a bidirectional pin and a open_collector pin",
+  "p2p_bidirectional_open_emitter": "a bidirectional pin and a open_emitter pin",
+  "p2p_bidirectional_no_connect": "a bidirectional pin and a no_connect pin",
+  "p2p_tri_state_tri_state": "a tri_state pin and a tri_state pin",
+  "p2p_tri_state_passive": "a tri_state pin and a passive pin",
+  "p2p_tri_state_free": "a tri_state pin and a free pin",
+  "p2p_tri_state_unspecified": "a tri_state pin and a unspecified pin",
+  "p2p_tri_state_power_in": "a tri_state pin and a power_in pin",
+  "p2p_tri_state_power_out": "a tri_state pin and a power_out pin",
+  "p2p_tri_state_open_collector": "a tri_state pin and a open_collector pin",
+  "p2p_tri_state_open_emitter": "a tri_state pin and a open_emitter pin",
+  "p2p_tri_state_no_connect": "a tri_state pin and a no_connect pin",
+  "p2p_passive_passive": "a passive pin and a passive pin",
+  "p2p_passive_free": "a passive pin and a free pin",
+  "p2p_passive_unspecified": "a passive pin and a unspecified pin",
+  "p2p_passive_power_in": "a passive pin and a power_in pin",
+  "p2p_passive_power_out": "a passive pin and a power_out pin",
+  "p2p_passive_open_collector": "a passive pin and a open_collector pin",
+  "p2p_passive_open_emitter": "a passive pin and a open_emitter pin",
+  "p2p_passive_no_connect": "a passive pin and a no_connect pin",
+  "p2p_free_free": "a free pin and a free pin",
+  "p2p_free_unspecified": "a free pin and a unspecified pin",
+  "p2p_free_power_in": "a free pin and a power_in pin",
+  "p2p_free_power_out": "a free pin and a power_out pin",
+  "p2p_free_open_collector": "a free pin and a open_collector pin",
+  "p2p_free_open_emitter": "a free pin and a open_emitter pin",
+  "p2p_free_no_connect": "a free pin and a no_connect pin",
+  "p2p_unspecified_unspecified": "a unspecified pin and a unspecified pin",
+  "p2p_unspecified_power_in": "a unspecified pin and a power_in pin",
+  "p2p_unspecified_power_out": "a unspecified pin and a power_out pin",
+  "p2p_unspecified_open_collector": "a unspecified pin and a open_collector pin",
+  "p2p_unspecified_open_emitter": "a unspecified pin and a open_emitter pin",
+  "p2p_unspecified_no_connect": "a unspecified pin and a no_connect pin",
+  "p2p_power_in_power_in": "a power_in pin and a power_in pin",
+  "p2p_power_in_power_out": "a power_in pin and a power_out pin",
+  "p2p_power_in_open_collector": "a power_in pin and a open_collector pin",
+  "p2p_power_in_open_emitter": "a power_in pin and a open_emitter pin",
+  "p2p_power_in_no_connect": "a power_in pin and a no_connect pin",
+  "p2p_power_out_power_out": "a power_out pin and a power_out pin",
+  "p2p_power_out_open_collector": "a power_out pin and a open_collector pin",
+  "p2p_power_out_open_emitter": "a power_out pin and a open_emitter pin",
+  "p2p_power_out_no_connect": "a power_out pin and a no_connect pin",
+  "p2p_open_collector_open_collector": "a open_collector pin and a open_collector pin",
+  "p2p_open_collector_open_emitter": "a open_collector pin and a open_emitter pin",
+  "p2p_open_collector_no_connect": "a open_collector pin and a no_connect pin",
+  "p2p_open_emitter_open_emitter": "a open_emitter pin and a open_emitter pin",
+  "p2p_open_emitter_no_connect": "a open_emitter pin and a no_connect pin",
+  "p2p_no_connect_no_connect": "a no_connect pin and a no_connect pin",
+  "p2p_three_outputs": "three outputs on one wire",
+  "p2p_outputs_by_label": "two outputs, joined only by a label name",
+  "p2p_bidi_flag": "three bidirectional pins and a PWR_FLAG",
+  "nc_on_joined_pin": "a no-connect flag on a pin wired to another pin",
+  "nc_alone": "a no-connect flag on nothing",
+  "nc_on_wire_end": "a no-connect flag on the far end of a pin's wire",
+  "nc_with_label": "a flagged pin that also has a label no other place has",
+  "label_alone": "a local label on nothing",
+  "global_alone": "a global label on nothing",
+  "global_on_pin": "a global label no other place has, wired to a pin",
+  "label_on_stub": "a label on a wire whose other end is free",
+  "wire_alone": "a wire touching nothing",
+  "wire_t_no_junction": "a wire ending on another's middle, no junction",
+  "two_names": "two local labels of different names on one wire",
+  "three_names": "three local labels of different names on one wire",
+  "power_and_label": "a power symbol and a local label of another name on one wire",
+  "similar_labels": "two local labels differing in case, on separate pins",
+  "off_grid": "a wire end off the 1.27 mm grid",
+  "four_way": "four wires meeting at a junction",
+  "label_two_wires": "a label where two wires meet",
+  "label_stub_named_elsewhere": "a label on a stub, its name on a pin's wire too",
+  "label_on_crossing": "a label where two wires cross, no junction",
+  "label_on_wire_middle_and_end": "a label on one wire's end and another's middle",
+  "global_twice": "a global label on two pins' wires",
+  "global_stub_named_elsewhere": "a global label on a stub, its name on a pin too",
+  "nc_on_pin_with_label_net": "a flagged pin joined by a label to another pin",
+  "nc_on_wire_middle": "a no-connect flag on the middle of a wire between pins",
+  "two_power_symbols": "two power symbols of one name, nothing else",
+  "power_symbol_on_pin": "a power symbol on a passive pin, nothing driving",
+  "pins_two_inputs_label": "two inputs joined by one label name, nothing driving",
+  "three_power_in": "three power inputs on one wire, nothing driving",
+  "pin_to_nc_pin_and_wire": "a passive pin wired to a no-connect pin and a label",
+  "wire_between_labels": "a wire with a label at each end, the names used nowhere else",
+  "junction_alone": "a junction on nothing",
+  "junction_on_wire_end": "a junction at the free end of a pin's wire",
+  "floating_label_named_elsewhere": "a label on nothing, its name on a pin's wire",
+  "floating_global_named_elsewhere": "a global label on nothing, its name on a pin",
+  "two_wires_alone": "two wires joined end to end, touching nothing else",
+  "power_in_before_symbol": "a power input drawn before the power symbol it meets",
+  "power_in_by_label": "two power inputs joined by a label, the lower drawn first",
+  "nc_on_free_wire_end": "a no-connect flag on a wire end, no pin anywhere",
+  "local_and_global_names": "a local and a global label of other names on one wire",
+  "output_input_power_in": "an output, an input and a power input on one wire",
+  "similar_power": "two power symbols whose values differ in case, each on a pin",
+  "similar_label_and_power": "a label and a power symbol whose names differ in case",
+  "same_local_global": "a local and a global label of one name, on different pins",
+  "four_wires_no_junction": "four wires meeting at a point, no junction dot",
+  "three_wires_and_pin": "three wires and a pin meeting at a junction",
+  "symbol_off_grid": "a part placed off the grid, its pins wired to labels",
+  "label_on_power_only": "a label on a power symbol's wire, no other pin",
+  "junction_mid_wire_alone": "a junction on the middle of a wire touching nothing",
+  "two_floating_labels": "two labels of one name on nothing",
+  "pin_label_two_floating": "a pin's label, and two floating labels of its name",
+  "label_on_pin_and_floating": "a label on a pin's end, and a floating label of its name",
+  "stub_pin_and_floating": "a pin's label, a stub's label and a floating label, one name",
+  "order_power_in_refs": "two power inputs on a wire: U900 drawn first and lower, U100 upper",
+  "order_power_in_refs_2": "two power inputs on a wire: U101 drawn first and upper, U901 lower",
+  "order_power_in_refs_3": "two power inputs on a wire: U902 drawn first and upper, U102 lower",
+  "order_inputs_refs": "two inputs on a wire: U903 drawn first and upper, U103 lower",
+  "three_wires_alone": "three wires in a chain, touching nothing else",
+  "pin_off_grid_unwired": "a part off the grid with nothing attached",
+  "nc_off_grid": "a no-connect flag off the grid, on nothing",
+  "label_off_grid": "a label off the grid, on a pin's wire",
+  "wire_mid_off_grid": "a wire from a pin whose far end is off the grid, with a label"
+ },
+ "items": {
+  "pnc_alone": [
+   "1e8e50af-e19e-55ab-a71b-00387427d2a2",
+   "b2f71907-cd9e-5689-ba15-7359815c02d5",
+   "29a7c232-666b-51cc-ba96-9884fed0b21b"
+  ],
+  "pnc_stub": [
+   "d7826976-4047-5abe-bfeb-de1cd68d9fdb",
+   "a0297fd7-24cb-5ab0-82c8-2bec1ff44c61",
+   "b2a04b60-5a82-5fa3-a7a6-bdb21619be3c",
+   "74697c53-0928-5e42-bd5e-7e16d753a8d9",
+   "01f0e30c-9807-596a-8cbc-34c679c1b800"
+  ],
+  "pnc_label_on_pin": [
+   "f8281080-a87f-5a55-8ab8-d82d171f7c1c",
+   "027b7d6e-fe46-5290-a47b-bea351b215c8",
+   "e2ab711e-260f-5b68-874b-7e4497e2fcf5",
+   "d528b94c-fd6d-517c-bb62-54d93cbb1369",
+   "b3d60ddb-6a44-5612-b5cf-d7461ea8d228"
+  ],
+  "pnc_label_wire": [
+   "d77508b1-26d5-54e6-b9f6-2f9fc02a743f",
+   "076dbfb2-d451-5686-9614-63d92dc204ae",
+   "8d4a7a47-80a4-51ae-b2da-388ee157c39b",
+   "e7c533db-9cd8-5674-aad6-b7c463a31294",
+   "c42e575f-de6e-5ed4-b689-185e78dedfaf",
+   "5d108d54-8586-5d93-8323-510195aeaf11"
+  ],
+  "pnc_joined_by_label": [
+   "403aad0e-12f9-5318-b247-8a842b919e6d",
+   "95356c2c-2343-5fd6-b7cf-c77777b3f952",
+   "839f13f5-5cab-5113-8042-0fa317bdb348",
+   "30c21b26-c74b-5a2f-b81f-f3f6017f5fcc",
+   "b1bf93ec-919f-57a9-a471-7e9d102dda66",
+   "12aed0ee-c887-5263-a714-f42c864cd61e",
+   "6f4f24d6-bcd5-56f3-b9c7-5cfd49f4e30e",
+   "ef0eb0bd-475a-5d4e-b725-34c5d2aabdfa",
+   "9a697e3e-a518-54e9-8f3f-1a3c9579f418",
+   "ffdc3f9d-d5c0-5487-82c3-cd477ebee4e9",
+   "30b1755e-38da-5dfc-a120-3289eea62310",
+   "f123afa9-765f-578b-b96a-6bedec65c552"
+  ],
+  "pnc_pin_on_pin": [
+   "462887e0-5b5f-5485-8340-3a6e5f536e9a",
+   "de248c8e-f6c4-5e62-bcd4-898c4143a3aa",
+   "699d1c63-e6e0-5cd7-a043-51f17c82df7f",
+   "0a55e560-6af4-5b43-b5df-7e8eb2d04121",
+   "8231a5ce-5a5e-5afc-a797-c15cbaceb0be",
+   "3d5d0abc-c0c8-5689-812b-3ad3fd67ff22",
+   "8529ec1e-2ae1-5e9f-b230-9d4339846d2c",
+   "8ca93913-eb59-557a-86e1-a56f0f2087d0"
+  ],
+  "pnc_nc_type": [
+   "86b79eac-f10a-516e-9771-1a9e54fd619f",
+   "1927775b-2373-5d1b-8f98-24811674115f"
+  ],
+  "pnc_free_type": [
+   "fca2bc73-3f1a-58ca-b0d9-b757b8f13da5",
+   "5caa983f-7963-54de-94fc-ac07c99eb0eb"
+  ],
+  "ppnd_symbol_and_pin": [
+   "396f17de-ffdc-5026-b060-5122d7630c33",
+   "f18e919d-5f71-5044-8936-ae7647539b47",
+   "a2830c6d-ab35-5b19-9807-1f0ee12c23b2",
+   "cfbf5ada-74dd-52a3-a827-234998fdb284",
+   "570c7ff7-b215-520c-8358-1b4a8a07ff18",
+   "e1097893-0295-50d2-81f0-b9754ae83fec"
+  ],
+  "ppnd_flagged": [
+   "cc6e2aea-e004-5afe-b9c8-4004b530f677",
+   "d7603d0d-3814-5de0-83ad-4c52a73e54c4",
+   "b461fea2-71c8-5076-b524-b1555fb335eb",
+   "d0afd23b-8ffd-5140-8ad9-f8298818aa58",
+   "a1abbad7-4551-5c85-96bf-3014e48a4da2",
+   "02e7841a-197f-57b2-9f1a-666a0e0dcd69",
+   "3d9bc19e-cdf4-5622-8eae-f1c7da535b49",
+   "fe09f485-bf65-5e89-aa70-bb87f9ae2cf2",
+   "767ad04b-fc6e-55bc-a95c-e3b36e087d5c"
+  ],
+  "ppnd_output": [
+   "9244a7e2-676f-5758-a326-bff78219c44c",
+   "ae075834-5c59-57e8-bde7-ee89ffa1222e",
+   "95cdd582-45ca-54d3-8a22-a3aec1fb73cf",
+   "cbd7d740-9098-5b9a-89d4-5cdf456fc739",
+   "6e8eb631-23ec-5d41-b431-884d80f347a1"
+  ],
+  "ppnd_passive": [
+   "cfd6e17d-d218-5e35-ab0b-5164b8fdc1a2",
+   "36e10796-fd1a-504c-b6d2-3444006656eb",
+   "085dbda7-2759-5ab6-87c5-0e76cd520e4e",
+   "f5d0e278-ead2-5ec2-b2c0-4612a760ac75",
+   "4efc3f40-3276-5d2e-8724-ae48a73e43e3"
+  ],
+  "ppnd_power_out": [
+   "1242d0a7-c45a-51fb-8d01-bbeae28c5402",
+   "0da5ecad-8e3c-57e5-8648-01cf6b8b6485",
+   "e11c0b57-bb1f-5961-9073-34e0a69d6f4c",
+   "3e67d347-17ad-53c6-9391-56855f3ccace",
+   "858a55a9-6230-540d-9c95-e3a30f740d24"
+  ],
+  "ppnd_two_inputs": [
+   "59e3b5c3-33e0-5839-b8c0-0ab875cffb84",
+   "25a1a88b-50f7-581a-b916-ee3f8da52567",
+   "448c9c8e-1f8c-559b-a53c-536bdee22dd5",
+   "2124eddf-7ec5-57b7-b9c1-58d9a8fc53f3",
+   "237169d7-1171-54a2-99b5-12caad0ef604"
+  ],
+  "ppnd_symbol_alone": [
+   "896bfbe8-8079-584b-87a8-375b7d6b51a7",
+   "85718952-a00f-50d5-a11b-9db7080affae"
+  ],
+  "ppnd_hidden": [
+   "8be2bd7b-d8f0-5890-b37e-05730bb6296d",
+   "44dcfb8e-86b3-539a-9ec8-7717e3bac2d5",
+   "3aa7b48b-a34b-52fc-8d00-faa90fb1fc7a",
+   "b00820b4-0de3-5446-878d-da5d87b0e6ac",
+   "07f9e2a7-16df-5b49-a6f5-aa6e8f833eb2"
+  ],
+  "pnd_input": [
+   "53941993-cbf2-572e-8949-226256b6bace",
+   "81605b02-1906-519a-bbbd-39cbe12a4607",
+   "8a2f90b3-9018-527e-b164-4add03d64513",
+   "3328dde5-f0fa-5040-af5f-ba19b3d6a4e6",
+   "1e780c95-f60e-5c27-92b1-6336e7bd9b81"
+  ],
+  "pnd_passive": [
+   "5feea7eb-c790-51f0-9578-d32f2b88f68f",
+   "d4360e57-6ffb-54af-80e7-a86029d2e9fb",
+   "036d772e-6cf6-57a3-aff1-040abf6513e9",
+   "7b69936d-8bb0-5706-a6ad-82ad3b5a3c04",
+   "5df067ee-7b9d-581b-92ae-6731ab27bb53"
+  ],
+  "pnd_output": [
+   "95b3c3bf-2260-5d87-bafc-e2a483faf306",
+   "c7860dc3-dd55-5753-be60-42d425c2b035",
+   "d714dfd9-bd94-5592-876f-3ef90410afc0",
+   "b4834013-3d14-5782-95d1-0dc9775c400f",
+   "842799d0-a32f-5488-8eae-b9519b634c46"
+  ],
+  "pnd_bidirectional": [
+   "abc6e199-5df4-54f9-bfd9-36443db7c163",
+   "91c10a28-cd90-59c2-bacc-459b84e6fb55",
+   "f4352eb8-13dd-5c08-adf0-2284094ebbfa",
+   "e84dbb34-8235-5890-b831-f6ef234d9f42",
+   "32f78086-1b77-5b7f-b5e8-919178fadd49"
+  ],
+  "pnd_tri_state": [
+   "b78e5e49-681a-5084-9607-696ee912a58d",
+   "93dfcdd5-9aee-5d9b-95d8-4d6adb685894",
+   "3ab8fa5b-0855-599c-9fb6-a7cb7f6bc08f",
+   "f899da36-a31b-5e06-b9ce-c08ddc6e95c6",
+   "304e423e-13cc-5f9c-ae0a-d988e7f52c0e"
+  ],
+  "pnd_unspecified": [
+   "e26a9553-26aa-52d0-b7e9-262c57684671",
+   "c23a3916-9b4b-5dec-a0b3-8567e63e4572",
+   "f8159247-91a0-56ac-ae64-c70cac659d21",
+   "5ce83710-c4fb-5452-b172-a149d6b96793",
+   "fdec132c-01f2-518a-b113-e35dd7edb11d"
+  ],
+  "pnd_open_collector": [
+   "08f37fd7-3335-50d1-b2eb-fbe5e7b55696",
+   "43009f92-4258-5b71-88ee-b518abc76aae",
+   "234cf56f-41c9-5863-87ac-dec27af9145c",
+   "5f42a726-172d-5c9e-b179-c99ab2c714dc",
+   "ce30cc83-5671-5631-9393-e3d4cccc2401"
+  ],
+  "pnd_open_emitter": [
+   "3f57176c-9fda-5124-9030-d2cfb2335394",
+   "191309cf-622e-5eda-ada0-0fe76bac05e8",
+   "ac54536e-a3ce-5d92-81e4-4e06659676b3",
+   "2ae87ea8-1cb0-5946-9f48-fc8c23945d40",
+   "defc2005-d9d1-58e9-9743-411cb88a35c1"
+  ],
+  "pnd_power_out": [
+   "df868192-8d21-5f80-86e4-a6f52eb7ab22",
+   "b7c7516d-f85e-51e5-9aba-5f80593554a9",
+   "3315a402-0d55-5bec-8614-cff1318284d7",
+   "a69e8a16-2c20-597e-8317-1e5a04c2b543",
+   "37c54264-b646-5fc6-b09a-2f69b7677217"
+  ],
+  "pnd_free": [
+   "bec11d81-a5f0-5006-9544-4139746da03d",
+   "f5322296-9090-5dd1-93b9-d3baac62cca8",
+   "ff824a69-fc74-5c96-8f3a-94bdb1cbf46a",
+   "e2eeb180-cacb-5cae-9218-f3ed674483b7",
+   "47b63fbe-565a-5c1d-962d-c7f91eb6fb56"
+  ],
+  "pnd_label_only": [
+   "099976b1-ea87-5f08-b73b-fd941fcb5155",
+   "792afefc-0a53-5ea7-8839-54ce2e5e5433",
+   "024e6abd-4f80-5521-be12-61a4a13bf3b1",
+   "653b559c-e49a-547c-a230-d43ca4e8cadf"
+  ],
+  "p2p_input_input": [
+   "66d808a9-e9ec-5881-a125-005663f30c25",
+   "63c916cd-4d12-55ec-b158-cc7ddadb69cb",
+   "b5bd8ae0-326e-5e89-aba1-4fad30fd2bb2",
+   "652eda30-274a-56b2-9bc8-fbd9706703ab",
+   "74d1adf5-109b-58a3-b08c-5715e10d2df0"
+  ],
+  "p2p_input_output": [
+   "0334bf93-0093-57de-8a08-8d58ed7577b0",
+   "49d788ea-3231-584b-aea1-a681027d95a9",
+   "9aa412c5-db5d-562a-abff-c37b342b0c80",
+   "92b6b7b9-e5d9-5f91-9cbd-f373c3fc4e5f",
+   "d38e1edc-a383-54d6-b88c-d4d1d5f68d74"
+  ],
+  "p2p_input_bidirectional": [
+   "f55f3462-b8af-504f-abf5-e74bce622d4e",
+   "f42dba93-7d8b-5d5e-83b7-da30bebc8014",
+   "1d02ce20-11f0-5969-bd0b-9f6bcfa9c357",
+   "4d65aeb9-1a90-57f9-82d9-326f4cb8369b",
+   "9437c82f-1492-590b-9637-380009709da1"
+  ],
+  "p2p_input_tri_state": [
+   "09d9d4eb-8657-52a5-aab1-06010289e10d",
+   "ec49f356-00a4-5cdd-9a38-a655a6cee788",
+   "196eb32b-124d-50b3-bdb5-cedd44211aed",
+   "b573e6c2-2400-55b6-81de-47e608123a54",
+   "dec47bab-f1d8-50d7-b8dd-6371140b8255"
+  ],
+  "p2p_input_passive": [
+   "6c349f1a-a156-5e94-adf5-6d250a3aadbc",
+   "a614fb1e-d229-57ca-936a-da62f7dded39",
+   "ac7b45f5-0034-5e2d-847f-220ec41bc12f",
+   "6fe20eea-6f5c-560e-b5f7-e47f2226c57f",
+   "fa34da60-1a17-562b-9553-9acd27179b65"
+  ],
+  "p2p_input_free": [
+   "5e852be3-c4bb-5057-b1d8-169f5bdd636d",
+   "fb8043a5-c5ec-556b-b358-dde0886fda10",
+   "2dfa8f8a-fd21-5028-88f0-605562f86bc3",
+   "2b908401-3888-50fd-b549-12442ab2fdb8",
+   "791ca5cf-2b7e-5ed0-bec7-b9af1fc66d93"
+  ],
+  "p2p_input_unspecified": [
+   "ca91f444-2f4a-5680-99d7-4ca3ede7ce77",
+   "a074e043-2ac7-5728-90cb-c5b37d8d978b",
+   "90d84c33-a868-5c80-ae3e-92557f98818e",
+   "02c73a81-f2c5-58ae-8439-da57483250f7",
+   "78c8fdd0-30e1-5421-82b2-d67b92e8928c"
+  ],
+  "p2p_input_power_in": [
+   "801d3315-4a0f-5853-80d4-a7fd41211b1a",
+   "f6baefe7-1139-5dce-b0a6-01e74ae8fb2f",
+   "1ab33a41-c4bd-5622-bda2-f0a71fd556f9",
+   "7bc37f81-53bd-5d51-8904-d169d399b90c",
+   "8b11fd6d-58a5-5604-b6be-dff7bd691c93"
+  ],
+  "p2p_input_power_out": [
+   "5252cee8-cde0-5d1b-9c89-701fa75638b2",
+   "0931b417-ec3c-563c-bf3a-922076a9c413",
+   "fe3812b4-422b-5e74-b4ef-e2ed0d0b0957",
+   "71c96870-c343-591e-9e77-31e1be86f05c",
+   "aed6b31d-a1c8-5cb0-9ab4-78122a6b4649"
+  ],
+  "p2p_input_open_collector": [
+   "ef2e8d0d-d788-538e-81de-0df9e43759df",
+   "2e5a911f-ee10-545b-add1-158b37dd203f",
+   "55047db0-57da-5b5f-8f65-5b6a7af9e349",
+   "2716ac34-3dbe-5c8f-930e-134d4becf15b",
+   "25e03913-1c97-54e4-a391-2ad545db9c3f"
+  ],
+  "p2p_input_open_emitter": [
+   "586dd07a-c62e-56af-9ec7-5f0171f99907",
+   "daa96eec-23e9-54d7-85ce-b74a1191bcd1",
+   "4c8e87b8-cd20-58ad-b1c0-21ade06f9f59",
+   "b55e8006-8fd8-5bc1-95f0-9f95e251ca81",
+   "b5fc743c-7e10-5991-82c8-86fa985f4fec"
+  ],
+  "p2p_input_no_connect": [
+   "82544465-6e32-5f8d-b902-6ba80e30ae67",
+   "aac2e7ec-79f8-53d7-9b36-05ff3506a42f",
+   "5ca7d64e-4206-5ca6-9ce2-2a1baf4952f5",
+   "8d6456a7-73a5-5312-8bb6-b46640694f18",
+   "2d0b0dbd-2f93-58ee-aa89-84ced28ccc90"
+  ],
+  "p2p_output_output": [
+   "ce2bb30e-cdb9-5cdc-98e2-e9059064b119",
+   "46092180-5a6b-5d45-ad6c-5b1e90d27113",
+   "7b5ad794-2e70-505b-974d-a46969588c04",
+   "6bbea5af-16fb-5e35-9d5c-312e7f54be73",
+   "c23924a9-a8c6-5968-8a4e-8ad3663bf08c"
+  ],
+  "p2p_output_bidirectional": [
+   "6182ad7d-0287-549c-86aa-ba78090d8287",
+   "863a310f-1288-59d4-9f0c-7a74de1f9ef7",
+   "d6078b7b-3697-529e-9b9b-8e2d2e6ff5cc",
+   "c1fc28ba-d6e2-51ff-9e66-f38321b41b72",
+   "7e9f26d7-f650-55fb-ba37-bd8a7cdde6e7"
+  ],
+  "p2p_output_tri_state": [
+   "580cb7eb-55c8-5435-a55a-aed0d7281bd7",
+   "67befa69-e83e-5a3d-ab3c-8877af1c9f6e",
+   "480bb021-347d-5d29-a67b-53a1e7277ecb",
+   "4210c296-edaf-51a1-88d4-da3a287f76ce",
+   "ecc7af22-d239-5b65-8863-f3cd75e260dd"
+  ],
+  "p2p_output_passive": [
+   "b1ece137-01bf-5c95-8dd3-4c8302f94fd7",
+   "5e99a45e-efe9-53f5-bc37-a5fa9327730e",
+   "ca9b5cae-dac6-5f46-88dd-0d3bc826b683",
+   "03d42a6a-0842-5b94-93d1-c4ef1053386d",
+   "85ba84e4-0d09-531c-bae8-11a2aa3f03ae"
+  ],
+  "p2p_output_free": [
+   "883c27c0-6508-556f-8082-6427f4ce8757",
+   "cfbe1bac-57f3-5331-be67-9550d23c1ff2",
+   "e3c8ca52-39e6-5982-920b-814d53efea2c",
+   "b822669c-c319-55ed-905d-9ef07986d453",
+   "6bbba10f-1a3e-510d-8c92-9460c1b98c29"
+  ],
+  "p2p_output_unspecified": [
+   "38568069-bfef-57d3-90e5-b0fcfd09c992",
+   "31431b64-ed67-5b6e-b245-442d39e20e20",
+   "f725a271-0582-5372-b28d-5f2b6b641316",
+   "ad8854b8-b56a-54cd-83ff-5c2e756282ad",
+   "8cd2a021-44fc-59e3-b460-2d37fad021e5"
+  ],
+  "p2p_output_power_in": [
+   "1e042dc9-174f-5602-980b-76fa9587b298",
+   "d00c0239-237c-54c5-a512-8b815e047a03",
+   "b54f4aa3-65cf-5dca-9861-ee87a70469dd",
+   "7e6af948-4f1d-5a0b-80c4-d53e85c47900",
+   "3ad4d841-cab4-54f4-afb7-30f90cadb79e"
+  ],
+  "p2p_output_power_out": [
+   "222dd545-31b9-5273-be61-b4d22761cc10",
+   "0653e5b9-36e8-5014-a63a-fccc1e942ef3",
+   "e9517fe6-25f4-5b5c-869e-c5b6a40bb37f",
+   "42169f70-87b7-5182-987d-3cd3001bcfd1",
+   "1ad91beb-15f1-5932-a783-820aa95ef714"
+  ],
+  "p2p_output_open_collector": [
+   "154baa92-cddc-5d37-8e39-280561d829ed",
+   "33c94ed7-a34e-5689-be54-783f81151b70",
+   "4957c467-c379-5772-bba8-46621fa323f6",
+   "4b899b1a-02d1-5b57-ba77-57feb88a1b5d",
+   "08a15527-76e5-5960-a240-d65287311c7f"
+  ],
+  "p2p_output_open_emitter": [
+   "a105928d-9de7-5285-a648-0b3ef853708c",
+   "bc0625aa-4543-5f09-aa10-db71ceecaf3d",
+   "d507381a-58e9-52a2-8678-c749d3ba067e",
+   "fe7a8f8b-91ad-58ef-b651-9275366761d6",
+   "ef5e46cf-ee06-5348-b297-dc0e272a7e96"
+  ],
+  "p2p_output_no_connect": [
+   "3843fdbd-bd21-53eb-bda9-a2b128c92206",
+   "78d883c9-71ef-58b4-8e6e-5d491e3b4980",
+   "818f6f6d-2c2e-554b-9391-5599acfc2d63",
+   "7212afe0-ae8f-582a-b300-b9d076bd6134",
+   "a973148b-1c9e-5293-b3af-acff22bdc756"
+  ],
+  "p2p_bidirectional_bidirectional": [
+   "21b9dfc7-0814-5a50-8d59-8eae67e91754",
+   "8b304614-66bc-58b9-8cda-56eae168ee37",
+   "2e394514-c552-5c56-9aa2-4538076ca86d",
+   "17d3f9d9-85e4-5780-80e3-d1475d367414",
+   "ecf4eb5b-a9a2-5a61-9b50-cf123d67e3e0"
+  ],
+  "p2p_bidirectional_tri_state": [
+   "05a10200-cbb7-5d04-8c41-eb0f8c531c97",
+   "c65cf437-d7de-5876-a263-e11f329ffd59",
+   "5a582071-bb79-5cae-917a-64ead7301d8a",
+   "8c627ae8-5971-5bd7-922c-08dcd02f5cf6",
+   "046f76bd-fae2-5870-8771-a594c671e4fb"
+  ],
+  "p2p_bidirectional_passive": [
+   "cfee349f-baf6-5596-af62-0372e63b753d",
+   "d0f9615c-df2a-5fd8-9e7b-d1a2817c63ee",
+   "2aabaad8-447d-52d0-86c8-29a6629f461a",
+   "3829027c-eddf-5dcf-98bb-8a3cf6d893fc",
+   "0309dcbb-e2af-50b0-9ba8-021c7f3afcbf"
+  ],
+  "p2p_bidirectional_free": [
+   "46f62e72-2c3c-58a8-82d1-31e751777747",
+   "a718df40-250d-5a9e-850e-697b26d461c4",
+   "a4c2776b-9cc6-5cff-904c-dcc4910eea0d",
+   "8eb365ec-96a3-5f82-bed1-cb99be9a381f",
+   "6f1016a2-7eca-5725-9040-7a577ae6f824"
+  ],
+  "p2p_bidirectional_unspecified": [
+   "f0bdd6cc-c283-5cdf-aca1-4e9b461aa39b",
+   "d35205bb-978a-5850-85c3-cc33adb97f42",
+   "afeab9ee-50c3-5222-9311-92d4ff014696",
+   "767bf002-f92f-588f-a792-1af7628a8ad6",
+   "a0dc8de9-3738-5db8-9e7c-c00dda966f12"
+  ],
+  "p2p_bidirectional_power_in": [
+   "fa7480a5-7842-50b1-9596-7500bf6cf190",
+   "5f057e03-3b64-521d-9e78-292f64664f19",
+   "96dfe15e-729a-56ab-a49e-7dc57e8cae4a",
+   "f3d7017b-7683-54a5-ab2d-34d4fc931ad1",
+   "316540f4-4d72-5384-be9a-bf7835e46efe"
+  ],
+  "p2p_bidirectional_power_out": [
+   "96aa15c7-ef2d-582c-ae46-bcdc28f934cf",
+   "b195a005-ab47-5661-951e-b9d807a403e3",
+   "3a692b64-d47b-5ee5-a213-d17c19ebbd08",
+   "b45f7a98-f1eb-5072-aa9f-52343da40905",
+   "ccc69196-e4d1-5e51-b112-f42a9d2e4ee8"
+  ],
+  "p2p_bidirectional_open_collector": [
+   "b664cf5a-eddd-539c-a54c-15dffa3df00f",
+   "ea057421-b853-57d7-9b6f-1d50d3c99a8d",
+   "ac45bea9-c874-5b28-b539-c534a541ce2e",
+   "d5600c93-3d63-5fb8-bfd0-ff5af9de372f",
+   "17baa93b-2d82-543d-abfa-f865a36925ea"
+  ],
+  "p2p_bidirectional_open_emitter": [
+   "bf57eebe-2c08-59a8-8fe5-3f3819e0bad5",
+   "0449e1c4-c7d1-5244-83c9-a911e2bd1950",
+   "210b8e63-0228-58af-b2db-2c597a80f600",
+   "81f4bd72-4b25-5c0e-940d-ad93d0cc10e8",
+   "56f3aa6d-3247-5195-8a6c-404ef03be007"
+  ],
+  "p2p_bidirectional_no_connect": [
+   "a7f4a3ab-b637-59ff-8d61-2a1beb7b60ef",
+   "236f1e7c-5a90-50d4-a213-8517683f1226",
+   "8a29cbaa-07a6-53f2-a3d6-46bb8a1f2aee",
+   "16af5a93-e2b2-50b3-8d50-83d86c3a215d",
+   "cb0950d9-40af-5749-8b29-7d8836d3804d"
+  ],
+  "p2p_tri_state_tri_state": [
+   "7bfdb1fe-4018-5574-be2f-87fa7e155387",
+   "4c16150a-6554-53d3-a000-7ca1ea6993b6",
+   "30c5374b-de94-57ee-8739-053591717519",
+   "00dfc11a-bf4e-5cb8-adcd-b2efb89a82c9",
+   "0991b5b3-9cb1-5432-ad75-58098413de93"
+  ],
+  "p2p_tri_state_passive": [
+   "c0710bd9-d3c8-5fab-bfa1-935f07c44cc6",
+   "01dff937-1704-560a-930b-0cabcb284f1f",
+   "f51ec9c1-db33-5d7d-820e-fb7cb5036ede",
+   "54268820-ab07-54b6-8466-77e1fb84071d",
+   "bbcb5247-bac9-5da0-98f0-a15d0f2e7a07"
+  ],
+  "p2p_tri_state_free": [
+   "8ccd2f33-d78b-5927-b908-6633ee746308",
+   "c073ba61-9c48-5d90-89e6-23ad8c666947",
+   "f823fe1e-49d1-5cc2-9e8f-856be574ecce",
+   "da0d2760-72bf-5ce8-b055-74585b2a952b",
+   "b8a1186d-367b-5e5b-bd84-8a3b32b51ad3"
+  ],
+  "p2p_tri_state_unspecified": [
+   "18d1b079-42c2-5af0-b13f-f21a9a4e9078",
+   "b06d3d50-ff6b-55d8-8a87-6f2c966e23cc",
+   "e9ffe027-d28c-5775-8047-3c0eb21cfe3b",
+   "7e760953-4259-5fa8-be06-17ad8c7f0012",
+   "75d1d49d-8df4-5931-9900-64fbe933def4"
+  ],
+  "p2p_tri_state_power_in": [
+   "719a5f32-7d6f-5ea4-9a1a-8b3037204030",
+   "9ef8690e-4deb-5af0-aa1b-e6b3510db29b",
+   "10caa783-8983-59bd-ac4d-d58a9d65aacb",
+   "cfad0359-ebda-5a04-bdd9-24d674a9db92",
+   "14f6b4a7-6808-5272-b0b6-0252526681d6"
+  ],
+  "p2p_tri_state_power_out": [
+   "152ba6a4-cdb8-527f-abfd-d5a424894a24",
+   "c8f61b8f-90a9-5fd9-909c-2d11a5421ff9",
+   "9cb327d2-6848-5583-bcf2-f8fb1139d134",
+   "a5478df6-0827-5deb-8798-66fda0b93b12",
+   "9790ee31-d96c-52ea-b648-f6f090804a27"
+  ],
+  "p2p_tri_state_open_collector": [
+   "0e55dc4d-6992-54fc-90c2-612bc73aabac",
+   "c1ebdfaf-1633-5112-ba6a-399b0b40bb85",
+   "f1d7d10c-3bac-5263-aac5-f9746ca1e209",
+   "afadf755-8c7f-5c4e-b3d0-6d2468f230be",
+   "9ff55f57-f6b4-560a-b793-49fe91ffc43b"
+  ],
+  "p2p_tri_state_open_emitter": [
+   "23fd1173-9b8a-547e-ab2b-c75181333921",
+   "af08e8b4-2790-5ed2-af46-4c11ae1514b3",
+   "ca2865fa-048f-5d7f-9c09-c7a0ebc9b429",
+   "9a904223-dd41-59aa-9a96-144f6d4cef3b",
+   "25adda63-2ac3-5d79-980f-c75f7989762c"
+  ],
+  "p2p_tri_state_no_connect": [
+   "f6ee58b5-807d-52dd-bb0f-5d7ba601b875",
+   "b3978f87-652c-5b96-8bf6-8d4f0bef83d5",
+   "6f76bc89-8944-5deb-a583-05cab460217b",
+   "413efbc0-a62a-58e7-bf11-ade9a16721b7",
+   "17fb6c85-477f-5265-80db-68b758be9eec"
+  ],
+  "p2p_passive_passive": [
+   "4ae82fcd-4670-5733-ad74-182672377d9f",
+   "903935c1-e6ac-52bb-abf7-312860950f8f",
+   "3d9520ae-46d6-542d-9bf8-a02f392d5203",
+   "fe247302-8343-56ff-8ed5-d7b548157f88",
+   "73570886-d159-5b26-b37c-40c902092ba2"
+  ],
+  "p2p_passive_free": [
+   "4fbe6e6c-bc0f-5f0f-92c9-584aefe6150f",
+   "627afa02-54a1-58a6-a8f1-1ab41f439144",
+   "e722f88e-90c5-5915-be41-3391daaba9dc",
+   "46e481b5-0a0d-5bbd-a120-c20ff4a57f02",
+   "8c907b6d-38f4-59ee-91f7-44eb5f87e75a"
+  ],
+  "p2p_passive_unspecified": [
+   "f2dbf1c1-70dd-52f2-af9b-e37fe126e362",
+   "b98fe1c8-ec0a-56ab-854c-b56fa77fca64",
+   "d74852a2-ce61-5bf3-914b-a4275ee98376",
+   "a7eaaa74-c839-5992-bf4a-7c7a2b778b73",
+   "5fbc6b68-10d5-5145-b3b2-3b1b85fd8209"
+  ],
+  "p2p_passive_power_in": [
+   "45c9b3c0-4121-5630-8cce-b406422f6afc",
+   "161916dd-9010-551a-878e-2c58e947a06e",
+   "342f3662-22bf-5dae-a2d3-7e9a2b5c987a",
+   "8f65ab53-2240-5d18-814b-95b8800981a7",
+   "e35941eb-2439-5429-94a5-53290d42c37e"
+  ],
+  "p2p_passive_power_out": [
+   "f6f3a6dc-d1be-503f-81e8-24a5057b21f3",
+   "b5330bf8-0fb7-50c3-8dc8-8b980f63f20b",
+   "e7b7ab52-3814-5b78-9d66-26e47aa69d00",
+   "dc7812d6-3c02-571b-bef8-dbc5494c8c28",
+   "1ae3c9c5-5722-5ada-8616-16aeb49f2f8f"
+  ],
+  "p2p_passive_open_collector": [
+   "a9e52ccb-64a0-53b4-be74-ea63120d77c3",
+   "73134bbb-76a7-5982-ae13-77eb361b5259",
+   "63a0a34a-e95f-577b-8f8c-a89f2d5b357d",
+   "dc3d92e0-5aaa-59f1-bf54-9fc2ecc0adc5",
+   "6913fe99-82a8-5ea5-83c7-9323f252426e"
+  ],
+  "p2p_passive_open_emitter": [
+   "74a98e78-5ea1-5aa6-bec1-f28f4e9031ca",
+   "f04b334a-58f3-59c7-88e8-da9b78b5c7fa",
+   "86f340a8-e154-59c7-878e-d8a0e4db7f8c",
+   "d34dcc4c-d932-59e8-a0b6-eb490836533e",
+   "9a308cd0-00b1-5935-9ba5-0542755e9c37"
+  ],
+  "p2p_passive_no_connect": [
+   "5448d221-26d6-5743-9736-3d729f1844ad",
+   "2fc90b89-4478-5af2-b32a-8e50e8ca9cb9",
+   "84fa544b-7bd0-5c3b-a33e-b0faa8e0f0c4",
+   "45bf410b-5b42-568d-ab8e-8d4515b982c0",
+   "ccf0d37f-c0f0-51d4-9a63-fabf7d4dfef3"
+  ],
+  "p2p_free_free": [
+   "5cbe200e-1a5d-53b5-889a-e243b856bfa7",
+   "a2395d0a-817a-5f93-9ecc-f4137b3817fe",
+   "9b661260-3d4e-5e48-a430-e091f4484cc1",
+   "6a6ec798-be62-5849-8ea8-53806682bf8b",
+   "d789362d-1b63-5ad7-8602-ec7fd5f5992d"
+  ],
+  "p2p_free_unspecified": [
+   "f78dd189-f5b2-5f6c-a4dd-0af76b51b79f",
+   "376ade97-e37d-5149-afd6-c7b3829745ab",
+   "af7321a8-447a-53e3-9055-e2bca5b46aa1",
+   "b7fa0841-5354-5281-a263-f34867270c62",
+   "8385e391-b7c5-51c9-b9c3-980004fff1ba"
+  ],
+  "p2p_free_power_in": [
+   "6c13d108-5f27-5995-832d-97ff9c26430f",
+   "38636c6a-ad77-5c89-8793-ff27f1a09b85",
+   "81b405d1-07d3-58f3-a398-74bac26e61eb",
+   "1e31e173-5b00-5fbc-8d49-ff2e948e6695",
+   "0e7d2c81-4a45-5c2f-b195-527a48d0b96c"
+  ],
+  "p2p_free_power_out": [
+   "462300d2-f88d-506c-bd35-e18c448f6726",
+   "277ade34-36cf-56f7-8b2d-23261848b734",
+   "8978bed4-0ecd-5a87-b5b8-fd6580a7707e",
+   "5d6a9490-7c6e-5aac-8325-13fc2eba7ef8",
+   "e2854090-7f36-5601-8f9e-d71c1cf973d9"
+  ],
+  "p2p_free_open_collector": [
+   "d9dd31b7-fe77-5295-a239-d72dc0b505ab",
+   "3b2ce2ff-f937-5c41-953a-a72b74dc55a9",
+   "3c25f79a-b179-5520-8034-e57c63846ec9",
+   "cb4c52fb-6aa8-56c5-a74a-1e36e8d1fdb9",
+   "8ef32382-049c-5ef0-91fd-49076c3a3e3a"
+  ],
+  "p2p_free_open_emitter": [
+   "5562d5c4-0750-5052-ad2b-96e3bc1fd26f",
+   "f71594bf-a37d-5c7d-9681-05a4767d6a5d",
+   "ee90d570-ef74-5d17-a74e-6f857c161603",
+   "a8af224c-9c22-52d4-a8f0-c5e4cd7dc438",
+   "42542fd1-6b70-540b-b95b-309481cc6ca4"
+  ],
+  "p2p_free_no_connect": [
+   "e5682bc0-1485-5795-a772-4e5f1bbf853b",
+   "9d4a5cd8-cacd-5716-91fb-58c899cc12da",
+   "23689b9a-757b-5062-805f-3bcbe01dd12d",
+   "2dcd611d-e0a5-5b61-be31-13eb0e6cb2d6",
+   "53b9aa25-9cb2-584f-8a92-28970012e700"
+  ],
+  "p2p_unspecified_unspecified": [
+   "46a11fa3-582d-59af-bfa0-966afbff7b36",
+   "a2ad6ec7-91a4-53f9-844e-5ae9c87fd4b5",
+   "2b6b2859-7ab7-5f8e-8ffe-893f831e881c",
+   "535863ec-b7e4-515c-bfd3-e629aac68881",
+   "76ebfa16-f015-598d-b74c-8efa4547111c"
+  ],
+  "p2p_unspecified_power_in": [
+   "d1d1a1e9-62a6-519f-96f7-451d0faef050",
+   "e2b52a62-743d-5194-9bdb-88444904f8e9",
+   "4a1f3f89-8c98-5ec6-a110-96db4207ca56",
+   "293fdb83-5ced-5454-8ef9-20ab1b685163",
+   "a39cf357-3dd9-56cb-8f24-3c62c38d84ba"
+  ],
+  "p2p_unspecified_power_out": [
+   "fd151b51-77fb-5ef4-9a57-b62939e8bd8d",
+   "041a6062-fb80-581c-ae5e-5a7de7035d08",
+   "4db89001-d7ae-59c0-92b8-f4e2c18858ac",
+   "15d58400-36f6-54f2-9445-4d8761543fc6",
+   "8755f2df-985e-5bcb-bd0c-bdbd19b8aed9"
+  ],
+  "p2p_unspecified_open_collector": [
+   "ddaa644b-4b6e-5b15-a3f4-0b1559de7c7e",
+   "b1596375-6b61-5f9f-9190-bf76884ed885",
+   "33ae22b9-8a05-501d-af1a-1c8905465c88",
+   "2c35e9ab-2ebe-5ee0-87b0-a1f074dbc4a3",
+   "bee8fca4-bdf9-51bc-a2ab-ab43cf5b0b68"
+  ],
+  "p2p_unspecified_open_emitter": [
+   "0dbe1b72-ef2e-533e-a949-329b89fc3fcf",
+   "7bc032bd-ebc7-5317-8e83-1d0404104359",
+   "4a27c3b7-4223-519e-a270-834adbc6d142",
+   "129c91e6-25b9-5efc-8f35-c7290dce917f",
+   "7abd943b-94f7-58ff-8e0b-6202c1aa2f23"
+  ],
+  "p2p_unspecified_no_connect": [
+   "fc888da5-05b6-5e61-8d1c-29f5215f0bb3",
+   "9aceadde-d6ad-5f64-9ab5-800e58446e5d",
+   "3c79333a-0e50-5bc8-8e34-b0a3759f519d",
+   "c21268ab-dc56-5ce6-ba93-31d18a6e6ad7",
+   "8e3197c2-2e23-5481-9d63-8be1cd59330c"
+  ],
+  "p2p_power_in_power_in": [
+   "68fc7152-f5ac-5767-84ee-7070c9674f68",
+   "9471d697-0aac-5715-bd95-ddd838d3c70c",
+   "61e9b305-06e9-5aa7-8b10-c21e7d32768e",
+   "527e5775-00ef-5bdc-8676-6a9958743747",
+   "f54ffbcf-9029-5d95-87ac-580a0da1295b"
+  ],
+  "p2p_power_in_power_out": [
+   "f59db21e-1d7b-5e93-b00d-50f0f0d8cf70",
+   "1744e15f-f18c-552b-8859-99898e491568",
+   "5eb1bc7e-9fe3-5b2f-abe9-2b976433504e",
+   "32437e73-69d2-5f79-b776-e7da8a1afd46",
+   "0a5e1adc-a5dd-559e-b506-fce39b90c820"
+  ],
+  "p2p_power_in_open_collector": [
+   "ed9c79b5-2c0e-50ea-b443-95b1e0cea073",
+   "754fd0ed-8cea-5eeb-9df8-fe2b6e2dfa48",
+   "fa520b83-50f1-5085-9080-9505c4341008",
+   "8e71b133-92c7-5342-a67e-66533efb1ed1",
+   "1df6b93f-96d8-5c10-8adb-1fef007944ba"
+  ],
+  "p2p_power_in_open_emitter": [
+   "22211521-18ce-54f2-986d-2323df5add8f",
+   "6d88cfa1-7885-5f8e-8c4d-459988478c35",
+   "5b9d46f1-9fac-5a02-9ddb-feac3dcf186f",
+   "488332a9-31b2-5d4f-953c-4c71e7f4a7d1",
+   "90375749-7373-5f22-860c-e22f615cac4d"
+  ],
+  "p2p_power_in_no_connect": [
+   "d95039b8-5afe-5c4f-8e21-432bde80e3fd",
+   "e31cf6f5-ebdb-5ae8-bd63-60b4feb1136e",
+   "9f2ceced-c6e1-5e40-8ccc-686918b2ceb4",
+   "244b0fe2-183e-5379-9650-5df014032e3f",
+   "b6147247-70e4-5c3b-bca9-e55834b5e85d"
+  ],
+  "p2p_power_out_power_out": [
+   "13093837-09cd-548e-8a81-a2ee88fd7e71",
+   "9d6d22dd-2760-5fa8-9d38-eacafdfb9065",
+   "1ab74dda-f22f-5f76-9a32-d010d9720423",
+   "be482835-f50e-5d21-b271-1ffc354f25e9",
+   "4361ebfc-eda1-5941-8f02-b3fe53b6c5ae"
+  ],
+  "p2p_power_out_open_collector": [
+   "02852afb-ef4c-5e4f-9804-92daaa107971",
+   "a6ddf591-9a8b-5830-87eb-fecdb4fc80b9",
+   "2e620f1d-5129-5018-8378-d9d605dabf7d",
+   "d1122518-de1e-559a-b1da-822146464567",
+   "8c5e4f3a-62d8-527b-b50d-9078c1a1f278"
+  ],
+  "p2p_power_out_open_emitter": [
+   "877f2676-da2f-52f7-9733-1f1ed575fd4c",
+   "dbd61ba6-47eb-5ff7-b0a2-ad25b41da2eb",
+   "7d4b8579-933a-596c-b860-51a08443fdd4",
+   "8d500f5f-a5a6-5195-93d9-d2d8a5ed6213",
+   "5ea3ea65-05f6-58c9-b3e5-a71f55216a9e"
+  ],
+  "p2p_power_out_no_connect": [
+   "fb2aa485-b482-53b9-a1e0-d74f44662b5e",
+   "84aa089a-6eb7-5433-982c-12d2e2f2e03c",
+   "752cf84b-61ab-5325-b89a-c2590825704c",
+   "99c25b6d-7b8e-5300-b10e-4c65517b9bca",
+   "260f9db7-9020-5f15-9af3-530e14c945f1"
+  ],
+  "p2p_open_collector_open_collector": [
+   "dd28526e-fef9-5503-b4e9-5ae0aa42fcc3",
+   "b9099bf5-8d25-5f8f-b05b-8509524f5d63",
+   "a1f044ad-7df9-58eb-ab99-4e6d5627e149",
+   "7fe6d5a3-65da-55a9-9d50-de8ed56997e6",
+   "27c31b49-2f8d-53f2-b45a-2aff163ee884"
+  ],
+  "p2p_open_collector_open_emitter": [
+   "ed20bc5f-5822-5750-9e17-7f821675f393",
+   "6e97e48e-b5d5-577d-aff7-9ca79fc32e79",
+   "801fddf3-7e12-5d5c-aaae-3d9078663df2",
+   "0248d7ff-432b-577e-a782-f48d9199c19e",
+   "c1d78ab6-7280-5a32-9417-d9c429665e38"
+  ],
+  "p2p_open_collector_no_connect": [
+   "b955aec2-bf9d-5b09-975b-67c15b163da9",
+   "8cdb46a5-e550-5f33-9b4b-37492325f57f",
+   "66ad4efb-161f-551b-b104-927a1b46f38e",
+   "e77fbb58-2957-58bf-b040-651a05d00752",
+   "10dd2804-fe91-529f-9ded-5e66db0a6227"
+  ],
+  "p2p_open_emitter_open_emitter": [
+   "3e97bf7b-4558-52b8-bfea-7a0062729022",
+   "5b872331-ca84-5444-bb9b-d150dffd893e",
+   "af3fb855-9b48-5361-8a60-f30e89542367",
+   "36f23e4f-1106-57b9-b8ff-4207d0156042",
+   "da096105-919d-5bb1-9a49-6d1f0bd43e3f"
+  ],
+  "p2p_open_emitter_no_connect": [
+   "26b17c48-43fe-5d22-91f9-3d7c1c7f4ba5",
+   "46384b3b-b1a8-59bd-a4c6-9b307f693dba",
+   "3ab4d400-8d5b-584f-8346-b9f6659661bf",
+   "f83f5896-41f6-5edd-9cf7-ac345b316cf3",
+   "41d8c54f-9b73-5c42-987e-1e32ec1f51b0"
+  ],
+  "p2p_no_connect_no_connect": [
+   "cfbe4502-40d3-51cc-861d-eee92859a348",
+   "64289344-7db0-58cb-8133-9e2b6669fa9b",
+   "e743e51e-329c-5d51-b9f4-dd3afd58d05a",
+   "4c11737c-ae49-5d1e-9ed5-804c28f7e968",
+   "dcb7feac-8818-52a8-9557-ddbe5a2be4db"
+  ],
+  "p2p_three_outputs": [
+   "552801f8-4ddb-548d-a7ac-dbbac423b2eb",
+   "5b85f5bc-d319-5a76-b886-c97d42866167",
+   "605e9601-fd13-5001-b5c9-c55db5088f97",
+   "1ec15fb0-b636-5046-9265-e73901158b65",
+   "aac24ea5-a7a9-5e3a-a28a-9bb2dcd64fa9",
+   "54e76429-48f5-5e0e-bcfb-595f2c68403b",
+   "62b3a762-38eb-543f-a4ab-6b019d812f5f",
+   "af20ce65-cca2-51bd-b068-6df13f51d668"
+  ],
+  "p2p_outputs_by_label": [
+   "b2894182-a7b8-597b-9f37-e56b2962de8f",
+   "531ca875-5bff-53f5-a445-8811e1abb89a",
+   "bc9ba916-86fa-50df-99de-ff889a3526cc",
+   "c6adc0b4-3bfd-5249-962a-1ef515e2d1e4",
+   "b917e3b7-634d-5ebb-9625-c6f0c60114d4",
+   "97bf9c2b-7d5a-5164-80d2-a3415e41e592",
+   "1e4a913d-9998-5297-8b9c-8556b56d8a6a",
+   "6d499df0-717f-53c2-8ade-12a1fbd8b4fa"
+  ],
+  "p2p_bidi_flag": [
+   "4bb2347f-7c29-55dc-b59a-f5ed44ca7529",
+   "af3eddff-dbdb-5642-9317-42588529f27a",
+   "65b8c87d-c425-5b9b-8ba2-901e0267c2b7",
+   "34a34445-b2ac-5ed9-9677-10f060c1a59b",
+   "3e57bcfe-1275-5501-91d9-22c764bb10ff",
+   "4ac5163e-7008-55c6-ab35-3444d83136d1",
+   "575c5758-227b-5781-b714-68ee4d88230c",
+   "6c7b704b-4bdc-59fa-938f-220845de57b8",
+   "346e4369-970e-5b65-b3b7-e4d7de7f7d6d",
+   "772d96bb-65d8-56b0-8aa9-03ed8b458849",
+   "f2f5f878-479a-5fdf-9d0c-0e1ebe8567a4",
+   "1e7f808d-66c0-58c0-9cc0-5f17bb49277f",
+   "1bad9883-77b8-51f9-9bcb-f46185a7b641",
+   "b22c27c7-4511-56a9-9161-91af086f019b"
+  ],
+  "nc_on_joined_pin": [
+   "a89dd2a3-f6eb-5091-ad21-d1c244ab5f91",
+   "0b787cc4-98a7-5d10-a7ea-fa74905925b0",
+   "efa3329a-d839-5af5-9e09-1483107db0d2",
+   "402a3537-54ab-5a1c-a1e4-2fb4d596440b",
+   "82245d77-9bc4-582d-a12e-02f895fa689f",
+   "a4b0d14c-a13a-562b-82e4-e495c35caa2e",
+   "5a21bfc5-4adc-5c47-8c77-f7dfea228b90",
+   "d354e162-35cc-565f-ab2d-9fdef26eafaa",
+   "daed7a60-8f34-507c-a69a-49c42e445e3e",
+   "485338c0-1fd9-5243-aabc-8c7e49040c5d",
+   "f4a87a38-01c2-5957-b4d0-4bca391a9819",
+   "51f7bbcd-de79-5c4c-95d7-d227d01cfa46"
+  ],
+  "nc_alone": [
+   "16d55863-b7bb-53d3-9257-3fd1a1df48f5"
+  ],
+  "nc_on_wire_end": [
+   "214de71a-4705-50ca-b7c5-517ef98b5e6b",
+   "017115fe-7049-5057-9021-715cea64a8a2",
+   "03857aad-6d4e-5a27-b7ea-70b47555c0a3",
+   "6c8ea118-0d2b-54a3-a76e-8d40539b3f55",
+   "bb175c90-52f7-5d1b-bf34-a51c0ec8e932",
+   "8592ca68-1a14-5146-a32e-1df00a0f2ac3"
+  ],
+  "nc_with_label": [
+   "cecead78-fa60-5a2a-bb58-fc4fcc87a681",
+   "4ac69bde-7fe6-5caa-a7b8-0157f11ba2eb",
+   "cfc29e46-9e93-5ac3-b948-55db0deec598",
+   "6d1c9a9b-79a0-599c-b2ab-7577c3991209",
+   "9cd7b2fe-d394-5477-9b5f-18d0a11552bf",
+   "12f137ee-34ae-551b-a87f-38cf821d8b15",
+   "824ce33f-36f5-520d-bdc6-d3ca73a22708"
+  ],
+  "label_alone": [
+   "2490246a-07c2-5d05-9dac-21e150edff98"
+  ],
+  "global_alone": [
+   "dec2de73-d8ca-58ed-bb07-187cc3800efe"
+  ],
+  "global_on_pin": [
+   "0b05161e-befc-5bdd-9095-bc355dd4b34d",
+   "e6f79393-58c8-57a1-a78b-633283df199f",
+   "69001106-716f-5930-904d-1ac64e8b19c6",
+   "1f4b4d06-3a02-560b-9441-19bc0357cec4",
+   "b6afec7b-1ad9-5c9f-8812-db9c48c27a70",
+   "e8a57ea8-8718-5b56-98b2-aa9112d8ab08"
+  ],
+  "label_on_stub": [
+   "2a53f2e9-cacd-53e7-a0d3-a43bf59fc3e7",
+   "9758e2ff-3e08-52c0-aadc-d0d289ee27d2"
+  ],
+  "wire_alone": [
+   "05b13a3e-7d9a-542c-a01d-2d3e9c8c8636"
+  ],
+  "wire_t_no_junction": [
+   "da4f441f-2510-5613-8c33-ebab285fe421",
+   "1e3c1614-d24c-5fa2-a295-c17ac51e59b8",
+   "f0ca91d9-55e7-52af-aab3-2d134efceb0a",
+   "b1f3a14f-3188-5cef-aca3-8d1ceaf1825a",
+   "f4c04d5a-02a2-5f42-acd6-2784e5239a3b",
+   "d7e88308-e1b1-5207-bb49-d52ba880f785",
+   "4b3b9790-41df-564a-a57a-557bd06b7f06",
+   "847beb66-04f2-5cce-ae66-1b07878d2676",
+   "e602427c-a5fe-51a7-be30-e8391d7b627b",
+   "44322078-ebce-5da5-abb3-b4a28ac81d9c",
+   "395c7976-0a32-5a11-b2e7-a1de74aaa5c7",
+   "f0a121b6-08c8-5af7-bef6-c54044d784cf",
+   "c7394ecf-fedd-58f7-8022-709365d8063c"
+  ],
+  "two_names": [
+   "4d9d8431-fb44-5299-adbe-9b8b63c4a0fd",
+   "f41cab82-ff81-53ad-964c-e1f1033882da",
+   "7280baff-b3c0-53c5-82cf-7711af0e2ad0",
+   "c1660f84-f5e0-5972-87ed-5330856e1c5d",
+   "8981b11f-d85b-5925-a77e-ae1e8e598446",
+   "3387ff42-342d-520d-8ce3-ac0955a85de0",
+   "507f18b4-59df-5721-b1d3-be27ea531afc"
+  ],
+  "three_names": [
+   "4f180918-f177-532f-b0db-9d02cd892af6",
+   "13e4a6cb-305f-5bb7-90fb-ab4d58ec55ea",
+   "6ca95226-98f2-52d7-af60-11bf4504751f",
+   "d0c40add-e0e1-5659-99c2-004606fb50c0",
+   "280f2eb1-db5e-516b-b5ad-957ee44b8e9c",
+   "836cdd55-4a30-5f51-abae-38661adeedb2",
+   "a8ead576-1bc3-550e-be59-3c5f7e046451",
+   "05619517-08fe-51ad-9d92-d5285cda6474"
+  ],
+  "power_and_label": [
+   "bcda4c71-d009-5bcc-8558-4c63457c9997",
+   "bbbabbf1-083d-50c1-bca5-9347279a9c3c",
+   "6a74844c-80d3-5619-a961-a1d516412d0d",
+   "76e753bf-7428-51c1-81bf-4d96ca14328c",
+   "db35c522-a9bb-5667-8dac-5e25123c2e17",
+   "b92e6365-514e-596c-b0e8-14d7991b34cb",
+   "c211289b-ab6a-5462-bf94-fed732cf6b0e",
+   "5b0ddf93-c98f-585e-a9b6-dcaabb30ff75",
+   "04e50876-7f4c-5944-bac2-9e32faab455f",
+   "c230f4c3-f962-585f-a098-63118765b59f",
+   "c4ab232b-324e-5b5f-bf43-4d043d8c6d8a",
+   "68ab7947-1700-5c4a-a84f-5328c712b266",
+   "d6f2be04-37c3-58e2-af6a-ff9f172f4248"
+  ],
+  "similar_labels": [
+   "9e3749eb-a858-509e-9aa9-1fee610db4b4",
+   "199b72d9-6df6-5930-927d-beabdc74040e",
+   "369352ad-333c-5c3b-8792-7f59039f63c6",
+   "271292c3-c456-5dd3-a478-ba6675333413",
+   "49003052-5589-5809-9239-611fb78fdf6b",
+   "5e9747c2-bbff-5050-af36-a5f55bf54568",
+   "11c0b49b-a3de-5aab-9a18-da256cc81ef5",
+   "93d73997-0fee-52ab-8a45-92e9bf4c3767",
+   "edaa6df3-55c1-5b4e-b4eb-266b2a3532d3",
+   "c2d7f01b-56ae-5a43-b7cb-e45b731aa999",
+   "00c4db8c-a09f-5e48-bef2-27c0d4fcb47f",
+   "1e523ec3-8c4f-52bc-b87e-fa1a27b4d655"
+  ],
+  "off_grid": [
+   "562cf876-bdad-50c5-a844-1174b1c0736e"
+  ],
+  "four_way": [
+   "f2afd928-4fad-5c4c-9539-a9937009762c",
+   "2fe69a98-4a4c-5cd9-a21e-74e652bba6fb",
+   "5d2271b1-9f35-539f-9ddd-15054774211a",
+   "16585d60-2b19-5828-90e1-cf61de04a084",
+   "cc7ee8d2-1c82-50a1-a522-5732f3b6022e",
+   "59fd98da-bef6-511c-9031-757f11e68f37",
+   "71646518-0b7e-5f72-87b6-106b6ce411d2",
+   "e0591d0e-a676-5893-9208-55ff5fc101a8",
+   "0943e9f6-c712-5d7a-8c88-fc9a82b1f945"
+  ],
+  "label_two_wires": [
+   "f4883080-3fab-586a-94d2-45da0a94d4a5",
+   "e863066b-f717-5427-88ca-653a7fff6e12",
+   "b9aea899-3f17-5835-91e2-bcb1e0094e07",
+   "bf2b0bee-f640-59a9-bd56-3e54a90b262c",
+   "57c8b605-5d14-5285-803b-9b5f33033977",
+   "42d97f6c-15eb-5fac-9ede-a23d596e1a08",
+   "8ce93331-0144-5cf7-b541-72056a77ba48",
+   "fce1be5f-1f1e-5a40-9031-7074a15bda46",
+   "bc5c92cc-6c67-5753-af24-4a7f63a5d56c",
+   "de0edbb8-7e41-5759-8b8b-d9fc96ad6f72",
+   "ea0c3f29-d055-5b6d-a1b1-5f528dd69c19",
+   "15814680-4f37-5b95-93a6-79c1d4c0696c",
+   "0b137851-8b7e-5e86-949c-b06e5d098c8e"
+  ],
+  "label_stub_named_elsewhere": [
+   "0b87a3c3-ea3f-5d54-90a8-019296fd8bff",
+   "b4bbab7d-a9be-5495-803b-0958e01b801c",
+   "adaacd1b-3a90-520e-9120-6e7ad2d03f58",
+   "14813bc2-a70d-52c1-abd8-8e3aa73804cb",
+   "9f2b2e9c-f1eb-5c88-8f1c-ed1e190ff0dc",
+   "2d909ac0-cd56-5f59-b932-6519f4ffb2fd",
+   "51302385-9a5b-5aae-a099-edd2ad3c852d",
+   "d39742ad-d15a-527c-bde1-de3b7c82af54"
+  ],
+  "label_on_crossing": [
+   "4c717598-9110-52f1-99d3-ecd3979031ec",
+   "ae2bd87e-e8ba-5d5f-a20c-eb5145123515",
+   "445afbd5-5199-5985-a1d3-b6cd43d08e71",
+   "671218d2-5d8a-5fdd-a499-bff6b1e521a5",
+   "2d5f7e8d-a5ad-5ba2-8452-aefa22558e0b",
+   "f9c42d15-d24a-5ea4-9fa5-c5bd03b59254",
+   "6dba067c-0bc5-5211-a2fc-06f0b1bda981",
+   "b84b81d0-8ba5-582d-8b9b-4a05e7d6404e",
+   "6b5b84a9-39eb-56e8-90b8-2fc1683854fe",
+   "4ab95d75-fbf4-5e2d-ac13-9f1baa6e2fd0",
+   "09a4bc74-ffb0-5044-919f-6efdb7620ed2",
+   "a2f7d7c6-bbed-5458-bf97-24abe93293b1"
+  ],
+  "label_on_wire_middle_and_end": [
+   "cae63135-9547-58f6-9aae-6939364f6880",
+   "1875b160-0696-52c5-8362-bf18d4d2ee5d",
+   "461fa9b6-1097-5a70-b9eb-ffc0515f49c7",
+   "d6b2ed4f-940e-52d4-97b0-5971f755b278",
+   "e1f12eca-7b19-526d-97a0-81893ff7c1ed",
+   "5843a629-6c91-54f1-a226-912f96950dd1",
+   "a31c6e3a-fece-5311-85a2-26f165f2fee7",
+   "d87faf97-5147-5fe6-9b79-8bc004d16e82"
+  ],
+  "global_twice": [
+   "6f3e559c-b42b-5610-9834-1a5b9b47a8c2",
+   "b1dae455-cdf8-5265-a078-75793494df50",
+   "a43eff93-dc59-5ce8-a970-f8c45c05ced4",
+   "1ee09b0f-02b4-5253-80aa-8f234647a62c",
+   "fcf43d3f-04c8-54cd-a8e1-55d98a84798b",
+   "6c726c86-5ef5-599d-869d-e5a415a76646",
+   "0c50650b-fe3b-5638-ab23-82cef9eb1993",
+   "19fdafb0-4d0e-557f-85c5-b708063c12a2",
+   "4b330423-4e1b-518c-89d2-ff3d1a618f3a",
+   "bd79a887-1f8e-51db-8975-dab9fc0ca030",
+   "ead1c4f6-9057-51da-9f2a-81dcbc27453a",
+   "54e7e13e-1162-59ec-b351-2d53577ea8ac"
+  ],
+  "global_stub_named_elsewhere": [
+   "9c6af96a-8c76-510d-9ec2-7c5f593848bb",
+   "215a3953-b502-5dfb-9ae6-e2d1e3a46094",
+   "b6cbd0f7-4015-526d-bd04-c51dd42d2be6",
+   "bf7b5029-164e-540f-8acc-ebdaf390ae7c",
+   "393f09b0-2e87-55d0-bfbf-c7170377028f",
+   "bd8a4fdb-c8bd-501d-bc0d-3d4b08a1f78a",
+   "aaa9af18-7ce0-564c-a89b-6a1b25b8ff94",
+   "1557a69d-505e-510a-afba-ca6ccf6f562f"
+  ],
+  "nc_on_pin_with_label_net": [
+   "7bbbe5be-640c-5d20-8825-5e4d07df8601",
+   "01c5cb24-8156-5dde-b47b-1793c31328de",
+   "fd77fbc8-bc2c-5a0c-9739-72b996105247",
+   "832a554c-4ee6-5ff8-b85a-d4736e87012e",
+   "ef5f8dd0-db34-508c-ae32-ade9c61dc1e2",
+   "89d7207a-d186-55ce-9470-d6a476c55951",
+   "d3259aef-db55-5028-b982-2e4ed4dc0dfc",
+   "68c9c0b5-ec4e-5785-9b69-79968eb01bd4",
+   "1f95e830-5959-5626-b23b-3e35fb1dd5af",
+   "a91c0e0f-106c-5693-9e68-26f6fb2c966a",
+   "11c6ad37-0f13-5385-8998-6486d395d62a",
+   "61f5738e-b9b5-5a4e-bb79-7a9b42e4eb8b",
+   "fd872c7d-1591-531f-8805-2f521a306b4a"
+  ],
+  "nc_on_wire_middle": [
+   "2e188e29-7a40-5f52-a098-946d3cab1245",
+   "71a64f80-6a4d-52ee-b6cb-80f6942cfc7d",
+   "84181a7a-7d67-55f8-a4f9-6addf827bc32",
+   "2f5f1733-a0f2-5b28-9d76-3e60745d4f8b",
+   "88d4b558-e205-5efc-aa50-075f422caf56",
+   "93ba23f5-4504-537b-bd79-07cf68bf4305",
+   "735a57f9-aeac-5c35-884a-07220e88e3c3",
+   "bacd2cfc-7d2b-5502-84e4-e86b8e9d802e",
+   "ae76771a-dce9-5155-b04a-6ebf6d77ea2e",
+   "811baf7d-f01b-5926-bf4e-3c0b2e09f0d5",
+   "f3a66aa5-b7b5-5bf1-8efd-01fbac91f125",
+   "f6fa65ea-8105-597f-a0ed-1485df36ec34"
+  ],
+  "two_power_symbols": [
+   "6b424cf8-6821-561e-8e54-017d031e1f10",
+   "b605ab10-eed8-5faf-af7a-ddbd966e4de4",
+   "645ad0ba-59d2-5f90-8711-7e5f0f177c3a",
+   "de43c3e1-515f-52d1-9df1-6e33d7a3f24e"
+  ],
+  "power_symbol_on_pin": [
+   "51860586-e281-540d-a5ac-58c821ed00ec",
+   "2a7fb879-ad04-53ba-9cf1-a1e51af75de8",
+   "264ba251-bee4-539b-bbae-87bf9482ba95",
+   "7e9571d0-1ed4-5020-bbfa-78eb00f1ed51",
+   "850c47fa-272b-5b7a-9fe6-fe18a0974215",
+   "810edf29-e71c-520e-94ca-75256388b8f9"
+  ],
+  "pins_two_inputs_label": [
+   "38575b25-65d5-5b29-af60-300378387a25",
+   "57dac9f4-54c1-545e-9f8b-2d4964067033",
+   "d3ff9f10-0c83-557f-be6e-34da1062f36a",
+   "523bddc5-9f55-5264-ac60-3b8fd6406be2",
+   "e9d665c6-06f0-5ab5-805c-233e3d93f68b",
+   "2ae5c86c-0b1e-506c-a53b-81d52e778b9a",
+   "66ae253a-5977-5f81-bded-89e77b777827",
+   "419d5317-f0c8-5a9e-9c13-636f0720e6eb"
+  ],
+  "three_power_in": [
+   "7dd74b1f-4148-5b55-89c1-302a7d40df66",
+   "845ec71a-542b-553a-b408-a9ac08251eef",
+   "ad4d1aa0-2d8f-5a19-9fe7-623cd6c30bf5",
+   "8f5137ed-fb5b-52af-9867-277cef686ec1",
+   "445334a8-8593-5408-93a8-f44db7c163ea",
+   "838f0fc4-c56e-5497-bbd8-3d1df7527ae5",
+   "67cd8146-4d39-5eb0-b946-1916ff2c8b04",
+   "a3cc8b9e-662f-515d-980e-b26db8f5f928"
+  ],
+  "pin_to_nc_pin_and_wire": [
+   "418290e6-7139-5dfe-aa66-3a0c3674a120",
+   "71344b3c-2789-511f-9296-9ae612dde9b2",
+   "44e7d296-ab0d-5e8a-bcc0-a427a20a4e60",
+   "da19c089-9a65-58d2-afc4-75b309075387",
+   "10b64362-80af-5ccb-b77d-084275e55b4e",
+   "c5bfc2ba-425c-5434-bc89-e2efdf73d04d",
+   "08153141-ddaa-5452-a255-686a66213be0"
+  ],
+  "wire_between_labels": [
+   "fc525acd-daa8-5d31-a408-085e54824fed",
+   "b476817e-93a0-5955-aee3-75b9e8c57fd1",
+   "c600066a-b7bf-5511-b34a-20feb158bb21"
+  ],
+  "junction_alone": [
+   "66220fe7-ae2e-5525-9f49-5d49aa0acf47"
+  ],
+  "junction_on_wire_end": [
+   "21f2aaf4-edae-5f61-b619-2e122b207a7a",
+   "92241928-af4f-510a-959b-5bd5ba60f1c8",
+   "c58e158d-2a4a-51ca-a34b-01f1a0770e5d",
+   "0150722b-4d0b-5ea8-8fab-cdec45a974b4",
+   "032e14d6-493d-582a-a28c-4a164aca9427",
+   "313317ca-c752-5b65-b416-1008e4095844"
+  ],
+  "floating_label_named_elsewhere": [
+   "196d2f41-bdd6-505a-955a-63481f601d1a",
+   "43cbed34-5102-5609-81c9-275dda6faefb",
+   "c7c908a6-fd6b-5ea2-a61c-7f870d0a2be1",
+   "277fd3a4-8343-5509-a3c3-8254749a1764",
+   "243023ec-8ce2-54f9-a2ba-ce2070ea1637",
+   "5ed92400-4bc2-51e7-a329-2ec767a59b01",
+   "b6d59adb-3426-50ff-96ee-6093fff5c242"
+  ],
+  "floating_global_named_elsewhere": [
+   "0f168fae-af39-5c37-bd2f-939571aa364c",
+   "5904df29-a7ef-53f8-98b3-0fbf570a90b0",
+   "386cfaf0-43ee-57de-b45c-3d10da7c6c04",
+   "98053289-4e23-5ccb-9716-bb01821396d1",
+   "68ff5e6d-0e43-51a7-b163-078dfeac4317",
+   "fba73543-0d8a-566e-b0c4-56d484419623",
+   "43f9f8b9-59ed-56b0-b487-98ac56c31651"
+  ],
+  "two_wires_alone": [
+   "5fefdf99-a4bf-5ffb-a62b-1eccf0e4f73e",
+   "3c6c8b2f-60d5-5775-a821-a4f8ad827da6"
+  ],
+  "power_in_before_symbol": [
+   "38250117-f63b-5bf7-bd49-5a9957087cf3",
+   "0bcbd2da-4087-5ba8-9ea8-1dda2543d4df",
+   "c6322878-7c4b-599a-912c-e00f3facd76a",
+   "0394154a-0b1a-5fdf-8862-b44ef7787cf1",
+   "9c36985d-bac3-5554-a2e2-285ae1d10741",
+   "a9cadaee-ead4-5280-b899-9487349b898c"
+  ],
+  "power_in_by_label": [
+   "4721c4e5-31e9-51d1-bb4e-8a05e433ee93",
+   "c092f012-7fbd-5986-a152-27f2f1ca9b5a",
+   "fef040c2-6925-5f30-9d6f-71a2c283d5d1",
+   "fd075455-1e41-5328-9349-5b0412eda6a4",
+   "e54b1101-1d6b-54dc-8502-11979274327b",
+   "20944bb2-b962-5cd1-b735-4500bdf7df11",
+   "72598748-705b-5f4a-9932-758d9868acf1",
+   "3309fbaa-1704-59cd-83cc-eec5c99efd4d"
+  ],
+  "nc_on_free_wire_end": [
+   "9de25cbc-b7fd-55d6-b0a3-ca723d8668c7",
+   "1413decd-4b5d-5d5d-98bf-eec793d1b754"
+  ],
+  "local_and_global_names": [
+   "6b10facd-0a33-5c73-af55-708a179b27fd",
+   "72677491-86e9-5d00-a0b8-ce9e27b1cc63",
+   "a6475a6a-9b32-5a3b-b845-6d3b478d5c3f",
+   "6adfc186-0846-5194-be8c-8cafc2e9d725",
+   "ae1add6c-1a7c-5d33-b651-4b0d9dc6dab3",
+   "c4d90726-9ec6-5a38-a0a3-b3af7d7d601b",
+   "d1285df9-63fe-5ca5-97c9-4081d4782bb4"
+  ],
+  "output_input_power_in": [
+   "d2eeaeaf-f172-508d-9393-bc85df86c9b5",
+   "c4bf7869-df8c-5af1-8955-fdba26168278",
+   "e23f17e9-2d95-5df7-ba81-7773b2af847f",
+   "9924ca87-b8bd-58c4-9f49-002668765c4c",
+   "1a56687f-ba82-5e6a-86cf-fa851925e637",
+   "b30ffb2a-ae44-5252-99dd-bdea6938a912",
+   "a803d6a1-06e5-5ecf-afa6-a360e518e92b",
+   "1ef0868f-7149-5f90-a172-907aedcfcb58"
+  ],
+  "similar_power": [
+   "3d9856fc-f5be-5863-899e-23f4f3b7baad",
+   "7acd75de-1751-513e-960a-ecd05adf20d9",
+   "7c96c2d6-36e6-5c56-8d0a-bf3a50638058",
+   "ed92b3f7-9529-5c51-ae7d-5ba9da906691",
+   "f4734585-9209-521a-8228-2d12a1c1512c",
+   "dd6b4034-57b0-56d4-8e9a-9a461512c0f1",
+   "a9e44700-54ee-565f-83e8-f1029de63d9a",
+   "8432671e-eaa1-583b-a6b1-9b6087be3fa9",
+   "d3b0d0cc-ebd1-596e-9428-fed78e3b6c74",
+   "59a30ffa-1b01-5419-91a7-60633ab0c499",
+   "56a0f43c-65e5-5e16-9337-ce64db190e0c",
+   "0da09dc5-6fc5-5468-8020-33f6a378dc71"
+  ],
+  "similar_label_and_power": [
+   "a35b5d7d-4f84-5d9a-ac4e-0ce504b0224d",
+   "51afa141-ab0e-5fca-87b6-9529ad4efccf",
+   "7918480d-763c-552c-80a8-6c3ea55dd1c0",
+   "b3e089d8-4fcc-5f48-a692-f92e78ed51fa",
+   "c14d0fd5-e0bf-5048-8326-826c4bfb74a0",
+   "d0d8cbcc-c8eb-5cc4-ad9c-10e494af2b2d",
+   "44a81b43-be31-5db5-bf2b-098f34e4150c",
+   "dc4873dd-8dc7-5d25-96d2-5fb08e20b0f7",
+   "47970b39-3a3d-5273-bf5d-443986d6796a",
+   "0d0baf87-9016-5b7b-a94e-c4430f9095b9",
+   "4a509a6a-b310-5849-be28-4151c3efa576",
+   "cf03d28e-20b1-56fc-939d-1473de3a7f81"
+  ],
+  "same_local_global": [
+   "a345176b-c4a5-5d3d-8cf4-e392eeedc3cc",
+   "3bcfeaac-a6fc-5dda-97ac-9cfe14ac53f0",
+   "46263be0-26c0-52fd-9248-4863ee90c3ef",
+   "ecf77d1c-c8ca-5384-9458-ef867fd5e144",
+   "0ecee341-ec6a-56ab-bfc6-5f3d067d4155",
+   "be06bf38-cc54-5aee-b66f-1c781ac7c51d",
+   "4810c155-ebd6-5070-b180-b7ab8b3b9d90",
+   "3a767e99-09be-5b6e-b2dd-da3f7b4b4c75",
+   "6d0b784c-8142-5e45-af12-7e13d4cdd1c2",
+   "6a431619-55a1-5242-badc-baec613bde63",
+   "64b74f74-431b-5b27-b10b-93dc9512ee60",
+   "224abc94-6e2b-596e-b826-870e2fe8edba"
+  ],
+  "four_wires_no_junction": [
+   "a58a0930-717f-5280-b318-4e541997e2a9",
+   "24dec273-d07d-5199-a2fa-f282a73341ce",
+   "df73080f-c2a5-5d57-80bb-0d09b191f4f6",
+   "61e14b02-314f-578e-884f-3a8244b6451a",
+   "b1061508-5465-59f8-94fd-cee63c04f110",
+   "0bdff802-fc03-5a39-87b5-79e1ad1dcd71",
+   "7b3702ba-4ba4-51d8-a85c-d143c17af33a",
+   "67306f03-ffd3-5587-b7f0-2bc2656ead51"
+  ],
+  "three_wires_and_pin": [
+   "fb6c7d23-3771-5191-93cc-9843b57baff2",
+   "97d7dbf3-9b68-5fde-86d3-3467332264e4",
+   "f992308a-27ec-57d2-a173-baae9884d559",
+   "2b9b1090-51a2-5671-88fb-dd94574d3ffa",
+   "2cd06bfa-fa4e-5ecd-8082-6798d269a7cd",
+   "209c9fe5-461e-50d9-9f96-91918daa1043",
+   "e7ad6856-8ad2-5333-a55c-3fe6db0c0c08",
+   "34acf5c8-efc3-5edb-9f99-204259e351b4",
+   "5e2d1b38-9b8e-51c6-8afb-cb5954ea3e22",
+   "44d93b52-f1b7-5772-a097-0fa23008372a",
+   "b9b6d921-f310-5772-a5ea-e42a4206c07e"
+  ],
+  "symbol_off_grid": [
+   "a9a5a9b2-4cee-598d-8704-b4ab56fddd83",
+   "05e3f6a8-1cfa-5ce5-bd4f-05c5a33e01eb",
+   "659ae6a0-2034-5bf6-aa97-f802ab54f6a2",
+   "ab3ef568-efc3-5b1b-876f-766dd2619e71",
+   "f195cdc8-1d61-5156-a3af-68e2f17bd835",
+   "07dcb45d-cf52-5f19-b438-fe0b6a434c81"
+  ],
+  "label_on_power_only": [
+   "205df334-fb0d-5dce-89a2-8591a50725a5",
+   "50802181-badd-5268-964a-5c13f78d55f1",
+   "95f654f2-c01c-5d22-82a0-334a7f23d862",
+   "18fff5ef-2855-5883-9729-67f2233503ea"
+  ],
+  "junction_mid_wire_alone": [
+   "11d3d94f-2e80-5f7f-83fe-79e833c3383b",
+   "f9e4c0ce-9830-515c-9dd6-47bb68158c6b"
+  ],
+  "two_floating_labels": [
+   "aac27df2-0078-5ede-b07b-533471f91d49",
+   "9ef93518-63a0-5789-a0a9-e9fb021d4bd6"
+  ],
+  "pin_label_two_floating": [
+   "dadec7d0-0893-565f-8fe9-0a5005c9c0bf",
+   "4f64908c-5f66-5811-8d82-4def11bf22d4",
+   "20078d96-936b-5721-a9e9-82e2ff180e23",
+   "cd723956-a479-5cfe-a614-706cc8a47c6c",
+   "eea3c39c-0ff1-5479-965c-0d12e3b05563",
+   "7fcee8e5-64f1-59c3-b9c9-22075d24aab3",
+   "b358ae84-efe4-5dd0-81e0-523dd69812c9",
+   "e7dd41da-55be-57a6-a043-6ebcecde8b94"
+  ],
+  "label_on_pin_and_floating": [
+   "74f6b4a7-bb8e-52cf-987b-8f173465cea8",
+   "1b008983-dac6-568e-9d8f-bfbf8a083fb1",
+   "c20684ba-41d6-5a68-9310-fd407f9f9cf1",
+   "51ea9f86-64e8-528d-a18d-2c69ece12488",
+   "c6b7f5c7-be4b-5ad6-bd4d-ffbf6badad53",
+   "14635eca-97c5-5d24-a156-951a8b3a5bb3"
+  ],
+  "stub_pin_and_floating": [
+   "efb0c0be-6895-5fec-98a2-c5bd80151969",
+   "b2aaa693-0a29-55dc-9f66-ef76b02bb110",
+   "176225e6-1e6e-5035-97c4-1de7fda3ee61",
+   "6ab3b3bc-0e76-5374-9aeb-f05c89075643",
+   "802486bc-8919-5c0f-a045-21a57d13129a",
+   "cfdff7ec-f36f-52d7-908b-e6501133ebe7",
+   "d9cbd69f-2ae2-583c-ae87-6ee98d6e3969",
+   "8db0582e-8889-5142-b776-b0c57f4e4587",
+   "fccced16-0ff8-58d2-9b2a-b8500885c93f"
+  ],
+  "order_power_in_refs": [
+   "0d7fc1be-1cb5-5fdd-a2b0-a1788d54e70f",
+   "9f5b0beb-a671-53c5-89bf-7e233290967f",
+   "1ecad96a-4738-5a0b-b826-0e05e7f5e3f5",
+   "cb84e07f-11e8-5d74-a9bc-013e2ecf3c30",
+   "2a003818-65cd-5059-9b16-58c887b1976f"
+  ],
+  "order_power_in_refs_2": [
+   "56528c6e-6eb5-5b99-bfbd-1aa5a44fd483",
+   "c294bba0-56e7-5310-b99c-9867f472bf0d",
+   "ebb875c1-65f1-57bd-bbb0-08301875ee5b",
+   "c826b336-bf96-582b-876e-689d4622dce2",
+   "bbfc1a61-161a-5a55-a894-4c46b2195c68"
+  ],
+  "order_power_in_refs_3": [
+   "24d9f3ea-5484-59e8-92fa-c88b491f2544",
+   "e813fec7-f661-50c2-9ec3-63f672a6d25b",
+   "159d88d3-1eae-53f6-8fad-9a568224d08b",
+   "399f107b-5039-57c7-a590-8d2808b469c8",
+   "7ee40b65-acc5-5ac3-97d7-16c0067a8618"
+  ],
+  "order_inputs_refs": [
+   "f1211012-e29b-5990-ae46-b3bcc9f96916",
+   "3b0b0e16-66f5-568c-896a-78c5bf654c19",
+   "3035e318-6874-5f42-a028-8c20f0c6b2c5",
+   "9a16e80c-a3c3-5c72-a180-e93a7d0c64a9",
+   "b16cc6ee-af7d-5066-94bb-b5dc53fecfd7"
+  ],
+  "three_wires_alone": [
+   "c1ff9b54-dfc0-5f4e-912b-574ace66f27e",
+   "6994f159-2002-5506-ae83-832ddad2ef17",
+   "5ee6f6b7-3330-536c-9991-e78e9fe6516e"
+  ],
+  "pin_off_grid_unwired": [
+   "1bf2ff7e-ba41-599e-8a93-63edd8d734bd",
+   "2f679cf9-a255-5f83-9a6d-27b474d87efa",
+   "8420e496-0174-5547-bd8d-d567c2dfd146"
+  ],
+  "nc_off_grid": [
+   "3ff3689c-f348-59b2-9e16-21fed43b7d7d"
+  ],
+  "label_off_grid": [
+   "28f16c79-e903-5b2b-9244-0a7eb601beff",
+   "58d537d0-df30-51af-bee3-5d5c95364e49",
+   "8e5b65c9-4500-5bd2-a941-2f2016e55c5f",
+   "54d7d326-9352-5960-94d2-77d8e557010c",
+   "16184d44-c61d-5fbd-8bd6-958c514318ab",
+   "8c1c99e1-aedb-51d3-b1ea-1091317dadb4"
+  ],
+  "wire_mid_off_grid": [
+   "52886219-4bde-5f15-b52c-559f42f4a46f",
+   "125a6b27-a0b6-5ba3-9331-f1b94922bddc",
+   "56f15e7c-4540-5e9f-ae27-05a4dbd8e148",
+   "532d473a-57a0-5042-8bbc-98812f6d0962",
+   "84bbc5a4-13a7-5106-929a-4266f81b4c6b",
+   "da89abe7-8005-5bf7-8af5-8f736e11b4f0"
+  ]
+ }
+}

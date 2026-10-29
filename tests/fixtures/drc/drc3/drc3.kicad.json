@@ -1,0 +1,181 @@
+{
+ "kicad_version": "10.0.6",
+ "violations": [
+  {
+   "type": "generic_error",
+   "severity": "error",
+   "items": [
+    "6ac99f41-d274-5e93-9083-b6ebd02195f0"
+   ]
+  },
+  {
+   "type": "generic_warning",
+   "severity": "warning",
+   "items": [
+    "72451ede-0c37-51e7-b4e6-a343ae670a9e"
+   ]
+  },
+  {
+   "type": "item_on_disabled_layer",
+   "severity": "error",
+   "items": [
+    "d3ba365d-689f-5d77-8273-f95792826483"
+   ]
+  },
+  {
+   "type": "items_not_allowed",
+   "severity": "error",
+   "items": [
+    "3b35d8ee-6705-543a-8d21-9e6ba0545b9a"
+   ]
+  },
+  {
+   "type": "items_not_allowed",
+   "severity": "error",
+   "items": [
+    "3c2d0d46-da8e-5a11-a57e-606601757e87"
+   ]
+  },
+  {
+   "type": "items_not_allowed",
+   "severity": "error",
+   "items": [
+    "6d31a4a6-fa92-5667-b7a0-bbc194ef0e47"
+   ]
+  },
+  {
+   "type": "items_not_allowed",
+   "severity": "error",
+   "items": [
+    "ac24d0a0-e814-5213-a058-70e81f902646"
+   ]
+  },
+  {
+   "type": "items_not_allowed",
+   "severity": "error",
+   "items": [
+    "b4880989-28aa-552d-8dc5-30daa7ad8cc4"
+   ]
+  },
+  {
+   "type": "through_hole_pad_without_hole",
+   "severity": "error",
+   "items": [
+    "e42a5e85-05a6-5b66-998d-f60e1f697711"
+   ]
+  },
+  {
+   "type": "unresolved_variable",
+   "severity": "error",
+   "items": [
+    "1391461d-f7b9-5672-8478-e3eaf7f1e75a"
+   ]
+  },
+  {
+   "type": "unresolved_variable",
+   "severity": "error",
+   "items": [
+    "16a92d6b-fab6-52f0-a8e5-2f9448f87983"
+   ]
+  },
+  {
+   "type": "unresolved_variable",
+   "severity": "error",
+   "items": [
+    "3265b4cf-3fd7-5c5c-932d-e0a8fb28d738"
+   ]
+  },
+  {
+   "type": "unresolved_variable",
+   "severity": "error",
+   "items": [
+    "336e68a5-5792-583b-bc9e-d322cf361ecc"
+   ]
+  },
+  {
+   "type": "unresolved_variable",
+   "severity": "error",
+   "items": [
+    "38c667ef-e14b-5328-84f3-e050cc86ccd3"
+   ]
+  },
+  {
+   "type": "unresolved_variable",
+   "severity": "error",
+   "items": [
+    "3d7a9fcc-aac1-59dc-980d-f6bf93f99145"
+   ]
+  },
+  {
+   "type": "unresolved_variable",
+   "severity": "error",
+   "items": [
+    "51fa4e08-58a0-5311-b304-032c8619a6e3"
+   ]
+  },
+  {
+   "type": "unresolved_variable",
+   "severity": "error",
+   "items": [
+    "651c7927-7861-53cd-a982-458cecfe70be"
+   ]
+  },
+  {
+   "type": "unresolved_variable",
+   "severity": "error",
+   "items": [
+    "85b2095b-97c3-595b-a403-70e1279850da"
+   ]
+  },
+  {
+   "type": "unresolved_variable",
+   "severity": "error",
+   "items": [
+    "9b8738ce-0205-55af-90c1-7f105dbcda05"
+   ]
+  },
+  {
+   "type": "unresolved_variable",
+   "severity": "error",
+   "items": [
+    "a6f0498e-f2f6-533a-ab68-7904cd325f39"
+   ]
+  },
+  {
+   "type": "unresolved_variable",
+   "severity": "error",
+   "items": [
+    "ac573fa6-2a7c-5118-a26f-ec89c178ebb7"
+   ]
+  },
+  {
+   "type": "unresolved_variable",
+   "severity": "error",
+   "items": [
+    "bb8d0913-1e3b-5124-9a5c-b9202ecbbb1f"
+   ]
+  },
+  {
+   "type": "unresolved_variable",
+   "severity": "error",
+   "items": [
+    "bc0c628e-f912-5706-b0e9-0890b098d521"
+   ]
+  },
+  {
+   "type": "unresolved_variable",
+   "severity": "error",
+   "items": [
+    "c3f4d7dc-a79f-5f31-aac0-b47c3af9963a"
+   ]
+  },
+  {
+   "type": "unresolved_variable",
+   "severity": "error",
+   "items": [
+    "f83b259d-a322-5b98-b75e-a995ce715581"
+   ]
+  }
+ ],
+ "unconnected_items": []
+}

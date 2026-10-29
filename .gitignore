@@ -1,0 +1,53 @@
+# Python-specific — append to common/.gitignore
+
+# Byte-compiled / cache
+__pycache__/
+*.py[cod]
+
+# Packaging / build artifacts
+*.egg-info/
+*.egg
+build/
+dist/
+
+# Virtual environments
+.venv/
+venv/
+
+# Test / coverage / lint caches
+.pytest_cache/
+.ruff_cache/
+.fcc-trace
+.fcc-coverage.json
+.error-coverage.json
+htmlcov/
+.coverage
+coverage.xml
+
+# PyInstaller
+*.spec
+*.manifest
+.vendor/
+
+# Recording rig: real board paths stay off the public repo
+demo/local.json
+.error-trace
+
+# Local CAD sessions and internal distribution staging (templates remain tracked).
+runtime-config.json
+scope.json
+*.sqlite3
+*.sqlite3-shm
+*.sqlite3-wal
+*.kicad-cli.lock
+*.kicad-cli.journal
+*.pending
+*.kicad-stage-*/
+internal-dist/
+release-work/
+
+# Private channel configuration and generated publication receipts
+deployment.local/
+release/HUB-TARGET.json
+release/PUBLISH-RECEIPT*.json
+release/ARTIFACTS.json

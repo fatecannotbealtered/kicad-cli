@@ -1,0 +1,251 @@
+{
+  "revision": "public-contract-v1-before-first-engineering-generation",
+  "requirements_sha256": "69a900071592765763ca460eb2f239b76db36148e5f932f11b070ae73108a659",
+  "requirements_unchanged": true,
+  "reason": "Public creation contract supports automatic schematic layout and a provisional outline, but not explicit schematic coordinates, rotation, manual groups, or exact-size/custom outline. Original 60x40 plan is retained as unsupported initial preference. Mechanical acceptance remains the frozen 40..80 by 25..60 mm rectangle range.",
+  "board_creation_parameters": {
+    "pitch_mm": 15.0,
+    "margin_mm": 10.0,
+    "columns": 4
+  },
+  "planned_initial_grid": [
+    {
+      "ref": "C1",
+      "xy_mm": [
+        10.0,
+        10.0
+      ],
+      "bbox_mm": [
+        8.495000000000001,
+        9.245,
+        11.504999999999999,
+        10.755
+      ]
+    },
+    {
+      "ref": "C2",
+      "xy_mm": [
+        25.0,
+        10.0
+      ],
+      "bbox_mm": [
+        23.495,
+        9.245,
+        26.505,
+        10.755
+      ]
+    },
+    {
+      "ref": "C3",
+      "xy_mm": [
+        40.0,
+        10.0
+      ],
+      "bbox_mm": [
+        38.495,
+        9.245,
+        41.505,
+        10.755
+      ]
+    },
+    {
+      "ref": "C4",
+      "xy_mm": [
+        55.0,
+        10.0
+      ],
+      "bbox_mm": [
+        53.495,
+        9.245,
+        56.505,
+        10.755
+      ]
+    },
+    {
+      "ref": "J1",
+      "xy_mm": [
+        10.0,
+        25.0
+      ],
+      "bbox_mm": [
+        8.205,
+        23.205,
+        11.795,
+        36.955
+      ]
+    },
+    {
+      "ref": "J2",
+      "xy_mm": [
+        25.0,
+        25.0
+      ],
+      "bbox_mm": [
+        23.205,
+        23.205,
+        26.795,
+        36.955
+      ]
+    },
+    {
+      "ref": "R1",
+      "xy_mm": [
+        40.0,
+        25.0
+      ],
+      "bbox_mm": [
+        38.495,
+        24.245,
+        41.505,
+        25.755
+      ]
+    },
+    {
+      "ref": "R2",
+      "xy_mm": [
+        55.0,
+        25.0
+      ],
+      "bbox_mm": [
+        53.495,
+        24.245,
+        56.505,
+        25.755
+      ]
+    },
+    {
+      "ref": "R3",
+      "xy_mm": [
+        10.0,
+        40.0
+      ],
+      "bbox_mm": [
+        8.495000000000001,
+        39.245,
+        11.504999999999999,
+        40.755
+      ]
+    },
+    {
+      "ref": "R4",
+      "xy_mm": [
+        25.0,
+        40.0
+      ],
+      "bbox_mm": [
+        23.495,
+        39.245,
+        26.505,
+        40.755
+      ]
+    }
+  ],
+  "planned_outline_from_native_library_geometry_mm": [
+    6.205,
+    7.245,
+    58.505,
+    42.755
+  ],
+  "planned_dimensions_mm": [
+    52.3,
+    35.51
+  ],
+  "prediction_basis": "Public reference encloses footprint copper/graphics/courtyard plus 2mm; native library no-text bounding boxes computed before generation. Exact footprint stroke treatment is not specified, so this is an independently computed prediction, not a replacement for frozen mechanical acceptance.",
+  "final_pcb_poses": {
+    "J1": {
+      "xy_mm": [
+        11,
+        16
+      ],
+      "rotation_deg": 0,
+      "layer": "F.Cu"
+    },
+    "J2": {
+      "xy_mm": [
+        52,
+        16
+      ],
+      "rotation_deg": 0,
+      "layer": "F.Cu"
+    },
+    "R1": {
+      "xy_mm": [
+        25,
+        12
+      ],
+      "rotation_deg": 0,
+      "layer": "F.Cu"
+    },
+    "C1": {
+      "xy_mm": [
+        39,
+        12
+      ],
+      "rotation_deg": 0,
+      "layer": "F.Cu"
+    },
+    "R2": {
+      "xy_mm": [
+        25,
+        20
+      ],
+      "rotation_deg": 0,
+      "layer": "F.Cu"
+    },
+    "C2": {
+      "xy_mm": [
+        39,
+        20
+      ],
+      "rotation_deg": 0,
+      "layer": "F.Cu"
+    },
+    "R3": {
+      "xy_mm": [
+        25,
+        28
+      ],
+      "rotation_deg": 0,
+      "layer": "F.Cu"
+    },
+    "C3": {
+      "xy_mm": [
+        39,
+        28
+      ],
+      "rotation_deg": 0,
+      "layer": "F.Cu"
+    },
+    "R4": {
+      "xy_mm": [
+        25,
+        36
+      ],
+      "rotation_deg": 0,
+      "layer": "F.Cu"
+    },
+    "C4": {
+      "xy_mm": [
+        39,
+        36
+      ],
+      "rotation_deg": 0,
+      "layer": "F.Cu"
+    }
+  },
+  "schematic": {
+    "strategy": "Automatic topology-based layout. Four RC groups and field clearance still require full visual inspection.",
+    "unsupported_manual_positions": "Manual schematic coordinates are not exposed; no manual placement is claimed."
+  },
+  "eco_expected_R2_if_baseline_accepted": {
+    "xy_mm": [
+      26.5,
+      20
+    ],
+    "rotation_deg": 0,
+    "layer": "F.Cu",
+    "freeze_again_before_writes": true
+  },
+  "parent_assistance": "This frozen implementation plan originated in the earlier independent RC session. This package replay is a documented recipe, not a new unaided design exercise.",
+  "requirements_binding": "Repository LF input; packager rebinds copied input bytes before engineering generation"
+}

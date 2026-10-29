@@ -1,0 +1,23 @@
+{
+  "before_public_acceptance_edits": true,
+  "original_project_sha256": "168c9714de2c778b534b618b6ff0c5fbd6c8eb36b5d08f9064861520b7c12542",
+  "new_project_sha256": "f04e69801cde9f23d2b9848b2262b5f066bde7f168aed925e1c041a054f9355a",
+  "change": {
+    "json_path": "/net_settings/classes/0/wire_width",
+    "from": "absent",
+    "to": 6,
+    "unit": "mil; schematic drawing only"
+  },
+  "reason": "Minimal prepared project omitted native wire style; controlled native SVG comparison restored visible wires and junctions",
+  "preserved": {
+    "edit.kicad_pcb": "3eb580df71c56f01755f35f3610b22cf90f9d6cefa6ca69b4dfe899b18dcc601",
+    "edit.kicad_prl": "ab8a6fe0bb5342113d24edb7e00443a475970de4f298fc2ee9a0edeaaa9234ef",
+    "edit.kicad_sch": "3ac036889c1ae3abbcb46cff40f6a8315fbf07ac469730e6e6fa71bda5a20a00",
+    "edit_child.kicad_sch": "f9c62dffc6b29720495b67bc14d78099f9a903c92674e28927479b7822035b12",
+    "fp-lib-table": "d2c6b86404c01938930979a04f1f9422fcd17ad71082400cebbc1797c3805567",
+    "sym-lib-table": "8383948a70fd83d05990c10e647ad0abadafee2d5a0b39ce3499295e994fe0ac"
+  },
+  "original_intent_sha256": "0aaf324f8069fab6e570f71f17d12b75706023d1f2a0c61fa5727eeeb8c2033c",
+  "source": "existing installed KiCad template Default wire_width and KiCad schematic netclass documentation",
+  "pcb_rules_changed": false
+}

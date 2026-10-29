@@ -1,0 +1,43 @@
+{
+  "F0-before-replace": {
+    "id": "F0-before-replace",
+    "trigger": "Operation-owned journal appears",
+    "hit_requires": "Own writer/debug event; original targets still baseline; journal/locks/files recorded before termination",
+    "observe": "Public show and saved readback after writer stop and normal lease expiry; resolve only attributable not_applied; repeat confirm/resolve and later preview checked."
+  },
+  "F1-save-window": {
+    "id": "F1-save-window",
+    "trigger": "A bound target pending file appears or first target replacement is observed",
+    "hit_requires": "Frozen pending bytes or mixed baseline/intended target set, plus writer and operation ownership",
+    "observe": "Report actual persistence evidence and partial/unknown; do not infer saved from a pending file. Unknown remains blocked, no replay."
+  },
+  "F2-receipt-loss": {
+    "id": "F2-receipt-loss",
+    "trigger": "First stdout byte while the response pipe is deliberately undrained",
+    "hit_requires": "All target bytes intended plus signed saved/cleanup or terminal operation witness; no complete receipt delivered to caller",
+    "observe": "Fresh public query/independent readback determines actual outcome; duplicate confirmation and inappropriate resolve refused."
+  },
+  "F3-cleanup": {
+    "id": "F3-cleanup",
+    "trigger": "Signed document cleanup checkpoint appears",
+    "hit_requires": "Freeze while phase=cleaning with attributed cursor/pending/actions and baseline archives; phase=cleaned is not a cleanup interruption hit",
+    "observe": "Public show/resolve only resumes owned cleanup; saved files preserved; verify baseline archive, duplicate controls and later preview."
+  },
+  "F4-unrecognized-after-stop": {
+    "id": "F4-unrecognized-after-stop",
+    "trigger": "Same before-write journal observation on a separate copy, then stopped writer; one predeclared external newline appended to a target after stop",
+    "hit_requires": "Controlled stopped writer; external before/after bytes and initial baseline separately frozen",
+    "observe": "Fresh readback stays unknown; applied resolution and repeat confirmation refuse, all external/original bytes and evidence preserved. No replay or protective-check bypass."
+  },
+  "F5-partial-save": {
+    "id": "F5-partial-save",
+    "trigger": "first formal target inode changes while its attributed writer is alive",
+    "hit_requires": "frozen signed journal plus at least one formal intended digest and at least one formal baseline digest, all targets attributable; birth-matched writer in owned job",
+    "observe": "fresh show after actual lease expiry; register only observed partial with signed evidence; preserve partial bytes and baseline archives; never replay the change",
+    "padding_mib": {
+      "root": 8,
+      "child": 48
+    },
+    "attempt_limit": 1
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "scope_id": "owned-synthetic-rc",
+  "tool": "kicad-cli",
+  "granted_by": "<ACTUAL_AUTHORIZING_CALLER>",
+  "granted_at": "2026-10-10T00:00:00Z",
+  "expires_at": null,
+  "effects": [
+    "observe",
+    "change",
+    "persist",
+    "artifact"
+  ],
+  "dangerous": false,
+  "roots": [
+    "<ABSOLUTE_EXECUTION_DIRECTORY>"
+  ],
+  "outputs": [
+    "<ABSOLUTE_EXECUTION_DIRECTORY>"
+  ],
+  "notes": "Only the explicitly authorized disposable synthetic RC directory"
+}

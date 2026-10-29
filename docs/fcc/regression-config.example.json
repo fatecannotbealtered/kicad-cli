@@ -1,0 +1,33 @@
+{
+  "source": "<COMMITTED_DETACHED_CHECKOUT>",
+  "output": "<NEW_REVIEW_OUTPUT_OUTSIDE_SOURCE>",
+  "mode": "exe",
+  "pytest_config_file": "pyproject.toml",
+  "pytest_plugin_modules": [],
+  "binary": "<CANDIDATE_EXE>",
+  "environment": {
+    "PYTHONIOENCODING": "utf-8",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "PYTHONUNBUFFERED": "1",
+    "KICAD_CLI_TEST_BINARY": "<CANDIDATE_EXE>",
+    "KICAD_CLI_ACCEPT_CANDIDATE": "<CANDIDATE_EXE>",
+    "KICAD_CLI_DRIVER_SDK_PATH": "<EXISTING_PINNED_DRIVER_SDK>",
+    "KICAD_CLI_ACCEPT_DRIVER_SDK": "<EXISTING_PINNED_DRIVER_SDK>",
+    "KICAD_CLI_ROOT": "<EXISTING_KICAD_10_0_6_ROOT>",
+    "KICAD_CLI_ACCEPT_NATIVE_ROOT": "<EXISTING_KICAD_10_0_6_ROOT>",
+    "KICAD_CONFIG_HOME": "<PREPARED_ISOLATED_CONFIG>",
+    "KICAD_CLI_STATE_DIR": "<NEW_ISOLATED_STATE>",
+    "KICAD_CLI_SCOPE_FILE": "<ABSENT_DEFAULT_SCOPE_FILE>"
+  },
+  "scope": {
+    "purpose": "Bounded saved schematic idempotency acceptance",
+    "authorization": "Replace with the explicit authorization for disposable copies",
+    "native_review": "Public sch edit uses a custom saved-file trial; official native acceptance is separate"
+  },
+  "selected_ids": [
+    "tests/test_saved_project_exe.py::test_edit_idempotency_receipt_retrieval"
+  ],
+  "dependency_paths": [],
+  "max_failures": 1,
+  "timeout_seconds": 600
+}

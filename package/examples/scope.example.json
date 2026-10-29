@@ -1,0 +1,12 @@
+{
+  "scope_id": "<new-task-id>",
+  "tool": "kicad-cli",
+  "granted_by": "<actual-user-task-authorization>",
+  "granted_at": "<actual-UTC-timestamp-ending-Z>",
+  "expires_at": "<actual-UTC-expiration-ending-Z>",
+  "effects": ["observe", "artifact", "change", "persist"],
+  "dangerous": false,
+  "roots": ["<absolute-authorized-project-directory>", "<absolute-owned-profile-state-directory>"],
+  "outputs": ["<absolute-owned-review-output-directory>", "<absolute-owned-profile-state-directory>"],
+  "limits": {"max_operations": 30}
+}

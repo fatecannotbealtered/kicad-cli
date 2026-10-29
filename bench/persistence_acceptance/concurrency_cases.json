@@ -1,0 +1,50 @@
+{
+  "format": "bounded-concurrency.v1",
+  "operation": "sch edit: C1 Value on two independent saved RC copies",
+  "store": "shared state; fixed SDK locks normalized target identity, not all targets",
+  "attempts": 1,
+  "cases": [
+    {
+      "id": "running-query",
+      "expected": "running while the observed lease is live"
+    },
+    {
+      "id": "same-target",
+      "expected": "E_CONFLICT/6 lock_held; B stays planned, token unused"
+    },
+    {
+      "id": "disjoint-target",
+      "expected": "C saves while A is held; A formal baseline unchanged"
+    },
+    {
+      "id": "expired-lease-query",
+      "expected": "unknown after observed lease expiry; no resolution"
+    },
+    {
+      "id": "cleaning-query",
+      "expected": "signed cleaning/all intended; public lease semantics"
+    },
+    {
+      "id": "saved-query",
+      "expected": "succeeded, completed/applied/saved receipt"
+    },
+    {
+      "id": "repeat-confirm",
+      "expected": "E_CONFLICT/6 token_used; files unchanged"
+    },
+    {
+      "id": "scope-expired",
+      "expected": "E_FORBIDDEN/4; no engineering change"
+    },
+    {
+      "id": "parameter-drift",
+      "expected": "E_CONFLICT/6 token_mismatch; no engineering change"
+    },
+    {
+      "id": "file-drift",
+      "expected": "E_CONFLICT/6 state_drift; retain external bytes"
+    }
+  ],
+  "phase_evidence": "signed operation journal, owned job/PID birth, per-file SHA, SQLite read-only lease",
+  "safety": "no old F4/F5 access; no token replay after uncertain outcome; one attempt; no product hooks"
+}

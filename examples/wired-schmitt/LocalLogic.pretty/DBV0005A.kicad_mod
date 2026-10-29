@@ -1,0 +1,70 @@
+(footprint "DBV0005A"
+	(version 20241229)
+	(generator "kicad-cli")
+	(layer "F.Cu")
+	(attr smd)
+	(property "Reference" "REF**"
+		(at 0 -2.925 0)
+		(layer "F.SilkS")
+		(effects
+			(font
+				(size 1 1)
+			)
+		)
+	)
+	(property "Value" "DBV0005A"
+		(at 0 2.925 0)
+		(layer "F.Fab")
+		(effects
+			(font
+				(size 1 1)
+			)
+		)
+	)
+	(fp_rect
+		(start -0.8 -1.45)
+		(end 0.8 1.45)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(fill none)
+		(layer "F.Fab")
+	)
+	(fp_rect
+		(start -2.125000 -1.725000)
+		(end 2.125000 1.725000)
+		(stroke
+			(width 0.05)
+			(type default)
+		)
+		(fill none)
+		(layer "F.CrtYd")
+	)
+	(pad "1" smd rect
+		(at -1.3 -0.95)
+		(size 1.1 0.6)
+		(layers "F.Cu" "F.Paste" "F.Mask")
+	)
+	(pad "2" smd rect
+		(at -1.3 0)
+		(size 1.1 0.6)
+		(layers "F.Cu" "F.Paste" "F.Mask")
+	)
+	(pad "3" smd rect
+		(at -1.3 0.95)
+		(size 1.1 0.6)
+		(layers "F.Cu" "F.Paste" "F.Mask")
+	)
+	(pad "4" smd rect
+		(at 1.3 0.95)
+		(size 1.1 0.6)
+		(layers "F.Cu" "F.Paste" "F.Mask")
+	)
+	(pad "5" smd rect
+		(at 1.3 -0.95)
+		(size 1.1 0.6)
+		(layers "F.Cu" "F.Paste" "F.Mask")
+	)
+)
+

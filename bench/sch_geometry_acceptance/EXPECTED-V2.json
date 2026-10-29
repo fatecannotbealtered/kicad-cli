@@ -1,0 +1,4759 @@
+{
+  "meadow": {
+    "data": {
+      "sources": {
+        "meadow.kicad_sch": {
+          "path": "D:\\personalSpace\\kicad-sch-geometry-20261021\\independent\\fixtures\\meadow\\meadow.kicad_sch",
+          "sha256": "efede3276888d4056e9a18a62068ab543e814ec420a3b48751decdc521db7d42",
+          "root_uuid": "47c297e7-69f3-524f-9b7d-057430f9c565",
+          "objects": [
+            {
+              "kind": "symbol",
+              "uuid": "b6f9d427-9e86-5930-9aa1-f6c875dcab11",
+              "span": [
+                2097,
+                2611
+              ],
+              "tokens": "(symbol (lib_id \"Independent:Pair\") (at 60 70 0) (unit 1)  (in_bom yes) (on_board yes) (dnp no) (uuid \"b6f9d427-9e86-5930-9aa1-f6c875dcab11\") (property \"Reference\" \"J17\" (at 60 62.38 0) (effects (font (size 1.27 1.27)))) (property \"Value\" \"Pair\" (at 60 77.62 0) (effects (font (size 1.27 1.27)))) (pin \"1\" (uuid \"bc459c84-decb-55fd-b7d7-ecd6affd3e05\")) (pin \"2\" (uuid \"37769936-df66-5787-8cc1-43596f7acf69\")) (instances (project \"meadow\" (path \"/47c297e7-69f3-524f-9b7d-057430f9c565\" (reference \"J17\") (unit 1)))))",
+              "at_nm": [
+                60000000,
+                70000000
+              ],
+              "angle": 0,
+              "fields": [
+                {
+                  "name": "Reference",
+                  "value": "J17",
+                  "at_nm": [
+                    60000000,
+                    62380000
+                  ],
+                  "angle": 0,
+                  "tokens": "(property \"Reference\" \"J17\" (at 60 62.38 0) (effects (font (size 1.27 1.27))))"
+                },
+                {
+                  "name": "Value",
+                  "value": "Pair",
+                  "at_nm": [
+                    60000000,
+                    77620000
+                  ],
+                  "angle": 0,
+                  "tokens": "(property \"Value\" \"Pair\" (at 60 77.62 0) (effects (font (size 1.27 1.27))))"
+                }
+              ],
+              "lib_id": "Independent:Pair",
+              "unit": 1,
+              "mirror": null,
+              "reference": "J17",
+              "instances": [
+                {
+                  "path": "/47c297e7-69f3-524f-9b7d-057430f9c565",
+                  "reference": "J17",
+                  "unit": 1
+                }
+              ],
+              "pins": [
+                {
+                  "ordinal": 0,
+                  "number": "1",
+                  "unit": 1,
+                  "body": 1,
+                  "local_nm": [
+                    -5080000,
+                    0
+                  ],
+                  "world_nm": [
+                    54920000,
+                    70000000
+                  ]
+                },
+                {
+                  "ordinal": 1,
+                  "number": "2",
+                  "unit": 1,
+                  "body": 1,
+                  "local_nm": [
+                    5080000,
+                    0
+                  ],
+                  "world_nm": [
+                    65080000,
+                    70000000
+                  ]
+                }
+              ]
+            },
+            {
+              "kind": "symbol",
+              "uuid": "3ee583cb-ef64-5046-960c-e99a10b1ef13",
+              "span": [
+                2612,
+                3132
+              ],
+              "tokens": "(symbol (lib_id \"Independent:Pair\") (at 80.0 70 0) (unit 1)  (in_bom yes) (on_board yes) (dnp no) (uuid \"3ee583cb-ef64-5046-960c-e99a10b1ef13\") (property \"Reference\" \"J24\" (at 80.0 62.38 0) (effects (font (size 1.27 1.27)))) (property \"Value\" \"Pair\" (at 80.0 77.62 0) (effects (font (size 1.27 1.27)))) (pin \"1\" (uuid \"20a5c82f-5efb-5e83-8373-0d4418590038\")) (pin \"2\" (uuid \"285c9f28-c275-5df2-81a3-a8d7360d0a68\")) (instances (project \"meadow\" (path \"/47c297e7-69f3-524f-9b7d-057430f9c565\" (reference \"J24\") (unit 1)))))",
+              "at_nm": [
+                80000000,
+                70000000
+              ],
+              "angle": 0,
+              "fields": [
+                {
+                  "name": "Reference",
+                  "value": "J24",
+                  "at_nm": [
+                    80000000,
+                    62380000
+                  ],
+                  "angle": 0,
+                  "tokens": "(property \"Reference\" \"J24\" (at 80.0 62.38 0) (effects (font (size 1.27 1.27))))"
+                },
+                {
+                  "name": "Value",
+                  "value": "Pair",
+                  "at_nm": [
+                    80000000,
+                    77620000
+                  ],
+                  "angle": 0,
+                  "tokens": "(property \"Value\" \"Pair\" (at 80.0 77.62 0) (effects (font (size 1.27 1.27))))"
+                }
+              ],
+              "lib_id": "Independent:Pair",
+              "unit": 1,
+              "mirror": null,
+              "reference": "J24",
+              "instances": [
+                {
+                  "path": "/47c297e7-69f3-524f-9b7d-057430f9c565",
+                  "reference": "J24",
+                  "unit": 1
+                }
+              ],
+              "pins": [
+                {
+                  "ordinal": 0,
+                  "number": "1",
+                  "unit": 1,
+                  "body": 1,
+                  "local_nm": [
+                    -5080000,
+                    0
+                  ],
+                  "world_nm": [
+                    74920000,
+                    70000000
+                  ]
+                },
+                {
+                  "ordinal": 1,
+                  "number": "2",
+                  "unit": 1,
+                  "body": 1,
+                  "local_nm": [
+                    5080000,
+                    0
+                  ],
+                  "world_nm": [
+                    85080000,
+                    70000000
+                  ]
+                }
+              ]
+            },
+            {
+              "kind": "symbol",
+              "uuid": "6b230ea1-aa58-50fd-bae7-5bca37cc1558",
+              "span": [
+                3133,
+                3658
+              ],
+              "tokens": "(symbol (lib_id \"Independent:Pair\") (at 85.08 90.0 0) (unit 1)  (in_bom yes) (on_board yes) (dnp no) (uuid \"6b230ea1-aa58-50fd-bae7-5bca37cc1558\") (property \"Reference\" \"J38\" (at 85.08 82.38 0) (effects (font (size 1.27 1.27)))) (property \"Value\" \"Pair\" (at 85.08 97.62 0) (effects (font (size 1.27 1.27)))) (pin \"1\" (uuid \"7b4209ef-2bbb-502d-8ca1-ff070f7caf51\")) (pin \"2\" (uuid \"46e89b5c-8583-5eb9-91b1-3a8564dce87a\")) (instances (project \"meadow\" (path \"/47c297e7-69f3-524f-9b7d-057430f9c565\" (reference \"J38\") (unit 1)))))",
+              "at_nm": [
+                85080000,
+                90000000
+              ],
+              "angle": 0,
+              "fields": [
+                {
+                  "name": "Reference",
+                  "value": "J38",
+                  "at_nm": [
+                    85080000,
+                    82380000
+                  ],
+                  "angle": 0,
+                  "tokens": "(property \"Reference\" \"J38\" (at 85.08 82.38 0) (effects (font (size 1.27 1.27))))"
+                },
+                {
+                  "name": "Value",
+                  "value": "Pair",
+                  "at_nm": [
+                    85080000,
+                    97620000
+                  ],
+                  "angle": 0,
+                  "tokens": "(property \"Value\" \"Pair\" (at 85.08 97.62 0) (effects (font (size 1.27 1.27))))"
+                }
+              ],
+              "lib_id": "Independent:Pair",
+              "unit": 1,
+              "mirror": null,
+              "reference": "J38",
+              "instances": [
+                {
+                  "path": "/47c297e7-69f3-524f-9b7d-057430f9c565",
+                  "reference": "J38",
+                  "unit": 1
+                }
+              ],
+              "pins": [
+                {
+                  "ordinal": 0,
+                  "number": "1",
+                  "unit": 1,
+                  "body": 1,
+                  "local_nm": [
+                    -5080000,
+                    0
+                  ],
+                  "world_nm": [
+                    80000000,
+                    90000000
+                  ]
+                },
+                {
+                  "ordinal": 1,
+                  "number": "2",
+                  "unit": 1,
+                  "body": 1,
+                  "local_nm": [
+                    5080000,
+                    0
+                  ],
+                  "world_nm": [
+                    90160000,
+                    90000000
+                  ]
+                }
+              ]
+            },
+            {
+              "kind": "wire",
+              "uuid": "8faf172f-6676-5844-a49e-75f9e7217ea4",
+              "span": [
+                3659,
+                3776
+              ],
+              "tokens": "(wire (pts (xy 65.08 70) (xy 70 70)) (stroke (width 0) (type default)) (uuid \"8faf172f-6676-5844-a49e-75f9e7217ea4\"))",
+              "points_nm": [
+                [
+                  65080000,
+                  70000000
+                ],
+                [
+                  70000000,
+                  70000000
+                ]
+              ],
+              "fields": []
+            },
+            {
+              "kind": "wire",
+              "uuid": "0712915d-c9fa-51b5-be04-a8dca0e92063",
+              "span": [
+                3777,
+                3894
+              ],
+              "tokens": "(wire (pts (xy 70 70) (xy 74.92 70)) (stroke (width 0) (type default)) (uuid \"0712915d-c9fa-51b5-be04-a8dca0e92063\"))",
+              "points_nm": [
+                [
+                  70000000,
+                  70000000
+                ],
+                [
+                  74920000,
+                  70000000
+                ]
+              ],
+              "fields": []
+            },
+            {
+              "kind": "wire",
+              "uuid": "90b987f7-0f93-547d-a398-081d19118d66",
+              "span": [
+                3895,
+                4011
+              ],
+              "tokens": "(wire (pts (xy 70 70) (xy 70 90.0)) (stroke (width 0) (type default)) (uuid \"90b987f7-0f93-547d-a398-081d19118d66\"))",
+              "points_nm": [
+                [
+                  70000000,
+                  70000000
+                ],
+                [
+                  70000000,
+                  90000000
+                ]
+              ],
+              "fields": []
+            },
+            {
+              "kind": "wire",
+              "uuid": "40033249-af9e-5d4e-96c5-f0e0d618984d",
+              "span": [
+                4012,
+                4132
+              ],
+              "tokens": "(wire (pts (xy 70 90.0) (xy 80.0 90.0)) (stroke (width 0) (type default)) (uuid \"40033249-af9e-5d4e-96c5-f0e0d618984d\"))",
+              "points_nm": [
+                [
+                  70000000,
+                  90000000
+                ],
+                [
+                  80000000,
+                  90000000
+                ]
+              ],
+              "fields": []
+            },
+            {
+              "kind": "junction",
+              "uuid": "db7e6e41-b64f-50b9-804b-fd21302f828f",
+              "span": [
+                4133,
+                4229
+              ],
+              "tokens": "(junction (at 70 70) (diameter 0) (color 0 0 0 0) (uuid \"db7e6e41-b64f-50b9-804b-fd21302f828f\"))",
+              "at_nm": [
+                70000000,
+                70000000
+              ],
+              "angle": null,
+              "fields": []
+            },
+            {
+              "kind": "label",
+              "uuid": "7c5b2ccb-7ca9-53a8-bc35-b74c6b930cce",
+              "span": [
+                4230,
+                4345
+              ],
+              "tokens": "(label \"LANE_MEADOW\" (at 70 70 90) (effects (font (size 1.27 1.27))) (uuid \"7c5b2ccb-7ca9-53a8-bc35-b74c6b930cce\"))",
+              "at_nm": [
+                70000000,
+                70000000
+              ],
+              "angle": 90,
+              "fields": [],
+              "text": "LANE_MEADOW"
+            },
+            {
+              "kind": "global_label",
+              "uuid": "877c5dd6-ab4c-5356-b233-d4fe4ed1e008",
+              "span": [
+                4346,
+                4485
+              ],
+              "tokens": "(global_label \"SYS_MEADOW\" (shape input) (at 54.92 70 180) (effects (font (size 1.27 1.27))) (uuid \"877c5dd6-ab4c-5356-b233-d4fe4ed1e008\"))",
+              "at_nm": [
+                54920000,
+                70000000
+              ],
+              "angle": 180,
+              "fields": [],
+              "text": "SYS_MEADOW"
+            },
+            {
+              "kind": "no_connect",
+              "uuid": "8576119b-c9dc-5c6d-bc44-8d892ff74c49",
+              "span": [
+                4486,
+                4558
+              ],
+              "tokens": "(no_connect (at 85.08 70) (uuid \"8576119b-c9dc-5c6d-bc44-8d892ff74c49\"))",
+              "at_nm": [
+                85080000,
+                70000000
+              ],
+              "angle": null,
+              "fields": []
+            },
+            {
+              "kind": "no_connect",
+              "uuid": "b67cb60f-5550-5518-9901-69f512840fc1",
+              "span": [
+                4559,
+                4633
+              ],
+              "tokens": "(no_connect (at 90.16 90.0) (uuid \"b67cb60f-5550-5518-9901-69f512840fc1\"))",
+              "at_nm": [
+                90160000,
+                90000000
+              ],
+              "angle": null,
+              "fields": []
+            },
+            {
+              "kind": "symbol",
+              "uuid": "726d963e-9f72-5d90-86bf-21b40463cfa8",
+              "span": [
+                4634,
+                5156
+              ],
+              "tokens": "(symbol (lib_id \"Independent:Pair\") (at 150 125 0) (unit 1)  (in_bom yes) (on_board yes) (dnp no) (uuid \"726d963e-9f72-5d90-86bf-21b40463cfa8\") (property \"Reference\" \"J861\" (at 150 117.38 0) (effects (font (size 1.27 1.27)))) (property \"Value\" \"Pair\" (at 150 132.62 0) (effects (font (size 1.27 1.27)))) (pin \"1\" (uuid \"f7c82160-1d96-56c7-8f7d-8802f2820f67\")) (pin \"2\" (uuid \"622aa77a-38d0-5c49-9389-55908d4df57a\")) (instances (project \"meadow\" (path \"/47c297e7-69f3-524f-9b7d-057430f9c565\" (reference \"J861\") (unit 1)))))",
+              "at_nm": [
+                150000000,
+                125000000
+              ],
+              "angle": 0,
+              "fields": [
+                {
+                  "name": "Reference",
+                  "value": "J861",
+                  "at_nm": [
+                    150000000,
+                    117380000
+                  ],
+                  "angle": 0,
+                  "tokens": "(property \"Reference\" \"J861\" (at 150 117.38 0) (effects (font (size 1.27 1.27))))"
+                },
+                {
+                  "name": "Value",
+                  "value": "Pair",
+                  "at_nm": [
+                    150000000,
+                    132620000
+                  ],
+                  "angle": 0,
+                  "tokens": "(property \"Value\" \"Pair\" (at 150 132.62 0) (effects (font (size 1.27 1.27))))"
+                }
+              ],
+              "lib_id": "Independent:Pair",
+              "unit": 1,
+              "mirror": null,
+              "reference": "J861",
+              "instances": [
+                {
+                  "path": "/47c297e7-69f3-524f-9b7d-057430f9c565",
+                  "reference": "J861",
+                  "unit": 1
+                }
+              ],
+              "pins": [
+                {
+                  "ordinal": 0,
+                  "number": "1",
+                  "unit": 1,
+                  "body": 1,
+                  "local_nm": [
+                    -5080000,
+                    0
+                  ],
+                  "world_nm": [
+                    144920000,
+                    125000000
+                  ]
+                },
+                {
+                  "ordinal": 1,
+                  "number": "2",
+                  "unit": 1,
+                  "body": 1,
+                  "local_nm": [
+                    5080000,
+                    0
+                  ],
+                  "world_nm": [
+                    155080000,
+                    125000000
+                  ]
+                }
+              ]
+            },
+            {
+              "kind": "no_connect",
+              "uuid": "1c421993-6881-5fb1-9525-0f21df957169",
+              "span": [
+                5157,
+                5231
+              ],
+              "tokens": "(no_connect (at 144.92 125) (uuid \"1c421993-6881-5fb1-9525-0f21df957169\"))",
+              "at_nm": [
+                144920000,
+                125000000
+              ],
+              "angle": null,
+              "fields": []
+            },
+            {
+              "kind": "no_connect",
+              "uuid": "e5400ddc-7512-58ca-b521-c838d14b21da",
+              "span": [
+                5232,
+                5306
+              ],
+              "tokens": "(no_connect (at 155.08 125) (uuid \"e5400ddc-7512-58ca-b521-c838d14b21da\"))",
+              "at_nm": [
+                155080000,
+                125000000
+              ],
+              "angle": null,
+              "fields": []
+            },
+            {
+              "kind": "polyline",
+              "uuid": "223dcd12-e7c3-59fd-8b9b-530ff7b322b2",
+              "span": [
+                5307,
+                5469
+              ],
+              "tokens": "(polyline (pts (xy 185 40) (xy 190.08 42.54) (xy 187.54 47.62) (xy 195.16 50.16)) (stroke (width 0) (type default)) (uuid \"223dcd12-e7c3-59fd-8b9b-530ff7b322b2\"))",
+              "points_nm": [
+                [
+                  185000000,
+                  40000000
+                ],
+                [
+                  190080000,
+                  42540000
+                ],
+                [
+                  187540000,
+                  47620000
+                ],
+                [
+                  195160000,
+                  50160000
+                ]
+              ],
+              "fields": []
+            }
+          ]
+        }
+      },
+      "logical_pages": [
+        {
+          "source": "meadow.kicad_sch",
+          "instance": "/47c297e7-69f3-524f-9b7d-057430f9c565",
+          "display_path": "/"
+        }
+      ]
+    },
+    "pins": [
+      {
+        "identity": [
+          "b6f9d427-9e86-5930-9aa1-f6c875dcab11",
+          "/47c297e7-69f3-524f-9b7d-057430f9c565",
+          1,
+          1,
+          0
+        ],
+        "reference": "J17",
+        "number": "1",
+        "world_nm": [
+          54920000,
+          70000000
+        ],
+        "source": "meadow.kicad_sch"
+      },
+      {
+        "identity": [
+          "b6f9d427-9e86-5930-9aa1-f6c875dcab11",
+          "/47c297e7-69f3-524f-9b7d-057430f9c565",
+          1,
+          1,
+          1
+        ],
+        "reference": "J17",
+        "number": "2",
+        "world_nm": [
+          65080000,
+          70000000
+        ],
+        "source": "meadow.kicad_sch"
+      },
+      {
+        "identity": [
+          "3ee583cb-ef64-5046-960c-e99a10b1ef13",
+          "/47c297e7-69f3-524f-9b7d-057430f9c565",
+          1,
+          1,
+          0
+        ],
+        "reference": "J24",
+        "number": "1",
+        "world_nm": [
+          74920000,
+          70000000
+        ],
+        "source": "meadow.kicad_sch"
+      },
+      {
+        "identity": [
+          "3ee583cb-ef64-5046-960c-e99a10b1ef13",
+          "/47c297e7-69f3-524f-9b7d-057430f9c565",
+          1,
+          1,
+          1
+        ],
+        "reference": "J24",
+        "number": "2",
+        "world_nm": [
+          85080000,
+          70000000
+        ],
+        "source": "meadow.kicad_sch"
+      },
+      {
+        "identity": [
+          "6b230ea1-aa58-50fd-bae7-5bca37cc1558",
+          "/47c297e7-69f3-524f-9b7d-057430f9c565",
+          1,
+          1,
+          0
+        ],
+        "reference": "J38",
+        "number": "1",
+        "world_nm": [
+          80000000,
+          90000000
+        ],
+        "source": "meadow.kicad_sch"
+      },
+      {
+        "identity": [
+          "6b230ea1-aa58-50fd-bae7-5bca37cc1558",
+          "/47c297e7-69f3-524f-9b7d-057430f9c565",
+          1,
+          1,
+          1
+        ],
+        "reference": "J38",
+        "number": "2",
+        "world_nm": [
+          90160000,
+          90000000
+        ],
+        "source": "meadow.kicad_sch"
+      },
+      {
+        "identity": [
+          "726d963e-9f72-5d90-86bf-21b40463cfa8",
+          "/47c297e7-69f3-524f-9b7d-057430f9c565",
+          1,
+          1,
+          0
+        ],
+        "reference": "J861",
+        "number": "1",
+        "world_nm": [
+          144920000,
+          125000000
+        ],
+        "source": "meadow.kicad_sch"
+      },
+      {
+        "identity": [
+          "726d963e-9f72-5d90-86bf-21b40463cfa8",
+          "/47c297e7-69f3-524f-9b7d-057430f9c565",
+          1,
+          1,
+          1
+        ],
+        "reference": "J861",
+        "number": "2",
+        "world_nm": [
+          155080000,
+          125000000
+        ],
+        "source": "meadow.kicad_sch"
+      }
+    ],
+    "connectivity": {
+      "groups": [
+        {
+          "identities": [
+            [
+              "0712915d-c9fa-51b5-be04-a8dca0e92063",
+              "/47c297e7-69f3-524f-9b7d-057430f9c565",
+              "vertex",
+              0
+            ],
+            [
+              "0712915d-c9fa-51b5-be04-a8dca0e92063",
+              "/47c297e7-69f3-524f-9b7d-057430f9c565",
+              "vertex",
+              1
+            ],
+            [
+              "3ee583cb-ef64-5046-960c-e99a10b1ef13",
+              "/47c297e7-69f3-524f-9b7d-057430f9c565",
+              1,
+              1,
+              0
+            ],
+            [
+              "40033249-af9e-5d4e-96c5-f0e0d618984d",
+              "/47c297e7-69f3-524f-9b7d-057430f9c565",
+              "vertex",
+              0
+            ],
+            [
+              "40033249-af9e-5d4e-96c5-f0e0d618984d",
+              "/47c297e7-69f3-524f-9b7d-057430f9c565",
+              "vertex",
+              1
+            ],
+            [
+              "6b230ea1-aa58-50fd-bae7-5bca37cc1558",
+              "/47c297e7-69f3-524f-9b7d-057430f9c565",
+              1,
+              1,
+              0
+            ],
+            [
+              "7c5b2ccb-7ca9-53a8-bc35-b74c6b930cce",
+              "/47c297e7-69f3-524f-9b7d-057430f9c565"
+            ],
+            [
+              "8faf172f-6676-5844-a49e-75f9e7217ea4",
+              "/47c297e7-69f3-524f-9b7d-057430f9c565",
+              "vertex",
+              0
+            ],
+            [
+              "8faf172f-6676-5844-a49e-75f9e7217ea4",
+              "/47c297e7-69f3-524f-9b7d-057430f9c565",
+              "vertex",
+              1
+            ],
+            [
+              "90b987f7-0f93-547d-a398-081d19118d66",
+              "/47c297e7-69f3-524f-9b7d-057430f9c565",
+              "vertex",
+              0
+            ],
+            [
+              "90b987f7-0f93-547d-a398-081d19118d66",
+              "/47c297e7-69f3-524f-9b7d-057430f9c565",
+              "vertex",
+              1
+            ],
+            [
+              "b6f9d427-9e86-5930-9aa1-f6c875dcab11",
+              "/47c297e7-69f3-524f-9b7d-057430f9c565",
+              1,
+              1,
+              1
+            ],
+            [
+              "db7e6e41-b64f-50b9-804b-fd21302f828f",
+              "/47c297e7-69f3-524f-9b7d-057430f9c565"
+            ]
+          ],
+          "pins": [
+            [
+              "J17",
+              "2"
+            ],
+            [
+              "J24",
+              "1"
+            ],
+            [
+              "J38",
+              "1"
+            ]
+          ],
+          "names": [
+            "/47c297e7-69f3-524f-9b7d-057430f9c565/LANE_MEADOW"
+          ]
+        },
+        {
+          "identities": [
+            [
+              "3ee583cb-ef64-5046-960c-e99a10b1ef13",
+              "/47c297e7-69f3-524f-9b7d-057430f9c565",
+              1,
+              1,
+              1
+            ]
+          ],
+          "pins": [
+            [
+              "J24",
+              "2"
+            ]
+          ],
+          "names": []
+        },
+        {
+          "identities": [
+            [
+              "6b230ea1-aa58-50fd-bae7-5bca37cc1558",
+              "/47c297e7-69f3-524f-9b7d-057430f9c565",
+              1,
+              1,
+              1
+            ]
+          ],
+          "pins": [
+            [
+              "J38",
+              "2"
+            ]
+          ],
+          "names": []
+        },
+        {
+          "identities": [
+            [
+              "726d963e-9f72-5d90-86bf-21b40463cfa8",
+              "/47c297e7-69f3-524f-9b7d-057430f9c565",
+              1,
+              1,
+              0
+            ]
+          ],
+          "pins": [
+            [
+              "J861",
+              "1"
+            ]
+          ],
+          "names": []
+        },
+        {
+          "identities": [
+            [
+              "726d963e-9f72-5d90-86bf-21b40463cfa8",
+              "/47c297e7-69f3-524f-9b7d-057430f9c565",
+              1,
+              1,
+              1
+            ]
+          ],
+          "pins": [
+            [
+              "J861",
+              "2"
+            ]
+          ],
+          "names": []
+        },
+        {
+          "identities": [
+            [
+              "877c5dd6-ab4c-5356-b233-d4fe4ed1e008",
+              "/47c297e7-69f3-524f-9b7d-057430f9c565"
+            ],
+            [
+              "b6f9d427-9e86-5930-9aa1-f6c875dcab11",
+              "/47c297e7-69f3-524f-9b7d-057430f9c565",
+              1,
+              1,
+              0
+            ]
+          ],
+          "pins": [
+            [
+              "J17",
+              "1"
+            ]
+          ],
+          "names": [
+            "/SYS_MEADOW"
+          ]
+        }
+      ],
+      "nc": [
+        {
+          "id": [
+            "1c421993-6881-5fb1-9525-0f21df957169",
+            "/47c297e7-69f3-524f-9b7d-057430f9c565"
+          ],
+          "pins": [
+            [
+              "726d963e-9f72-5d90-86bf-21b40463cfa8",
+              "/47c297e7-69f3-524f-9b7d-057430f9c565",
+              1,
+              1,
+              0
+            ]
+          ]
+        },
+        {
+          "id": [
+            "8576119b-c9dc-5c6d-bc44-8d892ff74c49",
+            "/47c297e7-69f3-524f-9b7d-057430f9c565"
+          ],
+          "pins": [
+            [
+              "3ee583cb-ef64-5046-960c-e99a10b1ef13",
+              "/47c297e7-69f3-524f-9b7d-057430f9c565",
+              1,
+              1,
+              1
+            ]
+          ]
+        },
+        {
+          "id": [
+            "b67cb60f-5550-5518-9901-69f512840fc1",
+            "/47c297e7-69f3-524f-9b7d-057430f9c565"
+          ],
+          "pins": [
+            [
+              "6b230ea1-aa58-50fd-bae7-5bca37cc1558",
+              "/47c297e7-69f3-524f-9b7d-057430f9c565",
+              1,
+              1,
+              1
+            ]
+          ]
+        },
+        {
+          "id": [
+            "e5400ddc-7512-58ca-b521-c838d14b21da",
+            "/47c297e7-69f3-524f-9b7d-057430f9c565"
+          ],
+          "pins": [
+            [
+              "726d963e-9f72-5d90-86bf-21b40463cfa8",
+              "/47c297e7-69f3-524f-9b7d-057430f9c565",
+              1,
+              1,
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    "expected_physical": [
+      {
+        "pins": [
+          [
+            "J17",
+            "1"
+          ]
+        ],
+        "explicit_names": [
+          "SYS_MEADOW"
+        ]
+      },
+      {
+        "pins": [
+          [
+            "J17",
+            "2"
+          ],
+          [
+            "J24",
+            "1"
+          ],
+          [
+            "J38",
+            "1"
+          ]
+        ],
+        "explicit_names": [
+          "/LANE_MEADOW"
+        ]
+      },
+      {
+        "pins": [
+          [
+            "J24",
+            "2"
+          ]
+        ],
+        "explicit_names": []
+      },
+      {
+        "pins": [
+          [
+            "J38",
+            "2"
+          ]
+        ],
+        "explicit_names": []
+      },
+      {
+        "pins": [
+          [
+            "J861",
+            "1"
+          ]
+        ],
+        "explicit_names": []
+      },
+      {
+        "pins": [
+          [
+            "J861",
+            "2"
+          ]
+        ],
+        "explicit_names": []
+      }
+    ]
+  },
+  "falcon": {
+    "data": {
+      "sources": {
+        "falcon.kicad_sch": {
+          "path": "D:\\personalSpace\\kicad-sch-geometry-20261021\\independent\\fixtures\\falcon\\falcon.kicad_sch",
+          "sha256": "34d7cadf175e76c4465e66f1bf62d25e6bf1dada60ca7fbd90e847ed54968e9c",
+          "root_uuid": "503f9da4-fb06-50e1-b059-afb807b4ffe9",
+          "objects": [
+            {
+              "kind": "symbol",
+              "uuid": "74e39bcf-9d88-5bc5-80bf-0a828a6b2e3c",
+              "span": [
+                2097,
+                2624
+              ],
+              "tokens": "(symbol (lib_id \"Independent:Pair\") (at 70.16 57.3 0) (unit 1)  (in_bom yes) (on_board yes) (dnp no) (uuid \"74e39bcf-9d88-5bc5-80bf-0a828a6b2e3c\") (property \"Reference\" \"J208\" (at 70.16 49.68 0) (effects (font (size 1.27 1.27)))) (property \"Value\" \"Pair\" (at 70.16 64.92 0) (effects (font (size 1.27 1.27)))) (pin \"1\" (uuid \"afceca16-b2b9-50dd-b5e6-3128dbf96930\")) (pin \"2\" (uuid \"2af9a5f3-a03a-5d89-a28d-0cfe9b5890df\")) (instances (project \"falcon\" (path \"/503f9da4-fb06-50e1-b059-afb807b4ffe9\" (reference \"J208\") (unit 1)))))",
+              "at_nm": [
+                70160000,
+                57300000
+              ],
+              "angle": 0,
+              "fields": [
+                {
+                  "name": "Reference",
+                  "value": "J208",
+                  "at_nm": [
+                    70160000,
+                    49680000
+                  ],
+                  "angle": 0,
+                  "tokens": "(property \"Reference\" \"J208\" (at 70.16 49.68 0) (effects (font (size 1.27 1.27))))"
+                },
+                {
+                  "name": "Value",
+                  "value": "Pair",
+                  "at_nm": [
+                    70160000,
+                    64920000
+                  ],
+                  "angle": 0,
+                  "tokens": "(property \"Value\" \"Pair\" (at 70.16 64.92 0) (effects (font (size 1.27 1.27))))"
+                }
+              ],
+              "lib_id": "Independent:Pair",
+              "unit": 1,
+              "mirror": null,
+              "reference": "J208",
+              "instances": [
+                {
+                  "path": "/503f9da4-fb06-50e1-b059-afb807b4ffe9",
+                  "reference": "J208",
+                  "unit": 1
+                }
+              ],
+              "pins": [
+                {
+                  "ordinal": 0,
+                  "number": "1",
+                  "unit": 1,
+                  "body": 1,
+                  "local_nm": [
+                    -5080000,
+                    0
+                  ],
+                  "world_nm": [
+                    65080000,
+                    57300000
+                  ]
+                },
+                {
+                  "ordinal": 1,
+                  "number": "2",
+                  "unit": 1,
+                  "body": 1,
+                  "local_nm": [
+                    5080000,
+                    0
+                  ],
+                  "world_nm": [
+                    75240000,
+                    57300000
+                  ]
+                }
+              ]
+            },
+            {
+              "kind": "symbol",
+              "uuid": "887de6fe-55bd-5494-9ddb-61362e7d9912",
+              "span": [
+                2625,
+                3152
+              ],
+              "tokens": "(symbol (lib_id \"Independent:Pair\") (at 90.16 57.3 0) (unit 1)  (in_bom yes) (on_board yes) (dnp no) (uuid \"887de6fe-55bd-5494-9ddb-61362e7d9912\") (property \"Reference\" \"J305\" (at 90.16 49.68 0) (effects (font (size 1.27 1.27)))) (property \"Value\" \"Pair\" (at 90.16 64.92 0) (effects (font (size 1.27 1.27)))) (pin \"1\" (uuid \"9f4e7b51-f07b-549a-9ad4-935fe31d7341\")) (pin \"2\" (uuid \"aad3a82c-1dee-5b33-8429-6226d4cc78b7\")) (instances (project \"falcon\" (path \"/503f9da4-fb06-50e1-b059-afb807b4ffe9\" (reference \"J305\") (unit 1)))))",
+              "at_nm": [
+                90160000,
+                57300000
+              ],
+              "angle": 0,
+              "fields": [
+                {
+                  "name": "Reference",
+                  "value": "J305",
+                  "at_nm": [
+                    90160000,
+                    49680000
+                  ],
+                  "angle": 0,
+                  "tokens": "(property \"Reference\" \"J305\" (at 90.16 49.68 0) (effects (font (size 1.27 1.27))))"
+                },
+                {
+                  "name": "Value",
+                  "value": "Pair",
+                  "at_nm": [
+                    90160000,
+                    64920000
+                  ],
+                  "angle": 0,
+                  "tokens": "(property \"Value\" \"Pair\" (at 90.16 64.92 0) (effects (font (size 1.27 1.27))))"
+                }
+              ],
+              "lib_id": "Independent:Pair",
+              "unit": 1,
+              "mirror": null,
+              "reference": "J305",
+              "instances": [
+                {
+                  "path": "/503f9da4-fb06-50e1-b059-afb807b4ffe9",
+                  "reference": "J305",
+                  "unit": 1
+                }
+              ],
+              "pins": [
+                {
+                  "ordinal": 0,
+                  "number": "1",
+                  "unit": 1,
+                  "body": 1,
+                  "local_nm": [
+                    -5080000,
+                    0
+                  ],
+                  "world_nm": [
+                    85080000,
+                    57300000
+                  ]
+                },
+                {
+                  "ordinal": 1,
+                  "number": "2",
+                  "unit": 1,
+                  "body": 1,
+                  "local_nm": [
+                    5080000,
+                    0
+                  ],
+                  "world_nm": [
+                    95240000,
+                    57300000
+                  ]
+                }
+              ]
+            },
+            {
+              "kind": "symbol",
+              "uuid": "eaca4cd7-60bd-56fd-b7b0-2a565f56bf8e",
+              "span": [
+                3153,
+                3680
+              ],
+              "tokens": "(symbol (lib_id \"Independent:Pair\") (at 95.24 77.3 0) (unit 1)  (in_bom yes) (on_board yes) (dnp no) (uuid \"eaca4cd7-60bd-56fd-b7b0-2a565f56bf8e\") (property \"Reference\" \"J412\" (at 95.24 69.68 0) (effects (font (size 1.27 1.27)))) (property \"Value\" \"Pair\" (at 95.24 84.92 0) (effects (font (size 1.27 1.27)))) (pin \"1\" (uuid \"b98bfb2b-1cd9-5efc-9bae-74410800646e\")) (pin \"2\" (uuid \"9c72fc63-aefb-5fc8-ac21-c068cac70f16\")) (instances (project \"falcon\" (path \"/503f9da4-fb06-50e1-b059-afb807b4ffe9\" (reference \"J412\") (unit 1)))))",
+              "at_nm": [
+                95240000,
+                77300000
+              ],
+              "angle": 0,
+              "fields": [
+                {
+                  "name": "Reference",
+                  "value": "J412",
+                  "at_nm": [
+                    95240000,
+                    69680000
+                  ],
+                  "angle": 0,
+                  "tokens": "(property \"Reference\" \"J412\" (at 95.24 69.68 0) (effects (font (size 1.27 1.27))))"
+                },
+                {
+                  "name": "Value",
+                  "value": "Pair",
+                  "at_nm": [
+                    95240000,
+                    84920000
+                  ],
+                  "angle": 0,
+                  "tokens": "(property \"Value\" \"Pair\" (at 95.24 84.92 0) (effects (font (size 1.27 1.27))))"
+                }
+              ],
+              "lib_id": "Independent:Pair",
+              "unit": 1,
+              "mirror": null,
+              "reference": "J412",
+              "instances": [
+                {
+                  "path": "/503f9da4-fb06-50e1-b059-afb807b4ffe9",
+                  "reference": "J412",
+                  "unit": 1
+                }
+              ],
+              "pins": [
+                {
+                  "ordinal": 0,
+                  "number": "1",
+                  "unit": 1,
+                  "body": 1,
+                  "local_nm": [
+                    -5080000,
+                    0
+                  ],
+                  "world_nm": [
+                    90160000,
+                    77300000
+                  ]
+                },
+                {
+                  "ordinal": 1,
+                  "number": "2",
+                  "unit": 1,
+                  "body": 1,
+                  "local_nm": [
+                    5080000,
+                    0
+                  ],
+                  "world_nm": [
+                    100320000,
+                    77300000
+                  ]
+                }
+              ]
+            },
+            {
+              "kind": "symbol",
+              "uuid": "1a3ff63a-432c-5ca1-a879-64a24d712c3b",
+              "span": [
+                3681,
+                4212
+              ],
+              "tokens": "(symbol (lib_id \"Independent:Pair\") (at 100.32 87.46 0) (unit 1)  (in_bom yes) (on_board yes) (dnp no) (uuid \"1a3ff63a-432c-5ca1-a879-64a24d712c3b\") (property \"Reference\" \"J529\" (at 100.32 79.84 0) (effects (font (size 1.27 1.27)))) (property \"Value\" \"Pair\" (at 100.32 95.08 0) (effects (font (size 1.27 1.27)))) (pin \"1\" (uuid \"52b58877-537c-58cd-a9d9-28737de4b551\")) (pin \"2\" (uuid \"011a1aa4-9646-5514-b379-99efb1a563c0\")) (instances (project \"falcon\" (path \"/503f9da4-fb06-50e1-b059-afb807b4ffe9\" (reference \"J529\") (unit 1)))))",
+              "at_nm": [
+                100320000,
+                87460000
+              ],
+              "angle": 0,
+              "fields": [
+                {
+                  "name": "Reference",
+                  "value": "J529",
+                  "at_nm": [
+                    100320000,
+                    79840000
+                  ],
+                  "angle": 0,
+                  "tokens": "(property \"Reference\" \"J529\" (at 100.32 79.84 0) (effects (font (size 1.27 1.27))))"
+                },
+                {
+                  "name": "Value",
+                  "value": "Pair",
+                  "at_nm": [
+                    100320000,
+                    95080000
+                  ],
+                  "angle": 0,
+                  "tokens": "(property \"Value\" \"Pair\" (at 100.32 95.08 0) (effects (font (size 1.27 1.27))))"
+                }
+              ],
+              "lib_id": "Independent:Pair",
+              "unit": 1,
+              "mirror": null,
+              "reference": "J529",
+              "instances": [
+                {
+                  "path": "/503f9da4-fb06-50e1-b059-afb807b4ffe9",
+                  "reference": "J529",
+                  "unit": 1
+                }
+              ],
+              "pins": [
+                {
+                  "ordinal": 0,
+                  "number": "1",
+                  "unit": 1,
+                  "body": 1,
+                  "local_nm": [
+                    -5080000,
+                    0
+                  ],
+                  "world_nm": [
+                    95240000,
+                    87460000
+                  ]
+                },
+                {
+                  "ordinal": 1,
+                  "number": "2",
+                  "unit": 1,
+                  "body": 1,
+                  "local_nm": [
+                    5080000,
+                    0
+                  ],
+                  "world_nm": [
+                    105400000,
+                    87460000
+                  ]
+                }
+              ]
+            },
+            {
+              "kind": "wire",
+              "uuid": "fb0e4f28-a0f5-5de5-9075-9ca3c67997a0",
+              "span": [
+                4213,
+                4337
+              ],
+              "tokens": "(wire (pts (xy 75.24 57.3) (xy 80.16 57.3)) (stroke (width 0) (type default)) (uuid \"fb0e4f28-a0f5-5de5-9075-9ca3c67997a0\"))",
+              "points_nm": [
+                [
+                  75240000,
+                  57300000
+                ],
+                [
+                  80160000,
+                  57300000
+                ]
+              ],
+              "fields": []
+            },
+            {
+              "kind": "wire",
+              "uuid": "7897c5d9-85ec-50cc-a2df-7043e205712c",
+              "span": [
+                4338,
+                4462
+              ],
+              "tokens": "(wire (pts (xy 80.16 57.3) (xy 85.08 57.3)) (stroke (width 0) (type default)) (uuid \"7897c5d9-85ec-50cc-a2df-7043e205712c\"))",
+              "points_nm": [
+                [
+                  80160000,
+                  57300000
+                ],
+                [
+                  85080000,
+                  57300000
+                ]
+              ],
+              "fields": []
+            },
+            {
+              "kind": "wire",
+              "uuid": "dd3ce8ed-6f19-595d-949c-03bb2cf26623",
+              "span": [
+                4463,
+                4587
+              ],
+              "tokens": "(wire (pts (xy 80.16 57.3) (xy 80.16 77.3)) (stroke (width 0) (type default)) (uuid \"dd3ce8ed-6f19-595d-949c-03bb2cf26623\"))",
+              "points_nm": [
+                [
+                  80160000,
+                  57300000
+                ],
+                [
+                  80160000,
+                  77300000
+                ]
+              ],
+              "fields": []
+            },
+            {
+              "kind": "wire",
+              "uuid": "57c78834-884b-59ca-a0c9-a3b6b07df819",
+              "span": [
+                4588,
+                4712
+              ],
+              "tokens": "(wire (pts (xy 80.16 77.3) (xy 90.16 77.3)) (stroke (width 0) (type default)) (uuid \"57c78834-884b-59ca-a0c9-a3b6b07df819\"))",
+              "points_nm": [
+                [
+                  80160000,
+                  77300000
+                ],
+                [
+                  90160000,
+                  77300000
+                ]
+              ],
+              "fields": []
+            },
+            {
+              "kind": "wire",
+              "uuid": "948f502e-c15f-54c6-ad5f-f657f7a0f38a",
+              "span": [
+                4713,
+                4838
+              ],
+              "tokens": "(wire (pts (xy 80.16 57.3) (xy 80.16 87.46)) (stroke (width 0) (type default)) (uuid \"948f502e-c15f-54c6-ad5f-f657f7a0f38a\"))",
+              "points_nm": [
+                [
+                  80160000,
+                  57300000
+                ],
+                [
+                  80160000,
+                  87460000
+                ]
+              ],
+              "fields": []
+            },
+            {
+              "kind": "wire",
+              "uuid": "5c8c986f-954a-5c64-ba1d-fef5d3a04f01",
+              "span": [
+                4839,
+                4965
+              ],
+              "tokens": "(wire (pts (xy 80.16 87.46) (xy 95.24 87.46)) (stroke (width 0) (type default)) (uuid \"5c8c986f-954a-5c64-ba1d-fef5d3a04f01\"))",
+              "points_nm": [
+                [
+                  80160000,
+                  87460000
+                ],
+                [
+                  95240000,
+                  87460000
+                ]
+              ],
+              "fields": []
+            },
+            {
+              "kind": "junction",
+              "uuid": "51d78a97-7e80-560f-8039-f8757c66fe68",
+              "span": [
+                4966,
+                5067
+              ],
+              "tokens": "(junction (at 80.16 57.3) (diameter 0) (color 0 0 0 0) (uuid \"51d78a97-7e80-560f-8039-f8757c66fe68\"))",
+              "at_nm": [
+                80160000,
+                57300000
+              ],
+              "angle": null,
+              "fields": []
+            },
+            {
+              "kind": "label",
+              "uuid": "8f5d6376-55da-56bf-8475-8626dc1a466f",
+              "span": [
+                5068,
+                5188
+              ],
+              "tokens": "(label \"LANE_FALCON\" (at 80.16 57.3 90) (effects (font (size 1.27 1.27))) (uuid \"8f5d6376-55da-56bf-8475-8626dc1a466f\"))",
+              "at_nm": [
+                80160000,
+                57300000
+              ],
+              "angle": 90,
+              "fields": [],
+              "text": "LANE_FALCON"
+            },
+            {
+              "kind": "global_label",
+              "uuid": "c057653e-73a3-5c1a-90f6-c6bef7dc2492",
+              "span": [
+                5189,
+                5330
+              ],
+              "tokens": "(global_label \"SYS_FALCON\" (shape input) (at 65.08 57.3 180) (effects (font (size 1.27 1.27))) (uuid \"c057653e-73a3-5c1a-90f6-c6bef7dc2492\"))",
+              "at_nm": [
+                65080000,
+                57300000
+              ],
+              "angle": 180,
+              "fields": [],
+              "text": "SYS_FALCON"
+            },
+            {
+              "kind": "no_connect",
+              "uuid": "22d698b9-d78a-54a1-b6da-796815473035",
+              "span": [
+                5331,
+                5405
+              ],
+              "tokens": "(no_connect (at 95.24 57.3) (uuid \"22d698b9-d78a-54a1-b6da-796815473035\"))",
+              "at_nm": [
+                95240000,
+                57300000
+              ],
+              "angle": null,
+              "fields": []
+            },
+            {
+              "kind": "no_connect",
+              "uuid": "9c0c604a-e227-5bb3-b9bb-c5540a3ec200",
+              "span": [
+                5406,
+                5481
+              ],
+              "tokens": "(no_connect (at 100.32 77.3) (uuid \"9c0c604a-e227-5bb3-b9bb-c5540a3ec200\"))",
+              "at_nm": [
+                100320000,
+                77300000
+              ],
+              "angle": null,
+              "fields": []
+            },
+            {
+              "kind": "no_connect",
+              "uuid": "0f0693fb-b26e-58d1-a737-08233fa42bce",
+              "span": [
+                5482,
+                5557
+              ],
+              "tokens": "(no_connect (at 105.4 87.46) (uuid \"0f0693fb-b26e-58d1-a737-08233fa42bce\"))",
+              "at_nm": [
+                105400000,
+                87460000
+              ],
+              "angle": null,
+              "fields": []
+            },
+            {
+              "kind": "symbol",
+              "uuid": "79056c03-19fc-5697-a33e-61d72dc670d8",
+              "span": [
+                5558,
+                6091
+              ],
+              "tokens": "(symbol (lib_id \"Independent:Pair\") (at 160.16 112.3 0) (unit 1)  (in_bom yes) (on_board yes) (dnp no) (uuid \"79056c03-19fc-5697-a33e-61d72dc670d8\") (property \"Reference\" \"J972\" (at 160.16 104.68 0) (effects (font (size 1.27 1.27)))) (property \"Value\" \"Pair\" (at 160.16 119.92 0) (effects (font (size 1.27 1.27)))) (pin \"1\" (uuid \"48768596-2425-59f2-abb8-6e9dba8d227d\")) (pin \"2\" (uuid \"6ebeb9b9-9546-5958-9386-0fcf670b6567\")) (instances (project \"falcon\" (path \"/503f9da4-fb06-50e1-b059-afb807b4ffe9\" (reference \"J972\") (unit 1)))))",
+              "at_nm": [
+                160160000,
+                112300000
+              ],
+              "angle": 0,
+              "fields": [
+                {
+                  "name": "Reference",
+                  "value": "J972",
+                  "at_nm": [
+                    160160000,
+                    104680000
+                  ],
+                  "angle": 0,
+                  "tokens": "(property \"Reference\" \"J972\" (at 160.16 104.68 0) (effects (font (size 1.27 1.27))))"
+                },
+                {
+                  "name": "Value",
+                  "value": "Pair",
+                  "at_nm": [
+                    160160000,
+                    119920000
+                  ],
+                  "angle": 0,
+                  "tokens": "(property \"Value\" \"Pair\" (at 160.16 119.92 0) (effects (font (size 1.27 1.27))))"
+                }
+              ],
+              "lib_id": "Independent:Pair",
+              "unit": 1,
+              "mirror": null,
+              "reference": "J972",
+              "instances": [
+                {
+                  "path": "/503f9da4-fb06-50e1-b059-afb807b4ffe9",
+                  "reference": "J972",
+                  "unit": 1
+                }
+              ],
+              "pins": [
+                {
+                  "ordinal": 0,
+                  "number": "1",
+                  "unit": 1,
+                  "body": 1,
+                  "local_nm": [
+                    -5080000,
+                    0
+                  ],
+                  "world_nm": [
+                    155080000,
+                    112300000
+                  ]
+                },
+                {
+                  "ordinal": 1,
+                  "number": "2",
+                  "unit": 1,
+                  "body": 1,
+                  "local_nm": [
+                    5080000,
+                    0
+                  ],
+                  "world_nm": [
+                    165240000,
+                    112300000
+                  ]
+                }
+              ]
+            },
+            {
+              "kind": "no_connect",
+              "uuid": "2b533162-fe49-5d5e-860c-f8eb01f07053",
+              "span": [
+                6092,
+                6168
+              ],
+              "tokens": "(no_connect (at 155.08 112.3) (uuid \"2b533162-fe49-5d5e-860c-f8eb01f07053\"))",
+              "at_nm": [
+                155080000,
+                112300000
+              ],
+              "angle": null,
+              "fields": []
+            },
+            {
+              "kind": "no_connect",
+              "uuid": "8055b13c-391d-5730-86a8-b633268d2f6e",
+              "span": [
+                6169,
+                6245
+              ],
+              "tokens": "(no_connect (at 165.24 112.3) (uuid \"8055b13c-391d-5730-86a8-b633268d2f6e\"))",
+              "at_nm": [
+                165240000,
+                112300000
+              ],
+              "angle": null,
+              "fields": []
+            },
+            {
+              "kind": "polyline",
+              "uuid": "50c5a588-5aef-5864-b703-220e7f35dc50",
+              "span": [
+                6246,
+                6412
+              ],
+              "tokens": "(polyline (pts (xy 195.16 27.3) (xy 200.24 29.84) (xy 197.7 34.92) (xy 205.32 37.46)) (stroke (width 0) (type default)) (uuid \"50c5a588-5aef-5864-b703-220e7f35dc50\"))",
+              "points_nm": [
+                [
+                  195160000,
+                  27300000
+                ],
+                [
+                  200240000,
+                  29840000
+                ],
+                [
+                  197700000,
+                  34920000
+                ],
+                [
+                  205320000,
+                  37460000
+                ]
+              ],
+              "fields": []
+            }
+          ]
+        }
+      },
+      "logical_pages": [
+        {
+          "source": "falcon.kicad_sch",
+          "instance": "/503f9da4-fb06-50e1-b059-afb807b4ffe9",
+          "display_path": "/"
+        }
+      ]
+    },
+    "pins": [
+      {
+        "identity": [
+          "74e39bcf-9d88-5bc5-80bf-0a828a6b2e3c",
+          "/503f9da4-fb06-50e1-b059-afb807b4ffe9",
+          1,
+          1,
+          0
+        ],
+        "reference": "J208",
+        "number": "1",
+        "world_nm": [
+          65080000,
+          57300000
+        ],
+        "source": "falcon.kicad_sch"
+      },
+      {
+        "identity": [
+          "74e39bcf-9d88-5bc5-80bf-0a828a6b2e3c",
+          "/503f9da4-fb06-50e1-b059-afb807b4ffe9",
+          1,
+          1,
+          1
+        ],
+        "reference": "J208",
+        "number": "2",
+        "world_nm": [
+          75240000,
+          57300000
+        ],
+        "source": "falcon.kicad_sch"
+      },
+      {
+        "identity": [
+          "887de6fe-55bd-5494-9ddb-61362e7d9912",
+          "/503f9da4-fb06-50e1-b059-afb807b4ffe9",
+          1,
+          1,
+          0
+        ],
+        "reference": "J305",
+        "number": "1",
+        "world_nm": [
+          85080000,
+          57300000
+        ],
+        "source": "falcon.kicad_sch"
+      },
+      {
+        "identity": [
+          "887de6fe-55bd-5494-9ddb-61362e7d9912",
+          "/503f9da4-fb06-50e1-b059-afb807b4ffe9",
+          1,
+          1,
+          1
+        ],
+        "reference": "J305",
+        "number": "2",
+        "world_nm": [
+          95240000,
+          57300000
+        ],
+        "source": "falcon.kicad_sch"
+      },
+      {
+        "identity": [
+          "eaca4cd7-60bd-56fd-b7b0-2a565f56bf8e",
+          "/503f9da4-fb06-50e1-b059-afb807b4ffe9",
+          1,
+          1,
+          0
+        ],
+        "reference": "J412",
+        "number": "1",
+        "world_nm": [
+          90160000,
+          77300000
+        ],
+        "source": "falcon.kicad_sch"
+      },
+      {
+        "identity": [
+          "eaca4cd7-60bd-56fd-b7b0-2a565f56bf8e",
+          "/503f9da4-fb06-50e1-b059-afb807b4ffe9",
+          1,
+          1,
+          1
+        ],
+        "reference": "J412",
+        "number": "2",
+        "world_nm": [
+          100320000,
+          77300000
+        ],
+        "source": "falcon.kicad_sch"
+      },
+      {
+        "identity": [
+          "1a3ff63a-432c-5ca1-a879-64a24d712c3b",
+          "/503f9da4-fb06-50e1-b059-afb807b4ffe9",
+          1,
+          1,
+          0
+        ],
+        "reference": "J529",
+        "number": "1",
+        "world_nm": [
+          95240000,
+          87460000
+        ],
+        "source": "falcon.kicad_sch"
+      },
+      {
+        "identity": [
+          "1a3ff63a-432c-5ca1-a879-64a24d712c3b",
+          "/503f9da4-fb06-50e1-b059-afb807b4ffe9",
+          1,
+          1,
+          1
+        ],
+        "reference": "J529",
+        "number": "2",
+        "world_nm": [
+          105400000,
+          87460000
+        ],
+        "source": "falcon.kicad_sch"
+      },
+      {
+        "identity": [
+          "79056c03-19fc-5697-a33e-61d72dc670d8",
+          "/503f9da4-fb06-50e1-b059-afb807b4ffe9",
+          1,
+          1,
+          0
+        ],
+        "reference": "J972",
+        "number": "1",
+        "world_nm": [
+          155080000,
+          112300000
+        ],
+        "source": "falcon.kicad_sch"
+      },
+      {
+        "identity": [
+          "79056c03-19fc-5697-a33e-61d72dc670d8",
+          "/503f9da4-fb06-50e1-b059-afb807b4ffe9",
+          1,
+          1,
+          1
+        ],
+        "reference": "J972",
+        "number": "2",
+        "world_nm": [
+          165240000,
+          112300000
+        ],
+        "source": "falcon.kicad_sch"
+      }
+    ],
+    "connectivity": {
+      "groups": [
+        {
+          "identities": [
+            [
+              "1a3ff63a-432c-5ca1-a879-64a24d712c3b",
+              "/503f9da4-fb06-50e1-b059-afb807b4ffe9",
+              1,
+              1,
+              0
+            ],
+            [
+              "51d78a97-7e80-560f-8039-f8757c66fe68",
+              "/503f9da4-fb06-50e1-b059-afb807b4ffe9"
+            ],
+            [
+              "57c78834-884b-59ca-a0c9-a3b6b07df819",
+              "/503f9da4-fb06-50e1-b059-afb807b4ffe9",
+              "vertex",
+              0
+            ],
+            [
+              "57c78834-884b-59ca-a0c9-a3b6b07df819",
+              "/503f9da4-fb06-50e1-b059-afb807b4ffe9",
+              "vertex",
+              1
+            ],
+            [
+              "5c8c986f-954a-5c64-ba1d-fef5d3a04f01",
+              "/503f9da4-fb06-50e1-b059-afb807b4ffe9",
+              "vertex",
+              0
+            ],
+            [
+              "5c8c986f-954a-5c64-ba1d-fef5d3a04f01",
+              "/503f9da4-fb06-50e1-b059-afb807b4ffe9",
+              "vertex",
+              1
+            ],
+            [
+              "74e39bcf-9d88-5bc5-80bf-0a828a6b2e3c",
+              "/503f9da4-fb06-50e1-b059-afb807b4ffe9",
+              1,
+              1,
+              1
+            ],
+            [
+              "7897c5d9-85ec-50cc-a2df-7043e205712c",
+              "/503f9da4-fb06-50e1-b059-afb807b4ffe9",
+              "vertex",
+              0
+            ],
+            [
+              "7897c5d9-85ec-50cc-a2df-7043e205712c",
+              "/503f9da4-fb06-50e1-b059-afb807b4ffe9",
+              "vertex",
+              1
+            ],
+            [
+              "887de6fe-55bd-5494-9ddb-61362e7d9912",
+              "/503f9da4-fb06-50e1-b059-afb807b4ffe9",
+              1,
+              1,
+              0
+            ],
+            [
+              "8f5d6376-55da-56bf-8475-8626dc1a466f",
+              "/503f9da4-fb06-50e1-b059-afb807b4ffe9"
+            ],
+            [
+              "948f502e-c15f-54c6-ad5f-f657f7a0f38a",
+              "/503f9da4-fb06-50e1-b059-afb807b4ffe9",
+              "vertex",
+              0
+            ],
+            [
+              "948f502e-c15f-54c6-ad5f-f657f7a0f38a",
+              "/503f9da4-fb06-50e1-b059-afb807b4ffe9",
+              "vertex",
+              1
+            ],
+            [
+              "dd3ce8ed-6f19-595d-949c-03bb2cf26623",
+              "/503f9da4-fb06-50e1-b059-afb807b4ffe9",
+              "vertex",
+              0
+            ],
+            [
+              "dd3ce8ed-6f19-595d-949c-03bb2cf26623",
+              "/503f9da4-fb06-50e1-b059-afb807b4ffe9",
+              "vertex",
+              1
+            ],
+            [
+              "eaca4cd7-60bd-56fd-b7b0-2a565f56bf8e",
+              "/503f9da4-fb06-50e1-b059-afb807b4ffe9",
+              1,
+              1,
+              0
+            ],
+            [
+              "fb0e4f28-a0f5-5de5-9075-9ca3c67997a0",
+              "/503f9da4-fb06-50e1-b059-afb807b4ffe9",
+              "vertex",
+              0
+            ],
+            [
+              "fb0e4f28-a0f5-5de5-9075-9ca3c67997a0",
+              "/503f9da4-fb06-50e1-b059-afb807b4ffe9",
+              "vertex",
+              1
+            ]
+          ],
+          "pins": [
+            [
+              "J208",
+              "2"
+            ],
+            [
+              "J305",
+              "1"
+            ],
+            [
+              "J412",
+              "1"
+            ],
+            [
+              "J529",
+              "1"
+            ]
+          ],
+          "names": [
+            "/503f9da4-fb06-50e1-b059-afb807b4ffe9/LANE_FALCON"
+          ]
+        },
+        {
+          "identities": [
+            [
+              "1a3ff63a-432c-5ca1-a879-64a24d712c3b",
+              "/503f9da4-fb06-50e1-b059-afb807b4ffe9",
+              1,
+              1,
+              1
+            ]
+          ],
+          "pins": [
+            [
+              "J529",
+              "2"
+            ]
+          ],
+          "names": []
+        },
+        {
+          "identities": [
+            [
+              "74e39bcf-9d88-5bc5-80bf-0a828a6b2e3c",
+              "/503f9da4-fb06-50e1-b059-afb807b4ffe9",
+              1,
+              1,
+              0
+            ],
+            [
+              "c057653e-73a3-5c1a-90f6-c6bef7dc2492",
+              "/503f9da4-fb06-50e1-b059-afb807b4ffe9"
+            ]
+          ],
+          "pins": [
+            [
+              "J208",
+              "1"
+            ]
+          ],
+          "names": [
+            "/SYS_FALCON"
+          ]
+        },
+        {
+          "identities": [
+            [
+              "79056c03-19fc-5697-a33e-61d72dc670d8",
+              "/503f9da4-fb06-50e1-b059-afb807b4ffe9",
+              1,
+              1,
+              0
+            ]
+          ],
+          "pins": [
+            [
+              "J972",
+              "1"
+            ]
+          ],
+          "names": []
+        },
+        {
+          "identities": [
+            [
+              "79056c03-19fc-5697-a33e-61d72dc670d8",
+              "/503f9da4-fb06-50e1-b059-afb807b4ffe9",
+              1,
+              1,
+              1
+            ]
+          ],
+          "pins": [
+            [
+              "J972",
+              "2"
+            ]
+          ],
+          "names": []
+        },
+        {
+          "identities": [
+            [
+              "887de6fe-55bd-5494-9ddb-61362e7d9912",
+              "/503f9da4-fb06-50e1-b059-afb807b4ffe9",
+              1,
+              1,
+              1
+            ]
+          ],
+          "pins": [
+            [
+              "J305",
+              "2"
+            ]
+          ],
+          "names": []
+        },
+        {
+          "identities": [
+            [
+              "eaca4cd7-60bd-56fd-b7b0-2a565f56bf8e",
+              "/503f9da4-fb06-50e1-b059-afb807b4ffe9",
+              1,
+              1,
+              1
+            ]
+          ],
+          "pins": [
+            [
+              "J412",
+              "2"
+            ]
+          ],
+          "names": []
+        }
+      ],
+      "nc": [
+        {
+          "id": [
+            "0f0693fb-b26e-58d1-a737-08233fa42bce",
+            "/503f9da4-fb06-50e1-b059-afb807b4ffe9"
+          ],
+          "pins": [
+            [
+              "1a3ff63a-432c-5ca1-a879-64a24d712c3b",
+              "/503f9da4-fb06-50e1-b059-afb807b4ffe9",
+              1,
+              1,
+              1
+            ]
+          ]
+        },
+        {
+          "id": [
+            "22d698b9-d78a-54a1-b6da-796815473035",
+            "/503f9da4-fb06-50e1-b059-afb807b4ffe9"
+          ],
+          "pins": [
+            [
+              "887de6fe-55bd-5494-9ddb-61362e7d9912",
+              "/503f9da4-fb06-50e1-b059-afb807b4ffe9",
+              1,
+              1,
+              1
+            ]
+          ]
+        },
+        {
+          "id": [
+            "2b533162-fe49-5d5e-860c-f8eb01f07053",
+            "/503f9da4-fb06-50e1-b059-afb807b4ffe9"
+          ],
+          "pins": [
+            [
+              "79056c03-19fc-5697-a33e-61d72dc670d8",
+              "/503f9da4-fb06-50e1-b059-afb807b4ffe9",
+              1,
+              1,
+              0
+            ]
+          ]
+        },
+        {
+          "id": [
+            "8055b13c-391d-5730-86a8-b633268d2f6e",
+            "/503f9da4-fb06-50e1-b059-afb807b4ffe9"
+          ],
+          "pins": [
+            [
+              "79056c03-19fc-5697-a33e-61d72dc670d8",
+              "/503f9da4-fb06-50e1-b059-afb807b4ffe9",
+              1,
+              1,
+              1
+            ]
+          ]
+        },
+        {
+          "id": [
+            "9c0c604a-e227-5bb3-b9bb-c5540a3ec200",
+            "/503f9da4-fb06-50e1-b059-afb807b4ffe9"
+          ],
+          "pins": [
+            [
+              "eaca4cd7-60bd-56fd-b7b0-2a565f56bf8e",
+              "/503f9da4-fb06-50e1-b059-afb807b4ffe9",
+              1,
+              1,
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    "expected_physical": [
+      {
+        "pins": [
+          [
+            "J208",
+            "1"
+          ]
+        ],
+        "explicit_names": [
+          "SYS_FALCON"
+        ]
+      },
+      {
+        "pins": [
+          [
+            "J208",
+            "2"
+          ],
+          [
+            "J305",
+            "1"
+          ],
+          [
+            "J412",
+            "1"
+          ],
+          [
+            "J529",
+            "1"
+          ]
+        ],
+        "explicit_names": [
+          "/LANE_FALCON"
+        ]
+      },
+      {
+        "pins": [
+          [
+            "J305",
+            "2"
+          ]
+        ],
+        "explicit_names": []
+      },
+      {
+        "pins": [
+          [
+            "J412",
+            "2"
+          ]
+        ],
+        "explicit_names": []
+      },
+      {
+        "pins": [
+          [
+            "J529",
+            "2"
+          ]
+        ],
+        "explicit_names": []
+      },
+      {
+        "pins": [
+          [
+            "J972",
+            "1"
+          ]
+        ],
+        "explicit_names": []
+      },
+      {
+        "pins": [
+          [
+            "J972",
+            "2"
+          ]
+        ],
+        "explicit_names": []
+      }
+    ]
+  },
+  "orbit": {
+    "data": {
+      "sources": {
+        "orbit.kicad_sch": {
+          "path": "D:\\personalSpace\\kicad-sch-geometry-20261021\\independent\\fixtures\\orbit\\orbit.kicad_sch",
+          "sha256": "56d5ab4903be5a6383e9548f7d1c088bb8827dc5b6a4807d27226a09aa741303",
+          "root_uuid": "7559feb7-193b-5950-b7ed-26dd65885df7",
+          "objects": [
+            {
+              "kind": "symbol",
+              "uuid": "baae45d0-35fe-5dd5-9a59-62a3446b5660",
+              "span": [
+                2097,
+                2735
+              ],
+              "tokens": "(symbol (lib_id \"Independent:Twin\") (at 65 65 90) (unit 1) (mirror x) (in_bom yes) (on_board yes) (dnp no) (uuid \"baae45d0-35fe-5dd5-9a59-62a3446b5660\") (property \"Reference\" \"U33\" (at 65 57.38 90) (effects (font (size 1.27 1.27)))) (property \"Value\" \"Twin\" (at 65 72.62 90) (effects (font (size 1.27 1.27)))) (pin \"1\" (uuid \"c31c9a54-7476-5d5d-83ed-52d7b1cf77ca\")) (pin \"2\" (uuid \"af20bdf7-95a3-5c30-8b28-43314abbd990\")) (pin \"7\" (uuid \"0970ddf2-e6ad-52fc-897f-f884bfcc59eb\")) (pin \"7\" (uuid \"d91a396d-6a20-517e-b406-f21ea13d69e2\")) (instances (project \"orbit\" (path \"/7559feb7-193b-5950-b7ed-26dd65885df7\" (reference \"U33\") (unit 1)))))",
+              "at_nm": [
+                65000000,
+                65000000
+              ],
+              "angle": 90,
+              "fields": [
+                {
+                  "name": "Reference",
+                  "value": "U33",
+                  "at_nm": [
+                    65000000,
+                    57380000
+                  ],
+                  "angle": 90,
+                  "tokens": "(property \"Reference\" \"U33\" (at 65 57.38 90) (effects (font (size 1.27 1.27))))"
+                },
+                {
+                  "name": "Value",
+                  "value": "Twin",
+                  "at_nm": [
+                    65000000,
+                    72620000
+                  ],
+                  "angle": 90,
+                  "tokens": "(property \"Value\" \"Twin\" (at 65 72.62 90) (effects (font (size 1.27 1.27))))"
+                }
+              ],
+              "lib_id": "Independent:Twin",
+              "unit": 1,
+              "mirror": "x",
+              "reference": "U33",
+              "instances": [
+                {
+                  "path": "/7559feb7-193b-5950-b7ed-26dd65885df7",
+                  "reference": "U33",
+                  "unit": 1
+                }
+              ],
+              "pins": [
+                {
+                  "ordinal": 0,
+                  "number": "1",
+                  "unit": 1,
+                  "body": 1,
+                  "local_nm": [
+                    -5080000,
+                    0
+                  ],
+                  "world_nm": [
+                    65000000,
+                    59920000
+                  ]
+                },
+                {
+                  "ordinal": 1,
+                  "number": "2",
+                  "unit": 1,
+                  "body": 1,
+                  "local_nm": [
+                    5080000,
+                    0
+                  ],
+                  "world_nm": [
+                    65000000,
+                    70080000
+                  ]
+                },
+                {
+                  "ordinal": 2,
+                  "number": "7",
+                  "unit": 1,
+                  "body": 1,
+                  "local_nm": [
+                    0,
+                    5080000
+                  ],
+                  "world_nm": [
+                    59920000,
+                    65000000
+                  ]
+                },
+                {
+                  "ordinal": 3,
+                  "number": "7",
+                  "unit": 1,
+                  "body": 1,
+                  "local_nm": [
+                    0,
+                    -5080000
+                  ],
+                  "world_nm": [
+                    70080000,
+                    65000000
+                  ]
+                }
+              ]
+            },
+            {
+              "kind": "no_connect",
+              "uuid": "acdb45fa-56c1-5e95-99e2-8074e7e171bc",
+              "span": [
+                2736,
+                2808
+              ],
+              "tokens": "(no_connect (at 65 70.08) (uuid \"acdb45fa-56c1-5e95-99e2-8074e7e171bc\"))",
+              "at_nm": [
+                65000000,
+                70080000
+              ],
+              "angle": null,
+              "fields": []
+            },
+            {
+              "kind": "no_connect",
+              "uuid": "e0ca47fe-f5f9-5286-a590-acee6116f7cd",
+              "span": [
+                2809,
+                2881
+              ],
+              "tokens": "(no_connect (at 65 59.92) (uuid \"e0ca47fe-f5f9-5286-a590-acee6116f7cd\"))",
+              "at_nm": [
+                65000000,
+                59920000
+              ],
+              "angle": null,
+              "fields": []
+            },
+            {
+              "kind": "no_connect",
+              "uuid": "972a7a50-0662-5a44-90c8-da7a4ae3f9ab",
+              "span": [
+                2882,
+                2954
+              ],
+              "tokens": "(no_connect (at 70.08 65) (uuid \"972a7a50-0662-5a44-90c8-da7a4ae3f9ab\"))",
+              "at_nm": [
+                70080000,
+                65000000
+              ],
+              "angle": null,
+              "fields": []
+            },
+            {
+              "kind": "no_connect",
+              "uuid": "8c2082d7-7680-5295-a5c3-153b47ecbbad",
+              "span": [
+                2955,
+                3027
+              ],
+              "tokens": "(no_connect (at 59.92 65) (uuid \"8c2082d7-7680-5295-a5c3-153b47ecbbad\"))",
+              "at_nm": [
+                59920000,
+                65000000
+              ],
+              "angle": null,
+              "fields": []
+            },
+            {
+              "kind": "symbol",
+              "uuid": "aa108c5d-2675-5cd3-b1d6-c72fd520c48e",
+              "span": [
+                3028,
+                3550
+              ],
+              "tokens": "(symbol (lib_id \"Independent:Twin\") (at 120 80 270) (unit 2)  (in_bom yes) (on_board yes) (dnp no) (uuid \"aa108c5d-2675-5cd3-b1d6-c72fd520c48e\") (property \"Reference\" \"U33\" (at 120 72.38 270) (effects (font (size 1.27 1.27)))) (property \"Value\" \"Twin\" (at 120 87.62 270) (effects (font (size 1.27 1.27)))) (pin \"3\" (uuid \"4fdc41c5-f9ee-5eaf-ad10-028ecc51b324\")) (pin \"4\" (uuid \"78d55df1-c6e0-5b32-8c4f-eca493c6c0ba\")) (instances (project \"orbit\" (path \"/7559feb7-193b-5950-b7ed-26dd65885df7\" (reference \"U33\") (unit 2)))))",
+              "at_nm": [
+                120000000,
+                80000000
+              ],
+              "angle": 270,
+              "fields": [
+                {
+                  "name": "Reference",
+                  "value": "U33",
+                  "at_nm": [
+                    120000000,
+                    72380000
+                  ],
+                  "angle": 270,
+                  "tokens": "(property \"Reference\" \"U33\" (at 120 72.38 270) (effects (font (size 1.27 1.27))))"
+                },
+                {
+                  "name": "Value",
+                  "value": "Twin",
+                  "at_nm": [
+                    120000000,
+                    87620000
+                  ],
+                  "angle": 270,
+                  "tokens": "(property \"Value\" \"Twin\" (at 120 87.62 270) (effects (font (size 1.27 1.27))))"
+                }
+              ],
+              "lib_id": "Independent:Twin",
+              "unit": 2,
+              "mirror": null,
+              "reference": "U33",
+              "instances": [
+                {
+                  "path": "/7559feb7-193b-5950-b7ed-26dd65885df7",
+                  "reference": "U33",
+                  "unit": 2
+                }
+              ],
+              "pins": [
+                {
+                  "ordinal": 4,
+                  "number": "3",
+                  "unit": 2,
+                  "body": 1,
+                  "local_nm": [
+                    -5080000,
+                    0
+                  ],
+                  "world_nm": [
+                    120000000,
+                    74920000
+                  ]
+                },
+                {
+                  "ordinal": 5,
+                  "number": "4",
+                  "unit": 2,
+                  "body": 1,
+                  "local_nm": [
+                    5080000,
+                    0
+                  ],
+                  "world_nm": [
+                    120000000,
+                    85080000
+                  ]
+                }
+              ]
+            },
+            {
+              "kind": "no_connect",
+              "uuid": "d2574fd9-ec56-5c55-b3cc-76d877b38a11",
+              "span": [
+                3551,
+                3624
+              ],
+              "tokens": "(no_connect (at 120 74.92) (uuid \"d2574fd9-ec56-5c55-b3cc-76d877b38a11\"))",
+              "at_nm": [
+                120000000,
+                74920000
+              ],
+              "angle": null,
+              "fields": []
+            },
+            {
+              "kind": "no_connect",
+              "uuid": "bd488e9f-9214-52a0-b683-9f34b0b7040f",
+              "span": [
+                3625,
+                3698
+              ],
+              "tokens": "(no_connect (at 120 85.08) (uuid \"bd488e9f-9214-52a0-b683-9f34b0b7040f\"))",
+              "at_nm": [
+                120000000,
+                85080000
+              ],
+              "angle": null,
+              "fields": []
+            },
+            {
+              "kind": "symbol",
+              "uuid": "4eed8cc7-c68b-5144-bec7-3de1d82c0623",
+              "span": [
+                3699,
+                4236
+              ],
+              "tokens": "(symbol (lib_id \"Independent:Pair\") (at 160 110 180) (unit 1) (mirror y) (in_bom yes) (on_board yes) (dnp no) (uuid \"4eed8cc7-c68b-5144-bec7-3de1d82c0623\") (property \"Reference\" \"J644\" (at 160 102.38 180) (effects (font (size 1.27 1.27)))) (property \"Value\" \"Pair\" (at 160 117.62 180) (effects (font (size 1.27 1.27)))) (pin \"1\" (uuid \"d2633b51-9430-5d1f-bfb1-3cb6acae64d4\")) (pin \"2\" (uuid \"a915b0a3-0f93-5c1f-975e-a205892a6a23\")) (instances (project \"orbit\" (path \"/7559feb7-193b-5950-b7ed-26dd65885df7\" (reference \"J644\") (unit 1)))))",
+              "at_nm": [
+                160000000,
+                110000000
+              ],
+              "angle": 180,
+              "fields": [
+                {
+                  "name": "Reference",
+                  "value": "J644",
+                  "at_nm": [
+                    160000000,
+                    102380000
+                  ],
+                  "angle": 180,
+                  "tokens": "(property \"Reference\" \"J644\" (at 160 102.38 180) (effects (font (size 1.27 1.27))))"
+                },
+                {
+                  "name": "Value",
+                  "value": "Pair",
+                  "at_nm": [
+                    160000000,
+                    117620000
+                  ],
+                  "angle": 180,
+                  "tokens": "(property \"Value\" \"Pair\" (at 160 117.62 180) (effects (font (size 1.27 1.27))))"
+                }
+              ],
+              "lib_id": "Independent:Pair",
+              "unit": 1,
+              "mirror": "y",
+              "reference": "J644",
+              "instances": [
+                {
+                  "path": "/7559feb7-193b-5950-b7ed-26dd65885df7",
+                  "reference": "J644",
+                  "unit": 1
+                }
+              ],
+              "pins": [
+                {
+                  "ordinal": 0,
+                  "number": "1",
+                  "unit": 1,
+                  "body": 1,
+                  "local_nm": [
+                    -5080000,
+                    0
+                  ],
+                  "world_nm": [
+                    154920000,
+                    110000000
+                  ]
+                },
+                {
+                  "ordinal": 1,
+                  "number": "2",
+                  "unit": 1,
+                  "body": 1,
+                  "local_nm": [
+                    5080000,
+                    0
+                  ],
+                  "world_nm": [
+                    165080000,
+                    110000000
+                  ]
+                }
+              ]
+            },
+            {
+              "kind": "no_connect",
+              "uuid": "586257e5-9679-5dba-b8a8-1557157280dc",
+              "span": [
+                4237,
+                4311
+              ],
+              "tokens": "(no_connect (at 154.92 110) (uuid \"586257e5-9679-5dba-b8a8-1557157280dc\"))",
+              "at_nm": [
+                154920000,
+                110000000
+              ],
+              "angle": null,
+              "fields": []
+            },
+            {
+              "kind": "no_connect",
+              "uuid": "2858de2e-cf43-53fe-a81e-955fdd86a7e8",
+              "span": [
+                4312,
+                4386
+              ],
+              "tokens": "(no_connect (at 165.08 110) (uuid \"2858de2e-cf43-53fe-a81e-955fdd86a7e8\"))",
+              "at_nm": [
+                165080000,
+                110000000
+              ],
+              "angle": null,
+              "fields": []
+            }
+          ]
+        }
+      },
+      "logical_pages": [
+        {
+          "source": "orbit.kicad_sch",
+          "instance": "/7559feb7-193b-5950-b7ed-26dd65885df7",
+          "display_path": "/"
+        }
+      ]
+    },
+    "pins": [
+      {
+        "identity": [
+          "baae45d0-35fe-5dd5-9a59-62a3446b5660",
+          "/7559feb7-193b-5950-b7ed-26dd65885df7",
+          1,
+          1,
+          0
+        ],
+        "reference": "U33",
+        "number": "1",
+        "world_nm": [
+          65000000,
+          59920000
+        ],
+        "source": "orbit.kicad_sch"
+      },
+      {
+        "identity": [
+          "baae45d0-35fe-5dd5-9a59-62a3446b5660",
+          "/7559feb7-193b-5950-b7ed-26dd65885df7",
+          1,
+          1,
+          1
+        ],
+        "reference": "U33",
+        "number": "2",
+        "world_nm": [
+          65000000,
+          70080000
+        ],
+        "source": "orbit.kicad_sch"
+      },
+      {
+        "identity": [
+          "baae45d0-35fe-5dd5-9a59-62a3446b5660",
+          "/7559feb7-193b-5950-b7ed-26dd65885df7",
+          1,
+          1,
+          2
+        ],
+        "reference": "U33",
+        "number": "7",
+        "world_nm": [
+          59920000,
+          65000000
+        ],
+        "source": "orbit.kicad_sch"
+      },
+      {
+        "identity": [
+          "baae45d0-35fe-5dd5-9a59-62a3446b5660",
+          "/7559feb7-193b-5950-b7ed-26dd65885df7",
+          1,
+          1,
+          3
+        ],
+        "reference": "U33",
+        "number": "7",
+        "world_nm": [
+          70080000,
+          65000000
+        ],
+        "source": "orbit.kicad_sch"
+      },
+      {
+        "identity": [
+          "aa108c5d-2675-5cd3-b1d6-c72fd520c48e",
+          "/7559feb7-193b-5950-b7ed-26dd65885df7",
+          2,
+          1,
+          4
+        ],
+        "reference": "U33",
+        "number": "3",
+        "world_nm": [
+          120000000,
+          74920000
+        ],
+        "source": "orbit.kicad_sch"
+      },
+      {
+        "identity": [
+          "aa108c5d-2675-5cd3-b1d6-c72fd520c48e",
+          "/7559feb7-193b-5950-b7ed-26dd65885df7",
+          2,
+          1,
+          5
+        ],
+        "reference": "U33",
+        "number": "4",
+        "world_nm": [
+          120000000,
+          85080000
+        ],
+        "source": "orbit.kicad_sch"
+      },
+      {
+        "identity": [
+          "4eed8cc7-c68b-5144-bec7-3de1d82c0623",
+          "/7559feb7-193b-5950-b7ed-26dd65885df7",
+          1,
+          1,
+          0
+        ],
+        "reference": "J644",
+        "number": "1",
+        "world_nm": [
+          154920000,
+          110000000
+        ],
+        "source": "orbit.kicad_sch"
+      },
+      {
+        "identity": [
+          "4eed8cc7-c68b-5144-bec7-3de1d82c0623",
+          "/7559feb7-193b-5950-b7ed-26dd65885df7",
+          1,
+          1,
+          1
+        ],
+        "reference": "J644",
+        "number": "2",
+        "world_nm": [
+          165080000,
+          110000000
+        ],
+        "source": "orbit.kicad_sch"
+      }
+    ],
+    "connectivity": {
+      "groups": [
+        {
+          "identities": [
+            [
+              "4eed8cc7-c68b-5144-bec7-3de1d82c0623",
+              "/7559feb7-193b-5950-b7ed-26dd65885df7",
+              1,
+              1,
+              0
+            ]
+          ],
+          "pins": [
+            [
+              "J644",
+              "1"
+            ]
+          ],
+          "names": []
+        },
+        {
+          "identities": [
+            [
+              "4eed8cc7-c68b-5144-bec7-3de1d82c0623",
+              "/7559feb7-193b-5950-b7ed-26dd65885df7",
+              1,
+              1,
+              1
+            ]
+          ],
+          "pins": [
+            [
+              "J644",
+              "2"
+            ]
+          ],
+          "names": []
+        },
+        {
+          "identities": [
+            [
+              "aa108c5d-2675-5cd3-b1d6-c72fd520c48e",
+              "/7559feb7-193b-5950-b7ed-26dd65885df7",
+              2,
+              1,
+              4
+            ]
+          ],
+          "pins": [
+            [
+              "U33",
+              "3"
+            ]
+          ],
+          "names": []
+        },
+        {
+          "identities": [
+            [
+              "aa108c5d-2675-5cd3-b1d6-c72fd520c48e",
+              "/7559feb7-193b-5950-b7ed-26dd65885df7",
+              2,
+              1,
+              5
+            ]
+          ],
+          "pins": [
+            [
+              "U33",
+              "4"
+            ]
+          ],
+          "names": []
+        },
+        {
+          "identities": [
+            [
+              "baae45d0-35fe-5dd5-9a59-62a3446b5660",
+              "/7559feb7-193b-5950-b7ed-26dd65885df7",
+              1,
+              1,
+              0
+            ]
+          ],
+          "pins": [
+            [
+              "U33",
+              "1"
+            ]
+          ],
+          "names": []
+        },
+        {
+          "identities": [
+            [
+              "baae45d0-35fe-5dd5-9a59-62a3446b5660",
+              "/7559feb7-193b-5950-b7ed-26dd65885df7",
+              1,
+              1,
+              1
+            ]
+          ],
+          "pins": [
+            [
+              "U33",
+              "2"
+            ]
+          ],
+          "names": []
+        },
+        {
+          "identities": [
+            [
+              "baae45d0-35fe-5dd5-9a59-62a3446b5660",
+              "/7559feb7-193b-5950-b7ed-26dd65885df7",
+              1,
+              1,
+              2
+            ]
+          ],
+          "pins": [
+            [
+              "U33",
+              "7"
+            ]
+          ],
+          "names": []
+        },
+        {
+          "identities": [
+            [
+              "baae45d0-35fe-5dd5-9a59-62a3446b5660",
+              "/7559feb7-193b-5950-b7ed-26dd65885df7",
+              1,
+              1,
+              3
+            ]
+          ],
+          "pins": [
+            [
+              "U33",
+              "7"
+            ]
+          ],
+          "names": []
+        }
+      ],
+      "nc": [
+        {
+          "id": [
+            "2858de2e-cf43-53fe-a81e-955fdd86a7e8",
+            "/7559feb7-193b-5950-b7ed-26dd65885df7"
+          ],
+          "pins": [
+            [
+              "4eed8cc7-c68b-5144-bec7-3de1d82c0623",
+              "/7559feb7-193b-5950-b7ed-26dd65885df7",
+              1,
+              1,
+              1
+            ]
+          ]
+        },
+        {
+          "id": [
+            "586257e5-9679-5dba-b8a8-1557157280dc",
+            "/7559feb7-193b-5950-b7ed-26dd65885df7"
+          ],
+          "pins": [
+            [
+              "4eed8cc7-c68b-5144-bec7-3de1d82c0623",
+              "/7559feb7-193b-5950-b7ed-26dd65885df7",
+              1,
+              1,
+              0
+            ]
+          ]
+        },
+        {
+          "id": [
+            "8c2082d7-7680-5295-a5c3-153b47ecbbad",
+            "/7559feb7-193b-5950-b7ed-26dd65885df7"
+          ],
+          "pins": [
+            [
+              "baae45d0-35fe-5dd5-9a59-62a3446b5660",
+              "/7559feb7-193b-5950-b7ed-26dd65885df7",
+              1,
+              1,
+              2
+            ]
+          ]
+        },
+        {
+          "id": [
+            "972a7a50-0662-5a44-90c8-da7a4ae3f9ab",
+            "/7559feb7-193b-5950-b7ed-26dd65885df7"
+          ],
+          "pins": [
+            [
+              "baae45d0-35fe-5dd5-9a59-62a3446b5660",
+              "/7559feb7-193b-5950-b7ed-26dd65885df7",
+              1,
+              1,
+              3
+            ]
+          ]
+        },
+        {
+          "id": [
+            "acdb45fa-56c1-5e95-99e2-8074e7e171bc",
+            "/7559feb7-193b-5950-b7ed-26dd65885df7"
+          ],
+          "pins": [
+            [
+              "baae45d0-35fe-5dd5-9a59-62a3446b5660",
+              "/7559feb7-193b-5950-b7ed-26dd65885df7",
+              1,
+              1,
+              1
+            ]
+          ]
+        },
+        {
+          "id": [
+            "bd488e9f-9214-52a0-b683-9f34b0b7040f",
+            "/7559feb7-193b-5950-b7ed-26dd65885df7"
+          ],
+          "pins": [
+            [
+              "aa108c5d-2675-5cd3-b1d6-c72fd520c48e",
+              "/7559feb7-193b-5950-b7ed-26dd65885df7",
+              2,
+              1,
+              5
+            ]
+          ]
+        },
+        {
+          "id": [
+            "d2574fd9-ec56-5c55-b3cc-76d877b38a11",
+            "/7559feb7-193b-5950-b7ed-26dd65885df7"
+          ],
+          "pins": [
+            [
+              "aa108c5d-2675-5cd3-b1d6-c72fd520c48e",
+              "/7559feb7-193b-5950-b7ed-26dd65885df7",
+              2,
+              1,
+              4
+            ]
+          ]
+        },
+        {
+          "id": [
+            "e0ca47fe-f5f9-5286-a590-acee6116f7cd",
+            "/7559feb7-193b-5950-b7ed-26dd65885df7"
+          ],
+          "pins": [
+            [
+              "baae45d0-35fe-5dd5-9a59-62a3446b5660",
+              "/7559feb7-193b-5950-b7ed-26dd65885df7",
+              1,
+              1,
+              0
+            ]
+          ]
+        }
+      ]
+    },
+    "expected_physical": [
+      {
+        "pins": [
+          [
+            "J644",
+            "1"
+          ]
+        ],
+        "explicit_names": []
+      },
+      {
+        "pins": [
+          [
+            "J644",
+            "2"
+          ]
+        ],
+        "explicit_names": []
+      },
+      {
+        "pins": [
+          [
+            "U33",
+            "1"
+          ]
+        ],
+        "explicit_names": []
+      },
+      {
+        "pins": [
+          [
+            "U33",
+            "2"
+          ]
+        ],
+        "explicit_names": []
+      },
+      {
+        "pins": [
+          [
+            "U33",
+            "3"
+          ]
+        ],
+        "explicit_names": []
+      },
+      {
+        "pins": [
+          [
+            "U33",
+            "4"
+          ]
+        ],
+        "explicit_names": []
+      },
+      {
+        "pins": [
+          [
+            "U33",
+            "7"
+          ]
+        ],
+        "explicit_names": []
+      }
+    ]
+  },
+  "shared": {
+    "data": {
+      "sources": {
+        "shared.kicad_sch": {
+          "path": "D:\\personalSpace\\kicad-sch-geometry-20261021\\independent\\fixtures\\shared\\shared.kicad_sch",
+          "sha256": "a5119ffff40bc37b001974ba81511cdecc89075c0838c969287f35124b1c9ad7",
+          "root_uuid": "e70e6270-ced3-5c80-a5ec-3553b0074c4a",
+          "objects": [
+            {
+              "kind": "sheet",
+              "uuid": "f1b311e4-5ffc-57a8-ab37-b405f7830ce4",
+              "span": [
+                2097,
+                2498
+              ],
+              "tokens": "(sheet (at 40 40) (size 30.48 20.32) (stroke (width 0) (type default)) (fill (color 0 0 0 0)) (uuid \"f1b311e4-5ffc-57a8-ab37-b405f7830ce4\") (property \"Sheetname\" \"North\" (at 40 37.46 0) (effects (font (size 1.27 1.27)))) (property \"Sheetfile\" \"north.kicad_sch\" (at 40 62.86 0) (effects (font (size 1.27 1.27)))) (instances (project \"shared\" (path \"/e70e6270-ced3-5c80-a5ec-3553b0074c4a\" (page \"2\")))))",
+              "at_nm": [
+                40000000,
+                40000000
+              ],
+              "angle": null,
+              "fields": [
+                {
+                  "name": "Sheetname",
+                  "value": "North",
+                  "at_nm": [
+                    40000000,
+                    37460000
+                  ],
+                  "angle": 0,
+                  "tokens": "(property \"Sheetname\" \"North\" (at 40 37.46 0) (effects (font (size 1.27 1.27))))"
+                },
+                {
+                  "name": "Sheetfile",
+                  "value": "north.kicad_sch",
+                  "at_nm": [
+                    40000000,
+                    62860000
+                  ],
+                  "angle": 0,
+                  "tokens": "(property \"Sheetfile\" \"north.kicad_sch\" (at 40 62.86 0) (effects (font (size 1.27 1.27))))"
+                }
+              ],
+              "sheet_file": "north.kicad_sch",
+              "sheet_name": "North"
+            },
+            {
+              "kind": "sheet",
+              "uuid": "340b6299-fa8b-5477-a344-b86758de2237",
+              "span": [
+                2499,
+                2904
+              ],
+              "tokens": "(sheet (at 100 90) (size 30.48 20.32) (stroke (width 0) (type default)) (fill (color 0 0 0 0)) (uuid \"340b6299-fa8b-5477-a344-b86758de2237\") (property \"Sheetname\" \"South\" (at 100 87.46 0) (effects (font (size 1.27 1.27)))) (property \"Sheetfile\" \"south.kicad_sch\" (at 100 112.86 0) (effects (font (size 1.27 1.27)))) (instances (project \"shared\" (path \"/e70e6270-ced3-5c80-a5ec-3553b0074c4a\" (page \"4\")))))",
+              "at_nm": [
+                100000000,
+                90000000
+              ],
+              "angle": null,
+              "fields": [
+                {
+                  "name": "Sheetname",
+                  "value": "South",
+                  "at_nm": [
+                    100000000,
+                    87460000
+                  ],
+                  "angle": 0,
+                  "tokens": "(property \"Sheetname\" \"South\" (at 100 87.46 0) (effects (font (size 1.27 1.27))))"
+                },
+                {
+                  "name": "Sheetfile",
+                  "value": "south.kicad_sch",
+                  "at_nm": [
+                    100000000,
+                    112860000
+                  ],
+                  "angle": 0,
+                  "tokens": "(property \"Sheetfile\" \"south.kicad_sch\" (at 100 112.86 0) (effects (font (size 1.27 1.27))))"
+                }
+              ],
+              "sheet_file": "south.kicad_sch",
+              "sheet_name": "South"
+            }
+          ]
+        },
+        "north.kicad_sch": {
+          "path": "D:\\personalSpace\\kicad-sch-geometry-20261021\\independent\\fixtures\\shared\\north.kicad_sch",
+          "sha256": "32448f4f10800a864f8f200eecb407b0c0eb520f95a48a147e722e8c4eef9aa9",
+          "root_uuid": "ee9eb38d-2feb-547b-b7f3-1320f499dbc4",
+          "objects": [
+            {
+              "kind": "sheet",
+              "uuid": "a00f2791-736d-5358-9d79-a28e04c85d75",
+              "span": [
+                2097,
+                2538
+              ],
+              "tokens": "(sheet (at 60 60) (size 30.48 20.32) (stroke (width 0) (type default)) (fill (color 0 0 0 0)) (uuid \"a00f2791-736d-5358-9d79-a28e04c85d75\") (property \"Sheetname\" \"NorthCell\" (at 60 57.46 0) (effects (font (size 1.27 1.27)))) (property \"Sheetfile\" \"cell.kicad_sch\" (at 60 82.86 0) (effects (font (size 1.27 1.27)))) (instances (project \"shared\" (path \"/e70e6270-ced3-5c80-a5ec-3553b0074c4a/f1b311e4-5ffc-57a8-ab37-b405f7830ce4\" (page \"3\")))))",
+              "at_nm": [
+                60000000,
+                60000000
+              ],
+              "angle": null,
+              "fields": [
+                {
+                  "name": "Sheetname",
+                  "value": "NorthCell",
+                  "at_nm": [
+                    60000000,
+                    57460000
+                  ],
+                  "angle": 0,
+                  "tokens": "(property \"Sheetname\" \"NorthCell\" (at 60 57.46 0) (effects (font (size 1.27 1.27))))"
+                },
+                {
+                  "name": "Sheetfile",
+                  "value": "cell.kicad_sch",
+                  "at_nm": [
+                    60000000,
+                    82860000
+                  ],
+                  "angle": 0,
+                  "tokens": "(property \"Sheetfile\" \"cell.kicad_sch\" (at 60 82.86 0) (effects (font (size 1.27 1.27))))"
+                }
+              ],
+              "sheet_file": "cell.kicad_sch",
+              "sheet_name": "NorthCell"
+            }
+          ]
+        },
+        "cell.kicad_sch": {
+          "path": "D:\\personalSpace\\kicad-sch-geometry-20261021\\independent\\fixtures\\shared\\cell.kicad_sch",
+          "sha256": "246206c80702c208e51c26ab90e84ffa5953255951c7a5cb11160bb7add5b01b",
+          "root_uuid": "709db9a3-4135-5f73-a193-5854aeb98e70",
+          "objects": [
+            {
+              "kind": "symbol",
+              "uuid": "94e39cc7-927c-591b-8058-05f36f897d87",
+              "span": [
+                2097,
+                2847
+              ],
+              "tokens": "(symbol (lib_id \"Independent:Pair\") (at 54.92 77.62 0) (unit 1)  (in_bom yes) (on_board yes) (dnp no) (uuid \"94e39cc7-927c-591b-8058-05f36f897d87\") (property \"Reference\" \"J208\" (at 54.92 70.0 0) (effects (font (size 1.27 1.27)))) (property \"Value\" \"Pair\" (at 54.92 85.24 0) (effects (font (size 1.27 1.27)))) (pin \"1\" (uuid \"361fcc7d-cde3-5b1d-8d03-91dbf89c0944\")) (pin \"2\" (uuid \"4bfbfe61-b564-5f9f-b7a8-337f4f3b363d\")) (instances (project \"shared\" (path \"/e70e6270-ced3-5c80-a5ec-3553b0074c4a/f1b311e4-5ffc-57a8-ab37-b405f7830ce4/a00f2791-736d-5358-9d79-a28e04c85d75\" (reference \"J710\") (unit 1)) (path \"/e70e6270-ced3-5c80-a5ec-3553b0074c4a/340b6299-fa8b-5477-a344-b86758de2237/4203147e-a452-52d1-96ec-d1ee87e37d67\" (reference \"J930\") (unit 1)))))",
+              "at_nm": [
+                54920000,
+                77620000
+              ],
+              "angle": 0,
+              "fields": [
+                {
+                  "name": "Reference",
+                  "value": "J208",
+                  "at_nm": [
+                    54920000,
+                    70000000
+                  ],
+                  "angle": 0,
+                  "tokens": "(property \"Reference\" \"J208\" (at 54.92 70.0 0) (effects (font (size 1.27 1.27))))"
+                },
+                {
+                  "name": "Value",
+                  "value": "Pair",
+                  "at_nm": [
+                    54920000,
+                    85240000
+                  ],
+                  "angle": 0,
+                  "tokens": "(property \"Value\" \"Pair\" (at 54.92 85.24 0) (effects (font (size 1.27 1.27))))"
+                }
+              ],
+              "lib_id": "Independent:Pair",
+              "unit": 1,
+              "mirror": null,
+              "reference": "J208",
+              "instances": [
+                {
+                  "path": "/e70e6270-ced3-5c80-a5ec-3553b0074c4a/f1b311e4-5ffc-57a8-ab37-b405f7830ce4/a00f2791-736d-5358-9d79-a28e04c85d75",
+                  "reference": "J710",
+                  "unit": 1
+                },
+                {
+                  "path": "/e70e6270-ced3-5c80-a5ec-3553b0074c4a/340b6299-fa8b-5477-a344-b86758de2237/4203147e-a452-52d1-96ec-d1ee87e37d67",
+                  "reference": "J930",
+                  "unit": 1
+                }
+              ],
+              "pins": [
+                {
+                  "ordinal": 0,
+                  "number": "1",
+                  "unit": 1,
+                  "body": 1,
+                  "local_nm": [
+                    -5080000,
+                    0
+                  ],
+                  "world_nm": [
+                    49840000,
+                    77620000
+                  ]
+                },
+                {
+                  "ordinal": 1,
+                  "number": "2",
+                  "unit": 1,
+                  "body": 1,
+                  "local_nm": [
+                    5080000,
+                    0
+                  ],
+                  "world_nm": [
+                    60000000,
+                    77620000
+                  ]
+                }
+              ]
+            },
+            {
+              "kind": "symbol",
+              "uuid": "09c7132e-7895-50be-9d23-0e8a6d7c6634",
+              "span": [
+                2848,
+                3598
+              ],
+              "tokens": "(symbol (lib_id \"Independent:Pair\") (at 74.92 77.62 0) (unit 1)  (in_bom yes) (on_board yes) (dnp no) (uuid \"09c7132e-7895-50be-9d23-0e8a6d7c6634\") (property \"Reference\" \"J305\" (at 74.92 70.0 0) (effects (font (size 1.27 1.27)))) (property \"Value\" \"Pair\" (at 74.92 85.24 0) (effects (font (size 1.27 1.27)))) (pin \"1\" (uuid \"25f4a090-c7d5-553f-9698-9a64a3e4cd61\")) (pin \"2\" (uuid \"33a4e138-34c5-5019-a06b-f6f41b9e33f2\")) (instances (project \"shared\" (path \"/e70e6270-ced3-5c80-a5ec-3553b0074c4a/f1b311e4-5ffc-57a8-ab37-b405f7830ce4/a00f2791-736d-5358-9d79-a28e04c85d75\" (reference \"J711\") (unit 1)) (path \"/e70e6270-ced3-5c80-a5ec-3553b0074c4a/340b6299-fa8b-5477-a344-b86758de2237/4203147e-a452-52d1-96ec-d1ee87e37d67\" (reference \"J931\") (unit 1)))))",
+              "at_nm": [
+                74920000,
+                77620000
+              ],
+              "angle": 0,
+              "fields": [
+                {
+                  "name": "Reference",
+                  "value": "J305",
+                  "at_nm": [
+                    74920000,
+                    70000000
+                  ],
+                  "angle": 0,
+                  "tokens": "(property \"Reference\" \"J305\" (at 74.92 70.0 0) (effects (font (size 1.27 1.27))))"
+                },
+                {
+                  "name": "Value",
+                  "value": "Pair",
+                  "at_nm": [
+                    74920000,
+                    85240000
+                  ],
+                  "angle": 0,
+                  "tokens": "(property \"Value\" \"Pair\" (at 74.92 85.24 0) (effects (font (size 1.27 1.27))))"
+                }
+              ],
+              "lib_id": "Independent:Pair",
+              "unit": 1,
+              "mirror": null,
+              "reference": "J305",
+              "instances": [
+                {
+                  "path": "/e70e6270-ced3-5c80-a5ec-3553b0074c4a/f1b311e4-5ffc-57a8-ab37-b405f7830ce4/a00f2791-736d-5358-9d79-a28e04c85d75",
+                  "reference": "J711",
+                  "unit": 1
+                },
+                {
+                  "path": "/e70e6270-ced3-5c80-a5ec-3553b0074c4a/340b6299-fa8b-5477-a344-b86758de2237/4203147e-a452-52d1-96ec-d1ee87e37d67",
+                  "reference": "J931",
+                  "unit": 1
+                }
+              ],
+              "pins": [
+                {
+                  "ordinal": 0,
+                  "number": "1",
+                  "unit": 1,
+                  "body": 1,
+                  "local_nm": [
+                    -5080000,
+                    0
+                  ],
+                  "world_nm": [
+                    69840000,
+                    77620000
+                  ]
+                },
+                {
+                  "ordinal": 1,
+                  "number": "2",
+                  "unit": 1,
+                  "body": 1,
+                  "local_nm": [
+                    5080000,
+                    0
+                  ],
+                  "world_nm": [
+                    80000000,
+                    77620000
+                  ]
+                }
+              ]
+            },
+            {
+              "kind": "symbol",
+              "uuid": "1d06feb6-8ae2-541d-b381-954087b938b2",
+              "span": [
+                3599,
+                4347
+              ],
+              "tokens": "(symbol (lib_id \"Independent:Pair\") (at 80.0 97.62 0) (unit 1)  (in_bom yes) (on_board yes) (dnp no) (uuid \"1d06feb6-8ae2-541d-b381-954087b938b2\") (property \"Reference\" \"J412\" (at 80.0 90.0 0) (effects (font (size 1.27 1.27)))) (property \"Value\" \"Pair\" (at 80.0 105.24 0) (effects (font (size 1.27 1.27)))) (pin \"1\" (uuid \"bd953b74-8d78-548c-9cd0-2c2005792627\")) (pin \"2\" (uuid \"76422b15-a865-54b2-bb2d-d493d46d6321\")) (instances (project \"shared\" (path \"/e70e6270-ced3-5c80-a5ec-3553b0074c4a/f1b311e4-5ffc-57a8-ab37-b405f7830ce4/a00f2791-736d-5358-9d79-a28e04c85d75\" (reference \"J712\") (unit 1)) (path \"/e70e6270-ced3-5c80-a5ec-3553b0074c4a/340b6299-fa8b-5477-a344-b86758de2237/4203147e-a452-52d1-96ec-d1ee87e37d67\" (reference \"J932\") (unit 1)))))",
+              "at_nm": [
+                80000000,
+                97620000
+              ],
+              "angle": 0,
+              "fields": [
+                {
+                  "name": "Reference",
+                  "value": "J412",
+                  "at_nm": [
+                    80000000,
+                    90000000
+                  ],
+                  "angle": 0,
+                  "tokens": "(property \"Reference\" \"J412\" (at 80.0 90.0 0) (effects (font (size 1.27 1.27))))"
+                },
+                {
+                  "name": "Value",
+                  "value": "Pair",
+                  "at_nm": [
+                    80000000,
+                    105240000
+                  ],
+                  "angle": 0,
+                  "tokens": "(property \"Value\" \"Pair\" (at 80.0 105.24 0) (effects (font (size 1.27 1.27))))"
+                }
+              ],
+              "lib_id": "Independent:Pair",
+              "unit": 1,
+              "mirror": null,
+              "reference": "J412",
+              "instances": [
+                {
+                  "path": "/e70e6270-ced3-5c80-a5ec-3553b0074c4a/f1b311e4-5ffc-57a8-ab37-b405f7830ce4/a00f2791-736d-5358-9d79-a28e04c85d75",
+                  "reference": "J712",
+                  "unit": 1
+                },
+                {
+                  "path": "/e70e6270-ced3-5c80-a5ec-3553b0074c4a/340b6299-fa8b-5477-a344-b86758de2237/4203147e-a452-52d1-96ec-d1ee87e37d67",
+                  "reference": "J932",
+                  "unit": 1
+                }
+              ],
+              "pins": [
+                {
+                  "ordinal": 0,
+                  "number": "1",
+                  "unit": 1,
+                  "body": 1,
+                  "local_nm": [
+                    -5080000,
+                    0
+                  ],
+                  "world_nm": [
+                    74920000,
+                    97620000
+                  ]
+                },
+                {
+                  "ordinal": 1,
+                  "number": "2",
+                  "unit": 1,
+                  "body": 1,
+                  "local_nm": [
+                    5080000,
+                    0
+                  ],
+                  "world_nm": [
+                    85080000,
+                    97620000
+                  ]
+                }
+              ]
+            },
+            {
+              "kind": "wire",
+              "uuid": "e458162c-6a25-51d2-8f1e-6d4e69ef860e",
+              "span": [
+                4348,
+                4473
+              ],
+              "tokens": "(wire (pts (xy 60.0 77.62) (xy 64.92 77.62)) (stroke (width 0) (type default)) (uuid \"e458162c-6a25-51d2-8f1e-6d4e69ef860e\"))",
+              "points_nm": [
+                [
+                  60000000,
+                  77620000
+                ],
+                [
+                  64920000,
+                  77620000
+                ]
+              ],
+              "fields": []
+            },
+            {
+              "kind": "wire",
+              "uuid": "61e38fe8-0a07-51f2-acbe-946b80ea94f7",
+              "span": [
+                4474,
+                4600
+              ],
+              "tokens": "(wire (pts (xy 64.92 77.62) (xy 69.84 77.62)) (stroke (width 0) (type default)) (uuid \"61e38fe8-0a07-51f2-acbe-946b80ea94f7\"))",
+              "points_nm": [
+                [
+                  64920000,
+                  77620000
+                ],
+                [
+                  69840000,
+                  77620000
+                ]
+              ],
+              "fields": []
+            },
+            {
+              "kind": "wire",
+              "uuid": "c131f0d4-2ade-55a8-9419-be845dfb0b83",
+              "span": [
+                4601,
+                4727
+              ],
+              "tokens": "(wire (pts (xy 64.92 77.62) (xy 64.92 97.62)) (stroke (width 0) (type default)) (uuid \"c131f0d4-2ade-55a8-9419-be845dfb0b83\"))",
+              "points_nm": [
+                [
+                  64920000,
+                  77620000
+                ],
+                [
+                  64920000,
+                  97620000
+                ]
+              ],
+              "fields": []
+            },
+            {
+              "kind": "wire",
+              "uuid": "5376bcff-82e2-5d73-a3c9-bba8bc8f01c4",
+              "span": [
+                4728,
+                4854
+              ],
+              "tokens": "(wire (pts (xy 64.92 97.62) (xy 74.92 97.62)) (stroke (width 0) (type default)) (uuid \"5376bcff-82e2-5d73-a3c9-bba8bc8f01c4\"))",
+              "points_nm": [
+                [
+                  64920000,
+                  97620000
+                ],
+                [
+                  74920000,
+                  97620000
+                ]
+              ],
+              "fields": []
+            },
+            {
+              "kind": "junction",
+              "uuid": "a8ac78d7-a075-522f-b981-c1fc56f5be0f",
+              "span": [
+                4855,
+                4957
+              ],
+              "tokens": "(junction (at 64.92 77.62) (diameter 0) (color 0 0 0 0) (uuid \"a8ac78d7-a075-522f-b981-c1fc56f5be0f\"))",
+              "at_nm": [
+                64920000,
+                77620000
+              ],
+              "angle": null,
+              "fields": []
+            },
+            {
+              "kind": "label",
+              "uuid": "3934b810-f84c-5d9e-bad6-85abe5cfd438",
+              "span": [
+                4958,
+                5079
+              ],
+              "tokens": "(label \"LANE_SHARED\" (at 64.92 77.62 90) (effects (font (size 1.27 1.27))) (uuid \"3934b810-f84c-5d9e-bad6-85abe5cfd438\"))",
+              "at_nm": [
+                64920000,
+                77620000
+              ],
+              "angle": 90,
+              "fields": [],
+              "text": "LANE_SHARED"
+            },
+            {
+              "kind": "global_label",
+              "uuid": "013072f7-efe1-5a4f-90da-6320b0343e64",
+              "span": [
+                5080,
+                5222
+              ],
+              "tokens": "(global_label \"SYS_SHARED\" (shape input) (at 49.84 77.62 180) (effects (font (size 1.27 1.27))) (uuid \"013072f7-efe1-5a4f-90da-6320b0343e64\"))",
+              "at_nm": [
+                49840000,
+                77620000
+              ],
+              "angle": 180,
+              "fields": [],
+              "text": "SYS_SHARED"
+            },
+            {
+              "kind": "no_connect",
+              "uuid": "0ac1b04f-6d93-54d9-b4ec-bbf6404f774b",
+              "span": [
+                5223,
+                5297
+              ],
+              "tokens": "(no_connect (at 80.0 77.62) (uuid \"0ac1b04f-6d93-54d9-b4ec-bbf6404f774b\"))",
+              "at_nm": [
+                80000000,
+                77620000
+              ],
+              "angle": null,
+              "fields": []
+            },
+            {
+              "kind": "no_connect",
+              "uuid": "df4f36ce-97d0-5c79-9ea5-8dbc0279c5f2",
+              "span": [
+                5298,
+                5373
+              ],
+              "tokens": "(no_connect (at 85.08 97.62) (uuid \"df4f36ce-97d0-5c79-9ea5-8dbc0279c5f2\"))",
+              "at_nm": [
+                85080000,
+                97620000
+              ],
+              "angle": null,
+              "fields": []
+            },
+            {
+              "kind": "symbol",
+              "uuid": "ef0c5c1b-2b1b-5d67-9bdc-88d306fb0c0c",
+              "span": [
+                5374,
+                6130
+              ],
+              "tokens": "(symbol (lib_id \"Independent:Pair\") (at 144.92 132.62 0) (unit 1)  (in_bom yes) (on_board yes) (dnp no) (uuid \"ef0c5c1b-2b1b-5d67-9bdc-88d306fb0c0c\") (property \"Reference\" \"J972\" (at 144.92 125.0 0) (effects (font (size 1.27 1.27)))) (property \"Value\" \"Pair\" (at 144.92 140.24 0) (effects (font (size 1.27 1.27)))) (pin \"1\" (uuid \"f7df07f5-2a8d-54bd-b1c1-4d5ac1292e08\")) (pin \"2\" (uuid \"5d4fae4d-8b57-5182-9036-3fb42d701161\")) (instances (project \"shared\" (path \"/e70e6270-ced3-5c80-a5ec-3553b0074c4a/f1b311e4-5ffc-57a8-ab37-b405f7830ce4/a00f2791-736d-5358-9d79-a28e04c85d75\" (reference \"J799\") (unit 1)) (path \"/e70e6270-ced3-5c80-a5ec-3553b0074c4a/340b6299-fa8b-5477-a344-b86758de2237/4203147e-a452-52d1-96ec-d1ee87e37d67\" (reference \"J999\") (unit 1)))))",
+              "at_nm": [
+                144920000,
+                132620000
+              ],
+              "angle": 0,
+              "fields": [
+                {
+                  "name": "Reference",
+                  "value": "J972",
+                  "at_nm": [
+                    144920000,
+                    125000000
+                  ],
+                  "angle": 0,
+                  "tokens": "(property \"Reference\" \"J972\" (at 144.92 125.0 0) (effects (font (size 1.27 1.27))))"
+                },
+                {
+                  "name": "Value",
+                  "value": "Pair",
+                  "at_nm": [
+                    144920000,
+                    140240000
+                  ],
+                  "angle": 0,
+                  "tokens": "(property \"Value\" \"Pair\" (at 144.92 140.24 0) (effects (font (size 1.27 1.27))))"
+                }
+              ],
+              "lib_id": "Independent:Pair",
+              "unit": 1,
+              "mirror": null,
+              "reference": "J972",
+              "instances": [
+                {
+                  "path": "/e70e6270-ced3-5c80-a5ec-3553b0074c4a/f1b311e4-5ffc-57a8-ab37-b405f7830ce4/a00f2791-736d-5358-9d79-a28e04c85d75",
+                  "reference": "J799",
+                  "unit": 1
+                },
+                {
+                  "path": "/e70e6270-ced3-5c80-a5ec-3553b0074c4a/340b6299-fa8b-5477-a344-b86758de2237/4203147e-a452-52d1-96ec-d1ee87e37d67",
+                  "reference": "J999",
+                  "unit": 1
+                }
+              ],
+              "pins": [
+                {
+                  "ordinal": 0,
+                  "number": "1",
+                  "unit": 1,
+                  "body": 1,
+                  "local_nm": [
+                    -5080000,
+                    0
+                  ],
+                  "world_nm": [
+                    139840000,
+                    132620000
+                  ]
+                },
+                {
+                  "ordinal": 1,
+                  "number": "2",
+                  "unit": 1,
+                  "body": 1,
+                  "local_nm": [
+                    5080000,
+                    0
+                  ],
+                  "world_nm": [
+                    150000000,
+                    132620000
+                  ]
+                }
+              ]
+            },
+            {
+              "kind": "no_connect",
+              "uuid": "c9d33ff7-00bb-58a1-84d3-ee0afc9c2204",
+              "span": [
+                6131,
+                6208
+              ],
+              "tokens": "(no_connect (at 139.84 132.62) (uuid \"c9d33ff7-00bb-58a1-84d3-ee0afc9c2204\"))",
+              "at_nm": [
+                139840000,
+                132620000
+              ],
+              "angle": null,
+              "fields": []
+            },
+            {
+              "kind": "no_connect",
+              "uuid": "786f3ce4-fe42-5bbf-af89-2958905826b4",
+              "span": [
+                6209,
+                6285
+              ],
+              "tokens": "(no_connect (at 150.0 132.62) (uuid \"786f3ce4-fe42-5bbf-af89-2958905826b4\"))",
+              "at_nm": [
+                150000000,
+                132620000
+              ],
+              "angle": null,
+              "fields": []
+            },
+            {
+              "kind": "polyline",
+              "uuid": "907bff31-a824-5045-96fa-95bc6e80d07b",
+              "span": [
+                6286,
+                6453
+              ],
+              "tokens": "(polyline (pts (xy 179.92 47.62) (xy 185.0 50.16) (xy 182.46 55.24) (xy 190.08 57.78)) (stroke (width 0) (type default)) (uuid \"907bff31-a824-5045-96fa-95bc6e80d07b\"))",
+              "points_nm": [
+                [
+                  179920000,
+                  47620000
+                ],
+                [
+                  185000000,
+                  50160000
+                ],
+                [
+                  182460000,
+                  55240000
+                ],
+                [
+                  190080000,
+                  57780000
+                ]
+              ],
+              "fields": []
+            }
+          ]
+        },
+        "south.kicad_sch": {
+          "path": "D:\\personalSpace\\kicad-sch-geometry-20261021\\independent\\fixtures\\shared\\south.kicad_sch",
+          "sha256": "df410353c8344bc3cc0f79138c42531f190c6fb4e175b10bae101ad67cafc430",
+          "root_uuid": "ca1ec22b-c4a6-5ce0-8de4-52997fbf89b3",
+          "objects": [
+            {
+              "kind": "sheet",
+              "uuid": "4203147e-a452-52d1-96ec-d1ee87e37d67",
+              "span": [
+                2097,
+                2538
+              ],
+              "tokens": "(sheet (at 75 70) (size 30.48 20.32) (stroke (width 0) (type default)) (fill (color 0 0 0 0)) (uuid \"4203147e-a452-52d1-96ec-d1ee87e37d67\") (property \"Sheetname\" \"SouthCell\" (at 75 67.46 0) (effects (font (size 1.27 1.27)))) (property \"Sheetfile\" \"cell.kicad_sch\" (at 75 92.86 0) (effects (font (size 1.27 1.27)))) (instances (project \"shared\" (path \"/e70e6270-ced3-5c80-a5ec-3553b0074c4a/340b6299-fa8b-5477-a344-b86758de2237\" (page \"5\")))))",
+              "at_nm": [
+                75000000,
+                70000000
+              ],
+              "angle": null,
+              "fields": [
+                {
+                  "name": "Sheetname",
+                  "value": "SouthCell",
+                  "at_nm": [
+                    75000000,
+                    67460000
+                  ],
+                  "angle": 0,
+                  "tokens": "(property \"Sheetname\" \"SouthCell\" (at 75 67.46 0) (effects (font (size 1.27 1.27))))"
+                },
+                {
+                  "name": "Sheetfile",
+                  "value": "cell.kicad_sch",
+                  "at_nm": [
+                    75000000,
+                    92860000
+                  ],
+                  "angle": 0,
+                  "tokens": "(property \"Sheetfile\" \"cell.kicad_sch\" (at 75 92.86 0) (effects (font (size 1.27 1.27))))"
+                }
+              ],
+              "sheet_file": "cell.kicad_sch",
+              "sheet_name": "SouthCell"
+            }
+          ]
+        }
+      },
+      "logical_pages": [
+        {
+          "source": "shared.kicad_sch",
+          "instance": "/e70e6270-ced3-5c80-a5ec-3553b0074c4a",
+          "display_path": "/"
+        },
+        {
+          "source": "north.kicad_sch",
+          "instance": "/e70e6270-ced3-5c80-a5ec-3553b0074c4a/f1b311e4-5ffc-57a8-ab37-b405f7830ce4",
+          "display_path": "/North/"
+        },
+        {
+          "source": "cell.kicad_sch",
+          "instance": "/e70e6270-ced3-5c80-a5ec-3553b0074c4a/f1b311e4-5ffc-57a8-ab37-b405f7830ce4/a00f2791-736d-5358-9d79-a28e04c85d75",
+          "display_path": "/North/NorthCell/"
+        },
+        {
+          "source": "south.kicad_sch",
+          "instance": "/e70e6270-ced3-5c80-a5ec-3553b0074c4a/340b6299-fa8b-5477-a344-b86758de2237",
+          "display_path": "/South/"
+        },
+        {
+          "source": "cell.kicad_sch",
+          "instance": "/e70e6270-ced3-5c80-a5ec-3553b0074c4a/340b6299-fa8b-5477-a344-b86758de2237/4203147e-a452-52d1-96ec-d1ee87e37d67",
+          "display_path": "/South/SouthCell/"
+        }
+      ]
+    },
+    "pins": [
+      {
+        "identity": [
+          "94e39cc7-927c-591b-8058-05f36f897d87",
+          "/e70e6270-ced3-5c80-a5ec-3553b0074c4a/f1b311e4-5ffc-57a8-ab37-b405f7830ce4/a00f2791-736d-5358-9d79-a28e04c85d75",
+          1,
+          1,
+          0
+        ],
+        "reference": "J710",
+        "number": "1",
+        "world_nm": [
+          49840000,
+          77620000
+        ],
+        "source": "cell.kicad_sch"
+      },
+      {
+        "identity": [
+          "94e39cc7-927c-591b-8058-05f36f897d87",
+          "/e70e6270-ced3-5c80-a5ec-3553b0074c4a/f1b311e4-5ffc-57a8-ab37-b405f7830ce4/a00f2791-736d-5358-9d79-a28e04c85d75",
+          1,
+          1,
+          1
+        ],
+        "reference": "J710",
+        "number": "2",
+        "world_nm": [
+          60000000,
+          77620000
+        ],
+        "source": "cell.kicad_sch"
+      },
+      {
+        "identity": [
+          "09c7132e-7895-50be-9d23-0e8a6d7c6634",
+          "/e70e6270-ced3-5c80-a5ec-3553b0074c4a/f1b311e4-5ffc-57a8-ab37-b405f7830ce4/a00f2791-736d-5358-9d79-a28e04c85d75",
+          1,
+          1,
+          0
+        ],
+        "reference": "J711",
+        "number": "1",
+        "world_nm": [
+          69840000,
+          77620000
+        ],
+        "source": "cell.kicad_sch"
+      },
+      {
+        "identity": [
+          "09c7132e-7895-50be-9d23-0e8a6d7c6634",
+          "/e70e6270-ced3-5c80-a5ec-3553b0074c4a/f1b311e4-5ffc-57a8-ab37-b405f7830ce4/a00f2791-736d-5358-9d79-a28e04c85d75",
+          1,
+          1,
+          1
+        ],
+        "reference": "J711",
+        "number": "2",
+        "world_nm": [
+          80000000,
+          77620000
+        ],
+        "source": "cell.kicad_sch"
+      },
+      {
+        "identity": [
+          "1d06feb6-8ae2-541d-b381-954087b938b2",
+          "/e70e6270-ced3-5c80-a5ec-3553b0074c4a/f1b311e4-5ffc-57a8-ab37-b405f7830ce4/a00f2791-736d-5358-9d79-a28e04c85d75",
+          1,
+          1,
+          0
+        ],
+        "reference": "J712",
+        "number": "1",
+        "world_nm": [
+          74920000,
+          97620000
+        ],
+        "source": "cell.kicad_sch"
+      },
+      {
+        "identity": [
+          "1d06feb6-8ae2-541d-b381-954087b938b2",
+          "/e70e6270-ced3-5c80-a5ec-3553b0074c4a/f1b311e4-5ffc-57a8-ab37-b405f7830ce4/a00f2791-736d-5358-9d79-a28e04c85d75",
+          1,
+          1,
+          1
+        ],
+        "reference": "J712",
+        "number": "2",
+        "world_nm": [
+          85080000,
+          97620000
+        ],
+        "source": "cell.kicad_sch"
+      },
+      {
+        "identity": [
+          "ef0c5c1b-2b1b-5d67-9bdc-88d306fb0c0c",
+          "/e70e6270-ced3-5c80-a5ec-3553b0074c4a/f1b311e4-5ffc-57a8-ab37-b405f7830ce4/a00f2791-736d-5358-9d79-a28e04c85d75",
+          1,
+          1,
+          0
+        ],
+        "reference": "J799",
+        "number": "1",
+        "world_nm": [
+          139840000,
+          132620000
+        ],
+        "source": "cell.kicad_sch"
+      },
+      {
+        "identity": [
+          "ef0c5c1b-2b1b-5d67-9bdc-88d306fb0c0c",
+          "/e70e6270-ced3-5c80-a5ec-3553b0074c4a/f1b311e4-5ffc-57a8-ab37-b405f7830ce4/a00f2791-736d-5358-9d79-a28e04c85d75",
+          1,
+          1,
+          1
+        ],
+        "reference": "J799",
+        "number": "2",
+        "world_nm": [
+          150000000,
+          132620000
+        ],
+        "source": "cell.kicad_sch"
+      },
+      {
+        "identity": [
+          "94e39cc7-927c-591b-8058-05f36f897d87",
+          "/e70e6270-ced3-5c80-a5ec-3553b0074c4a/340b6299-fa8b-5477-a344-b86758de2237/4203147e-a452-52d1-96ec-d1ee87e37d67",
+          1,
+          1,
+          0
+        ],
+        "reference": "J930",
+        "number": "1",
+        "world_nm": [
+          49840000,
+          77620000
+        ],
+        "source": "cell.kicad_sch"
+      },
+      {
+        "identity": [
+          "94e39cc7-927c-591b-8058-05f36f897d87",
+          "/e70e6270-ced3-5c80-a5ec-3553b0074c4a/340b6299-fa8b-5477-a344-b86758de2237/4203147e-a452-52d1-96ec-d1ee87e37d67",
+          1,
+          1,
+          1
+        ],
+        "reference": "J930",
+        "number": "2",
+        "world_nm": [
+          60000000,
+          77620000
+        ],
+        "source": "cell.kicad_sch"
+      },
+      {
+        "identity": [
+          "09c7132e-7895-50be-9d23-0e8a6d7c6634",
+          "/e70e6270-ced3-5c80-a5ec-3553b0074c4a/340b6299-fa8b-5477-a344-b86758de2237/4203147e-a452-52d1-96ec-d1ee87e37d67",
+          1,
+          1,
+          0
+        ],
+        "reference": "J931",
+        "number": "1",
+        "world_nm": [
+          69840000,
+          77620000
+        ],
+        "source": "cell.kicad_sch"
+      },
+      {
+        "identity": [
+          "09c7132e-7895-50be-9d23-0e8a6d7c6634",
+          "/e70e6270-ced3-5c80-a5ec-3553b0074c4a/340b6299-fa8b-5477-a344-b86758de2237/4203147e-a452-52d1-96ec-d1ee87e37d67",
+          1,
+          1,
+          1
+        ],
+        "reference": "J931",
+        "number": "2",
+        "world_nm": [
+          80000000,
+          77620000
+        ],
+        "source": "cell.kicad_sch"
+      },
+      {
+        "identity": [
+          "1d06feb6-8ae2-541d-b381-954087b938b2",
+          "/e70e6270-ced3-5c80-a5ec-3553b0074c4a/340b6299-fa8b-5477-a344-b86758de2237/4203147e-a452-52d1-96ec-d1ee87e37d67",
+          1,
+          1,
+          0
+        ],
+        "reference": "J932",
+        "number": "1",
+        "world_nm": [
+          74920000,
+          97620000
+        ],
+        "source": "cell.kicad_sch"
+      },
+      {
+        "identity": [
+          "1d06feb6-8ae2-541d-b381-954087b938b2",
+          "/e70e6270-ced3-5c80-a5ec-3553b0074c4a/340b6299-fa8b-5477-a344-b86758de2237/4203147e-a452-52d1-96ec-d1ee87e37d67",
+          1,
+          1,
+          1
+        ],
+        "reference": "J932",
+        "number": "2",
+        "world_nm": [
+          85080000,
+          97620000
+        ],
+        "source": "cell.kicad_sch"
+      },
+      {
+        "identity": [
+          "ef0c5c1b-2b1b-5d67-9bdc-88d306fb0c0c",
+          "/e70e6270-ced3-5c80-a5ec-3553b0074c4a/340b6299-fa8b-5477-a344-b86758de2237/4203147e-a452-52d1-96ec-d1ee87e37d67",
+          1,
+          1,
+          0
+        ],
+        "reference": "J999",
+        "number": "1",
+        "world_nm": [
+          139840000,
+          132620000
+        ],
+        "source": "cell.kicad_sch"
+      },
+      {
+        "identity": [
+          "ef0c5c1b-2b1b-5d67-9bdc-88d306fb0c0c",
+          "/e70e6270-ced3-5c80-a5ec-3553b0074c4a/340b6299-fa8b-5477-a344-b86758de2237/4203147e-a452-52d1-96ec-d1ee87e37d67",
+          1,
+          1,
+          1
+        ],
+        "reference": "J999",
+        "number": "2",
+        "world_nm": [
+          150000000,
+          132620000
+        ],
+        "source": "cell.kicad_sch"
+      }
+    ],
+    "connectivity": {
+      "groups": [
+        {
+          "identities": [
+            [
+              "013072f7-efe1-5a4f-90da-6320b0343e64",
+              "/e70e6270-ced3-5c80-a5ec-3553b0074c4a/340b6299-fa8b-5477-a344-b86758de2237/4203147e-a452-52d1-96ec-d1ee87e37d67"
+            ],
+            [
+              "013072f7-efe1-5a4f-90da-6320b0343e64",
+              "/e70e6270-ced3-5c80-a5ec-3553b0074c4a/f1b311e4-5ffc-57a8-ab37-b405f7830ce4/a00f2791-736d-5358-9d79-a28e04c85d75"
+            ],
+            [
+              "94e39cc7-927c-591b-8058-05f36f897d87",
+              "/e70e6270-ced3-5c80-a5ec-3553b0074c4a/340b6299-fa8b-5477-a344-b86758de2237/4203147e-a452-52d1-96ec-d1ee87e37d67",
+              1,
+              1,
+              0
+            ],
+            [
+              "94e39cc7-927c-591b-8058-05f36f897d87",
+              "/e70e6270-ced3-5c80-a5ec-3553b0074c4a/f1b311e4-5ffc-57a8-ab37-b405f7830ce4/a00f2791-736d-5358-9d79-a28e04c85d75",
+              1,
+              1,
+              0
+            ]
+          ],
+          "pins": [
+            [
+              "J710",
+              "1"
+            ],
+            [
+              "J930",
+              "1"
+            ]
+          ],
+          "names": [
+            "/SYS_SHARED"
+          ]
+        },
+        {
+          "identities": [
+            [
+              "09c7132e-7895-50be-9d23-0e8a6d7c6634",
+              "/e70e6270-ced3-5c80-a5ec-3553b0074c4a/340b6299-fa8b-5477-a344-b86758de2237/4203147e-a452-52d1-96ec-d1ee87e37d67",
+              1,
+              1,
+              0
+            ],
+            [
+              "1d06feb6-8ae2-541d-b381-954087b938b2",
+              "/e70e6270-ced3-5c80-a5ec-3553b0074c4a/340b6299-fa8b-5477-a344-b86758de2237/4203147e-a452-52d1-96ec-d1ee87e37d67",
+              1,
+              1,
+              0
+            ],
+            [
+              "3934b810-f84c-5d9e-bad6-85abe5cfd438",
+              "/e70e6270-ced3-5c80-a5ec-3553b0074c4a/340b6299-fa8b-5477-a344-b86758de2237/4203147e-a452-52d1-96ec-d1ee87e37d67"
+            ],
+            [
+              "5376bcff-82e2-5d73-a3c9-bba8bc8f01c4",
+              "/e70e6270-ced3-5c80-a5ec-3553b0074c4a/340b6299-fa8b-5477-a344-b86758de2237/4203147e-a452-52d1-96ec-d1ee87e37d67",
+              "vertex",
+              0
+            ],
+            [
+              "5376bcff-82e2-5d73-a3c9-bba8bc8f01c4",
+              "/e70e6270-ced3-5c80-a5ec-3553b0074c4a/340b6299-fa8b-5477-a344-b86758de2237/4203147e-a452-52d1-96ec-d1ee87e37d67",
+              "vertex",
+              1
+            ],
+            [
+              "61e38fe8-0a07-51f2-acbe-946b80ea94f7",
+              "/e70e6270-ced3-5c80-a5ec-3553b0074c4a/340b6299-fa8b-5477-a344-b86758de2237/4203147e-a452-52d1-96ec-d1ee87e37d67",
+              "vertex",
+              0
+            ],
+            [
+              "61e38fe8-0a07-51f2-acbe-946b80ea94f7",
+              "/e70e6270-ced3-5c80-a5ec-3553b0074c4a/340b6299-fa8b-5477-a344-b86758de2237/4203147e-a452-52d1-96ec-d1ee87e37d67",
+              "vertex",
+              1
+            ],
+            [
+              "94e39cc7-927c-591b-8058-05f36f897d87",
+              "/e70e6270-ced3-5c80-a5ec-3553b0074c4a/340b6299-fa8b-5477-a344-b86758de2237/4203147e-a452-52d1-96ec-d1ee87e37d67",
+              1,
+              1,
+              1
+            ],
+            [
+              "a8ac78d7-a075-522f-b981-c1fc56f5be0f",
+              "/e70e6270-ced3-5c80-a5ec-3553b0074c4a/340b6299-fa8b-5477-a344-b86758de2237/4203147e-a452-52d1-96ec-d1ee87e37d67"
+            ],
+            [
+              "c131f0d4-2ade-55a8-9419-be845dfb0b83",
+              "/e70e6270-ced3-5c80-a5ec-3553b0074c4a/340b6299-fa8b-5477-a344-b86758de2237/4203147e-a452-52d1-96ec-d1ee87e37d67",
+              "vertex",
+              0
+            ],
+            [
+              "c131f0d4-2ade-55a8-9419-be845dfb0b83",
+              "/e70e6270-ced3-5c80-a5ec-3553b0074c4a/340b6299-fa8b-5477-a344-b86758de2237/4203147e-a452-52d1-96ec-d1ee87e37d67",
+              "vertex",
+              1
+            ],
+            [
+              "e458162c-6a25-51d2-8f1e-6d4e69ef860e",
+              "/e70e6270-ced3-5c80-a5ec-3553b0074c4a/340b6299-fa8b-5477-a344-b86758de2237/4203147e-a452-52d1-96ec-d1ee87e37d67",
+              "vertex",
+              0
+            ],
+            [
+              "e458162c-6a25-51d2-8f1e-6d4e69ef860e",
+              "/e70e6270-ced3-5c80-a5ec-3553b0074c4a/340b6299-fa8b-5477-a344-b86758de2237/4203147e-a452-52d1-96ec-d1ee87e37d67",
+              "vertex",
+              1
+            ]
+          ],
+          "pins": [
+            [
+              "J930",
+              "2"
+            ],
+            [
+              "J931",
+              "1"
+            ],
+            [
+              "J932",
+              "1"
+            ]
+          ],
+          "names": [
+            "/e70e6270-ced3-5c80-a5ec-3553b0074c4a/340b6299-fa8b-5477-a344-b86758de2237/4203147e-a452-52d1-96ec-d1ee87e37d67/LANE_SHARED"
+          ]
+        },
+        {
+          "identities": [
+            [
+              "09c7132e-7895-50be-9d23-0e8a6d7c6634",
+              "/e70e6270-ced3-5c80-a5ec-3553b0074c4a/340b6299-fa8b-5477-a344-b86758de2237/4203147e-a452-52d1-96ec-d1ee87e37d67",
+              1,
+              1,
+              1
+            ]
+          ],
+          "pins": [
+            [
+              "J931",
+              "2"
+            ]
+          ],
+          "names": []
+        },
+        {
+          "identities": [
+            [
+              "09c7132e-7895-50be-9d23-0e8a6d7c6634",
+              "/e70e6270-ced3-5c80-a5ec-3553b0074c4a/f1b311e4-5ffc-57a8-ab37-b405f7830ce4/a00f2791-736d-5358-9d79-a28e04c85d75",
+              1,
+              1,
+              0
+            ],
+            [
+              "1d06feb6-8ae2-541d-b381-954087b938b2",
+              "/e70e6270-ced3-5c80-a5ec-3553b0074c4a/f1b311e4-5ffc-57a8-ab37-b405f7830ce4/a00f2791-736d-5358-9d79-a28e04c85d75",
+              1,
+              1,
+              0
+            ],
+            [
+              "3934b810-f84c-5d9e-bad6-85abe5cfd438",
+              "/e70e6270-ced3-5c80-a5ec-3553b0074c4a/f1b311e4-5ffc-57a8-ab37-b405f7830ce4/a00f2791-736d-5358-9d79-a28e04c85d75"
+            ],
+            [
+              "5376bcff-82e2-5d73-a3c9-bba8bc8f01c4",
+              "/e70e6270-ced3-5c80-a5ec-3553b0074c4a/f1b311e4-5ffc-57a8-ab37-b405f7830ce4/a00f2791-736d-5358-9d79-a28e04c85d75",
+              "vertex",
+              0
+            ],
+            [
+              "5376bcff-82e2-5d73-a3c9-bba8bc8f01c4",
+              "/e70e6270-ced3-5c80-a5ec-3553b0074c4a/f1b311e4-5ffc-57a8-ab37-b405f7830ce4/a00f2791-736d-5358-9d79-a28e04c85d75",
+              "vertex",
+              1
+            ],
+            [
+              "61e38fe8-0a07-51f2-acbe-946b80ea94f7",
+              "/e70e6270-ced3-5c80-a5ec-3553b0074c4a/f1b311e4-5ffc-57a8-ab37-b405f7830ce4/a00f2791-736d-5358-9d79-a28e04c85d75",
+              "vertex",
+              0
+            ],
+            [
+              "61e38fe8-0a07-51f2-acbe-946b80ea94f7",
+              "/e70e6270-ced3-5c80-a5ec-3553b0074c4a/f1b311e4-5ffc-57a8-ab37-b405f7830ce4/a00f2791-736d-5358-9d79-a28e04c85d75",
+              "vertex",
+              1
+            ],
+            [
+              "94e39cc7-927c-591b-8058-05f36f897d87",
+              "/e70e6270-ced3-5c80-a5ec-3553b0074c4a/f1b311e4-5ffc-57a8-ab37-b405f7830ce4/a00f2791-736d-5358-9d79-a28e04c85d75",
+              1,
+              1,
+              1
+            ],
+            [
+              "a8ac78d7-a075-522f-b981-c1fc56f5be0f",
+              "/e70e6270-ced3-5c80-a5ec-3553b0074c4a/f1b311e4-5ffc-57a8-ab37-b405f7830ce4/a00f2791-736d-5358-9d79-a28e04c85d75"
+            ],
+            [
+              "c131f0d4-2ade-55a8-9419-be845dfb0b83",
+              "/e70e6270-ced3-5c80-a5ec-3553b0074c4a/f1b311e4-5ffc-57a8-ab37-b405f7830ce4/a00f2791-736d-5358-9d79-a28e04c85d75",
+              "vertex",
+              0
+            ],
+            [
+              "c131f0d4-2ade-55a8-9419-be845dfb0b83",
+              "/e70e6270-ced3-5c80-a5ec-3553b0074c4a/f1b311e4-5ffc-57a8-ab37-b405f7830ce4/a00f2791-736d-5358-9d79-a28e04c85d75",
+              "vertex",
+              1
+            ],
+            [
+              "e458162c-6a25-51d2-8f1e-6d4e69ef860e",
+              "/e70e6270-ced3-5c80-a5ec-3553b0074c4a/f1b311e4-5ffc-57a8-ab37-b405f7830ce4/a00f2791-736d-5358-9d79-a28e04c85d75",
+              "vertex",
+              0
+            ],
+            [
+              "e458162c-6a25-51d2-8f1e-6d4e69ef860e",
+              "/e70e6270-ced3-5c80-a5ec-3553b0074c4a/f1b311e4-5ffc-57a8-ab37-b405f7830ce4/a00f2791-736d-5358-9d79-a28e04c85d75",
+              "vertex",
+              1
+            ]
+          ],
+          "pins": [
+            [
+              "J710",
+              "2"
+            ],
+            [
+              "J711",
+              "1"
+            ],
+            [
+              "J712",
+              "1"
+            ]
+          ],
+          "names": [
+            "/e70e6270-ced3-5c80-a5ec-3553b0074c4a/f1b311e4-5ffc-57a8-ab37-b405f7830ce4/a00f2791-736d-5358-9d79-a28e04c85d75/LANE_SHARED"
+          ]
+        },
+        {
+          "identities": [
+            [
+              "09c7132e-7895-50be-9d23-0e8a6d7c6634",
+              "/e70e6270-ced3-5c80-a5ec-3553b0074c4a/f1b311e4-5ffc-57a8-ab37-b405f7830ce4/a00f2791-736d-5358-9d79-a28e04c85d75",
+              1,
+              1,
+              1
+            ]
+          ],
+          "pins": [
+            [
+              "J711",
+              "2"
+            ]
+          ],
+          "names": []
+        },
+        {
+          "identities": [
+            [
+              "1d06feb6-8ae2-541d-b381-954087b938b2",
+              "/e70e6270-ced3-5c80-a5ec-3553b0074c4a/340b6299-fa8b-5477-a344-b86758de2237/4203147e-a452-52d1-96ec-d1ee87e37d67",
+              1,
+              1,
+              1
+            ]
+          ],
+          "pins": [
+            [
+              "J932",
+              "2"
+            ]
+          ],
+          "names": []
+        },
+        {
+          "identities": [
+            [
+              "1d06feb6-8ae2-541d-b381-954087b938b2",
+              "/e70e6270-ced3-5c80-a5ec-3553b0074c4a/f1b311e4-5ffc-57a8-ab37-b405f7830ce4/a00f2791-736d-5358-9d79-a28e04c85d75",
+              1,
+              1,
+              1
+            ]
+          ],
+          "pins": [
+            [
+              "J712",
+              "2"
+            ]
+          ],
+          "names": []
+        },
+        {
+          "identities": [
+            [
+              "ef0c5c1b-2b1b-5d67-9bdc-88d306fb0c0c",
+              "/e70e6270-ced3-5c80-a5ec-3553b0074c4a/340b6299-fa8b-5477-a344-b86758de2237/4203147e-a452-52d1-96ec-d1ee87e37d67",
+              1,
+              1,
+              0
+            ]
+          ],
+          "pins": [
+            [
+              "J999",
+              "1"
+            ]
+          ],
+          "names": []
+        },
+        {
+          "identities": [
+            [
+              "ef0c5c1b-2b1b-5d67-9bdc-88d306fb0c0c",
+              "/e70e6270-ced3-5c80-a5ec-3553b0074c4a/340b6299-fa8b-5477-a344-b86758de2237/4203147e-a452-52d1-96ec-d1ee87e37d67",
+              1,
+              1,
+              1
+            ]
+          ],
+          "pins": [
+            [
+              "J999",
+              "2"
+            ]
+          ],
+          "names": []
+        },
+        {
+          "identities": [
+            [
+              "ef0c5c1b-2b1b-5d67-9bdc-88d306fb0c0c",
+              "/e70e6270-ced3-5c80-a5ec-3553b0074c4a/f1b311e4-5ffc-57a8-ab37-b405f7830ce4/a00f2791-736d-5358-9d79-a28e04c85d75",
+              1,
+              1,
+              0
+            ]
+          ],
+          "pins": [
+            [
+              "J799",
+              "1"
+            ]
+          ],
+          "names": []
+        },
+        {
+          "identities": [
+            [
+              "ef0c5c1b-2b1b-5d67-9bdc-88d306fb0c0c",
+              "/e70e6270-ced3-5c80-a5ec-3553b0074c4a/f1b311e4-5ffc-57a8-ab37-b405f7830ce4/a00f2791-736d-5358-9d79-a28e04c85d75",
+              1,
+              1,
+              1
+            ]
+          ],
+          "pins": [
+            [
+              "J799",
+              "2"
+            ]
+          ],
+          "names": []
+        }
+      ],
+      "nc": [
+        {
+          "id": [
+            "0ac1b04f-6d93-54d9-b4ec-bbf6404f774b",
+            "/e70e6270-ced3-5c80-a5ec-3553b0074c4a/340b6299-fa8b-5477-a344-b86758de2237/4203147e-a452-52d1-96ec-d1ee87e37d67"
+          ],
+          "pins": [
+            [
+              "09c7132e-7895-50be-9d23-0e8a6d7c6634",
+              "/e70e6270-ced3-5c80-a5ec-3553b0074c4a/340b6299-fa8b-5477-a344-b86758de2237/4203147e-a452-52d1-96ec-d1ee87e37d67",
+              1,
+              1,
+              1
+            ]
+          ]
+        },
+        {
+          "id": [
+            "0ac1b04f-6d93-54d9-b4ec-bbf6404f774b",
+            "/e70e6270-ced3-5c80-a5ec-3553b0074c4a/f1b311e4-5ffc-57a8-ab37-b405f7830ce4/a00f2791-736d-5358-9d79-a28e04c85d75"
+          ],
+          "pins": [
+            [
+              "09c7132e-7895-50be-9d23-0e8a6d7c6634",
+              "/e70e6270-ced3-5c80-a5ec-3553b0074c4a/f1b311e4-5ffc-57a8-ab37-b405f7830ce4/a00f2791-736d-5358-9d79-a28e04c85d75",
+              1,
+              1,
+              1
+            ]
+          ]
+        },
+        {
+          "id": [
+            "786f3ce4-fe42-5bbf-af89-2958905826b4",
+            "/e70e6270-ced3-5c80-a5ec-3553b0074c4a/340b6299-fa8b-5477-a344-b86758de2237/4203147e-a452-52d1-96ec-d1ee87e37d67"
+          ],
+          "pins": [
+            [
+              "ef0c5c1b-2b1b-5d67-9bdc-88d306fb0c0c",
+              "/e70e6270-ced3-5c80-a5ec-3553b0074c4a/340b6299-fa8b-5477-a344-b86758de2237/4203147e-a452-52d1-96ec-d1ee87e37d67",
+              1,
+              1,
+              1
+            ]
+          ]
+        },
+        {
+          "id": [
+            "786f3ce4-fe42-5bbf-af89-2958905826b4",
+            "/e70e6270-ced3-5c80-a5ec-3553b0074c4a/f1b311e4-5ffc-57a8-ab37-b405f7830ce4/a00f2791-736d-5358-9d79-a28e04c85d75"
+          ],
+          "pins": [
+            [
+              "ef0c5c1b-2b1b-5d67-9bdc-88d306fb0c0c",
+              "/e70e6270-ced3-5c80-a5ec-3553b0074c4a/f1b311e4-5ffc-57a8-ab37-b405f7830ce4/a00f2791-736d-5358-9d79-a28e04c85d75",
+              1,
+              1,
+              1
+            ]
+          ]
+        },
+        {
+          "id": [
+            "c9d33ff7-00bb-58a1-84d3-ee0afc9c2204",
+            "/e70e6270-ced3-5c80-a5ec-3553b0074c4a/340b6299-fa8b-5477-a344-b86758de2237/4203147e-a452-52d1-96ec-d1ee87e37d67"
+          ],
+          "pins": [
+            [
+              "ef0c5c1b-2b1b-5d67-9bdc-88d306fb0c0c",
+              "/e70e6270-ced3-5c80-a5ec-3553b0074c4a/340b6299-fa8b-5477-a344-b86758de2237/4203147e-a452-52d1-96ec-d1ee87e37d67",
+              1,
+              1,
+              0
+            ]
+          ]
+        },
+        {
+          "id": [
+            "c9d33ff7-00bb-58a1-84d3-ee0afc9c2204",
+            "/e70e6270-ced3-5c80-a5ec-3553b0074c4a/f1b311e4-5ffc-57a8-ab37-b405f7830ce4/a00f2791-736d-5358-9d79-a28e04c85d75"
+          ],
+          "pins": [
+            [
+              "ef0c5c1b-2b1b-5d67-9bdc-88d306fb0c0c",
+              "/e70e6270-ced3-5c80-a5ec-3553b0074c4a/f1b311e4-5ffc-57a8-ab37-b405f7830ce4/a00f2791-736d-5358-9d79-a28e04c85d75",
+              1,
+              1,
+              0
+            ]
+          ]
+        },
+        {
+          "id": [
+            "df4f36ce-97d0-5c79-9ea5-8dbc0279c5f2",
+            "/e70e6270-ced3-5c80-a5ec-3553b0074c4a/340b6299-fa8b-5477-a344-b86758de2237/4203147e-a452-52d1-96ec-d1ee87e37d67"
+          ],
+          "pins": [
+            [
+              "1d06feb6-8ae2-541d-b381-954087b938b2",
+              "/e70e6270-ced3-5c80-a5ec-3553b0074c4a/340b6299-fa8b-5477-a344-b86758de2237/4203147e-a452-52d1-96ec-d1ee87e37d67",
+              1,
+              1,
+              1
+            ]
+          ]
+        },
+        {
+          "id": [
+            "df4f36ce-97d0-5c79-9ea5-8dbc0279c5f2",
+            "/e70e6270-ced3-5c80-a5ec-3553b0074c4a/f1b311e4-5ffc-57a8-ab37-b405f7830ce4/a00f2791-736d-5358-9d79-a28e04c85d75"
+          ],
+          "pins": [
+            [
+              "1d06feb6-8ae2-541d-b381-954087b938b2",
+              "/e70e6270-ced3-5c80-a5ec-3553b0074c4a/f1b311e4-5ffc-57a8-ab37-b405f7830ce4/a00f2791-736d-5358-9d79-a28e04c85d75",
+              1,
+              1,
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    "expected_physical": [
+      {
+        "pins": [
+          [
+            "J710",
+            "1"
+          ],
+          [
+            "J930",
+            "1"
+          ]
+        ],
+        "explicit_names": [
+          "SYS_SHARED"
+        ]
+      },
+      {
+        "pins": [
+          [
+            "J710",
+            "2"
+          ],
+          [
+            "J711",
+            "1"
+          ],
+          [
+            "J712",
+            "1"
+          ]
+        ],
+        "explicit_names": [
+          "/North/NorthCell/LANE_SHARED"
+        ]
+      },
+      {
+        "pins": [
+          [
+            "J711",
+            "2"
+          ]
+        ],
+        "explicit_names": []
+      },
+      {
+        "pins": [
+          [
+            "J712",
+            "2"
+          ]
+        ],
+        "explicit_names": []
+      },
+      {
+        "pins": [
+          [
+            "J799",
+            "1"
+          ]
+        ],
+        "explicit_names": []
+      },
+      {
+        "pins": [
+          [
+            "J799",
+            "2"
+          ]
+        ],
+        "explicit_names": []
+      },
+      {
+        "pins": [
+          [
+            "J930",
+            "2"
+          ],
+          [
+            "J931",
+            "1"
+          ],
+          [
+            "J932",
+            "1"
+          ]
+        ],
+        "explicit_names": [
+          "/South/SouthCell/LANE_SHARED"
+        ]
+      },
+      {
+        "pins": [
+          [
+            "J931",
+            "2"
+          ]
+        ],
+        "explicit_names": []
+      },
+      {
+        "pins": [
+          [
+            "J932",
+            "2"
+          ]
+        ],
+        "explicit_names": []
+      },
+      {
+        "pins": [
+          [
+            "J999",
+            "1"
+          ]
+        ],
+        "explicit_names": []
+      },
+      {
+        "pins": [
+          [
+            "J999",
+            "2"
+          ]
+        ],
+        "explicit_names": []
+      }
+    ]
+  }
+}

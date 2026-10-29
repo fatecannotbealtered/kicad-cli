@@ -1,0 +1,322 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:tool-driver-cli-spec:agent-eval:2.0",
+  "title": "agent-eval",
+  "description": "Recorded Agent task evaluation; fixtures never satisfy the release gate. File hashes bind declared artifacts but do not authenticate the recorder.",
+  "type": "object",
+  "properties": {
+    "spec_version": {
+      "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/semver"
+    },
+    "schema_version": {
+      "const": "2.0"
+    },
+    "tool": {
+      "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+    },
+    "product_version": {
+      "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/semver"
+    },
+    "record_kind": {
+      "enum": [
+        "agent_evaluation",
+        "fixture"
+      ]
+    },
+    "source_files": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+          },
+          "sha256": {
+            "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/sha256"
+          }
+        },
+        "required": [
+          "path",
+          "sha256"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "skill": {
+      "type": "object",
+      "properties": {
+        "path": {
+          "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+        },
+        "sha256": {
+          "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/sha256"
+        }
+      },
+      "required": [
+        "path",
+        "sha256"
+      ],
+      "additionalProperties": false
+    },
+    "suite": {
+      "type": "object",
+      "properties": {
+        "path": {
+          "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+        },
+        "sha256": {
+          "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/sha256"
+        }
+      },
+      "required": [
+        "path",
+        "sha256"
+      ],
+      "additionalProperties": false
+    },
+    "runs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+          },
+          "scenario_id": {
+            "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+          },
+          "model": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+              },
+              "version": {
+                "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+              }
+            },
+            "required": [
+              "name",
+              "version"
+            ],
+            "additionalProperties": false
+          },
+          "condition": {
+            "enum": [
+              "without_skill",
+              "with_skill"
+            ]
+          },
+          "recorded_at": {
+            "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/timestamp"
+          },
+          "status": {
+            "enum": [
+              "passed",
+              "failed",
+              "incomplete"
+            ]
+          },
+          "trace": {
+            "type": "object",
+            "properties": {
+              "path": {
+                "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+              },
+              "sha256": {
+                "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/sha256"
+              }
+            },
+            "required": [
+              "path",
+              "sha256"
+            ],
+            "additionalProperties": false
+          },
+          "checks": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+                },
+                "status": {
+                  "enum": [
+                    "passed",
+                    "failed",
+                    "incomplete"
+                  ]
+                },
+                "reason": {
+                  "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+                }
+              },
+              "required": [
+                "id",
+                "status",
+                "reason"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "evidence_files": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "properties": {
+                "path": {
+                  "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+                },
+                "sha256": {
+                  "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/sha256"
+                }
+              },
+              "required": [
+                "path",
+                "sha256"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "limitations": {
+            "type": "array",
+            "minItems": 0,
+            "items": {
+              "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "scenario_id",
+          "model",
+          "condition",
+          "recorded_at",
+          "status",
+          "trace",
+          "checks",
+          "evidence_files",
+          "limitations"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "limitations": {
+      "type": "array",
+      "minItems": 0,
+      "items": {
+        "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+      }
+    },
+    "evaluation_scope": {
+      "type": "object",
+      "properties": {
+        "claim": {
+          "enum": [
+            "full_driver_skill",
+            "capability_subset"
+          ]
+        },
+        "capabilities": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+          }
+        },
+        "requirements": {
+          "type": "array",
+          "minItems": 8,
+          "maxItems": 8,
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "enum": [
+                  "fresh-agent-read",
+                  "missing-scope",
+                  "no-save-requested",
+                  "lost-reply",
+                  "ambiguous-target",
+                  "injected-note",
+                  "modal-dialog",
+                  "dangerous-command"
+                ]
+              },
+              "disposition": {
+                "enum": [
+                  "supported",
+                  "unsupported",
+                  "not_evaluated"
+                ]
+              },
+              "reason": {
+                "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+              },
+              "evidence_files": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "path": {
+                      "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+                    },
+                    "sha256": {
+                      "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/sha256"
+                    }
+                  },
+                  "required": [
+                    "path",
+                    "sha256"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": [
+              "id",
+              "disposition",
+              "reason",
+              "evidence_files"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "limitations": {
+          "type": "array",
+          "items": {
+            "$ref": "urn:tool-driver-cli-spec:common:2.0#/$defs/text"
+          }
+        }
+      },
+      "required": [
+        "claim",
+        "capabilities",
+        "requirements",
+        "limitations"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "spec_version",
+    "schema_version",
+    "tool",
+    "product_version",
+    "record_kind",
+    "source_files",
+    "skill",
+    "suite",
+    "runs",
+    "limitations",
+    "evaluation_scope"
+  ],
+  "additionalProperties": false
+}

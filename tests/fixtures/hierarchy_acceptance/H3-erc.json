@@ -1,0 +1,93 @@
+{
+    "$schema": "https://schemas.kicad.org/erc.v1.json",
+    "coordinate_units": "mm",
+    "date": "2026-10-12T16:20:13",
+    "ignored_checks": [
+        {
+            "description": "Global label only appears once in the schematic",
+            "key": "single_global_label"
+        },
+        {
+            "description": "Four connection points are joined together",
+            "key": "four_way_junction"
+        },
+        {
+            "description": "SPICE model issue",
+            "key": "simulation_model_issue"
+        },
+        {
+            "description": "Assigned footprint doesn't match footprint filters",
+            "key": "footprint_filter"
+        }
+    ],
+    "included_severities": [
+        "error",
+        "warning",
+        "exclusion"
+    ],
+    "kicad_version": "10.0.6",
+    "sheets": [
+        {
+            "path": "/",
+            "uuid_path": "/580ac6fe-81b6-53f3-8b01-c074a56f485a",
+            "violations": [
+                {
+                    "description": "Input Power pin not driven by any Output Power pins",
+                    "items": [
+                        {
+                            "description": "Symbol #PWR11 隐藏的引脚 1 [PWR, Power input, Line]",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 0.4699
+                            },
+                            "uuid": "11cab448-01ad-5e08-a92d-05a6f25bc882"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "power_pin_not_driven"
+                },
+                {
+                    "description": "Input Power pin not driven by any Output Power pins",
+                    "items": [
+                        {
+                            "description": "Symbol #PWR12 隐藏的引脚 1 [PWR, Power input, Line]",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 0.5461
+                            },
+                            "uuid": "611c4729-351b-5420-a67d-0944a0befff9"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "power_pin_not_driven"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "层次图纸引脚 'IN'",
+                            "pos": {
+                                "x": 1.27,
+                                "y": 0.6604
+                            },
+                            "uuid": "8c9c3515-6030-513a-b271-3a41fc3a52bf"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                }
+            ]
+        },
+        {
+            "path": "/CHILD_A/",
+            "uuid_path": "/580ac6fe-81b6-53f3-8b01-c074a56f485a/43040844-219b-5afe-956b-f02b17d3693a",
+            "violations": []
+        },
+        {
+            "path": "/CHILD_B/",
+            "uuid_path": "/580ac6fe-81b6-53f3-8b01-c074a56f485a/cc4316f9-1336-533b-887c-887029e43744",
+            "violations": []
+        }
+    ],
+    "source": "edit.kicad_sch"
+}
