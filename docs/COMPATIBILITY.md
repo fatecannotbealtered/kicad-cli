@@ -1,9 +1,9 @@
 # Compatibility
 
-Product 1.0.0 targets Windows x64, macOS arm64/x64 and Linux x64 with user-supplied
+The product targets Windows x64, macOS arm64/x64 and Linux x64 with user-supplied
 KiCad 10.0 patch 6 or later. Build baselines are Ubuntu 24.04 (glibc 2.39), macOS 14
 arm64 and macOS 15 Intel. Exact native versions and artifact hashes belong in each
-package's acceptance record. Linux arm64 is not a current native package target.
+package's acceptance record. Windows arm64 and Linux arm64 are not current native package targets.
 
 Two operations still require the Windows NTFS handle backend: board sync with
 candidate-out, and incremental schematic hierarchy batches that publish new source

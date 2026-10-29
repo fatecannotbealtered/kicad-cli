@@ -14,6 +14,6 @@ board routing inspect识别同网络、同层、同宽、同端点的直线段�
 
 新route patch预览提供原生完整报告与按finding身份的before/after比较。报告检查范围、ignored checks、project exclusions、原有/新增/解决项及未检查项；不能仅比较总数量，也不降低规则或忽略错误追求绿色。只读复核可读取预览报告，但确认修改仍须单独授权。
 
-fatecannotbealtered/skills中的schematic-review是另一套EDIF/EBOM/PDF只读审查。可复用问题分级、证据引用与人工判定方法；不共享其命令、输入格式或资格，不将它复制成KiCad操作模块。本轮不修改或发布那个仓库。
+需要EDIF/EBOM/PDF审查时使用对应的只读工具；本模块读取KiCad工程。不同工具的命令和输入格式不能混用。
 
 评测见test-prompts.json，尤其验证“只检查”不会升级为修改或投板签核。

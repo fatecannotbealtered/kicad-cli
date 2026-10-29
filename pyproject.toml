@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "kicad-cli"
 dynamic = ["version"]
-description = "AI-native KiCad PCB CLI - board audit, schematic parity, grid routing, zone stitching, ampacity-driven trace width, and DRC-verified writes"
+description = "KiCad CLI for AI assistants: project libraries, schematic and PCB editing, checks, and fabrication exports"
 readme = "README.md"
 requires-python = ">=3.10"
 license = { text = "Apache-2.0" }

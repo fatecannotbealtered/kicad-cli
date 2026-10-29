@@ -1,7 +1,7 @@
 {
   "module": "kicad-pcb",
   "install_name": "kicad-layout",
-  "source_code_sha256": "20374c0317ac3b01ef3a33ebed64b259b1e94502932d7009b744fc01c5005fba",
+  "source_code_sha256": "0e02af9c15fef9d1ea16e0ebaf44705e1e56cc626b7c719aeadcdf29bc0b244d",
   "protocol": "driver-board.v2.20-integer-nm-library",
   "command_contract_sha256": "9518290d5ee9cad05ddc2872d2c3f5502e3ac8bdd5b685470da25d8d1bb9a5f3",
   "executable_sha256": null,

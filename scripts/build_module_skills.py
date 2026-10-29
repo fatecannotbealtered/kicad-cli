@@ -21,31 +21,28 @@ SCENARIOS = json.loads((ROOT / "docs/modules/test-prompts.json").read_bytes())
 
 DESCRIPTIONS = {
     "kicad-cli": (
-        "KiCad环境发现、实际能力查询与跨模块分流。用于启动KiCad工程任务或跨建库、SCH、P"
-        "CB、审查和制造流程；单模块操作加载对应Skill。"
+        "检查KiCad运行环境、查询命令与能力，并按任务选择建库、原理图、PCB、审查或制造模块。"
+        "用于开始KiCad工程任务或跨模块操作。"
     ),
     "kicad-library": (
-        "KiCad项目局部建库：符号、封装、引脚/焊盘映射、项目库注册及可追溯版本。用于创建或修改库"
-        "资产；不接管仅SCH编辑、只读审查或全局库管理。"
+        "创建和维护KiCad项目局部符号与SMD封装，检查引脚/焊盘映射并注册项目库。"
+        "用于建库或修改项目库资产。"
     ),
     "kicad-sch": (
-        "KiCad原理图设计和编辑：空白初始化、精确构建、scalar层级复用、连接、属性、变换、重"
-        "开续编及当前单根页网表/SVG/PDF导出。用于SCH操作；不自动写PCB、不负责库作者或P"
-        "CB制造导出。"
+        "创建和编辑KiCad原理图，处理连接、属性与层级复用，导出单根页网表、SVG和PDF。"
+        "用于SCH设计、修改、保存重开或图面导出。"
     ),
     "kicad-pcb": (
-        "KiCad PCB工程操作：同步、布局、关键逃线规划、显式局部走线patch和已有铺铜/规则"
-        "任务。用于板文件实际修改；机械/层叠编辑与自动逃线以运行时支持范围为准。只检查时加载kica"
-        "d-review。"
+        "从网表创建KiCad PCB、同步设计字段、调整受支持的器件位置，并按指定路径修改局部直线走线。"
+        "用于PCB创建、同步、布局或局部改线。"
     ),
     "kicad-review": (
-        "KiCad只读工程检查与诊断：SCH、PCB、跨图一致性、重复对象、开口端、绕行和人工判断。"
-        "用于检查、审查或诊断；不自动修设计，不等同于schematic-review工具或投板签核。"
+        "只读检查KiCad原理图、PCB和图间一致性，诊断重复铜线、开口端与路径问题。"
+        "用于检查、审查或诊断，不自动修改设计。"
     ),
     "kicad-fabrication": (
-        "KiCad PCB制造资料导出、板层绘图、文件绑定及交付检查。用于Gerber、钻孔和PCB"
-        "导出包；SCH网表或图面走kicad-sch。导出不等于制造、装配或上电验收，不自动修改设计"
-        "。"
+        "导出KiCad PCB的Gerber、钻孔、SVG和PDF文件，并核对输出文件与源设计。"
+        "用于制造资料或PCB图面导出，不自动修改设计。"
     ),
 }
 PROMPTS = [
@@ -127,11 +124,15 @@ def generate(destination, module=None, executable=None, runtime_binding=None, in
             + f"逻辑模块：{name}；Skill安装名：{install_name}。\n\n"
             + (f"正文按CLI逻辑模块描述职责；加载Skill时使用：{aliases}。\n\n" if aliases else "")
             + "## Installation and first discovery\n\n"
-            + "Select the package for this OS and CPU: Windows uses bin/kicad-cli.exe; "
-            "macOS/Linux use bin/kicad-cli. The direct binary bundles Python, validators "
-            "and the authorized SDK; the Node wrapper additionally needs Node.\n\n"
+            + "Download the complete package for this OS and CPU from "
+            "[Releases](https://github.com/fatecannotbealtered/kicad-cli/releases/latest): "
+            "Windows x64 uses bin/kicad-cli.exe; macOS arm64/x64 and Linux x64 use "
+            "bin/kicad-cli. The direct binary bundles Python and its runtime dependencies; "
+            "the optional Node wrapper additionally needs Node. KiCad 10.0.6 or a newer "
+            "10.0 patch, with symbol and footprint libraries, is installed separately.\n\n"
             "Set runtime-config.json beside the binary, selecting the legal KiCad root "
-            "and a fresh owned profile_dir. On macOS select KiCad.app; Linux prefix installs "
+            "and an owned profile_dir. Preserve existing configuration and knowledge paths "
+            "when upgrading. On macOS select KiCad.app; Linux prefix installs "
             "typically use /usr; Windows uses its installed version root. "
             "Run the matching binary with --check-environment --compact.\n\n"
             + f"Install with `npx skills add <local-bundle> --skill {install_name} -y`, "
