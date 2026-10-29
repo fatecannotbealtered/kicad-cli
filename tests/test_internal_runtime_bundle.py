@@ -27,8 +27,8 @@ def test_internal_runtime_is_complete_and_keeps_authentication(tmp_path):
     assert manifest["license_model"] == "Apache-2.0-with-preserved-MIT-baseline"
     notices = stage / "runtime-notices"
     for name in ("DRIVER-APACHE-LICENSE.txt", "PRODUCT-LICENSE.txt"):
-        assert "Apache License" in (notices / name).read_text()
-    assert "MIT License" in (notices / "BASELINE-MIT-LICENSE.txt").read_text()
+        assert "Apache License" in (notices / name).read_text(encoding="utf-8")
+    assert "MIT License" in (notices / "BASELINE-MIT-LICENSE.txt").read_text(encoding="utf-8")
     assert manifest["sdk_python_in_pyz"] is False
     assert "sqlite3" in result["hidden"]
     assert not list(stage.rglob("*.pyc"))
@@ -87,7 +87,7 @@ def test_product_and_independent_skills_ship_their_license():
     for skill in (root / "skills").iterdir():
         if not (skill / "SKILL.md").is_file():
             continue
-        assert "license: Apache-2.0" in (skill / "SKILL.md").read_text()
+        assert "license: Apache-2.0" in (skill / "SKILL.md").read_text(encoding="utf-8")
         assert (skill / "LICENSE").read_bytes() == product_license
         manifest = json.loads((skill / "RESOURCE-MANIFEST.json").read_bytes())
         assert manifest["LICENSE"] == hashlib.sha256(product_license).hexdigest()

@@ -149,6 +149,7 @@ def generate(destination, module=None, executable=None, runtime_binding=None, in
         (target / "NOTICE.txt").write_text(
             "Copyright 2026 Sean Guo. Original Skill content is licensed under Apache-2.0.\n",
             encoding="utf-8",
+            newline="\n",
         )
         shutil.copyfile(ROOT / "docs/modules/common.md", refs / "common.md")
         shutil.copyfile(ROOT / "docs/KNOWLEDGE.md", refs / "KNOWLEDGE.md")
