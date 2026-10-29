@@ -32,7 +32,7 @@ jobs:
         with:
           ref: ${{ inputs.tag }}
           persist-credentials: false
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
       - uses: actions/setup-node@v7
@@ -65,7 +65,7 @@ jobs:
           ref: ${{ inputs.tag }}
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
           python-version: ${{ matrix.python-version }}
 
