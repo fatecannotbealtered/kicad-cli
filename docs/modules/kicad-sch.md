@@ -2,7 +2,7 @@
 
 先读[共享运行规则](common.md)。SCH任务只加载本模块；只有明确涉及库作者、PCB同步或制造时才加载其他模块。
 
-现有关键流程保留：公开blank初始化；objects/symbols/connections的完整分页；基于实际资源、原始pin ordinal与全逻辑instance的精确构建；层级新建、复用与scalar interface；属性编辑；连接不变的明确对象组变换；保存后新进程续编。准确请求结构与精度以本构件selected reference为准。
+现有关键流程保留：公开blank初始化；objects/symbols/connections的完整分页；基于实际资源、原始pin ordinal与全逻辑instance的精确构建；层级新建、复用与scalar interface；属性编辑；连接不变的明确对象组变换；保存后新进程续编。准确请求结构与精度以本构件相应命令的 reference为准。
 
 从空白开始用sch create显式blank模式创建零对象SCH/PRO。不要手写CAD。之后查询空root身份和实际symbol资源。初始.net不会随编辑更新，验收必须导出当前SCH。
 
@@ -19,5 +19,3 @@ expected描述最终电气关系，不授予几何接触权限。交汇点逐项
 派生symbol的空mandatory-field按原生继承规则处理；已有嵌入cache仍优先。不能因引脚相同就推断全部库cache一致。bus、自动布线和通用cache刷新仍不支持。
 
 当前sch export通过正式适配层生成已保存单根页的netlist、SVG或PDF。输出目录先存在，目标文件必须不存在；每次请求绑定源文件、项目与库、配置和原生工具。预览生成的是候选，确认后才保存正式artifact；不修改设计。当前不支持层级图导出，本模块已有层级编辑能力不自动获得该导出资格。检查artifact回执及完整图面；不能将过时的初始.net用于PCB同步。
-
-评测见test-prompts.json。需要从零构建、共享源ECO、局部变换以及重开续编；只改SCH不能自动写PCB。

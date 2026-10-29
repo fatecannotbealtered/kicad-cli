@@ -10,6 +10,5 @@ C1为标称100nF的16V X7R 0603去耦件。TI建议0.1µF靠近VCC。选用现�
 
 预期逻辑为低输入时高输出、高输入时低输出。仅完成CAD连接、库映射、几何、原生检查、保存重开和修改验证。没有仿真、实物、上电或电气测量。
 
-交付工程还在完整字段同步基线上做了15kΩ的纯目标续编，事前意图另存CONTINUATION-INTENT-BEFORE.json，未覆盖原始设计意图。其高输入负载约0.22mA、功耗0.726mW、5µA漏电偏移估计75mV。首次同步额外补入两个MPN的失败记录和原始比较工程一并保留；当前状态以结果工程及回执为准。
 
-资料：[TI数据表](https://www.ti.com/lit/ds/symlink/sn74lvc1g14.pdf)、[YAGEO初始10kΩ](https://www.yageogroup.com/component-documentation/download/specsheet/RC0603FR-0710KL)、[YAGEO ECO 22kΩ](https://www.yageogroup.com/component-documentation/download/specsheet/RC0603FR-0722KL)。供独立接手的15kΩ变体及Murata资料来源见事实记录。
+资料：[TI数据表](https://www.ti.com/lit/ds/symlink/sn74lvc1g14.pdf)、[YAGEO初始10kΩ](https://www.yageogroup.com/component-documentation/download/specsheet/RC0603FR-0710KL)、[YAGEO ECO 22kΩ](https://www.yageogroup.com/component-documentation/download/specsheet/RC0603FR-0722KL)。15kΩ电阻变体及Murata资料来源见 source-facts.json。

@@ -16,8 +16,6 @@ body_mm表示以原点为中心的名义机械本体宽/高，不包括Fab图形
 
 先预览并核对明确的pin—pad双射。此能力要求编号本身一致；不隐式翻译编号，不处理一个引脚多焊盘。确认后用library inspect读取资产、版本、source和新基线。
 
-文件存在不足以通过。用SCH当前symbol查询，按实际raw pins放入原理图；用公开sch export导出实际当前netlist，再由board from-netlist消费项目注册的本地封装。同basename板首次创建可显式初始化不存在或恰为{}的PRO；已有配置的PRO不得覆盖。准确选项以reference为准。保存后新进程重开SCH和PCB，再核对原生引脚、焊盘编号/尺寸、网络与机械边界。NC coupon不能证明实际电路功能。
+文件存在不足以通过。用SCH当前symbol查询，按实际raw pins放入原理图；用公开sch export导出实际当前netlist，再由board from-netlist消费项目注册的本地封装。同basename板首次创建可显式初始化不存在或恰为{}的PRO；已有配置的PRO不得覆盖。准确选项以reference为准。保存后新进程重开SCH和PCB，再核对原生引脚、焊盘编号/尺寸、网络与机械边界。仅放置器件或标记NC，不能证明实际电路功能。
 
 修改库不会自动刷新已放置实例的cache。当前没有通用实例刷新能力；已有实例保持自己的cache与身份。更新库后必须明确选择受支持的放置或重建流程，重新做原生对照，不能宣称已同步所有实例。
-
-评测见test-prompts.json：新库、明确asset更新、错误映射、只读查询和不支持封装均需正确处理。

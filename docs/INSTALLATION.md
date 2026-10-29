@@ -61,7 +61,7 @@ For the optional Node installation, explicitly install the exact local target TG
 into a new prefix, for example:
 
 ```sh
-npm install --global --prefix /owned/kicad-node /owned/downloads/fateforge-kicad-cli-1.0.1-linux-x64-internal.tgz
+npm install --global --prefix /owned/kicad-node /owned/downloads/fateforge-kicad-cli-1.0.2-linux-x64-internal.tgz
 ```
 
 Use the matching version and target TGZ from the release; Windows uses its

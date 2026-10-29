@@ -1,4 +1,4 @@
-# kicad-cli 1.0.1
+# kicad-cli 1.0.2
 
 [中文完整使用入口](README_zh.md).
 
@@ -44,13 +44,9 @@ Automatic routing, dense escape, push/shove, new vias or arc/via removal, arbitr
 
 Writes use scoped previews and confirmation. After a partial or unknown result, inspect the operation and actual files before retrying. Multi-file saves are not atomic. Custom checks differ from official ERC/DRC, and successful exports or zero findings do not establish manufacturing approval.
 
-## Knowledge and repository layout
+## Knowledge
 
 An AI assistant can read an explicitly configured file/URL knowledge index for project or team rules. Existing knowledge paths are retained during an upgrade. See [knowledge configuration](docs/KNOWLEDGE.md).
-
-Product code lives in kicad_cli; maintained Skill sources in docs/modules; generated
-installable modules in skills. tests and bench retain reproducible regression inputs,
-not installation requirements. See [maintenance](docs/MAINTENANCE.md).
 
 ## License
 

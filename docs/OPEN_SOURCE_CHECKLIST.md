@@ -51,8 +51,8 @@ Run through this gate **before the first public push** of `kicad-cli`. It is a s
 - [ ] Root `AGENTS.md` is present and points to `.agent/AGENT.md`.
 - [ ] `.agent/{AGENT,CLI-SPEC,SKILL-SPEC,SEC-SPEC}.md` specs are present; the shared repo skeleton standard is referenced from `ai-native-cli-spec/REPO-SPEC.md`.
 - [ ] `skills/kicad-cli/SKILL.md` is present; frontmatter includes `version`, `license: Apache-2.0`, `user-invocable: true`, and `metadata.requires.min_version` matching the CLI version.
-- [ ] `SKILL.md` includes `When to use`, `Do not use`, `First Step`, agent defaults, JSON contract, write recipe or explicit read-only boundary, `STOP CHECKPOINT`, error decision tree, security boundary, self-update, and eval scenarios.
-- [ ] `skills/kicad-cli/test-prompts.json` is present, valid JSON, and covers fresh-agent read, write safety or read-only boundary, permission boundary, `_untrusted` handling, and the absence of self-update.
+- [ ] `SKILL.md` includes `When to use`, `Do not use`, `First Step`, agent defaults, JSON contract, write recipe or explicit read-only boundary, `STOP CHECKPOINT`, error decision tree, security boundary and applicable update guidance. Developer evals live separately in tests/evals.
+- [ ] `tests/evals/skill-scenarios.json` is valid JSON and preserves routing, write safety, read-only and permission boundaries, and untrusted-content cases; it is not distributed inside user Skills.
 - [x] N/A — there is no `update` command. SKILL-SPEC §6.7 applies only to tools that have one; `SKILL.md` instead points at the two install lines, and `tests/test_skill.py` fails if the Skill ever claims a self-update that does not exist.
 - [ ] `kicad-cli reference`, `kicad-cli context`, and `kicad-cli doctor` run and emit valid JSON envelopes — an agent can self-onboard from a clean checkout.
 - [ ] `kicad-cli reference` exposes `release_readiness`, and `kicad-cli doctor` reports the matching check.

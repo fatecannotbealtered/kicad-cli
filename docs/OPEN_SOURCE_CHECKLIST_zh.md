@@ -51,8 +51,8 @@
 - [ ] 根目录 `AGENTS.md` 存在并指向 `.agent/AGENT.md`。
 - [ ] `.agent/{AGENT,CLI-SPEC,SKILL-SPEC,SEC-SPEC}.md` 规格文件齐全；共享仓库骨架标准引用 `ai-native-cli-spec/REPO-SPEC.md`。
 - [ ] `skills/kicad-cli/SKILL.md` 存在；frontmatter 包含 `version`、`license: Apache-2.0`、`user-invocable: true`，且 `metadata.requires.min_version` 匹配 CLI 版本。
-- [ ] `SKILL.md` 包含 `When to use`、`Do not use`、`First Step`、Agent 默认规则、JSON contract、写操作配方或明确只读边界、`STOP CHECKPOINT`、错误决策树、安全边界、自更新和评估场景。
-- [ ] `skills/kicad-cli/test-prompts.json` 存在、JSON 合法，并覆盖 fresh-agent read、写操作安全或只读边界、权限边界、`_untrusted` 处理和自更新。
+- [ ] `SKILL.md` 包含 `When to use`、`Do not use`、`First Step`、Agent 默认规则、JSON contract、写操作配方或明确只读边界、`STOP CHECKPOINT`、错误决策树、安全边界和适用的更新说明。开发评测单独保存在 tests/evals。
+- [ ] `tests/evals/skill-scenarios.json` 存在、JSON 合法，并覆盖任务分流、写操作安全与只读边界、权限及不可信内容；不随用户 Skill 分发。
 - [x] 不适用 —— 没有 `update` 命令。SKILL-SPEC §6.7 只对有自更新的工具生效；`SKILL.md` 改为指向那两行安装命令，而 `tests/test_skill.py` 会在 Skill 声称任何不存在的自更新时失败。
 - [ ] `kicad-cli reference`、`kicad-cli context`、`kicad-cli doctor` 可运行并输出合法的 JSON 信封 —— 代理能从干净的检出自助上手。
 - [ ] `kicad-cli reference` 暴露 `release_readiness`，`kicad-cli doctor` 报告匹配的检查项。

@@ -1,6 +1,6 @@
 # 共享运行规则
 
-每个模块都随附这份生成资源。源码只维护docs/modules/common.md，由构建脚本生成模块内副本。模块不依赖开发仓库的相对路径，也不要求安装其他Skill。不要手改生成副本。
+每个 Skill 都随附完整的运行规则和参考资源，可按任务单独安装，无需取得开发仓库或安装其他 Skill。
 
 先用 `modules`、`context` 和 `doctor` 核对本机可用能力与依赖，再按任务读取命令契约。检查报告只覆盖其声明的范围；未检查项不能作为通过，工程检查不等于制造签核。
 
@@ -37,7 +37,7 @@ macOS/Linux暂不支持带candidate-out的board sync，以及会发布新源文�
 
 ## 预览、确认与保存
 
-写入必须已有本次用户授权的有限scope；授权不够时才请求补充。授权已覆盖的自有测试副本，不重复索要许可。scope、state、token与旧unknown现场不是交付资源，不复制旧现场来重放操作。
+写入必须已有本次用户授权的有限scope；授权不够时才请求补充。授权已覆盖的自有工作副本，不重复索要许可。scope、state、token与旧unknown现场不是交付资源，不复制旧现场来重放操作。
 
 公开modules的observation.operation_scope提供准确schema和有效结构的示例。示例不会写入或授予权限；将路径、次数和授权来源改成本次已授权范围，再保存到自有profile/scope.json。不要从context的状态投影反推scope输入，也不要添加schema没有的schema_version。根reference和每个selected reference提供同一份scope schema。
 

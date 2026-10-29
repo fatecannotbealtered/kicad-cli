@@ -60,10 +60,10 @@ def package(build, destination, sample, binding):
             "README.md",
             "LICENSE",
             "NOTICE.md",
+            "NOTICE_zh.md",
             "authorization",
             "release",
             "examples",
-            "qualification",
             "knowledge",
             "docs",
             "third_party",
@@ -72,10 +72,16 @@ def package(build, destination, sample, binding):
     put(bundle / "package.json", package_meta)
     (bundle / "scripts").mkdir()
     shutil.copyfile(ROOT / "scripts/run.js", bundle / "scripts/run.js")
-    for name in ("README.md", "README_zh.md", "LICENSE", "NOTICE.md", "CHANGELOG.md"):
+    for name in (
+        "README.md",
+        "README_zh.md",
+        "LICENSE",
+        "NOTICE.md",
+        "NOTICE_zh.md",
+        "CHANGELOG.md",
+    ):
         shutil.copyfile(ROOT / name, bundle / name)
     (bundle / "docs/modules").mkdir(parents=True)
-    shutil.copyfile(ROOT / "docs/modules/DELIVERY.md", bundle / "docs/modules/DELIVERY.md")
     for name in ("INSTALLATION.md", "COMPATIBILITY.md", "KNOWLEDGE.md"):
         shutil.copyfile(ROOT / "docs" / name, bundle / "docs" / name)
     shutil.copyfile(ROOT / "docs/modules/common.md", bundle / "docs/modules/common.md")
@@ -108,7 +114,7 @@ def package(build, destination, sample, binding):
             ],
         },
     )
-    for example in ("functional-schmitt", "library", "arc-scope"):
+    for example in ("functional-schmitt", "library"):
         shutil.copytree(ROOT / "examples" / example, bundle / "examples" / example)
     # A small editable design, with all local library assets and no old control plane.
     target = bundle / "examples/wired-schmitt"
@@ -124,14 +130,6 @@ def package(build, destination, sample, binding):
             dest = target / source.relative_to(sample)
             dest.parent.mkdir(parents=True, exist_ok=True)
             shutil.copyfile(source, dest)
-    q = bundle / "qualification"
-    q.mkdir()
-    (q / "README.md").write_text(
-        "Exact executable/package acceptance is recorded alongside these artifacts. "
-        "No prior executable evidence is inherited. Agent evaluations remain not_run.\n",
-        encoding="utf-8",
-        newline="\n",
-    )
     put(
         bundle / "bin/runtime-config.example.json",
         {

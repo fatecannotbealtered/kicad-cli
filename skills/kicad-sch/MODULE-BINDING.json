@@ -1,7 +1,7 @@
 {
   "module": "kicad-sch",
   "install_name": "kicad-sch",
-  "source_code_sha256": "0e02af9c15fef9d1ea16e0ebaf44705e1e56cc626b7c719aeadcdf29bc0b244d",
+  "source_code_sha256": "1794944885ddb840710602fac2af0c30094b4bae68992501ec8ce637ce392a81",
   "protocol": "driver-board.v2.20-integer-nm-library",
   "command_contract_sha256": "0fe9f3751b14aa48c2d35851a14d0ad822a1f8176b87960d9869ab9256b810ea",
   "executable_sha256": null,
