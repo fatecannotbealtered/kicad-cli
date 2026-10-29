@@ -16,5 +16,5 @@ requirements. Product and official binaries share a name: use exact absolute pat
 Custom checks are not official ERC/DRC; zero findings are not manufacturing approval.
 
 The direct binary contains Python and the fixed authorized SDK, whose license is
-separate. External KiCad is not redistributed. See [installation](INSTALLATION.md),
-[delivery](modules/DELIVERY.md) and [knowledge configuration](KNOWLEDGE.md).
+separate. External KiCad is not redistributed. See [installation](INSTALLATION.md)
+and [knowledge configuration](KNOWLEDGE.md).

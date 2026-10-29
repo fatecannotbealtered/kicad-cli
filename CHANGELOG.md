@@ -4,6 +4,18 @@ All notable product changes are recorded here. CLI, executable, six Skills and d
 
 ## [Unreleased]
 
+## [1.0.2] - 2026-10-29
+
+### Changed
+
+- Remove developer evaluation prompts, acceptance placeholders and synthetic rejection fixtures from installed Skills and native user packages.
+- Simplify Skill installation and task guidance while preserving engineering rules, configuration examples, manifests and runtime compatibility bindings.
+
+### Fixed
+
+- Remove stale evaluation files when regenerating existing Skill directories.
+- Correct the CAD resource guide to identify the product license as Apache-2.0 and include the Chinese notice in native packages.
+
 ## [1.0.1] - 2026-10-29
 
 ### Changed

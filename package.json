@@ -1,6 +1,6 @@
 {
   "name": "@fateforge/kicad-cli",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "private": true,
   "description": "KiCad CLI for AI assistants: project libraries, schematic and PCB editing, checks, and fabrication exports",
   "license": "Apache-2.0",
@@ -17,12 +17,12 @@
     "check-version": "node scripts/check-version.js"
   },
   "optionalDependencies": {
-    "@fateforge/kicad-cli-darwin-arm64": "1.0.1",
-    "@fateforge/kicad-cli-darwin-x64": "1.0.1",
-    "@fateforge/kicad-cli-linux-arm64": "1.0.1",
-    "@fateforge/kicad-cli-linux-x64": "1.0.1",
-    "@fateforge/kicad-cli-win32-arm64": "1.0.1",
-    "@fateforge/kicad-cli-win32-x64": "1.0.1"
+    "@fateforge/kicad-cli-darwin-arm64": "1.0.2",
+    "@fateforge/kicad-cli-darwin-x64": "1.0.2",
+    "@fateforge/kicad-cli-linux-arm64": "1.0.2",
+    "@fateforge/kicad-cli-linux-x64": "1.0.2",
+    "@fateforge/kicad-cli-win32-arm64": "1.0.2",
+    "@fateforge/kicad-cli-win32-x64": "1.0.2"
   },
   "files": [
     "scripts/run.js",

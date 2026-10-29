@@ -1,13 +1,12 @@
 {
   "LICENSE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
-  "MODULE-BINDING.json": "d36da7fb70b091a36bbd317a03ddbd95dfdd248d82a55e1105fd0cc867dee18f",
+  "MODULE-BINDING.json": "504e3472a810fce2b157f6255a1c57db29687da0072de248e0c81fe55014bba7",
   "NOTICE.txt": "ce11968069298d37a746fe5a6971b7938fe9c6ef2c39fefd6872f305cdb119b1",
-  "SKILL.md": "0e941ca8d62af2927a9604ecffb71b1c73d8f01dd20b2aca5bdbc3e8d373e207",
+  "SKILL.md": "b1281be839bd083b826ca068c9c079f7f956768b4acd500dc61762cb5e9f563e",
   "reference/KNOWLEDGE.md": "8ef37a0edb8ba12159eee7862fa729d82ebe644e726c4a90b7d786da87e50717",
-  "reference/common.md": "3261b80f847c4786c3195b094f0fce8962b43f3cc99b3d197ac55913b970042d",
-  "reference/knowledge/CAD_RESOURCES.md": "b3f1beb80063e559e17661805269952c409478c2fbcb56da48cc30b7f3b6cc7d",
+  "reference/common.md": "41fbece17dc3bab2d051ded59a09a588bdf67263375d953a7137bbd32579699c",
+  "reference/knowledge/CAD_RESOURCES.md": "52ba0fb599ffc5975e571b03ae89cbf6e879453eabacd733202917dc6762944d",
   "reference/knowledge/INDEX.json": "a6407df3680d4ab8c117cb02905bbd72f88ddd212552f02a7182658cfa60299e",
   "reference/knowledge/external.example.json": "4c7216deb95f4cc63e4d3e4612ee7b7ae4415e0a0202e37adbdb316079934b93",
-  "reference/knowledge/team/SCHEMATIC_RULES.example.md": "da8d21b59d893b66749f122dad270672141fcaaba49b263f053a88ca5a5e137f",
-  "test-prompts.json": "9b94cb23f4725be474321e642231abf9196fa84b7a6074d0532994d8003d348b"
+  "reference/knowledge/team/SCHEMATIC_RULES.example.md": "da8d21b59d893b66749f122dad270672141fcaaba49b263f053a88ca5a5e137f"
 }

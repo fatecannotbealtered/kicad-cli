@@ -1,7 +1,7 @@
 {
   "module": "kicad-review",
   "install_name": "kicad-review",
-  "source_code_sha256": "0e02af9c15fef9d1ea16e0ebaf44705e1e56cc626b7c719aeadcdf29bc0b244d",
+  "source_code_sha256": "1794944885ddb840710602fac2af0c30094b4bae68992501ec8ce637ce392a81",
   "protocol": "driver-board.v2.20-integer-nm-library",
   "command_contract_sha256": "5295761d444eb4fdc162f0e72f4928b9f9f82f6ce06c715c15b0a651111a5fb8",
   "executable_sha256": null,

@@ -1,7 +1,7 @@
 {
   "module": "kicad-library",
   "install_name": "kicad-library",
-  "source_code_sha256": "0e02af9c15fef9d1ea16e0ebaf44705e1e56cc626b7c719aeadcdf29bc0b244d",
+  "source_code_sha256": "1794944885ddb840710602fac2af0c30094b4bae68992501ec8ce637ce392a81",
   "protocol": "driver-board.v2.20-integer-nm-library",
   "command_contract_sha256": "fd7bb066e7077ae26b8a4d22111c23b95b4e135224ca759a115017311d3bde5d",
   "executable_sha256": null,

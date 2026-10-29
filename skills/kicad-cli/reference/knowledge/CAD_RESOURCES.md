@@ -10,5 +10,5 @@ source identity, units, pin/pad mapping and project dependencies. Do not replace
 missing library with an unrelated same-named library or scan unrelated directories.
 
 External KiCad installations, libraries and team standards retain their own licenses.
-They are not covered by the product's MIT license. The bundled SDK is separately
-licensed; cleanup or a knowledge entry cannot grant redistribution rights.
+They are not covered by the product's Apache-2.0 license. The bundled SDK is separately
+licensed; a knowledge entry cannot grant redistribution rights.

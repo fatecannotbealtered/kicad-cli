@@ -1,4 +1,4 @@
-# kicad-cli 1.0.1
+# kicad-cli 1.0.2
 
 面向 AI 助手的 KiCad 工程命令行工具，支持项目建库、原理图编辑、PCB 创建与局部修改、只读检查，以及 Gerber、钻孔和图面导出。
 
@@ -66,12 +66,10 @@ macOS/Linux 暂不支持带 `candidate-out` 的 board sync，以及会发布新�
 
 按[安装说明](docs/INSTALLATION.md)更新现有命令入口和六模块，保留原配置与知识索引。不要把旧操作状态、scope 或确认 token 当成新版授权重放；CAD 工程不会因工具升级自动修改或回滚。
 
-## 知识配置与仓库结构
+## 知识配置
 
 知识通过 AI 显式读取配置的文件/URL 索引接入；升级保留已有知识库路径。
-参见[知识配置](docs/KNOWLEDGE.md)与[维护边界](docs/MAINTENANCE.md)。
-产品代码在 kicad_cli，Skill 单源在 docs/modules，生成模块在 skills；tests 与 bench
-保留可复现测试和夹具，不是使用者安装前提。
+参见[知识配置](docs/KNOWLEDGE.md)。
 
 ## 许可证
 
