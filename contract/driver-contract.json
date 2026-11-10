@@ -1,0 +1,1072 @@
+{
+  "$schema": "schemas/contract.schema.json",
+  "name": "tool-driver-cli-spec",
+  "version": "1.2.0",
+  "schema_version": "1.2",
+  "spec_documents": [
+    {
+      "name": "DRIVER-CLI-SPEC",
+      "prefix": "DCLI",
+      "segments": [
+        {"from": 1, "to": 9, "topic": "output"},
+        {"from": 10, "to": 19, "topic": "errors"},
+        {"from": 20, "to": 29, "topic": "command_shape"},
+        {"from": 30, "to": 39, "topic": "builtin_commands"},
+        {"from": 50, "to": 69, "topic": "writes"},
+        {"from": 70, "to": 79, "topic": "self_update"},
+        {"from": 80, "to": 89, "topic": "units"},
+        {"from": 200, "to": 209, "topic": "modes_and_sessions"},
+        {"from": 210, "to": 219, "topic": "documents"},
+        {"from": 220, "to": 229, "topic": "jobs"},
+        {"from": 230, "to": 239, "topic": "devices"},
+        {"from": 240, "to": 249, "topic": "host_components"},
+        {"from": 260, "to": 269, "topic": "adapter_and_runtime"},
+        {"from": 270, "to": 289, "topic": "host_protocol"}
+      ]
+    },
+    {
+      "name": "DRIVER-SEC-SPEC",
+      "prefix": "DSEC",
+      "segments": [
+        {"from": 1, "to": 9, "topic": "risk_tiers"},
+        {"from": 10, "to": 19, "topic": "authorization_scope"},
+        {"from": 20, "to": 29, "topic": "untrusted_content"},
+        {"from": 30, "to": 39, "topic": "state_directory"},
+        {"from": 40, "to": 49, "topic": "secrets_and_network"},
+        {"from": 50, "to": 59, "topic": "host_components"},
+        {"from": 60, "to": 69, "topic": "physical_effects"},
+        {"from": 70, "to": 79, "topic": "supply_chain"}
+      ]
+    },
+    {
+      "name": "DRIVER-SKILL-SPEC",
+      "prefix": "DSKL",
+      "segments": [
+        {"from": 1, "to": 19, "topic": "single_skill"},
+        {"from": 20, "to": 29, "topic": "multiple_skills"},
+        {"from": 30, "to": 39, "topic": "release_and_sync"},
+        {"from": 40, "to": 49, "topic": "evaluation"},
+        {"from": 100, "to": 109, "topic": "knowledge_sources"},
+        {"from": 110, "to": 119, "topic": "knowledge_reading"},
+        {"from": 120, "to": 129, "topic": "knowledge_format_and_commands"}
+      ]
+    },
+    {
+      "name": "DRIVER-VERIFY-SPEC",
+      "prefix": "DVER",
+      "segments": [
+        {"from": 1, "to": 9, "topic": "general_conformance"},
+        {"from": 10, "to": 19, "topic": "driver_conformance"},
+        {"from": 20, "to": 29, "topic": "fake_host"},
+        {"from": 30, "to": 39, "topic": "behavior_matrix"},
+        {"from": 40, "to": 49, "topic": "maturity_and_evidence"},
+        {"from": 50, "to": 59, "topic": "live_acceptance"}
+      ]
+    },
+    {
+      "name": "DRIVER-REPO-SPEC",
+      "prefix": "DREPO",
+      "segments": [
+        {"from": 1, "to": 9, "topic": "project_layout"},
+        {"from": 10, "to": 19, "topic": "document_skeletons"},
+        {"from": 20, "to": 29, "topic": "badges_and_labels"},
+        {"from": 30, "to": 39, "topic": "pinning"},
+        {"from": 40, "to": 49, "topic": "versions_ci_release"},
+        {"from": 50, "to": 59, "topic": "distribution"},
+        {"from": 60, "to": 69, "topic": "capability_survey_and_onboarding"}
+      ]
+    }
+  ],
+  "envelope": {
+    "success_keys": ["ok", "data"],
+    "error_keys": ["ok", "error"],
+    "meta_keys": ["notices", "untrusted"],
+    "notice_keys": ["type", "severity", "message"],
+    "notice_severities": ["info", "warning"],
+    "error_keys_inner": ["code", "message", "retryable", "details"],
+    "details_always": ["dispatch_state", "next_action"],
+    "details_optional": ["receipt", "batch", "update", "native_message", "knowledge"],
+    "dispatch_states": ["not_started", "dispatched", "unknown"],
+    "formats": ["json", "text", "raw"],
+    "list_keys": ["items", "count", "has_more", "total", "next_offset"],
+    "limits": {
+      "success_chars": 8000,
+      "error_chars": 2000,
+      "reference_index_chars": 8000,
+      "reference_command_chars": 6000,
+      "confirmation_required_chars": 8000
+    }
+  },
+  "error_codes": [
+    {"code": "E_USAGE", "exit": 2, "retryable": false, "details": ["problem", "parameter"]},
+    {"code": "E_VALIDATION", "exit": 2, "retryable": false, "details": []},
+    {"code": "E_AMBIGUOUS", "exit": 2, "retryable": false, "details": ["candidates"]},
+    {"code": "E_UNSUPPORTED", "exit": 2, "retryable": false, "details": []},
+    {"code": "E_NOT_FOUND", "exit": 3, "retryable": false, "details": []},
+    {"code": "E_AUTH", "exit": 4, "retryable": false, "details": []},
+    {"code": "E_FORBIDDEN", "exit": 4, "retryable": false, "details": ["scope"]},
+    {"code": "E_CONFIG", "exit": 4, "retryable": false, "details": []},
+    {"code": "E_BACKEND_UNAVAILABLE", "exit": 4, "retryable": false, "details": []},
+    {
+      "code": "E_CONFIRMATION_REQUIRED",
+      "exit": 5,
+      "retryable": false,
+      "details": ["preview", "confirm_token", "expires_at"]
+    },
+    {"code": "E_CONFLICT", "exit": 6, "retryable": false, "details": ["conflict"]},
+    {"code": "E_NETWORK", "exit": 7, "retryable": true, "details": []},
+    {"code": "E_BUSY", "exit": 7, "retryable": true, "details": ["retry_after_ms"]},
+    {"code": "E_TIMEOUT", "exit": 7, "retryable": true, "details": []},
+    {"code": "E_OUTCOME_UNKNOWN", "exit": 8, "retryable": false, "details": ["lookup"]},
+    {"code": "E_HUMAN_REQUIRED", "exit": 9, "retryable": false, "details": ["action", "resume"]},
+    {"code": "E_PARTIAL", "exit": 1, "retryable": false, "details": ["receipt"]},
+    {"code": "E_VERIFY_FAILED", "exit": 1, "retryable": false, "details": ["receipt"]},
+    {"code": "E_VERIFY_INCOMPLETE", "exit": 1, "retryable": false, "details": ["receipt"]},
+    {"code": "E_NATIVE_FAILURE", "exit": 1, "retryable": false, "details": []},
+    {"code": "E_PROTOCOL", "exit": 1, "retryable": false, "details": []},
+    {"code": "E_INTEGRITY", "exit": 1, "retryable": false, "details": []},
+    {"code": "E_IO", "exit": 1, "retryable": false, "details": []},
+    {"code": "E_INTERRUPTED", "exit": 130, "retryable": true, "details": []},
+    {"code": "E_UNKNOWN", "exit": 1, "retryable": false, "details": []}
+  ],
+  "exit_codes": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 130],
+  "verbs": [
+    {"verb": "list", "effect": "observe"},
+    {"verb": "get", "effect": "observe"},
+    {"verb": "search", "effect": "observe"},
+    {"verb": "check", "effect": "observe"},
+    {"verb": "create", "effect": "change"},
+    {"verb": "update", "effect": "change"},
+    {"verb": "delete", "effect": "change"},
+    {"verb": "move", "effect": "change"},
+    {"verb": "import", "effect": "change"},
+    {"verb": "render", "effect": "artifact"},
+    {"verb": "export", "effect": "artifact"},
+    {"verb": "run", "effect": null},
+    {"verb": "stop", "effect": "lifecycle"}
+  ],
+  "banned_verbs": ["show", "inspect", "info", "status"],
+  "global_flags": [
+    {"flag": "--format", "value": "json|text|raw"},
+    {"flag": "--json", "value": null},
+    {"flag": "--pretty", "value": null},
+    {"flag": "--fields", "value": "<a,b|all>"},
+    {"flag": "--quiet", "value": null},
+    {"flag": "--dry-run", "value": null},
+    {"flag": "--confirm", "value": "<token>"},
+    {"flag": "--dangerous", "value": null}
+  ],
+  "shared_flags": [
+    {"flag": "--limit", "value": "<n>", "default": 20, "maximum": 100},
+    {"flag": "--offset", "value": "<n>"},
+    {"flag": "--query", "value": "<text>"},
+    {"flag": "--sort", "value": "<field>"},
+    {"flag": "--order", "value": "asc|desc"},
+    {"flag": "--state", "value": "<state>"},
+    {"flag": "--ids", "value": "<a,b,c>"},
+    {"flag": "--continue-on-error", "value": "true|false"},
+    {"flag": "--wait", "value": "<duration>"},
+    {"flag": "--output", "value": "<path>"},
+    {"flag": "--input", "value": "<path|->"}
+  ],
+  "target_flags": [
+    {"flag": "--session", "object": "session"},
+    {"flag": "--doc", "object": "document"},
+    {"flag": "--device", "object": "device"},
+    {"flag": "--job", "object": "job"}
+  ],
+  "duration_suffixes": ["ms", "s", "min", "h"],
+  "target_keys": [
+    {"kind": "file", "format": "file:///<absolute-path>", "example": "file:///D:/proj/board.kicad_pcb"},
+    {
+      "kind": "file_object",
+      "format": "file:///<absolute-path>#<domain-path>",
+      "example": "file:///D:/proj/board.kicad_pcb#/footprints/R1"
+    },
+    {"kind": "untitled_document", "format": "untitled:<session-id>/<n>", "example": "untitled:kicad-1234/1"},
+    {
+      "kind": "untitled_object",
+      "format": "untitled:<session-id>/<n>#<domain-path>",
+      "example": "untitled:kicad-1234/1#/footprints/R1"
+    },
+    {"kind": "device_part", "format": "device:<device-id>/<part>", "example": "device:cnc-01/axis-x"}
+  ],
+  "reserved_names": [
+    "reference",
+    "context",
+    "doctor",
+    "changelog",
+    "update",
+    "operation",
+    "help",
+    "version",
+    "session",
+    "doc",
+    "job",
+    "device",
+    "plugin",
+    "knowledge"
+  ],
+  "modes": [
+    {"mode": "file", "required_commands": ["doc get"]},
+    {"mode": "session", "required_commands": ["session list", "session get", "doc list", "doc get", "doc save"]},
+    {"mode": "device", "required_commands": ["device list", "device get"]}
+  ],
+  "effects": [
+    {"effect": "observe", "tier": "none", "risk": "T0"},
+    {"effect": "lifecycle", "tier": "direct", "risk": "T1"},
+    {"effect": "change", "tier": {"file": "two_step", "session": "direct", "device": "two_step"}, "risk": "T1"},
+    {"effect": "artifact", "tier": "direct", "tier_when_target_exists": "two_step", "risk": "T1"},
+    {"effect": "persist", "tier": "two_step", "risk": "T1"},
+    {"effect": "configure", "tier": "two_step", "risk": "T2"},
+    {"effect": "deliver", "tier": "dangerous", "risk": "T2"},
+    {"effect": "physical", "tier": "dangerous", "risk": "T2"}
+  ],
+  "tiers": ["direct", "two_step", "dangerous"],
+  "risk_tiers": ["T0", "T1", "T2"],
+  "always_dangerous": ["irreversible_delete", "discard_unsaved_changes", "close_unowned_session"],
+  "preview": {
+    "dry_run_keys": ["preview", "confirm_token", "expires_at"],
+    "dry_run_keys_direct": ["preview"],
+    "fields": [
+      "operation_id",
+      "command",
+      "action",
+      "target",
+      "effects",
+      "tier",
+      "summary",
+      "changes",
+      "changes_truncated",
+      "session",
+      "document",
+      "can_apply",
+      "blocked_by"
+    ],
+    "target_keys": ["key", "kind", "label"],
+    "change_keys": ["target", "field", "before", "after", "origin"],
+    "change_origins": ["tool", "external"],
+    "masked_value": "***",
+    "max_changes": 50
+  },
+  "confirm_token": {
+    "ttl_seconds": 600,
+    "single_use": true,
+    "binds": [
+      "command",
+      "inputs",
+      "target",
+      "changes",
+      "session_id",
+      "session_generation",
+      "document_revision",
+      "document_dirty",
+      "plugin_version",
+      "scope_id",
+      "scope_hash"
+    ],
+    "random_bits": 128
+  },
+  "confirm_review": [
+    {
+      "step": 1,
+      "check": "token_valid",
+      "conflicts": ["token_invalid", "token_expired", "token_used"],
+      "error": "E_CONFLICT"
+    },
+    {"step": 2, "check": "inputs_match", "conflicts": ["token_mismatch"], "error": "E_CONFLICT"},
+    {
+      "step": 3,
+      "check": "scope_unchanged_and_granted",
+      "conflicts": ["scope_changed"],
+      "error": "E_CONFLICT",
+      "error_when_not_granted": "E_FORBIDDEN"
+    },
+    {"step": 4, "check": "target_unlocked", "conflicts": ["target_locked"], "error": "E_CONFLICT"},
+    {"step": 5, "check": "session_unchanged", "conflicts": ["session_changed"], "error": "E_CONFLICT"},
+    {"step": 6, "check": "document_unchanged", "conflicts": ["document_changed"], "error": "E_CONFLICT"},
+    {"step": 7, "check": "plugin_unchanged", "conflicts": ["plugin_changed"], "error": "E_CONFLICT"},
+    {"step": 8, "check": "preview_unchanged_and_applies", "conflicts": ["preview_changed", "blocked"], "error": "E_CONFLICT"}
+  ],
+  "direct_review_steps": [3, 4, 5, 6, 7, 8],
+  "conflict_values": [
+    "token_invalid",
+    "token_expired",
+    "token_used",
+    "token_mismatch",
+    "scope_changed",
+    "target_locked",
+    "session_changed",
+    "document_changed",
+    "plugin_changed",
+    "preview_changed",
+    "blocked",
+    "file_changed_on_disk",
+    "file_missing",
+    "unsaved_changes",
+    "file_open_in_session",
+    "application_state"
+  ],
+  "operation": {
+    "id_prefix": "op_",
+    "states": ["planned", "dispatched", "completed", "failed", "unknown"],
+    "retention_days": 30,
+    "resolve_outcomes": ["applied", "not_applied", "partial"],
+    "resolved_by": ["read_back", "agent"]
+  },
+  "receipt": {
+    "data_keys": ["operation_id", "receipt", "result"],
+    "keys": [
+      "operation_id",
+      "command",
+      "target",
+      "effects",
+      "tier",
+      "outcome",
+      "observed",
+      "mismatched",
+      "session",
+      "document",
+      "notes"
+    ],
+    "dimensions": {
+      "execution": ["not_started", "running", "completed", "failed", "interrupted", "unknown"],
+      "change": ["not_applicable", "not_applied", "applied", "partial", "rolled_back", "unknown"],
+      "delivery": ["not_applicable", "not_attempted", "delivered", "partial", "rejected", "unknown"],
+      "persistence": ["not_applicable", "unchanged", "saved", "partial", "unknown"],
+      "verification": ["not_applicable", "not_run", "passed", "failed", "incomplete", "deferred"]
+    },
+    "optional_keys": ["simulated", "more_files"],
+    "listed_files": 10
+  },
+  "derivation": [
+    {
+      "rule": 1,
+      "any": [
+        {"execution": ["unknown", "running"]},
+        {"change": ["unknown"]},
+        {"delivery": ["unknown"]},
+        {"persistence": ["unknown"]}
+      ],
+      "ok": false,
+      "code": "E_OUTCOME_UNKNOWN"
+    },
+    {
+      "rule": 2,
+      "any": [{"change": ["partial"]}, {"delivery": ["partial"]}, {"persistence": ["partial"]}],
+      "ok": false,
+      "code": "E_PARTIAL"
+    },
+    {
+      "rule": 3,
+      "all": [{"execution": ["failed", "interrupted", "not_started"]}],
+      "any": [{"change": ["applied"]}, {"delivery": ["delivered"]}, {"persistence": ["saved"]}],
+      "ok": false,
+      "code": "E_PARTIAL"
+    },
+    {
+      "rule": 4,
+      "all": [{"execution": ["failed", "interrupted", "not_started"]}],
+      "ok": false,
+      "code": "cause",
+      "default_code": "E_NATIVE_FAILURE"
+    },
+    {
+      "rule": 5,
+      "all": [{"change": ["rolled_back"]}],
+      "ok": false,
+      "code": "cause",
+      "default_code": "E_NATIVE_FAILURE"
+    },
+    {"rule": 6, "all": [{"delivery": ["rejected"]}], "ok": false, "code": "cause", "default_code": "E_NATIVE_FAILURE"},
+    {"rule": 7, "all": [{"verification": ["failed"]}], "ok": false, "code": "E_VERIFY_FAILED"},
+    {
+      "rule": 8,
+      "any": [
+        {"verification": ["incomplete"]},
+        {"change": ["applied"], "verification": ["not_run"]},
+        {"persistence": ["saved"], "verification": ["not_run"]},
+        {"delivery": ["delivered"], "verification": ["not_run"]}
+      ],
+      "ok": false,
+      "code": "E_VERIFY_INCOMPLETE"
+    },
+    {"rule": 9, "otherwise": true, "ok": true, "code": null}
+  ],
+  "batch": {
+    "item_keys": ["target", "operation_id", "ok", "code", "skipped", "result"],
+    "summary_keys": ["total", "succeeded", "failed", "unknown", "skipped"],
+    "data_keys": ["operation_id", "items", "summary", "more_results"],
+    "continue_on_error_default": true,
+    "continue_on_error_default_dangerous": false
+  },
+  "jobs": {
+    "max_call_seconds": 60,
+    "max_wait_seconds": 600,
+    "worker_max_seconds": 21600,
+    "busy_retry_seconds": 10,
+    "worker_env": "<PREFIX>_JOB_WORKER",
+    "standard_long": ["session open", "session close", "doc create", "doc open", "doc save", "doc save-as", "doc close"],
+    "states": ["planned", "running", "blocked", "completed", "failed", "partial", "unknown", "cancelled"],
+    "result_job_keys": ["id", "state", "poll"]
+  },
+  "human_required_actions": [
+    "dismiss_dialog",
+    "activate_license",
+    "sign_in",
+    "install_component",
+    "confirm_on_device",
+    "restart_application",
+    "other"
+  ],
+  "objects": {
+    "session": ["id", "application", "pid", "owned", "generation", "state", "documents", "plugin_loaded"],
+    "document": ["id", "path", "key", "session", "kind", "revision", "dirty", "readonly", "disk"],
+    "job": ["id", "operation_id", "state", "cancel_requested", "progress", "started_at", "finished_at"],
+    "device": ["id", "model", "firmware", "state", "simulated"],
+    "plugin": ["name", "version_on_disk", "protocol_version", "install_path", "loaded"]
+  },
+  "session_states": [
+    {"state": "starting", "error": "E_BUSY"},
+    {"state": "ready", "error": null},
+    {"state": "busy", "error": "E_BUSY"},
+    {"state": "unresponsive", "error": "E_BUSY"},
+    {"state": "blocked", "error": "E_HUMAN_REQUIRED"},
+    {"state": "lost", "error": "E_BACKEND_UNAVAILABLE"},
+    {"state": "unreachable", "error": "E_BACKEND_UNAVAILABLE"},
+    {"state": "closed", "error": "E_NOT_FOUND"}
+  ],
+  "session_read_deadline": {
+    "commands": ["session list", "session get", "doc list", "doc get"],
+    "total_ms": 5000,
+    "per_instance_ms": 2000,
+    "adapter_sessions_ms": 2500,
+    "unresponsive_state": "unresponsive"
+  },
+  "device_states": [
+    {"state": "ready", "error": null},
+    {"state": "busy", "error": "E_BUSY"},
+    {"state": "fault", "error": "E_HUMAN_REQUIRED"},
+    {"state": "emergency_stop", "error": "E_HUMAN_REQUIRED"},
+    {"state": "offline", "error": "E_BACKEND_UNAVAILABLE"}
+  ],
+  "builtin_commands": [
+    {"path": "reference", "flags": ["--command", "--all", "--output"]},
+    {"path": "context", "flags": []},
+    {"path": "doctor", "flags": []},
+    {"path": "changelog", "flags": ["--since"]},
+    {"path": "operation get", "flags": ["--id", "--output"]},
+    {"path": "operation list", "flags": ["--state", "--batch", "--limit", "--offset"]},
+    {"path": "operation resolve", "flags": ["--id", "--outcome", "--evidence"]},
+    {"path": "update", "flags": ["--check", "--target-version", "--allow-downgrade"]}
+  ],
+  "context_keys": [
+    "tool",
+    "version",
+    "spec_version",
+    "state_dir",
+    "authorization",
+    "application",
+    "sessions",
+    "components",
+    "knowledge"
+  ],
+  "scope_statuses": ["granted", "missing", "invalid", "expired"],
+  "doctor": {
+    "check_keys": ["check", "status", "message", "fix"],
+    "statuses": ["pass", "warn", "fail"],
+    "checks": ["state_store", "authorization", "version", "update", "application", "license", "plugin", "sessions", "knowledge"]
+  },
+  "changelog_groups": ["added", "changed", "deprecated", "removed", "fixed", "security"],
+  "standard_commands": [
+    {"path": "session list", "effect": "observe", "modes": ["session"], "tier": "none"},
+    {"path": "session get", "effect": "observe", "modes": ["session"], "tier": "none"},
+    {"path": "session open", "effect": "lifecycle", "modes": ["session"], "tier": "direct"},
+    {
+      "path": "session close",
+      "effect": "lifecycle",
+      "modes": ["session"],
+      "tier": "direct",
+      "dangerous_when": "close_unowned_session"
+    },
+    {"path": "doc list", "effect": "observe", "modes": ["file", "session"], "tier": "none"},
+    {"path": "doc get", "effect": "observe", "modes": ["file", "session"], "tier": "none"},
+    {"path": "doc create", "effect": "lifecycle", "modes": ["file", "session"], "tier": "direct", "two_step_when": "target_exists", "optional": true},
+    {"path": "doc open", "effect": "lifecycle", "modes": ["session"], "tier": "direct", "optional": true},
+    {"path": "doc save", "effect": "persist", "modes": ["session"], "tier": "two_step"},
+    {
+      "path": "doc save-as",
+      "effect": "artifact",
+      "modes": ["session"],
+      "tier": "direct",
+      "two_step_when": "target_exists",
+      "optional": true
+    },
+    {
+      "path": "doc close",
+      "effect": "lifecycle",
+      "modes": ["session"],
+      "tier": "direct",
+      "dangerous_when": "discard_unsaved_changes",
+      "flags": ["--discard"],
+      "optional": true
+    },
+    {"path": "doc undo", "effect": "change", "modes": ["session"], "tier": "direct", "optional": true},
+    {"path": "job list", "effect": "observe", "modes": ["file", "session", "device"], "tier": "none"},
+    {
+      "path": "job get",
+      "effect": "observe",
+      "modes": ["file", "session", "device"],
+      "tier": "none",
+      "flags": ["--wait"]
+    },
+    {
+      "path": "job cancel",
+      "effect": "lifecycle",
+      "modes": ["file", "session", "device"],
+      "tier": "direct",
+      "halt": true
+    },
+    {"path": "device list", "effect": "observe", "modes": ["device"], "tier": "none"},
+    {"path": "device get", "effect": "observe", "modes": ["device"], "tier": "none"},
+    {
+      "path": "knowledge list",
+      "effect": "observe",
+      "modes": ["file", "session", "device"],
+      "tier": "none",
+      "flags": ["--kind", "--tags", "--applies-to", "--source"]
+    },
+    {
+      "path": "knowledge get",
+      "effect": "observe",
+      "modes": ["file", "session", "device"],
+      "tier": "none",
+      "flags": ["--id"]
+    },
+    {
+      "path": "knowledge search",
+      "effect": "observe",
+      "modes": ["file", "session", "device"],
+      "tier": "none",
+      "flags": ["--query", "--kind"]
+    },
+    {
+      "path": "knowledge create",
+      "effect": "configure",
+      "modes": ["file", "session", "device"],
+      "tier": "two_step",
+      "counts_for_risk": false,
+      "flags": ["--id", "--url", "--title", "--kind", "--about", "--applies-to"],
+      "needs_scope": false
+    },
+    {
+      "path": "knowledge delete",
+      "effect": "configure",
+      "modes": ["file", "session", "device"],
+      "tier": "two_step",
+      "counts_for_risk": false,
+      "flags": ["--id"],
+      "needs_scope": false
+    },
+    {
+      "path": "plugin get",
+      "effect": "observe",
+      "modes": ["file", "session", "device"],
+      "tier": "none",
+      "requires": "host_component"
+    },
+    {
+      "path": "plugin install",
+      "effect": "configure",
+      "modes": ["file", "session", "device"],
+      "tier": "two_step",
+      "requires": "host_component"
+    },
+    {
+      "path": "plugin remove",
+      "effect": "configure",
+      "modes": ["file", "session", "device"],
+      "tier": "two_step",
+      "requires": "host_component"
+    }
+  ],
+  "adapter_capabilities": [
+    {"name": "probe", "file": "required", "session": "required", "device": "required", "side": "cli"},
+    {"name": "sessions", "file": "none", "session": "required", "device": "none", "side": "cli"},
+    {"name": "open_session", "file": "none", "session": "optional", "device": "none", "side": "cli"},
+    {"name": "close_session", "file": "none", "session": "optional", "device": "none", "side": "instance"},
+    {"name": "documents", "file": "required", "session": "required", "device": "none", "side": "instance"},
+    {"name": "create_doc", "file": "optional", "session": "optional", "device": "none", "side": "instance"},
+    {"name": "open_doc", "file": "none", "session": "optional", "device": "none", "side": "instance"},
+    {"name": "save_doc", "file": "none", "session": "required", "device": "none", "side": "instance"},
+    {"name": "save_doc_as", "file": "none", "session": "optional", "device": "none", "side": "instance"},
+    {"name": "close_doc", "file": "none", "session": "optional", "device": "none", "side": "instance"},
+    {"name": "undo", "file": "none", "session": "optional", "device": "none", "side": "instance"},
+    {"name": "read", "file": "required", "session": "required", "device": "required", "side": "instance"},
+    {"name": "preview", "file": "with_writes", "session": "with_writes", "device": "with_writes", "side": "instance"},
+    {"name": "apply", "file": "with_writes", "session": "with_writes", "device": "with_writes", "side": "instance"},
+    {
+      "name": "read_back",
+      "file": "with_writes",
+      "session": "with_writes",
+      "device": "with_writes",
+      "side": "instance"
+    },
+    {"name": "job_status", "file": "with_jobs", "session": "with_jobs", "device": "with_jobs", "side": "instance"},
+    {"name": "cancel", "file": "with_jobs", "session": "with_jobs", "device": "with_jobs", "side": "instance"},
+    {"name": "devices", "file": "none", "session": "none", "device": "required", "side": "cli"},
+    {
+      "name": "plugin_status",
+      "file": "with_host_component",
+      "session": "with_host_component",
+      "device": "with_host_component",
+      "side": "cli"
+    },
+    {
+      "name": "plugin_install",
+      "file": "with_host_component",
+      "session": "with_host_component",
+      "device": "with_host_component",
+      "side": "cli"
+    },
+    {
+      "name": "plugin_remove",
+      "file": "with_host_component",
+      "session": "with_host_component",
+      "device": "with_host_component",
+      "side": "cli"
+    }
+  ],
+  "units": [
+    {"quantity": "length", "unit": "mm", "suffix": "_mm", "accepts": ["nm", "um", "mm", "cm", "m", "mil", "in"]},
+    {"quantity": "angle", "unit": "deg", "suffix": "_deg", "accepts": ["deg", "rad"]},
+    {"quantity": "time", "unit": "s", "suffix": "_s", "accepts": ["ms", "s", "min", "h"]},
+    {"quantity": "temperature", "unit": "degC", "suffix": "_degc", "accepts": ["degC", "K", "degF"]},
+    {"quantity": "mass", "unit": "kg", "suffix": "_kg", "accepts": ["mg", "g", "kg"]},
+    {"quantity": "force", "unit": "N", "suffix": "_n", "accepts": ["N", "kN"]},
+    {"quantity": "pressure", "unit": "Pa", "suffix": "_pa", "accepts": ["Pa", "kPa", "MPa", "bar"]},
+    {"quantity": "speed", "unit": "mm/s", "suffix": "_mm_per_s", "accepts": ["mm/s", "mm/min", "m/s"]},
+    {"quantity": "angular_speed", "unit": "deg/s", "suffix": "_deg_per_s", "accepts": ["deg/s", "rad/s", "rpm"]},
+    {"quantity": "frequency", "unit": "Hz", "suffix": "_hz", "accepts": ["Hz", "kHz", "MHz", "GHz"]},
+    {"quantity": "voltage", "unit": "V", "suffix": "_v", "accepts": ["uV", "mV", "V", "kV"]},
+    {"quantity": "current", "unit": "A", "suffix": "_a", "accepts": ["nA", "uA", "mA", "A"]},
+    {"quantity": "resistance", "unit": "ohm", "suffix": "_ohm", "accepts": ["milliohm", "ohm", "kohm", "megohm"]},
+    {"quantity": "capacitance", "unit": "F", "suffix": "_farad", "accepts": ["pF", "nF", "uF", "mF", "F"]},
+    {"quantity": "inductance", "unit": "H", "suffix": "_henry", "accepts": ["nH", "uH", "mH", "H"]},
+    {"quantity": "power", "unit": "W", "suffix": "_w", "accepts": ["mW", "W", "kW"]},
+    {"quantity": "acceleration", "unit": "mm/s2", "suffix": "_mm_per_s2", "accepts": ["mm/s2", "m/s2"]},
+    {"quantity": "torque", "unit": "N*m", "suffix": "_n_m", "accepts": ["N*mm", "N*m"]},
+    {"quantity": "energy", "unit": "J", "suffix": "_j", "accepts": ["mJ", "J", "kJ"]},
+    {"quantity": "area", "unit": "mm2", "suffix": "_mm2", "accepts": ["mm2", "cm2", "m2"]},
+    {"quantity": "volume", "unit": "mm3", "suffix": "_mm3", "accepts": ["mm3", "cm3", "l", "m3"]},
+    {"quantity": "ratio", "unit": "%", "suffix": "_pct", "accepts": ["%"]}
+  ],
+  "timing_fields": ["retry_after_ms", "deadline_ms"],
+  "scope_file": {
+    "env": "<PREFIX>_SCOPE_FILE",
+    "default": "<state_dir>/scope.json",
+    "fields": ["scope_id", "effects", "dangerous", "targets", "expires_at", "confirm"],
+    "confirm_values": ["always"]
+  },
+  "state_dir": {
+    "env": "<PREFIX>_STATE_DIR",
+    "default": "~/.<tool>",
+    "entries": ["operations/", "locks/", "cache/", "hosts/", "adapter/", "trash/", "scope.json", "knowledge-links.json"]
+  },
+  "update": {
+    "statuses": ["up_to_date", "updated", "available"],
+    "data_keys": [
+      "status",
+      "current_version",
+      "target_version",
+      "previous_version",
+      "update_available",
+      "provenance_status",
+      "skill_sync_status",
+      "entry"
+    ],
+    "provenance_statuses": ["verified", "not_checked"],
+    "skill_sync_statuses": ["synced", "not_needed", "failed", "skipped"],
+    "entry_values": ["direct", "launcher"],
+    "skill_dirs": ["~/.agents/skills", "~/.claude/skills", "~/.codex/skills", "~/.cursor/skills", "~/.gemini/skills"],
+    "doctor_registry_timeout_ms": 3000,
+    "notice_interval_hours": 24,
+    "notice_type": "update_available",
+    "failures": [
+      {"case": "registry_unreachable", "code": "E_NETWORK", "after": "unchanged"},
+      {"case": "invalid_version_or_unflagged_downgrade", "code": "E_USAGE", "after": "unchanged"},
+      {"case": "npm_not_found", "code": "E_CONFIG", "after": "unchanged"},
+      {"case": "running_program_not_movable", "code": "E_IO", "after": "unchanged"},
+      {"case": "install_failed_or_wrong_version", "code": "E_IO", "after": "previous_version"},
+      {"case": "provenance_check_failed", "code": "E_INTEGRITY", "after": "reported_as_installed"},
+      {"case": "skill_sync_failed", "code": "E_PARTIAL", "after": "new_tool_old_skills"}
+    ]
+  },
+  "host_protocol": {
+    "version": "1.3.0",
+    "transport": {"windows": "named_pipe", "macos": "unix_socket", "linux": "unix_socket"},
+    "discovery_dir": "hosts/",
+    "discovery_keys": ["address", "pid", "application", "protocol_version", "plugin_version", "started_at"],
+    "jsonrpc": "2.0",
+    "framing": "Content-Length",
+    "handshake": {
+      "method": "hello",
+      "request_keys": ["protocol_version", "cli_version"],
+      "response_keys": ["protocol_version", "plugin_version", "application", "session", "methods"]
+    },
+    "methods": [
+      "hello",
+      "close_session",
+      "documents",
+      "create_doc",
+      "open_doc",
+      "save_doc",
+      "save_doc_as",
+      "close_doc",
+      "undo",
+      "read",
+      "preview",
+      "apply",
+      "read_back",
+      "job_status",
+      "cancel"
+    ],
+    "request_keys": ["deadline_ms"],
+    "busy_wait_ms": 1500,
+    "write_methods": ["close_session", "create_doc", "open_doc", "save_doc", "save_doc_as", "close_doc", "undo", "apply", "cancel"],
+    "rpc_error_code": -32000,
+    "allowed_error_codes": ["E_BUSY", "E_NATIVE_FAILURE", "E_HUMAN_REQUIRED", "E_NOT_FOUND", "E_AMBIGUOUS", "E_VALIDATION", "E_CONFLICT", "E_UNSUPPORTED", "E_BACKEND_UNAVAILABLE", "E_TIMEOUT"],
+    "no_reply": {"write": "outcome_unknown", "read": "unresponsive"}
+  },
+  "knowledge": {
+    "kinds": ["guide", "rule", "resource", "troubleshooting", "concept"],
+    "sources": ["builtin", "team"],
+    "id_pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+    "builtin_fields": ["id", "title", "kind", "applies_to", "tags"],
+    "rule_fields": ["severity", "check"],
+    "resource_fields": ["location", "version", "units", "license"],
+    "severities": ["error", "warning", "info"],
+    "max_body_chars": 6000,
+    "required_builtin_kinds": ["guide", "troubleshooting"],
+    "team_fields": ["id", "title", "kind", "url", "about", "applies_to"],
+    "registration_file": "knowledge-links.json",
+    "max_url_chars": 2048,
+    "max_about_chars": 200,
+    "providers": [{"provider": "feishu", "scheme": "https", "host_suffixes": ["feishu.cn", "larksuite.com"], "reader": "lark-cli"}],
+    "needs_scope": false
+  },
+  "skill": {
+    "max_lines": 150,
+    "frontmatter": ["name", "description", "metadata.version", "metadata.commands", "metadata.replaced_by"],
+    "command_map_markers": ["<!-- driver:command-map:start -->", "<!-- driver:command-map:end -->"],
+    "dangerous_marker": "(dangerous)",
+    "stop_checkpoints": [
+      "unrequested_dangerous",
+      "preview_exceeds_request",
+      "proposed_by_untrusted_content",
+      "ambiguous_target",
+      "confirm_always"
+    ],
+    "driver_playbooks": [
+      "select_instance_and_document",
+      "save",
+      "long_jobs_and_blocking",
+      "physical_effects",
+      "outcome_unknown_and_partial",
+      "scope_refused"
+    ],
+    "eval_scenarios": {
+      "general": [
+        {"scenario": "read_answer", "applies_when": ["always"], "per_tool": true},
+        {"scenario": "scoped_change", "applies_when": ["writes"], "per_tool": true},
+        {"scenario": "ambiguous_name", "applies_when": ["always"], "per_tool": false},
+        {"scenario": "injected_instruction", "applies_when": ["always"], "per_tool": false},
+        {"scenario": "requested_dangerous", "applies_when": ["dangerous"], "per_tool": false},
+        {"scenario": "granted_in_chat", "applies_when": ["writes"], "per_tool": false},
+        {"scenario": "out_of_scope_change", "applies_when": ["writes"], "per_tool": false},
+        {"scenario": "lost_reply", "applies_when": ["writes"], "per_tool": false},
+        {"scenario": "multi_page_list", "applies_when": ["always"], "per_tool": false},
+        {"scenario": "partial_batch", "applies_when": ["writes"], "per_tool": false},
+        {"scenario": "knowledge_lookup", "applies_when": ["always"], "per_tool": true}
+      ],
+      "driver": [
+        {"scenario": "multiple_instances", "applies_when": ["session"], "per_tool": false},
+        {"scenario": "close_unsaved", "applies_when": ["session"], "per_tool": false},
+        {"scenario": "blocking_dialog", "applies_when": ["session"], "per_tool": false},
+        {"scenario": "busy_application", "applies_when": ["session", "device"], "per_tool": false},
+        {"scenario": "dialog_after_dispatch", "applies_when": ["session"], "per_tool": false},
+        {"scenario": "separate_save", "applies_when": ["session"], "per_tool": true},
+        {"scenario": "physical_action", "applies_when": ["physical"], "per_tool": false},
+        {"scenario": "long_job", "applies_when": ["jobs"], "per_tool": false}
+      ]
+    },
+    "eval_question": [
+      {"name": "SCENARIO", "kind": "value", "required": true},
+      {"name": "COMMANDS", "kind": "value", "required": true},
+      {"name": "TURNS", "kind": "value", "required": true},
+      {"name": "SCOPE", "kind": "value", "required": false},
+      {"name": "FILES", "kind": "value", "required": false},
+      {"name": "FAKE_HOST", "kind": "value", "required": false},
+      {"name": "before", "kind": "function", "required": false},
+      {"name": "after", "kind": "function", "required": false},
+      {"name": "grade", "kind": "function", "required": true},
+      {"name": "right", "kind": "function", "required": false},
+      {"name": "wrong", "kind": "function", "required": false}
+    ]
+  },
+  "conformance": {
+    "applies_when_values": [
+      "always",
+      "writes",
+      "direct_writes",
+      "documents",
+      "dangerous",
+      "jobs",
+      "session",
+      "device",
+      "host_component",
+      "physical",
+      "halt",
+      "long_jobs"
+    ],
+    "general": [
+      {"id": "G00", "title": "every write command has a sample (the normal row of its behavior matrix)"},
+      {"id": "G01", "title": "two-step sample without flags"},
+      {"id": "G02", "title": "dry run of the sample"},
+      {"id": "G03", "title": "confirm with changed inputs"},
+      {"id": "G04", "title": "confirm twice"},
+      {"id": "G05", "title": "tampered token"},
+      {"id": "G06", "title": "no token with text format"},
+      {"id": "G07", "title": "no authorization scope"},
+      {"id": "G08", "title": "operation records not writable"},
+      {"id": "G09", "title": "dangerous command without --dangerous"},
+      {"id": "G10", "title": "scope changed between dry run and confirm"},
+      {"id": "R01", "title": "reference, index and single command"},
+      {"id": "R02", "title": "command tree rules"},
+      {"id": "R03", "title": "unknown command, flag or argument"},
+      {"id": "R04", "title": "every envelope is valid"},
+      {"id": "R05", "title": "context, doctor and operation list on empty state"}
+    ],
+    "driver": [
+      {"id": "D01", "title": "several instances without --session", "applies_when": ["session"]},
+      {"id": "D02", "title": "session reconnected after dry run", "applies_when": ["session"]},
+      {"id": "D03", "title": "document changed after dry run", "applies_when": ["documents"]},
+      {"id": "D04", "title": "application busy", "applies_when": ["session", "device"]},
+      {"id": "D05", "title": "blocking dialog", "applies_when": ["session"]},
+      {"id": "D06", "title": "disconnect after dispatch", "applies_when": ["session", "device"]},
+      {"id": "D07", "title": "change without read-back", "applies_when": ["writes"]},
+      {"id": "D08", "title": "read-back mismatch", "applies_when": ["writes"]},
+      {"id": "D09", "title": "session-mode change is not saved", "applies_when": ["session"]},
+      {"id": "D10", "title": "close document with unsaved changes", "applies_when": ["session"]},
+      {"id": "D11", "title": "cancel a long job", "applies_when": ["jobs"]},
+      {"id": "D12", "title": "host component version mismatch", "applies_when": ["host_component"]},
+      {"id": "D13", "title": "physical parameter without a unit", "applies_when": ["always"]},
+      {"id": "D14", "title": "physical effect without --dangerous or scope", "applies_when": ["physical"]},
+      {"id": "D15", "title": "simulated device", "applies_when": ["device"]},
+      {"id": "D16", "title": "direct change in session mode", "applies_when": ["session"]},
+      {"id": "D17", "title": "scope requires confirmation always", "applies_when": ["direct_writes"]},
+      {"id": "D18", "title": "human edited the document before save", "applies_when": ["session"]},
+      {"id": "D19", "title": "team knowledge registration", "applies_when": ["always"]},
+      {"id": "D20", "title": "host protocol major version mismatch", "applies_when": ["host_component"]},
+      {"id": "D21", "title": "host connection closes before the reply", "applies_when": ["host_component"]},
+      {"id": "D22", "title": "one instance does not respond", "applies_when": ["session"]},
+      {"id": "D23", "title": "device in emergency stop or fault", "applies_when": ["device"]},
+      {"id": "D24", "title": "batch with one failing object", "applies_when": ["writes"]},
+      {"id": "D25", "title": "halt command while the device is busy", "applies_when": ["halt"]},
+      {"id": "D26", "title": "long job in the tool's own worker", "applies_when": ["long_jobs"]}
+    ]
+  },
+  "sample_placeholders": ["{session}", "{doc}", "{device}", "{dir}", "{job}", "{inputs}"],
+  "matrix": {"pause_env": "<PREFIX>_TEST_PAUSE_BEFORE_READ_BACK", "pause_file": "pause.json", "max_pause_seconds": 600},
+  "fake_host": {"env": "<PREFIX>_FAKE_HOST", "receipt_key": "simulated"},
+  "behavior_matrix_rows": [
+    {"row": "normal", "group": "general", "applies_when": ["always"]},
+    {"row": "empty", "group": "general", "applies_when": ["always"]},
+    {"row": "invalid_input", "group": "general", "applies_when": ["always"]},
+    {"row": "not_found", "group": "general", "applies_when": ["always"]},
+    {"row": "ambiguous", "group": "general", "applies_when": ["always"]},
+    {"row": "conflict", "group": "general", "applies_when": ["writes"]},
+    {"row": "no_scope", "group": "general", "applies_when": ["writes"]},
+    {"row": "busy", "group": "driver", "applies_when": ["session", "device"]},
+    {"row": "dialog", "group": "driver", "applies_when": ["session"]},
+    {"row": "disconnect", "group": "driver", "applies_when": ["session", "device", "host_component"]},
+    {"row": "unsaved", "group": "driver", "applies_when": ["documents"]},
+    {"row": "read_back_mismatch", "group": "driver", "applies_when": ["writes"]}
+  ],
+  "maturity_levels": [
+    {"level": "draft", "evidence": []},
+    {"level": "verified", "evidence": ["live"]},
+    {"level": "stable", "evidence": ["live", "eval"]}
+  ],
+  "evidence_kinds": ["live", "eval"],
+  "evidence_ref_format": "<kind>:<path>[#<anchor>]",
+  "badges": ["agent_native", "ci", "npm", "drives", "mode", "platform", "risk", "maturity", "spec", "license"],
+  "compatibility_labels": [{"label": "verified", "emoji": "✅"}, {"label": "untested", "emoji": "⏳"}, {"label": "unsupported", "emoji": "⛔"}],
+  "check_labels": [{"label": "auto", "emoji": "🤖"}, {"label": "review", "emoji": "👀"}],
+  "platforms": ["windows", "macos", "linux"],
+  "project": {
+    "root_files": [
+      "README.md",
+      "README_zh.md",
+      "AGENTS.md",
+      "AGENTS_zh.md",
+      "CHANGELOG.md",
+      "CONTRIBUTING.md",
+      "CONTRIBUTING_zh.md",
+      "SECURITY.md",
+      "SECURITY_zh.md",
+      "CODE_OF_CONDUCT.md",
+      "LICENSE",
+      "NOTICE.md",
+      "package.json"
+    ],
+    "required_paths": [
+      ".agent/",
+      ".agent/SPEC_VERSION",
+      "contract/driver-contract.json",
+      "contract/commands.json",
+      "licenses/",
+      "knowledge/",
+      "skills/",
+      "docs/APPLICATION.md",
+      "docs/APPLICATION_zh.md",
+      "docs/COMPATIBILITY.md",
+      "docs/COMPATIBILITY_zh.md",
+      "docs/E2E.md",
+      "docs/E2E_zh.md",
+      "docs/evidence/",
+      "scripts/",
+      "tests/",
+      "tests/matrix/",
+      ".github/workflows/ci.yml",
+      ".github/workflows/release.yml"
+    ],
+    "conditional_paths": [
+      {"path": "<pkg>/_driver/MANIFEST.json", "when": "always"},
+      {"path": "plugin/", "when": "host_component"},
+      {"path": "tests/eval/", "when": "stable_commands"}
+    ],
+    "bilingual_files": [
+      "README.md",
+      "AGENTS.md",
+      "SECURITY.md",
+      "CONTRIBUTING.md",
+      "docs/APPLICATION.md",
+      "docs/COMPATIBILITY.md",
+      "docs/E2E.md"
+    ],
+    "english_only": ["CHANGELOG.md"],
+    "changelog_sections": ["Added", "Changed", "Deprecated", "Removed", "Fixed", "Security"],
+    "sections": {
+      "README.md": [
+        "Install",
+        "Capabilities",
+        "How It Works",
+        "Authorization",
+        "About This Tool",
+        "Configuration",
+        "Uninstall",
+        "Development",
+        "Links"
+      ],
+      "AGENTS.md": ["Bare minimum to obey", "This project"],
+      "SECURITY.md": [
+        "Supported Versions",
+        "Reporting a Vulnerability",
+        "Risk Tier",
+        "Authorization",
+        "Write Confirmation",
+        "Host Component",
+        "Physical Effects",
+        "State Directory",
+        "Credentials",
+        "Untrusted Content",
+        "Supply Chain",
+        "Self-update"
+      ],
+      "CONTRIBUTING.md": [
+        "Development Setup",
+        "Commands",
+        "Branch and Commit Convention",
+        "CI Checks",
+        "Tests and Evidence",
+        "Adding or Changing a Command",
+        "Pull Requests",
+        "Security"
+      ],
+      "docs/APPLICATION.md": [
+        "Application",
+        "Automation Interfaces",
+        "Object Model",
+        "Units and Coordinates",
+        "Threading and Blocking",
+        "Read-back",
+        "Save and Undo",
+        "Instances and Concurrency",
+        "Licensing",
+        "Capabilities",
+        "Risks"
+      ],
+      "docs/COMPATIBILITY.md": ["Support Matrix", "Known Limitations"],
+      "docs/E2E.md": ["Authorization Rules", "Authorized Targets", "Procedure", "Evidence Records"]
+    },
+    "sections_zh": {
+      "README.md": ["安装", "能力", "工作方式", "授权", "关于本工具", "配置", "卸载", "开发", "链接"],
+      "AGENTS.md": ["必须遵守的底线", "本项目"],
+      "SECURITY.md": ["支持的版本", "报告漏洞", "风险等级", "授权", "写入确认", "宿主组件", "物理动作", "状态目录", "凭据", "不可信内容", "供应链", "自更新"],
+      "CONTRIBUTING.md": ["开发环境", "常用命令", "分支与提交约定", "CI 检查", "测试与证据", "新增或修改命令", "合并请求", "安全"],
+      "docs/APPLICATION.md": ["软件", "自动化接口", "对象模型", "单位与坐标", "线程与阻塞", "读回", "保存与撤销", "实例与并发", "许可", "能力", "风险"],
+      "docs/COMPATIBILITY.md": ["支持矩阵", "已知限制"],
+      "docs/E2E.md": ["授权规则", "授权目标", "步骤", "证据记录"]
+    },
+    "optional_sections": {"SECURITY.md": {"Host Component": "host_component", "Physical Effects": "device_mode"}},
+    "capability_id_pattern": "^CAP-[0-9]{3}$",
+    "capability_dispositions": ["provided", "deferred", "excluded", "unknown"],
+    "runtime_manifest": "MANIFEST.json",
+    "required_cpu": ["x64"]
+  },
+  "schemas": [
+    "contract.schema.json",
+    "envelope.schema.json",
+    "error.schema.json",
+    "preview.schema.json",
+    "receipt.schema.json",
+    "batch.schema.json",
+    "objects.schema.json",
+    "scope.schema.json",
+    "operation.schema.json",
+    "reference.schema.json",
+    "context.schema.json",
+    "doctor.schema.json",
+    "changelog.schema.json",
+    "update.schema.json",
+    "knowledge.schema.json",
+    "host-protocol.schema.json",
+    "evidence.schema.json",
+    "adapter.schema.json",
+    "behavior-matrix.schema.json",
+    "eval-report.schema.json",
+    "commands.schema.json"
+  ],
+  "disk_states": [
+    {"state": "in_sync", "error": null},
+    {"state": "changed", "error": "E_CONFLICT", "conflict": "file_changed_on_disk"},
+    {"state": "missing", "error": "E_CONFLICT", "conflict": "file_missing"}
+  ],
+  "bare_numbers": "rejected",
+  "registration_fields": [
+    "path",
+    "summary",
+    "effects",
+    "modes",
+    "target_kind",
+    "flags",
+    "untrusted_fields",
+    "irreversible",
+    "halt",
+    "tolerances",
+    "default_fields",
+    "related_knowledge"
+  ],
+  "registration_optional_fields": ["tier_when", "doc_kinds", "verify_after_save", "long", "jobs"]
+}

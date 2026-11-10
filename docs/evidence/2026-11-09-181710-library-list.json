@@ -1,0 +1,70 @@
+{
+  "kind": "live",
+  "tool": "kicad-cli",
+  "tool_version": "1.1.0",
+  "commit": "ca8457790854",
+  "application": {
+    "name": "KiCad",
+    "version": "10.0.6"
+  },
+  "os": "Windows-11-10.0.26300-SP0",
+  "platform": "windows",
+  "recorded_at": "2026-11-09T18:17:10Z",
+  "targets": [
+    "file:///D:/driver-work/kicad-cli/targets/"
+  ],
+  "runs": [
+    {
+      "command": "library list",
+      "arguments": [
+        "--doc",
+        "D:\\driver-work\\kicad-cli\\targets\\schmitt\\schmitt.kicad_pro"
+      ],
+      "exit": 0,
+      "result": "pass",
+      "matrix_row": "normal",
+      "mode": "file",
+      "fingerprint": "68a9c0dc5962321919e5ff5859d03b9e42ad54a44c62ffe58948ef9d2e941852"
+    },
+    {
+      "command": "library list",
+      "arguments": [
+        "--doc",
+        "D:\\driver-work\\kicad-cli\\targets\\schmitt\\schmitt.kicad_pro",
+        "--query",
+        "no-library-has-this-name"
+      ],
+      "exit": 0,
+      "result": "pass",
+      "matrix_row": "empty",
+      "mode": "file",
+      "fingerprint": "68a9c0dc5962321919e5ff5859d03b9e42ad54a44c62ffe58948ef9d2e941852"
+    },
+    {
+      "command": "library list",
+      "arguments": [
+        "--doc",
+        "D:\\driver-work\\kicad-cli\\targets\\schmitt\\schmitt.kicad_pro",
+        "--limit",
+        "many"
+      ],
+      "exit": 2,
+      "result": "pass",
+      "matrix_row": "invalid_input",
+      "mode": "file",
+      "fingerprint": "68a9c0dc5962321919e5ff5859d03b9e42ad54a44c62ffe58948ef9d2e941852"
+    },
+    {
+      "command": "library list",
+      "arguments": [
+        "--doc",
+        "D:\\driver-work\\kicad-cli\\targets\\runs\\library-list-1794248227313674900/missing.kicad_pro"
+      ],
+      "exit": 3,
+      "result": "pass",
+      "matrix_row": "not_found",
+      "mode": "file",
+      "fingerprint": "68a9c0dc5962321919e5ff5859d03b9e42ad54a44c62ffe58948ef9d2e941852"
+    }
+  ]
+}

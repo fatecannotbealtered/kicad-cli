@@ -1,0 +1,9 @@
+{
+  "name": "PRACTICE_PAD2",
+  "body_mm": [2.0, 1.2],
+  "courtyard_mm": 0.25,
+  "pads": [
+    {"number": "1", "at_mm": [-0.75, 0], "size_mm": [0.8, 1.0]},
+    {"number": "2", "at_mm": [0.75, 0], "size_mm": [0.8, 1.0]}
+  ]
+}

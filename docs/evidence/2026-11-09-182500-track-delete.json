@@ -1,0 +1,32 @@
+{
+  "kind": "live",
+  "tool": "kicad-cli",
+  "tool_version": "1.1.0",
+  "commit": "ca8457790854",
+  "application": {
+    "name": "KiCad",
+    "version": "10.0.6"
+  },
+  "os": "Windows-11-10.0.26300-SP0",
+  "platform": "windows",
+  "recorded_at": "2026-11-09T18:25:00Z",
+  "targets": [
+    "file:///D:/driver-work/kicad-cli/targets/"
+  ],
+  "runs": [
+    {
+      "command": "track delete",
+      "arguments": [
+        "--doc",
+        "D:\\driver-work\\kicad-cli\\targets\\schmitt\\schmitt.kicad_pcb",
+        "--id",
+        "9a3bc855-a72e-5f2c-8bb6-5acd7dc3e32c"
+      ],
+      "exit": 6,
+      "result": "pass",
+      "matrix_row": "conflict",
+      "mode": "file",
+      "fingerprint": "00e937a722825dfde15c7845c41dbb571a5535b16f334715d04be7be53dd62c4"
+    }
+  ]
+}

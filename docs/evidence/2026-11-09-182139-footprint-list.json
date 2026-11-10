@@ -1,0 +1,70 @@
+{
+  "kind": "live",
+  "tool": "kicad-cli",
+  "tool_version": "1.1.0",
+  "commit": "ca8457790854",
+  "application": {
+    "name": "KiCad",
+    "version": "10.0.6"
+  },
+  "os": "Windows-11-10.0.26300-SP0",
+  "platform": "windows",
+  "recorded_at": "2026-11-09T18:21:39Z",
+  "targets": [
+    "file:///D:/driver-work/kicad-cli/targets/"
+  ],
+  "runs": [
+    {
+      "command": "footprint list",
+      "arguments": [
+        "--doc",
+        "D:\\driver-work\\kicad-cli\\targets\\schmitt\\schmitt.kicad_pcb"
+      ],
+      "exit": 0,
+      "result": "pass",
+      "matrix_row": "normal",
+      "mode": "file",
+      "fingerprint": "e077266dd38e67edbd8043b682cc105c0c8f31c7962a169c50f16e24ebb16da6"
+    },
+    {
+      "command": "footprint list",
+      "arguments": [
+        "--doc",
+        "D:\\driver-work\\kicad-cli\\targets\\schmitt\\schmitt.kicad_pcb",
+        "--query",
+        "no-footprint-has-this"
+      ],
+      "exit": 0,
+      "result": "pass",
+      "matrix_row": "empty",
+      "mode": "file",
+      "fingerprint": "e077266dd38e67edbd8043b682cc105c0c8f31c7962a169c50f16e24ebb16da6"
+    },
+    {
+      "command": "footprint list",
+      "arguments": [
+        "--doc",
+        "D:\\driver-work\\kicad-cli\\targets\\schmitt\\schmitt.kicad_pcb",
+        "--limit",
+        "many"
+      ],
+      "exit": 2,
+      "result": "pass",
+      "matrix_row": "invalid_input",
+      "mode": "file",
+      "fingerprint": "e077266dd38e67edbd8043b682cc105c0c8f31c7962a169c50f16e24ebb16da6"
+    },
+    {
+      "command": "footprint list",
+      "arguments": [
+        "--doc",
+        "D:\\driver-work\\kicad-cli\\targets\\runs\\footprint-list-1794248496982095200/missing.kicad_pcb"
+      ],
+      "exit": 3,
+      "result": "pass",
+      "matrix_row": "not_found",
+      "mode": "file",
+      "fingerprint": "e077266dd38e67edbd8043b682cc105c0c8f31c7962a169c50f16e24ebb16da6"
+    }
+  ]
+}

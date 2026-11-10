@@ -1,0 +1,34 @@
+{
+  "kind": "live",
+  "tool": "kicad-cli",
+  "tool_version": "1.1.0",
+  "commit": "ca8457790854",
+  "application": {
+    "name": "KiCad",
+    "version": "10.0.6"
+  },
+  "os": "Windows-11-10.0.26300-SP0",
+  "platform": "windows",
+  "recorded_at": "2026-11-09T18:19:49Z",
+  "targets": [
+    "file:///D:/driver-work/kicad-cli/targets/"
+  ],
+  "runs": [
+    {
+      "command": "pin update",
+      "arguments": [
+        "--doc",
+        "D:\\driver-work\\kicad-cli\\targets\\schmitt-sch\\schmitt.kicad_sch",
+        "--id",
+        "U1.1",
+        "--net",
+        "SPARE"
+      ],
+      "exit": 6,
+      "result": "pass",
+      "matrix_row": "conflict",
+      "mode": "file",
+      "fingerprint": "ce04875ae9e220333005f49dfad223b4d938e0d1d7844ef819d1cb3c378b53a8"
+    }
+  ]
+}

@@ -1,0 +1,100 @@
+{
+  "kind": "live",
+  "tool": "kicad-cli",
+  "tool_version": "1.1.0",
+  "commit": "ca8457790854",
+  "application": {
+    "name": "KiCad",
+    "version": "10.0.6"
+  },
+  "os": "Windows-11-10.0.26300-SP0",
+  "platform": "windows",
+  "recorded_at": "2026-11-09T18:19:42Z",
+  "targets": [
+    "file:///D:/driver-work/kicad-cli/targets/"
+  ],
+  "runs": [
+    {
+      "command": "pin update",
+      "arguments": [
+        "--doc",
+        "D:\\driver-work\\kicad-cli\\targets\\schmitt-sch\\schmitt.kicad_sch",
+        "--id",
+        "U1.1",
+        "--net",
+        "SPARE"
+      ],
+      "exit": 0,
+      "result": "pass",
+      "matrix_row": "normal",
+      "mode": "file",
+      "fingerprint": "ce04875ae9e220333005f49dfad223b4d938e0d1d7844ef819d1cb3c378b53a8"
+    },
+    {
+      "command": "pin update",
+      "arguments": [
+        "--doc",
+        "D:\\driver-work\\kicad-cli\\targets\\schmitt-sch\\schmitt.kicad_sch",
+        "--id",
+        "U1.1",
+        "--ids",
+        "",
+        "--net",
+        "SPARE"
+      ],
+      "exit": 2,
+      "result": "pass",
+      "matrix_row": "empty",
+      "mode": "file",
+      "fingerprint": "ce04875ae9e220333005f49dfad223b4d938e0d1d7844ef819d1cb3c378b53a8"
+    },
+    {
+      "command": "pin update",
+      "arguments": [
+        "--doc",
+        "D:\\driver-work\\kicad-cli\\targets\\schmitt-sch\\schmitt.kicad_sch",
+        "--id",
+        "U1",
+        "--net",
+        "SPARE"
+      ],
+      "exit": 2,
+      "result": "pass",
+      "matrix_row": "invalid_input",
+      "mode": "file",
+      "fingerprint": "ce04875ae9e220333005f49dfad223b4d938e0d1d7844ef819d1cb3c378b53a8"
+    },
+    {
+      "command": "pin update",
+      "arguments": [
+        "--doc",
+        "D:\\driver-work\\kicad-cli\\targets\\schmitt-sch\\schmitt.kicad_sch",
+        "--id",
+        "U1.9",
+        "--net",
+        "SPARE"
+      ],
+      "exit": 3,
+      "result": "pass",
+      "matrix_row": "not_found",
+      "mode": "file",
+      "fingerprint": "ce04875ae9e220333005f49dfad223b4d938e0d1d7844ef819d1cb3c378b53a8"
+    },
+    {
+      "command": "pin update",
+      "arguments": [
+        "--doc",
+        "D:\\driver-work\\kicad-cli\\targets\\schmitt-sch\\schmitt.kicad_sch",
+        "--id",
+        "U1.1",
+        "--net",
+        "SPARE"
+      ],
+      "exit": 4,
+      "result": "pass",
+      "matrix_row": "no_scope",
+      "mode": "file",
+      "fingerprint": "ce04875ae9e220333005f49dfad223b4d938e0d1d7844ef819d1cb3c378b53a8"
+    }
+  ]
+}

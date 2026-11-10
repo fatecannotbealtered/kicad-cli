@@ -1,0 +1,92 @@
+{
+  "kind": "live",
+  "tool": "kicad-cli",
+  "tool_version": "1.1.0",
+  "commit": "ca8457790854",
+  "application": {
+    "name": "KiCad",
+    "version": "10.0.6"
+  },
+  "os": "Windows-11-10.0.26300-SP0",
+  "platform": "windows",
+  "recorded_at": "2026-11-09T18:17:14Z",
+  "targets": [
+    "file:///D:/driver-work/kicad-cli/targets/"
+  ],
+  "runs": [
+    {
+      "command": "library get",
+      "arguments": [
+        "--doc",
+        "D:\\driver-work\\kicad-cli\\targets\\schmitt\\schmitt.kicad_pro",
+        "--id",
+        "LocalLogic",
+        "--type",
+        "symbol"
+      ],
+      "exit": 0,
+      "result": "pass",
+      "matrix_row": "normal",
+      "mode": "file",
+      "fingerprint": "90eae2a420aa02e1926fd6880d191d0a6e146217366fac3e3c0bf964dc99d007"
+    },
+    {
+      "command": "library get",
+      "arguments": [
+        "--doc",
+        "D:\\driver-work\\kicad-cli\\targets\\schmitt\\schmitt.kicad_pro",
+        "--id",
+        "LocalLogic",
+        "--type",
+        "symbol",
+        "--query",
+        "no-symbol-has-this-name"
+      ],
+      "exit": 0,
+      "result": "pass",
+      "matrix_row": "empty",
+      "mode": "file",
+      "fingerprint": "90eae2a420aa02e1926fd6880d191d0a6e146217366fac3e3c0bf964dc99d007"
+    },
+    {
+      "command": "library get",
+      "arguments": [
+        "--doc",
+        "D:\\driver-work\\kicad-cli\\targets\\schmitt\\schmitt.kicad_pro"
+      ],
+      "exit": 2,
+      "result": "pass",
+      "matrix_row": "invalid_input",
+      "mode": "file",
+      "fingerprint": "90eae2a420aa02e1926fd6880d191d0a6e146217366fac3e3c0bf964dc99d007"
+    },
+    {
+      "command": "library get",
+      "arguments": [
+        "--doc",
+        "D:\\driver-work\\kicad-cli\\targets\\schmitt\\schmitt.kicad_pro",
+        "--id",
+        "NoSuchLibrary"
+      ],
+      "exit": 3,
+      "result": "pass",
+      "matrix_row": "not_found",
+      "mode": "file",
+      "fingerprint": "90eae2a420aa02e1926fd6880d191d0a6e146217366fac3e3c0bf964dc99d007"
+    },
+    {
+      "command": "library get",
+      "arguments": [
+        "--doc",
+        "D:\\driver-work\\kicad-cli\\targets\\schmitt\\schmitt.kicad_pro",
+        "--id",
+        "LocalLogic"
+      ],
+      "exit": 2,
+      "result": "pass",
+      "matrix_row": "ambiguous",
+      "mode": "file",
+      "fingerprint": "90eae2a420aa02e1926fd6880d191d0a6e146217366fac3e3c0bf964dc99d007"
+    }
+  ]
+}

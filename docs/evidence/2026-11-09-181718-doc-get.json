@@ -1,0 +1,56 @@
+{
+  "kind": "live",
+  "tool": "kicad-cli",
+  "tool_version": "1.1.0",
+  "commit": "ca8457790854",
+  "application": {
+    "name": "KiCad",
+    "version": "10.0.6"
+  },
+  "os": "Windows-11-10.0.26300-SP0",
+  "platform": "windows",
+  "recorded_at": "2026-11-09T18:17:18Z",
+  "targets": [
+    "file:///D:/driver-work/kicad-cli/targets/"
+  ],
+  "runs": [
+    {
+      "command": "doc get",
+      "arguments": [
+        "--doc",
+        "D:\\driver-work\\kicad-cli\\targets\\schmitt\\schmitt.kicad_sch"
+      ],
+      "exit": 0,
+      "result": "pass",
+      "matrix_row": "normal",
+      "mode": "file",
+      "fingerprint": "691718f765c856200d0eff7d506d32ca9412477c00963eab4916d1a581dc374c"
+    },
+    {
+      "command": "doc get",
+      "arguments": [
+        "--doc",
+        "D:\\driver-work\\kicad-cli\\targets\\schmitt\\schmitt.kicad_sch",
+        "--id",
+        "x"
+      ],
+      "exit": 2,
+      "result": "pass",
+      "matrix_row": "invalid_input",
+      "mode": "file",
+      "fingerprint": "691718f765c856200d0eff7d506d32ca9412477c00963eab4916d1a581dc374c"
+    },
+    {
+      "command": "doc get",
+      "arguments": [
+        "--doc",
+        "D:\\driver-work\\kicad-cli\\targets\\runs\\doc-get-1794248235528502700/no-such-folder/missing.kicad_pcb"
+      ],
+      "exit": 3,
+      "result": "pass",
+      "matrix_row": "not_found",
+      "mode": "file",
+      "fingerprint": "691718f765c856200d0eff7d506d32ca9412477c00963eab4916d1a581dc374c"
+    }
+  ]
+}

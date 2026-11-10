@@ -1,0 +1,3188 @@
+(export
+	(version "E")
+	(design
+		(source "rules.kicad_sch")
+		(date "")
+		(tool "Eeschema 10.0.6")
+		(sheet
+			(number "1")
+			(name "/")
+			(tstamps "/")
+			(title_block
+				(title)
+				(company)
+				(rev)
+				(date)
+				(source "rules.kicad_sch")
+				(comment
+					(number "1")
+					(value "")
+				)
+				(comment
+					(number "2")
+					(value "")
+				)
+				(comment
+					(number "3")
+					(value "")
+				)
+				(comment
+					(number "4")
+					(value "")
+				)
+				(comment
+					(number "5")
+					(value "")
+				)
+				(comment
+					(number "6")
+					(value "")
+				)
+				(comment
+					(number "7")
+					(value "")
+				)
+				(comment
+					(number "8")
+					(value "")
+				)
+				(comment
+					(number "9")
+					(value "")
+				)
+			)
+		)
+		(sheet
+			(number "2")
+			(name "/amp_a/")
+			(tstamps "/8a94a5bb-398d-5e29-be3a-6b95c4bb4853/")
+			(title_block
+				(title)
+				(company)
+				(rev)
+				(date)
+				(source "rules_child.kicad_sch")
+				(comment
+					(number "1")
+					(value "")
+				)
+				(comment
+					(number "2")
+					(value "")
+				)
+				(comment
+					(number "3")
+					(value "")
+				)
+				(comment
+					(number "4")
+					(value "")
+				)
+				(comment
+					(number "5")
+					(value "")
+				)
+				(comment
+					(number "6")
+					(value "")
+				)
+				(comment
+					(number "7")
+					(value "")
+				)
+				(comment
+					(number "8")
+					(value "")
+				)
+				(comment
+					(number "9")
+					(value "")
+				)
+			)
+		)
+		(sheet
+			(number "3")
+			(name "/amp_b/")
+			(tstamps "/678e2738-f7ed-51ac-a920-71d922eb8ecb/")
+			(title_block
+				(title)
+				(company)
+				(rev)
+				(date)
+				(source "rules_child.kicad_sch")
+				(comment
+					(number "1")
+					(value "")
+				)
+				(comment
+					(number "2")
+					(value "")
+				)
+				(comment
+					(number "3")
+					(value "")
+				)
+				(comment
+					(number "4")
+					(value "")
+				)
+				(comment
+					(number "5")
+					(value "")
+				)
+				(comment
+					(number "6")
+					(value "")
+				)
+				(comment
+					(number "7")
+					(value "")
+				)
+				(comment
+					(number "8")
+					(value "")
+				)
+				(comment
+					(number "9")
+					(value "")
+				)
+			)
+		)
+	)
+	(components
+		(comp
+			(ref "J1")
+			(value "CONN")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "fixture")
+				(part "CONN")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "rules")
+			)
+			(property
+				(name "Sheetfile")
+				(value "rules.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "0a2da642-509b-5e62-b270-13a0792b639f")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "3")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "Q1")
+			(value "Q3")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "fixture")
+				(part "Q3")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "rules")
+			)
+			(property
+				(name "Sheetfile")
+				(value "rules.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "66ee17d1-cdfe-528c-9a9a-23e9b25bccb2")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "3")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "Q2")
+			(value "Q3")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "fixture")
+				(part "Q3")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "rules")
+			)
+			(property
+				(name "Sheetfile")
+				(value "rules.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "246ff2e6-2275-5c61-ab94-0fe132f6b6c3")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "3")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "Q3")
+			(value "Q3")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "fixture")
+				(part "Q3")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "rules")
+			)
+			(property
+				(name "Sheetfile")
+				(value "rules.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "dfccec73-c2c6-5621-bdf5-cfe0dc80763b")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "3")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "Q4")
+			(value "Q3")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "fixture")
+				(part "Q3")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "rules")
+			)
+			(property
+				(name "Sheetfile")
+				(value "rules.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "375aef96-8117-5d57-bc75-981fc04f6805")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "3")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "Q5")
+			(value "Q3")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "fixture")
+				(part "Q3")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "rules")
+			)
+			(property
+				(name "Sheetfile")
+				(value "rules.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "82a5ad76-09c3-5fb9-af9a-9381e6d48bbc")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "3")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "Q6")
+			(value "Q3")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "fixture")
+				(part "Q3")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "rules")
+			)
+			(property
+				(name "Sheetfile")
+				(value "rules.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "77a0d94f-bd10-5ada-a8bc-48f1c15a3fcd")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "3")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "Q7")
+			(value "Q3")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "fixture")
+				(part "Q3")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "rules")
+			)
+			(property
+				(name "Sheetfile")
+				(value "rules.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "9cdecc87-00cb-5706-813d-5dab2431a656")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "3")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "Q8")
+			(value "Q3")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "fixture")
+				(part "Q3")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "rules")
+			)
+			(property
+				(name "Sheetfile")
+				(value "rules.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "b6178976-9a17-51e8-8cba-174c7bfec9f4")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "3")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R1")
+			(value "R")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "fixture")
+				(part "R")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "rules")
+			)
+			(property
+				(name "Sheetfile")
+				(value "rules.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "bcbde2a0-f131-55e2-bb43-baec0cc79264")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R2")
+			(value "R")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "fixture")
+				(part "R")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "rules")
+			)
+			(property
+				(name "Sheetfile")
+				(value "rules.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "019d1c45-3c2f-55a8-b613-8cca1897a7b2")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R3")
+			(value "R")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "fixture")
+				(part "R")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "rules")
+			)
+			(property
+				(name "Sheetfile")
+				(value "rules.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "5326ba68-dade-5300-ac57-76fa2a83c551")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R4")
+			(value "R")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "fixture")
+				(part "R")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "rules")
+			)
+			(property
+				(name "Sheetfile")
+				(value "rules.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "144fa6b4-5406-5b60-812a-7511b8c52d6a")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R5")
+			(value "R")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "fixture")
+				(part "R")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "rules")
+			)
+			(property
+				(name "Sheetfile")
+				(value "rules.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "10076243-8557-595c-b676-81096f7aae26")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R6")
+			(value "R")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "fixture")
+				(part "R")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "rules")
+			)
+			(property
+				(name "Sheetfile")
+				(value "rules.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "091fac3e-4370-55dc-92f6-218c4a9aa189")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R7")
+			(value "R")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "fixture")
+				(part "R")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "rules")
+			)
+			(property
+				(name "Sheetfile")
+				(value "rules.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "47495d11-34ac-5487-bd82-118528a9e41a")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R8")
+			(value "R")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "fixture")
+				(part "R")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "rules")
+			)
+			(property
+				(name "Sheetfile")
+				(value "rules.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "88bdd52a-b559-5050-b10b-6c7721f59a94")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R9")
+			(value "R")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "fixture")
+				(part "R")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "rules")
+			)
+			(property
+				(name "Sheetfile")
+				(value "rules.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "441cd77d-ea28-5886-898b-33db6d5e4b93")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R10")
+			(value "R")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "fixture")
+				(part "R")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "rules")
+			)
+			(property
+				(name "Sheetfile")
+				(value "rules.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "b0a4e3c8-cd04-5d8a-ae40-128bc36b251a")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R11")
+			(value "R")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "fixture")
+				(part "R")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "rules")
+			)
+			(property
+				(name "Sheetfile")
+				(value "rules.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "322f0f12-3591-51e4-98ca-219095e40fde")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R12")
+			(value "R")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "fixture")
+				(part "R")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "rules")
+			)
+			(property
+				(name "Sheetfile")
+				(value "rules.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "5ef15f3f-9b96-5fd7-ba73-06df5879bc35")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R13")
+			(value "R")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "fixture")
+				(part "R")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "rules")
+			)
+			(property
+				(name "Sheetfile")
+				(value "rules.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "5b18e8d3-310a-5cb5-82e5-fc55aef01705")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R30")
+			(value "R_NONUM")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "fixture")
+				(part "R_NONUM")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "rules")
+			)
+			(property
+				(name "Sheetfile")
+				(value "rules.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "bee34555-1529-5fae-b1a9-a9bc789707b0")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R31")
+			(value "R_OFFSET")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "fixture")
+				(part "R_OFFSET")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "rules")
+			)
+			(property
+				(name "Sheetfile")
+				(value "rules.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "7960549d-63fb-5746-850b-df5670a6d3a8")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R32")
+			(value "R_NONAME")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "fixture")
+				(part "R_NONAME")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "rules")
+			)
+			(property
+				(name "Sheetfile")
+				(value "rules.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "60ba296a-a272-585e-ac77-5eb4d783884c")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R40")
+			(value "R")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "fixture")
+				(part "R")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "rules")
+			)
+			(property
+				(name "Sheetfile")
+				(value "rules.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "f00cc834-bc93-5037-91e9-5d9626984fe4")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "U1")
+			(value "DUAL")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "fixture")
+				(part "DUAL")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "rules")
+			)
+			(property
+				(name "Sheetfile")
+				(value "rules.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "7d8cc637-5b8a-5053-904f-11617eceea2e" "17e0cc5b-8f60-5bce-8d02-5fdbb2384eab")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "3")
+						)
+						(pin
+							(num "8")
+						)
+						(pin
+							(num "4")
+						)
+						(pin
+							(num "1")
+						)
+					)
+				)
+				(unit
+					(name "B")
+					(pins
+						(pin
+							(num "6")
+						)
+						(pin
+							(num "5")
+						)
+						(pin
+							(num "8")
+						)
+						(pin
+							(num "4")
+						)
+						(pin
+							(num "7")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "U2")
+			(value "DUAL")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "fixture")
+				(part "DUAL")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "rules")
+			)
+			(property
+				(name "Sheetfile")
+				(value "rules.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "dac793e3-1cb4-5c09-ad2e-c3f256a03ef4" "6ceaac6a-dff4-5d6c-8b45-8d172f897d57")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "3")
+						)
+						(pin
+							(num "8")
+						)
+						(pin
+							(num "4")
+						)
+						(pin
+							(num "1")
+						)
+					)
+				)
+				(unit
+					(name "B")
+					(pins
+						(pin
+							(num "6")
+						)
+						(pin
+							(num "5")
+						)
+						(pin
+							(num "8")
+						)
+						(pin
+							(num "4")
+						)
+						(pin
+							(num "7")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "U3")
+			(value "HIDDEN")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "fixture")
+				(part "HIDDEN")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "rules")
+			)
+			(property
+				(name "Sheetfile")
+				(value "rules.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "7170d09c-0dc6-5689-be11-e575f2213992")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "U4")
+			(value "DUP")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "fixture")
+				(part "DUP")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "rules")
+			)
+			(property
+				(name "Sheetfile")
+				(value "rules.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "71c4f227-a65e-53b6-8818-eeb7db3f94cb")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "3")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "U5")
+			(value "DUP")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "fixture")
+				(part "DUP")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "rules")
+			)
+			(property
+				(name "Sheetfile")
+				(value "rules.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "2e15bc3a-aa79-56c9-9da6-4ea00bee16ff")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "3")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R101")
+			(value "R")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "fixture")
+				(part "R")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "amp_a")
+			)
+			(property
+				(name "Sheetfile")
+				(value "rules_child.kicad_sch")
+			)
+			(sheetpath
+				(names "/amp_a/")
+				(tstamps "/8a94a5bb-398d-5e29-be3a-6b95c4bb4853/")
+			)
+			(tstamps "8a44fa32-742c-5d2d-b85b-248112e251d5")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R102")
+			(value "R")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "fixture")
+				(part "R")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "amp_a")
+			)
+			(property
+				(name "Sheetfile")
+				(value "rules_child.kicad_sch")
+			)
+			(sheetpath
+				(names "/amp_a/")
+				(tstamps "/8a94a5bb-398d-5e29-be3a-6b95c4bb4853/")
+			)
+			(tstamps "32a12820-8eac-5800-96a5-ff39c0da0851")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R201")
+			(value "R")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "fixture")
+				(part "R")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "amp_b")
+			)
+			(property
+				(name "Sheetfile")
+				(value "rules_child.kicad_sch")
+			)
+			(sheetpath
+				(names "/amp_b/")
+				(tstamps "/678e2738-f7ed-51ac-a920-71d922eb8ecb/")
+			)
+			(tstamps "8a44fa32-742c-5d2d-b85b-248112e251d5")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R202")
+			(value "R")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "fixture")
+				(part "R")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "amp_b")
+			)
+			(property
+				(name "Sheetfile")
+				(value "rules_child.kicad_sch")
+			)
+			(sheetpath
+				(names "/amp_b/")
+				(tstamps "/678e2738-f7ed-51ac-a920-71d922eb8ecb/")
+			)
+			(tstamps "32a12820-8eac-5800-96a5-ff39c0da0851")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+	)
+	(groups)
+	(variants)
+	(libparts
+		(libpart
+			(lib "fixture")
+			(part "CONN")
+			(fields
+				(field
+					(name "Reference") "J")
+				(field
+					(name "Value") "CONN")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "2")
+					(type "passive")
+				)
+				(pin
+					(num "3")
+					(name "3")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "fixture")
+			(part "DUAL")
+			(fields
+				(field
+					(name "Reference") "U")
+				(field
+					(name "Value") "DUAL")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "OUT")
+					(type "output")
+				)
+				(pin
+					(num "2")
+					(name "IN-")
+					(type "input")
+				)
+				(pin
+					(num "3")
+					(name "IN+")
+					(type "input")
+				)
+				(pin
+					(num "4")
+					(name "V-")
+					(type "power_in")
+				)
+				(pin
+					(num "5")
+					(name "IN+")
+					(type "input")
+				)
+				(pin
+					(num "6")
+					(name "IN-")
+					(type "input")
+				)
+				(pin
+					(num "7")
+					(name "OUT")
+					(type "output")
+				)
+				(pin
+					(num "8")
+					(name "V+")
+					(type "power_in")
+				)
+			)
+		)
+		(libpart
+			(lib "fixture")
+			(part "DUP")
+			(fields
+				(field
+					(name "Reference") "U")
+				(field
+					(name "Value") "DUP")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "GND")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "GND")
+					(type "passive")
+				)
+				(pin
+					(num "3")
+					(name "SIG")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "fixture")
+			(part "HIDDEN")
+			(fields
+				(field
+					(name "Reference") "U")
+				(field
+					(name "Value") "HIDDEN")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "A")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "VDDX")
+					(type "power_in")
+				)
+			)
+		)
+		(libpart
+			(lib "fixture")
+			(part "Q3")
+			(fields
+				(field
+					(name "Reference") "Q")
+				(field
+					(name "Value") "Q3")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "B")
+					(type "input")
+				)
+				(pin
+					(num "2")
+					(name "C")
+					(type "passive")
+				)
+				(pin
+					(num "3")
+					(name "E")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "fixture")
+			(part "R")
+			(fields
+				(field
+					(name "Reference") "R")
+				(field
+					(name "Value") "R")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "~")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "~")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "fixture")
+			(part "R_NONAME")
+			(fields
+				(field
+					(name "Reference") "R")
+				(field
+					(name "Value") "R_NONAME")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "~")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "~")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "fixture")
+			(part "R_NONUM")
+			(fields
+				(field
+					(name "Reference") "R")
+				(field
+					(name "Value") "R_NONUM")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "~")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "~")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "fixture")
+			(part "R_OFFSET")
+			(fields
+				(field
+					(name "Reference") "R")
+				(field
+					(name "Value") "R_OFFSET")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "~")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "~")
+					(type "passive")
+				)
+			)
+		)
+	)
+	(libraries)
+	(nets
+		(net
+			(code "1")
+			(name "/ALONG")
+			(class "Default")
+			(node
+				(ref "R12")
+				(pin "2")
+				(pinfunction "~_2")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "3")
+			(name "/CROSS_V")
+			(class "Default")
+			(node
+				(ref "R1")
+				(pin "2")
+				(pinfunction "~_2")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "4")
+			(name "/HIDDEN_A")
+			(class "Default")
+			(node
+				(ref "U3")
+				(pin "1")
+				(pinfunction "A_1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "5")
+			(name "/IO_A")
+			(class "Default")
+			(node
+				(ref "R101")
+				(pin "1")
+				(pinfunction "~_1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "6")
+			(name "/JUNCTION_H")
+			(class "Default")
+			(node
+				(ref "R3")
+				(pin "2")
+				(pinfunction "~_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "R4")
+				(pin "2")
+				(pinfunction "~_2")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "8")
+			(name "/ORIENT1_P1")
+			(class "Default")
+			(node
+				(ref "Q1")
+				(pin "1")
+				(pinfunction "B_1")
+				(pintype "input")
+			)
+		)
+		(net
+			(code "9")
+			(name "/ORIENT1_P2")
+			(class "Default")
+			(node
+				(ref "Q1")
+				(pin "2")
+				(pinfunction "C_2")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "10")
+			(name "/ORIENT1_P3")
+			(class "Default")
+			(node
+				(ref "Q1")
+				(pin "3")
+				(pinfunction "E_3")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "11")
+			(name "/ORIENT2_P1")
+			(class "Default")
+			(node
+				(ref "Q2")
+				(pin "1")
+				(pinfunction "B_1")
+				(pintype "input")
+			)
+		)
+		(net
+			(code "12")
+			(name "/ORIENT2_P2")
+			(class "Default")
+			(node
+				(ref "Q2")
+				(pin "2")
+				(pinfunction "C_2")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "13")
+			(name "/ORIENT2_P3")
+			(class "Default")
+			(node
+				(ref "Q2")
+				(pin "3")
+				(pinfunction "E_3")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "14")
+			(name "/ORIENT3_P1")
+			(class "Default")
+			(node
+				(ref "Q3")
+				(pin "1")
+				(pinfunction "B_1")
+				(pintype "input")
+			)
+		)
+		(net
+			(code "15")
+			(name "/ORIENT3_P2")
+			(class "Default")
+			(node
+				(ref "Q3")
+				(pin "2")
+				(pinfunction "C_2")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "16")
+			(name "/ORIENT3_P3")
+			(class "Default")
+			(node
+				(ref "Q3")
+				(pin "3")
+				(pinfunction "E_3")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "17")
+			(name "/ORIENT4_P1")
+			(class "Default")
+			(node
+				(ref "Q4")
+				(pin "1")
+				(pinfunction "B_1")
+				(pintype "input")
+			)
+		)
+		(net
+			(code "18")
+			(name "/ORIENT4_P2")
+			(class "Default")
+			(node
+				(ref "Q4")
+				(pin "2")
+				(pinfunction "C_2")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "19")
+			(name "/ORIENT4_P3")
+			(class "Default")
+			(node
+				(ref "Q4")
+				(pin "3")
+				(pinfunction "E_3")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "20")
+			(name "/ORIENT5_P1")
+			(class "Default")
+			(node
+				(ref "Q5")
+				(pin "1")
+				(pinfunction "B_1")
+				(pintype "input")
+			)
+		)
+		(net
+			(code "21")
+			(name "/ORIENT5_P2")
+			(class "Default")
+			(node
+				(ref "Q5")
+				(pin "2")
+				(pinfunction "C_2")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "22")
+			(name "/ORIENT5_P3")
+			(class "Default")
+			(node
+				(ref "Q5")
+				(pin "3")
+				(pinfunction "E_3")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "23")
+			(name "/ORIENT6_P1")
+			(class "Default")
+			(node
+				(ref "Q6")
+				(pin "1")
+				(pinfunction "B_1")
+				(pintype "input")
+			)
+		)
+		(net
+			(code "24")
+			(name "/ORIENT6_P2")
+			(class "Default")
+			(node
+				(ref "Q6")
+				(pin "2")
+				(pinfunction "C_2")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "25")
+			(name "/ORIENT6_P3")
+			(class "Default")
+			(node
+				(ref "Q6")
+				(pin "3")
+				(pinfunction "E_3")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "26")
+			(name "/ORIENT7_P1")
+			(class "Default")
+			(node
+				(ref "Q7")
+				(pin "1")
+				(pinfunction "B_1")
+				(pintype "input")
+			)
+		)
+		(net
+			(code "27")
+			(name "/ORIENT7_P2")
+			(class "Default")
+			(node
+				(ref "Q7")
+				(pin "2")
+				(pinfunction "C_2")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "28")
+			(name "/ORIENT7_P3")
+			(class "Default")
+			(node
+				(ref "Q7")
+				(pin "3")
+				(pinfunction "E_3")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "29")
+			(name "/ORIENT8_P1")
+			(class "Default")
+			(node
+				(ref "Q8")
+				(pin "1")
+				(pinfunction "B_1")
+				(pintype "input")
+			)
+		)
+		(net
+			(code "30")
+			(name "/ORIENT8_P2")
+			(class "Default")
+			(node
+				(ref "Q8")
+				(pin "2")
+				(pinfunction "C_2")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "31")
+			(name "/ORIENT8_P3")
+			(class "Default")
+			(node
+				(ref "Q8")
+				(pin "3")
+				(pinfunction "E_3")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "32")
+			(name "/PIN_JUNCTION")
+			(class "Default")
+			(node
+				(ref "R13")
+				(pin "2")
+				(pinfunction "~_2")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "33")
+			(name "/R1_TOP")
+			(class "Default")
+			(node
+				(ref "R1")
+				(pin "1")
+				(pinfunction "~_1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "34")
+			(name "/R2_TOP")
+			(class "Default")
+			(node
+				(ref "R2")
+				(pin "1")
+				(pinfunction "~_1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "35")
+			(name "/R3_TOP")
+			(class "Default")
+			(node
+				(ref "R3")
+				(pin "1")
+				(pinfunction "~_1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "36")
+			(name "/R4_TOP")
+			(class "Default")
+			(node
+				(ref "R4")
+				(pin "1")
+				(pinfunction "~_1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "37")
+			(name "/R5_TOP")
+			(class "Default")
+			(node
+				(ref "R5")
+				(pin "1")
+				(pinfunction "~_1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "38")
+			(name "/R7_BOTTOM")
+			(class "Default")
+			(node
+				(ref "R7")
+				(pin "2")
+				(pinfunction "~_2")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "39")
+			(name "/R12_TOP")
+			(class "Default")
+			(node
+				(ref "R12")
+				(pin "1")
+				(pinfunction "~_1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "40")
+			(name "/R13_TOP")
+			(class "Default")
+			(node
+				(ref "R13")
+				(pin "1")
+				(pinfunction "~_1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "41")
+			(name "/U1B_INV")
+			(class "Default")
+			(node
+				(ref "U1")
+				(pin "6")
+				(pinfunction "IN-_6")
+				(pintype "input")
+			)
+		)
+		(net
+			(code "42")
+			(name "/amp_a/LOCAL")
+			(class "Default")
+			(node
+				(ref "R101")
+				(pin "2")
+				(pinfunction "~_2")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "43")
+			(name "/amp_b/LOCAL")
+			(class "Default")
+			(node
+				(ref "R201")
+				(pin "2")
+				(pinfunction "~_2")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "44")
+			(name "IO_B")
+			(class "Default")
+			(node
+				(ref "R201")
+				(pin "1")
+				(pinfunction "~_1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "45")
+			(name "Net-(J1-Pad1)")
+			(class "Default")
+			(node
+				(ref "J1")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "R9")
+				(pin "1")
+				(pinfunction "~_1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "46")
+			(name "Net-(R10-~-Pad2)")
+			(class "Default")
+			(node
+				(ref "R10")
+				(pin "2")
+				(pinfunction "~_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "U4")
+				(pin "1")
+				(pinfunction "GND_1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "47")
+			(name "Net-(R40-~-Pad1)")
+			(class "Default")
+			(node
+				(ref "R40")
+				(pin "1")
+				(pinfunction "~_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "R40")
+				(pin "2")
+				(pinfunction "~_2")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "48")
+			(name "Net-(U1A-OUT)")
+			(class "Default")
+			(node
+				(ref "R11")
+				(pin "1")
+				(pinfunction "~_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U1")
+				(pin "1")
+				(pinfunction "OUT_1")
+				(pintype "output")
+			)
+		)
+		(net
+			(code "49")
+			(name "Net-(U2A-OUT)")
+			(class "Default")
+			(node
+				(ref "U2")
+				(pin "1")
+				(pinfunction "OUT_1")
+				(pintype "output")
+			)
+			(node
+				(ref "U2")
+				(pin "6")
+				(pinfunction "IN-_6")
+				(pintype "input")
+			)
+		)
+		(net
+			(code "50")
+			(name "Net-(U5-GND-Pad1)")
+			(class "Default")
+			(node
+				(ref "U5")
+				(pin "1")
+				(pinfunction "GND_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U5")
+				(pin "2")
+				(pinfunction "GND_2")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "51")
+			(name "SHARED")
+			(class "Default")
+			(node
+				(ref "R102")
+				(pin "1")
+				(pinfunction "~_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "R202")
+				(pin "1")
+				(pinfunction "~_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "R7")
+				(pin "1")
+				(pinfunction "~_1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "52")
+			(name "VBUS")
+			(class "Default")
+			(node
+				(ref "R102")
+				(pin "2")
+				(pinfunction "~_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "R202")
+				(pin "2")
+				(pinfunction "~_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "R6")
+				(pin "1")
+				(pinfunction "~_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "R6")
+				(pin "2")
+				(pinfunction "~_2")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "53")
+			(name "VDDX")
+			(class "Default")
+			(node
+				(ref "R8")
+				(pin "1")
+				(pinfunction "~_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U3")
+				(pin "2")
+				(pinfunction "VDDX_2")
+				(pintype "power_in")
+			)
+		)
+		(net
+			(code "54")
+			(name "unconnected-(J1-Pad2)")
+			(class "Default")
+			(node
+				(ref "J1")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "55")
+			(name "unconnected-(J1-Pad3)")
+			(class "Default")
+			(node
+				(ref "J1")
+				(pin "3")
+				(pinfunction "3_3")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "56")
+			(name "unconnected-(R2-~-Pad2)")
+			(class "Default")
+			(node
+				(ref "R2")
+				(pin "2")
+				(pinfunction "~_2")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "57")
+			(name "unconnected-(R5-~-Pad2)")
+			(class "Default")
+			(node
+				(ref "R5")
+				(pin "2")
+				(pinfunction "~_2")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "58")
+			(name "unconnected-(R8-~-Pad2)")
+			(class "Default")
+			(node
+				(ref "R8")
+				(pin "2")
+				(pinfunction "~_2")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "59")
+			(name "unconnected-(R9-~-Pad2)")
+			(class "Default")
+			(node
+				(ref "R9")
+				(pin "2")
+				(pinfunction "~_2")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "60")
+			(name "unconnected-(R10-~-Pad1)")
+			(class "Default")
+			(node
+				(ref "R10")
+				(pin "1")
+				(pinfunction "~_1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "61")
+			(name "unconnected-(R11-~-Pad2)")
+			(class "Default")
+			(node
+				(ref "R11")
+				(pin "2")
+				(pinfunction "~_2")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "62")
+			(name "unconnected-(R30-~-Pad1)")
+			(class "Default")
+			(node
+				(ref "R30")
+				(pin "1")
+				(pinfunction "~_1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "63")
+			(name "unconnected-(R30-~-Pad2)")
+			(class "Default")
+			(node
+				(ref "R30")
+				(pin "2")
+				(pinfunction "~_2")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "64")
+			(name "unconnected-(R31-~-Pad1)")
+			(class "Default")
+			(node
+				(ref "R31")
+				(pin "1")
+				(pinfunction "~_1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "65")
+			(name "unconnected-(R31-~-Pad2)")
+			(class "Default")
+			(node
+				(ref "R31")
+				(pin "2")
+				(pinfunction "~_2")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "66")
+			(name "unconnected-(R32-~-Pad1)")
+			(class "Default")
+			(node
+				(ref "R32")
+				(pin "1")
+				(pinfunction "~_1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "67")
+			(name "unconnected-(R32-~-Pad2)")
+			(class "Default")
+			(node
+				(ref "R32")
+				(pin "2")
+				(pinfunction "~_2")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "68")
+			(name "unconnected-(U1A-IN+-Pad3)")
+			(class "Default")
+			(node
+				(ref "U1")
+				(pin "3")
+				(pinfunction "IN+_3")
+				(pintype "input")
+			)
+		)
+		(net
+			(code "69")
+			(name "unconnected-(U1A-IN--Pad2)")
+			(class "Default")
+			(node
+				(ref "U1")
+				(pin "2")
+				(pinfunction "IN-_2")
+				(pintype "input")
+			)
+		)
+		(net
+			(code "70")
+			(name "unconnected-(U1A-V+-Pad8)")
+			(class "Default")
+			(node
+				(ref "U1")
+				(pin "8")
+				(pinfunction "V+_8")
+				(pintype "power_in")
+			)
+		)
+		(net
+			(code "71")
+			(name "unconnected-(U1A-V--Pad4)")
+			(class "Default")
+			(node
+				(ref "U1")
+				(pin "4")
+				(pinfunction "V-_4")
+				(pintype "power_in")
+			)
+		)
+		(net
+			(code "72")
+			(name "unconnected-(U1B-IN+-Pad5)")
+			(class "Default")
+			(node
+				(ref "U1")
+				(pin "5")
+				(pinfunction "IN+_5")
+				(pintype "input")
+			)
+		)
+		(net
+			(code "73")
+			(name "unconnected-(U1B-OUT-Pad7)")
+			(class "Default")
+			(node
+				(ref "U1")
+				(pin "7")
+				(pinfunction "OUT_7")
+				(pintype "output")
+			)
+		)
+		(net
+			(code "74")
+			(name "unconnected-(U1B-V+-Pad8)")
+			(class "Default")
+			(node
+				(ref "U1")
+				(pin "8")
+				(pinfunction "V+_8")
+				(pintype "power_in")
+			)
+		)
+		(net
+			(code "75")
+			(name "unconnected-(U1B-V--Pad4)")
+			(class "Default")
+			(node
+				(ref "U1")
+				(pin "4")
+				(pinfunction "V-_4")
+				(pintype "power_in")
+			)
+		)
+		(net
+			(code "76")
+			(name "unconnected-(U2A-IN+-Pad3)")
+			(class "Default")
+			(node
+				(ref "U2")
+				(pin "3")
+				(pinfunction "IN+_3")
+				(pintype "input")
+			)
+		)
+		(net
+			(code "77")
+			(name "unconnected-(U2A-IN--Pad2)")
+			(class "Default")
+			(node
+				(ref "U2")
+				(pin "2")
+				(pinfunction "IN-_2")
+				(pintype "input")
+			)
+		)
+		(net
+			(code "78")
+			(name "unconnected-(U2A-V+-Pad8)")
+			(class "Default")
+			(node
+				(ref "U2")
+				(pin "8")
+				(pinfunction "V+_8")
+				(pintype "power_in")
+			)
+		)
+		(net
+			(code "79")
+			(name "unconnected-(U2A-V--Pad4)")
+			(class "Default")
+			(node
+				(ref "U2")
+				(pin "4")
+				(pinfunction "V-_4")
+				(pintype "power_in")
+			)
+		)
+		(net
+			(code "80")
+			(name "unconnected-(U2B-IN+-Pad5)")
+			(class "Default")
+			(node
+				(ref "U2")
+				(pin "5")
+				(pinfunction "IN+_5")
+				(pintype "input")
+			)
+		)
+		(net
+			(code "81")
+			(name "unconnected-(U2B-OUT-Pad7)")
+			(class "Default")
+			(node
+				(ref "U2")
+				(pin "7")
+				(pinfunction "OUT_7")
+				(pintype "output")
+			)
+		)
+		(net
+			(code "82")
+			(name "unconnected-(U2B-V+-Pad8)")
+			(class "Default")
+			(node
+				(ref "U2")
+				(pin "8")
+				(pinfunction "V+_8")
+				(pintype "power_in")
+			)
+		)
+		(net
+			(code "83")
+			(name "unconnected-(U2B-V--Pad4)")
+			(class "Default")
+			(node
+				(ref "U2")
+				(pin "4")
+				(pinfunction "V-_4")
+				(pintype "power_in")
+			)
+		)
+		(net
+			(code "84")
+			(name "unconnected-(U4-GND-Pad2)")
+			(class "Default")
+			(node
+				(ref "U4")
+				(pin "2")
+				(pinfunction "GND_2")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "85")
+			(name "unconnected-(U4-SIG-Pad3)")
+			(class "Default")
+			(node
+				(ref "U4")
+				(pin "3")
+				(pinfunction "SIG_3")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "86")
+			(name "unconnected-(U5-SIG-Pad3)")
+			(class "Default")
+			(node
+				(ref "U5")
+				(pin "3")
+				(pinfunction "SIG_3")
+				(pintype "passive")
+			)
+		)
+	)
+)

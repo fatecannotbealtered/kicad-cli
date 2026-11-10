@@ -1,0 +1,74 @@
+{
+  "kind": "live",
+  "tool": "kicad-cli",
+  "tool_version": "1.1.0",
+  "commit": "ca8457790854",
+  "application": {
+    "name": "KiCad",
+    "version": "10.0.6"
+  },
+  "os": "Windows-11-10.0.26300-SP0",
+  "platform": "windows",
+  "recorded_at": "2026-11-09T18:21:17Z",
+  "targets": [
+    "file:///D:/driver-work/kicad-cli/targets/"
+  ],
+  "runs": [
+    {
+      "command": "board create",
+      "arguments": [
+        "--doc",
+        "D:\\driver-work\\kicad-cli\\targets\\schmitt\\schmitt.kicad_sch",
+        "--output",
+        "D:\\driver-work\\kicad-cli\\targets\\runs\\board-create-1794248472452259800/fresh.kicad_pcb"
+      ],
+      "exit": 0,
+      "result": "pass",
+      "matrix_row": "normal",
+      "mode": "file",
+      "fingerprint": "63ff900a6087a316cc8257152b268f7e62209cadc4c90aeee6eab305edaa7d21"
+    },
+    {
+      "command": "board create",
+      "arguments": [
+        "--doc",
+        "D:\\driver-work\\kicad-cli\\targets\\schmitt\\schmitt.kicad_sch",
+        "--output",
+        "D:\\driver-work\\kicad-cli\\targets\\runs\\board-create-1794248472452259800/fresh.kicad_pcb",
+        "--width",
+        "40"
+      ],
+      "exit": 2,
+      "result": "pass",
+      "matrix_row": "invalid_input",
+      "mode": "file",
+      "fingerprint": "63ff900a6087a316cc8257152b268f7e62209cadc4c90aeee6eab305edaa7d21"
+    },
+    {
+      "command": "board create",
+      "arguments": [
+        "--doc",
+        "D:\\driver-work\\kicad-cli\\targets\\runs\\board-create-1794248472452259800/missing.kicad_sch",
+        "--output",
+        "D:\\driver-work\\kicad-cli\\targets\\runs\\board-create-1794248472452259800/fresh.kicad_pcb"
+      ],
+      "exit": 3,
+      "result": "pass",
+      "matrix_row": "not_found",
+      "mode": "file",
+      "fingerprint": "63ff900a6087a316cc8257152b268f7e62209cadc4c90aeee6eab305edaa7d21"
+    },
+    {
+      "command": "board create",
+      "arguments": [
+        "--doc",
+        "D:\\driver-work\\kicad-cli\\targets\\schmitt\\schmitt.kicad_sch"
+      ],
+      "exit": 2,
+      "result": "pass",
+      "matrix_row": "conflict",
+      "mode": "file",
+      "fingerprint": "63ff900a6087a316cc8257152b268f7e62209cadc4c90aeee6eab305edaa7d21"
+    }
+  ]
+}

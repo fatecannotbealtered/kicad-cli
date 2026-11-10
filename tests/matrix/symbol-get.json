@@ -1,0 +1,117 @@
+{
+  "command": "symbol get",
+  "rows": [
+    {
+      "row": "normal",
+      "applies": true,
+      "arguments": [
+        "--doc",
+        "{doc}",
+        "--id",
+        "U1"
+      ],
+      "expected": {
+        "exit": 0
+      },
+      "actual": {
+        "exit": 0
+      },
+      "evidence": "live:docs/evidence/2026-11-09-181753-symbol-get.json#normal"
+    },
+    {
+      "row": "empty",
+      "applies": false,
+      "reason": "symbol get returns one symbol; it has no empty result."
+    },
+    {
+      "row": "invalid_input",
+      "applies": true,
+      "arguments": [
+        "--doc",
+        "{doc}"
+      ],
+      "expected": {
+        "exit": 2,
+        "code": "E_USAGE"
+      },
+      "actual": {
+        "exit": 2,
+        "code": "E_USAGE"
+      },
+      "evidence": "live:docs/evidence/2026-11-09-181753-symbol-get.json#invalid_input"
+    },
+    {
+      "row": "not_found",
+      "applies": true,
+      "arguments": [
+        "--doc",
+        "{doc}",
+        "--id",
+        "R99"
+      ],
+      "expected": {
+        "exit": 3,
+        "code": "E_NOT_FOUND"
+      },
+      "actual": {
+        "exit": 3,
+        "code": "E_NOT_FOUND"
+      },
+      "evidence": "live:docs/evidence/2026-11-09-181753-symbol-get.json#not_found"
+    },
+    {
+      "row": "ambiguous",
+      "applies": true,
+      "arguments": [
+        "--doc",
+        "{doc}",
+        "--id",
+        "TP3"
+      ],
+      "expected": {
+        "exit": 2,
+        "code": "E_AMBIGUOUS"
+      },
+      "actual": {
+        "exit": 2,
+        "code": "E_AMBIGUOUS"
+      },
+      "evidence": "live:docs/evidence/2026-11-09-181755-symbol-get.json#ambiguous"
+    },
+    {
+      "row": "conflict",
+      "applies": false,
+      "reason": "This row applies only to a command that changes something."
+    },
+    {
+      "row": "no_scope",
+      "applies": false,
+      "reason": "This row applies only to a command that changes something."
+    },
+    {
+      "row": "busy",
+      "applies": false,
+      "reason": "This row applies only to a command that works in session mode or works in device mode."
+    },
+    {
+      "row": "dialog",
+      "applies": false,
+      "reason": "This row applies only to a command that works in session mode."
+    },
+    {
+      "row": "disconnect",
+      "applies": false,
+      "reason": "This row applies only to a command that works in session mode or works in device mode or reaches the application through the host component."
+    },
+    {
+      "row": "unsaved",
+      "applies": false,
+      "reason": "In file mode the file on disk is the document, so it never has unsaved changes."
+    },
+    {
+      "row": "read_back_mismatch",
+      "applies": false,
+      "reason": "This row applies only to a command that changes something."
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+(kicad_pcb
+	(version 20241229)
+	(generator "kicad-cli-tests")
+	(generator_version "10.0")
+	(general
+		(thickness 1.6)
+		(legacy_teardrops no)
+	)
+	(paper "A4")
+	(layers
+		(0 "F.Cu" signal)
+		(2 "B.Cu" signal)
+		(9 "F.Paste" user)
+		(11 "B.Paste" user)
+		(5 "F.SilkS" user)
+		(7 "B.SilkS" user)
+		(1 "F.Mask" user)
+		(3 "B.Mask" user)
+		(44 "Edge.Cuts" user)
+	)
+	(setup
+		(pad_to_mask_clearance 0)
+		(allow_soldermask_bridges_in_footprints no)
+	)
+	(net 0 "")
+	(net 1 "GND")
+	(net 2 "VCC")
+)

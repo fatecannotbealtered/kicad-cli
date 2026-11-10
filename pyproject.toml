@@ -1,0 +1,14 @@
+# Build configuration. The package name, the version and the command name come from
+# package.json (DREPO-053); check_project compares the version below with it.
+[project]
+name = "kicad_cli"
+version = "1.1.0"
+description = "Lets an AI Agent operate KiCad safely from the command line."
+requires-python = ">=3.12"
+license = "Apache-2.0"
+dependencies = []
+
+[tool.ruff]
+line-length = 140
+target-version = "py312"
+extend-exclude = ["kicad_cli/_driver"]

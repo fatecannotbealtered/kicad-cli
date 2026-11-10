@@ -1,0 +1,104 @@
+{
+  "kind": "live",
+  "tool": "kicad-cli",
+  "tool_version": "1.1.0",
+  "commit": "ca8457790854",
+  "application": {
+    "name": "KiCad",
+    "version": "10.0.6"
+  },
+  "os": "Windows-11-10.0.26300-SP0",
+  "platform": "windows",
+  "recorded_at": "2026-11-09T18:19:10Z",
+  "targets": [
+    "file:///D:/driver-work/kicad-cli/targets/"
+  ],
+  "runs": [
+    {
+      "command": "symbol move",
+      "arguments": [
+        "--doc",
+        "D:\\driver-work\\kicad-cli\\targets\\schmitt-sch\\schmitt.kicad_sch",
+        "--id",
+        "R5",
+        "--x",
+        "50.8mm",
+        "--y",
+        "40.64mm"
+      ],
+      "exit": 0,
+      "result": "pass",
+      "matrix_row": "normal",
+      "mode": "file",
+      "fingerprint": "471826d4083a4d79cd1e2c160be713c17e027203e95997a21f74e3a6102b8d76"
+    },
+    {
+      "command": "symbol move",
+      "arguments": [
+        "--doc",
+        "D:\\driver-work\\kicad-cli\\targets\\schmitt-sch\\schmitt.kicad_sch",
+        "--input",
+        "tests/matrix/inputs/empty-items.json"
+      ],
+      "exit": 2,
+      "result": "pass",
+      "matrix_row": "empty",
+      "mode": "file",
+      "fingerprint": "471826d4083a4d79cd1e2c160be713c17e027203e95997a21f74e3a6102b8d76"
+    },
+    {
+      "command": "symbol move",
+      "arguments": [
+        "--doc",
+        "D:\\driver-work\\kicad-cli\\targets\\schmitt-sch\\schmitt.kicad_sch",
+        "--id",
+        "R5",
+        "--x",
+        "50.8",
+        "--y",
+        "40.64mm"
+      ],
+      "exit": 2,
+      "result": "pass",
+      "matrix_row": "invalid_input",
+      "mode": "file",
+      "fingerprint": "471826d4083a4d79cd1e2c160be713c17e027203e95997a21f74e3a6102b8d76"
+    },
+    {
+      "command": "symbol move",
+      "arguments": [
+        "--doc",
+        "D:\\driver-work\\kicad-cli\\targets\\schmitt-sch\\schmitt.kicad_sch",
+        "--id",
+        "R99",
+        "--x",
+        "50.8mm",
+        "--y",
+        "40.64mm"
+      ],
+      "exit": 3,
+      "result": "pass",
+      "matrix_row": "not_found",
+      "mode": "file",
+      "fingerprint": "471826d4083a4d79cd1e2c160be713c17e027203e95997a21f74e3a6102b8d76"
+    },
+    {
+      "command": "symbol move",
+      "arguments": [
+        "--doc",
+        "D:\\driver-work\\kicad-cli\\targets\\schmitt-sch\\schmitt.kicad_sch",
+        "--id",
+        "R5",
+        "--x",
+        "50.8mm",
+        "--y",
+        "40.64mm"
+      ],
+      "exit": 4,
+      "result": "pass",
+      "matrix_row": "no_scope",
+      "mode": "file",
+      "fingerprint": "471826d4083a4d79cd1e2c160be713c17e027203e95997a21f74e3a6102b8d76"
+    }
+  ]
+}

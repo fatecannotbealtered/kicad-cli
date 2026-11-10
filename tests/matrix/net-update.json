@@ -1,0 +1,157 @@
+{
+  "command": "net update",
+  "rows": [
+    {
+      "row": "normal",
+      "applies": true,
+      "arguments": [
+        "--doc",
+        "{doc}",
+        "--id",
+        "OUTPUT",
+        "--name",
+        "SIG_OUT"
+      ],
+      "expected": {
+        "exit": 0
+      },
+      "actual": {
+        "exit": 0
+      },
+      "evidence": "live:docs/evidence/2026-11-09-181958-net-update.json#normal"
+    },
+    {
+      "row": "empty",
+      "applies": false,
+      "reason": "net update renames the one net --id names; there is no empty call."
+    },
+    {
+      "row": "invalid_input",
+      "applies": true,
+      "arguments": [
+        "--doc",
+        "{doc}",
+        "--id",
+        "OUTPUT"
+      ],
+      "expected": {
+        "exit": 2,
+        "code": "E_USAGE"
+      },
+      "actual": {
+        "exit": 2,
+        "code": "E_USAGE"
+      },
+      "evidence": "live:docs/evidence/2026-11-09-181958-net-update.json#invalid_input"
+    },
+    {
+      "row": "not_found",
+      "applies": true,
+      "arguments": [
+        "--doc",
+        "{doc}",
+        "--id",
+        "NO_SUCH_NET",
+        "--name",
+        "X"
+      ],
+      "expected": {
+        "exit": 3,
+        "code": "E_NOT_FOUND"
+      },
+      "actual": {
+        "exit": 3,
+        "code": "E_NOT_FOUND"
+      },
+      "evidence": "live:docs/evidence/2026-11-09-181958-net-update.json#not_found"
+    },
+    {
+      "row": "ambiguous",
+      "applies": false,
+      "reason": "A net is named as net list shows it, with its sheet path for local nets, which names one net."
+    },
+    {
+      "row": "conflict",
+      "applies": true,
+      "arguments": [
+        "--doc",
+        "{doc}",
+        "--id",
+        "OUTPUT",
+        "--name",
+        "SIG_OUT"
+      ],
+      "expected": {
+        "exit": 6,
+        "code": "E_CONFLICT"
+      },
+      "actual": {
+        "exit": 6,
+        "code": "E_CONFLICT"
+      },
+      "evidence": "live:docs/evidence/2026-11-09-182004-net-update.json#conflict"
+    },
+    {
+      "row": "no_scope",
+      "applies": true,
+      "arguments": [
+        "--doc",
+        "{doc}",
+        "--id",
+        "OUTPUT",
+        "--name",
+        "SIG_OUT"
+      ],
+      "expected": {
+        "exit": 4,
+        "code": "E_FORBIDDEN"
+      },
+      "actual": {
+        "exit": 4,
+        "code": "E_FORBIDDEN"
+      },
+      "evidence": "live:docs/evidence/2026-11-09-182059-net-update.json#no_scope"
+    },
+    {
+      "row": "busy",
+      "applies": false,
+      "reason": "This row applies only to a command that works in session mode or works in device mode."
+    },
+    {
+      "row": "dialog",
+      "applies": false,
+      "reason": "This row applies only to a command that works in session mode."
+    },
+    {
+      "row": "disconnect",
+      "applies": false,
+      "reason": "This row applies only to a command that works in session mode or works in device mode or reaches the application through the host component."
+    },
+    {
+      "row": "unsaved",
+      "applies": false,
+      "reason": "In file mode the file on disk is the document, so it never has unsaved changes."
+    },
+    {
+      "row": "read_back_mismatch",
+      "applies": true,
+      "arguments": [
+        "--doc",
+        "{doc}",
+        "--id",
+        "OUTPUT",
+        "--name",
+        "SIG_OUT"
+      ],
+      "expected": {
+        "exit": 1,
+        "code": "E_VERIFY_FAILED"
+      },
+      "actual": {
+        "exit": 1,
+        "code": "E_VERIFY_FAILED"
+      },
+      "evidence": "live:docs/evidence/2026-11-09-182009-net-update.json#read_back_mismatch"
+    }
+  ]
+}

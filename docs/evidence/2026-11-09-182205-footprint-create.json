@@ -1,0 +1,34 @@
+{
+  "kind": "live",
+  "tool": "kicad-cli",
+  "tool_version": "1.1.0",
+  "commit": "ca8457790854",
+  "application": {
+    "name": "KiCad",
+    "version": "10.0.6"
+  },
+  "os": "Windows-11-10.0.26300-SP0",
+  "platform": "windows",
+  "recorded_at": "2026-11-09T18:22:05Z",
+  "targets": [
+    "file:///D:/driver-work/kicad-cli/targets/"
+  ],
+  "runs": [
+    {
+      "command": "footprint create",
+      "arguments": [
+        "--doc",
+        "D:\\driver-work\\kicad-cli\\targets\\schmitt\\LocalLogic.pretty",
+        "--definition",
+        "tests/matrix/inputs/footprint-practice.json"
+      ],
+      "exit": 1,
+      "result": "pass",
+      "matrix_row": "read_back_mismatch",
+      "mode": "file",
+      "fingerprint": "180e39c30c5b9edb66b6a3357da6a973557437fa1470a8a2eff7bd69074ac62d",
+      "tampered": true,
+      "notes": "--tamper exited 0"
+    }
+  ]
+}

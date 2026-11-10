@@ -1,0 +1,42 @@
+{
+  "$schema": "https://schemas.kicad.org/erc.v1.json",
+  "coordinate_units": "mm",
+  "date": "2026-11-04T12:00:00+0000",
+  "ignored_checks": [],
+  "included_severities": ["error", "warning"],
+  "kicad_version": "10.0.6",
+  "sheets": [
+    {
+      "path": "/",
+      "uuid_path": "/00000000-0000-0000-0000-000000000001",
+      "violations": [
+        {
+          "description": "Pin not connected",
+          "items": [{"description": "Symbol R1 Pin 2 [Passive, Line]", "pos": {"x": 101.6, "y": 63.5}, "uuid": "00000000-0000-0000-0000-0000000000a1"}],
+          "severity": "error",
+          "type": "pin_not_connected"
+        },
+        {
+          "description": "Symbol pin or wire end off connection grid",
+          "items": [{"description": "Wire", "pos": {"x": 50.8, "y": 50.0}, "uuid": "00000000-0000-0000-0000-0000000000a2"}],
+          "severity": "warning",
+          "type": "endpoint_off_grid"
+        }
+      ]
+    },
+    {
+      "path": "/child/",
+      "uuid_path": "/00000000-0000-0000-0000-000000000001/00000000-0000-0000-0000-000000000002",
+      "violations": [
+        {
+          "description": "Input pin not driven by any output pins",
+          "excluded": true,
+          "items": [{"description": "Symbol U1 Pin 2 [A, Input, Line]", "pos": {"x": 92.71, "y": 69.85}, "uuid": "00000000-0000-0000-0000-0000000000a3"}],
+          "severity": "error",
+          "type": "pin_not_driven"
+        }
+      ]
+    }
+  ],
+  "source": "demo.kicad_sch"
+}

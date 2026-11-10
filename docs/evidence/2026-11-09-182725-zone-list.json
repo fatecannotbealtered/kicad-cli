@@ -1,0 +1,70 @@
+{
+  "kind": "live",
+  "tool": "kicad-cli",
+  "tool_version": "1.1.0",
+  "commit": "ca8457790854",
+  "application": {
+    "name": "KiCad",
+    "version": "10.0.6"
+  },
+  "os": "Windows-11-10.0.26300-SP0",
+  "platform": "windows",
+  "recorded_at": "2026-11-09T18:27:25Z",
+  "targets": [
+    "file:///D:/driver-work/kicad-cli/targets/"
+  ],
+  "runs": [
+    {
+      "command": "zone list",
+      "arguments": [
+        "--doc",
+        "D:\\driver-work\\kicad-cli\\targets\\layout-practice\\layout-practice.kicad_pcb"
+      ],
+      "exit": 0,
+      "result": "pass",
+      "matrix_row": "normal",
+      "mode": "file",
+      "fingerprint": "8fc172b9bbf1ff3e7306e298b8b3ca4395f5b89436e692f3c565f95455ba8084"
+    },
+    {
+      "command": "zone list",
+      "arguments": [
+        "--doc",
+        "D:\\driver-work\\kicad-cli\\targets\\layout-practice\\layout-practice.kicad_pcb",
+        "--net",
+        "NO_SUCH_NET"
+      ],
+      "exit": 0,
+      "result": "pass",
+      "matrix_row": "empty",
+      "mode": "file",
+      "fingerprint": "8fc172b9bbf1ff3e7306e298b8b3ca4395f5b89436e692f3c565f95455ba8084"
+    },
+    {
+      "command": "zone list",
+      "arguments": [
+        "--doc",
+        "D:\\driver-work\\kicad-cli\\targets\\layout-practice\\layout-practice.kicad_pcb",
+        "--limit",
+        "many"
+      ],
+      "exit": 2,
+      "result": "pass",
+      "matrix_row": "invalid_input",
+      "mode": "file",
+      "fingerprint": "8fc172b9bbf1ff3e7306e298b8b3ca4395f5b89436e692f3c565f95455ba8084"
+    },
+    {
+      "command": "zone list",
+      "arguments": [
+        "--doc",
+        "D:\\driver-work\\kicad-cli\\targets\\runs\\zone-list-1794248842621930700/missing.kicad_pcb"
+      ],
+      "exit": 3,
+      "result": "pass",
+      "matrix_row": "not_found",
+      "mode": "file",
+      "fingerprint": "8fc172b9bbf1ff3e7306e298b8b3ca4395f5b89436e692f3c565f95455ba8084"
+    }
+  ]
+}

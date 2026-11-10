@@ -1,0 +1,36 @@
+{
+  "kind": "live",
+  "tool": "kicad-cli",
+  "tool_version": "1.1.0",
+  "commit": "ca8457790854",
+  "application": {
+    "name": "KiCad",
+    "version": "10.0.6"
+  },
+  "os": "Windows-11-10.0.26300-SP0",
+  "platform": "windows",
+  "recorded_at": "2026-11-09T18:21:57Z",
+  "targets": [
+    "file:///D:/driver-work/kicad-cli/targets/"
+  ],
+  "runs": [
+    {
+      "command": "board render",
+      "arguments": [
+        "--doc",
+        "D:\\driver-work\\kicad-cli\\targets\\schmitt\\schmitt.kicad_pcb",
+        "--file-type",
+        "pdf",
+        "--output",
+        "D:\\driver-work\\kicad-cli\\targets\\runs\\board-render-1794248514524435400/board.pdf"
+      ],
+      "exit": 1,
+      "result": "pass",
+      "matrix_row": "read_back_mismatch",
+      "mode": "file",
+      "fingerprint": "9b0cdf73b880b49e25c16925cc1b999ff7d4a0dbd5e36a82d1c46c5cbe5067ce",
+      "tampered": true,
+      "notes": "--tamper exited 0"
+    }
+  ]
+}

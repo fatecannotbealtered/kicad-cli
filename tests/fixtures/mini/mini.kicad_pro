@@ -1,0 +1,36 @@
+{
+  "board": {
+    "design_settings": {
+      "rules": {}
+    }
+  },
+  "erc": {
+    "rule_severities": {
+      "single_global_label": "ignore",
+      "footprint_filter": "ignore",
+      "four_way_junction": "ignore",
+      "simulation_model_issue": "ignore"
+    }
+  },
+  "meta": {
+    "filename": "mini.kicad_pro",
+    "version": 3
+  },
+  "net_settings": {
+    "classes": [
+      {
+        "name": "Default",
+        "track_width": 0.25,
+        "via_diameter": 0.6,
+        "via_drill": 0.3,
+        "clearance": 0.2
+      }
+    ]
+  },
+  "sheets": [
+    [
+      "00000000-0000-0000-0000-000000000001",
+      "Root"
+    ]
+  ]
+}

@@ -1,0 +1,10 @@
+(fp_lib_table
+	(version 7)
+	(lib
+		(name "LocalLogic")
+		(type "KiCad")
+		(uri "${KIPRJMOD}/LocalLogic.pretty")
+		(options "")
+		(descr "Project-local source-bound library")
+	)
+)

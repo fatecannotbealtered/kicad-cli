@@ -1,0 +1,37 @@
+{
+  "name": "@fateforge/kicad-cli",
+  "version": "1.1.0",
+  "description": "Lets an AI Agent operate KiCad safely from the command line.",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fatecannotbealtered/kicad-cli.git"
+  },
+  "homepage": "https://github.com/fatecannotbealtered/kicad-cli#readme",
+  "bugs": {
+    "url": "https://github.com/fatecannotbealtered/kicad-cli/issues"
+  },
+  "bin": {
+    "kicad-cli": "bin/kicad-cli.js"
+  },
+  "files": [
+    "bin/kicad-cli.js",
+    "skills/",
+    "NOTICE.md"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "optionalDependencies": {
+    "@fateforge/kicad-cli-win32-x64": "1.1.0",
+    "@fateforge/kicad-cli-win32-arm64": "1.1.0",
+    "@fateforge/kicad-cli-darwin-x64": "1.1.0",
+    "@fateforge/kicad-cli-darwin-arm64": "1.1.0",
+    "@fateforge/kicad-cli-linux-x64": "1.1.0",
+    "@fateforge/kicad-cli-linux-arm64": "1.1.0"
+  }
+}

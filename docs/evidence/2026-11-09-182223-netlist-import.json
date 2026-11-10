@@ -1,0 +1,30 @@
+{
+  "kind": "live",
+  "tool": "kicad-cli",
+  "tool_version": "1.1.0",
+  "commit": "ca8457790854",
+  "application": {
+    "name": "KiCad",
+    "version": "10.0.6"
+  },
+  "os": "Windows-11-10.0.26300-SP0",
+  "platform": "windows",
+  "recorded_at": "2026-11-09T18:22:23Z",
+  "targets": [
+    "file:///D:/driver-work/kicad-cli/targets/"
+  ],
+  "runs": [
+    {
+      "command": "netlist import",
+      "arguments": [
+        "--doc",
+        "D:\\driver-work\\kicad-cli\\targets\\schmitt-eco\\schmitt.kicad_pcb"
+      ],
+      "exit": 4,
+      "result": "pass",
+      "matrix_row": "no_scope",
+      "mode": "file",
+      "fingerprint": "81286814f431b0a30617d7c64d2deb20a77f18c40ee86a34bd0562501afb56da"
+    }
+  ]
+}

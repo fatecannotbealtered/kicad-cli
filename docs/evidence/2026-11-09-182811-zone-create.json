@@ -1,0 +1,36 @@
+{
+  "kind": "live",
+  "tool": "kicad-cli",
+  "tool_version": "1.1.0",
+  "commit": "ca8457790854",
+  "application": {
+    "name": "KiCad",
+    "version": "10.0.6"
+  },
+  "os": "Windows-11-10.0.26300-SP0",
+  "platform": "windows",
+  "recorded_at": "2026-11-09T18:28:11Z",
+  "targets": [
+    "file:///D:/driver-work/kicad-cli/targets/"
+  ],
+  "runs": [
+    {
+      "command": "zone create",
+      "arguments": [
+        "--doc",
+        "D:\\driver-work\\kicad-cli\\targets\\layout-practice\\layout-practice.kicad_pcb",
+        "--net",
+        "GND",
+        "--layer",
+        "B.Cu",
+        "--points",
+        "[{\"x_mm\": 10, \"y_mm\": 10}, {\"x_mm\": 45, \"y_mm\": 10}, {\"x_mm\": 45, \"y_mm\": 37}, {\"x_mm\": 10, \"y_mm\": 37}]"
+      ],
+      "exit": 4,
+      "result": "pass",
+      "matrix_row": "no_scope",
+      "mode": "file",
+      "fingerprint": "30ee8f3a1ba87a0bc104c43ee66896619dfe230ac0bd2165bb96c095209042b9"
+    }
+  ]
+}

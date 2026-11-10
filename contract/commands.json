@@ -1,0 +1,2118 @@
+{
+  "tool": "kicad-cli",
+  "version": "1.1.0",
+  "commands": [
+    {
+      "path": "project get",
+      "summary": "Read a project: its files, design rules and net classes.",
+      "effects": [
+        "observe"
+      ],
+      "modes": [
+        "file"
+      ],
+      "target_kind": "project",
+      "flags": [
+        {
+          "name": "--doc",
+          "type": "string",
+          "summary": "The document: its ID or path; in file mode, the file path."
+        }
+      ],
+      "untrusted_fields": [
+        "name",
+        "net_classes",
+        "netclass_patterns"
+      ],
+      "irreversible": false,
+      "halt": false,
+      "tolerances": {},
+      "default_fields": [],
+      "related_knowledge": [
+        "design-rules-files"
+      ]
+    },
+    {
+      "path": "library list",
+      "summary": "List the symbol and footprint libraries a project sees.",
+      "effects": [
+        "observe"
+      ],
+      "modes": [
+        "file"
+      ],
+      "target_kind": "library",
+      "flags": [
+        {
+          "name": "--doc",
+          "type": "string",
+          "summary": "The document: its ID or path; in file mode, the file path."
+        },
+        {
+          "name": "--type",
+          "type": "string",
+          "summary": "symbol, footprint or all (default)."
+        },
+        {
+          "name": "--query",
+          "type": "string",
+          "summary": "Part of a library nickname."
+        },
+        {
+          "name": "--limit",
+          "type": "integer",
+          "summary": "Items per page; default 20, at most 100."
+        },
+        {
+          "name": "--offset",
+          "type": "integer",
+          "summary": "Items to skip, from next_offset of the previous page."
+        }
+      ],
+      "untrusted_fields": [
+        "id",
+        "path"
+      ],
+      "irreversible": false,
+      "halt": false,
+      "tolerances": {},
+      "default_fields": [
+        "id",
+        "type",
+        "scope",
+        "writable"
+      ],
+      "related_knowledge": [
+        "library-changes-do-not-refresh-instances"
+      ]
+    },
+    {
+      "path": "library get",
+      "summary": "Read one library and the names of its symbols or footprints.",
+      "effects": [
+        "observe"
+      ],
+      "modes": [
+        "file"
+      ],
+      "target_kind": "library",
+      "flags": [
+        {
+          "name": "--doc",
+          "type": "string",
+          "summary": "The document: its ID or path; in file mode, the file path."
+        },
+        {
+          "name": "--id",
+          "type": "string",
+          "summary": "The library nickname, such as Device.",
+          "required": true
+        },
+        {
+          "name": "--type",
+          "type": "string",
+          "summary": "symbol, footprint or all (default)."
+        },
+        {
+          "name": "--query",
+          "type": "string",
+          "summary": "Part of a symbol or footprint name."
+        },
+        {
+          "name": "--limit",
+          "type": "integer",
+          "summary": "Items per page; default 20, at most 100."
+        },
+        {
+          "name": "--offset",
+          "type": "integer",
+          "summary": "Items to skip, from next_offset of the previous page."
+        }
+      ],
+      "untrusted_fields": [
+        "id",
+        "path",
+        "items"
+      ],
+      "irreversible": false,
+      "halt": false,
+      "tolerances": {},
+      "default_fields": [],
+      "related_knowledge": [
+        "library-changes-do-not-refresh-instances"
+      ]
+    },
+    {
+      "path": "schematic create",
+      "summary": "Create an empty schematic, and its project file when there is none.",
+      "effects": [
+        "artifact"
+      ],
+      "modes": [
+        "file"
+      ],
+      "target_kind": "schematic",
+      "flags": [
+        {
+          "name": "--doc",
+          "type": "string",
+          "summary": "The document: its ID or path; in file mode, the file path."
+        },
+        {
+          "name": "--output",
+          "type": "path",
+          "summary": "The new .kicad_sch; default: the project's name with .kicad_sch. --doc is the .kicad_pro, made when missing.",
+          "output": true
+        },
+        {
+          "name": "--title",
+          "type": "string",
+          "summary": "The title block's title; default the file name."
+        },
+        {
+          "name": "--paper",
+          "type": "string",
+          "summary": "Page size: A5, A4 (default), A3, A2, A1, A0, A, B, C, D, E, USLetter, USLegal or USLedger."
+        }
+      ],
+      "untrusted_fields": [],
+      "irreversible": false,
+      "halt": false,
+      "tolerances": {},
+      "default_fields": [],
+      "related_knowledge": [
+        "files-open-in-kicad",
+        "multi-file-writes-are-not-atomic",
+        "design-flow"
+      ]
+    },
+    {
+      "path": "schematic check",
+      "summary": "Run KiCad's electrical rules check (ERC) on a schematic.",
+      "effects": [
+        "observe"
+      ],
+      "modes": [
+        "file"
+      ],
+      "target_kind": "schematic",
+      "flags": [
+        {
+          "name": "--doc",
+          "type": "string",
+          "summary": "The document: its ID or path; in file mode, the file path."
+        },
+        {
+          "name": "--severity",
+          "type": "string",
+          "summary": "error, warning or all (default)."
+        },
+        {
+          "name": "--limit",
+          "type": "integer",
+          "summary": "Items per page; default 20, at most 100."
+        },
+        {
+          "name": "--offset",
+          "type": "integer",
+          "summary": "Items to skip, from next_offset of the previous page."
+        }
+      ],
+      "untrusted_fields": [
+        "description",
+        "sheet",
+        "objects"
+      ],
+      "irreversible": false,
+      "halt": false,
+      "tolerances": {},
+      "default_fields": [
+        "type",
+        "severity",
+        "description",
+        "sheet"
+      ],
+      "related_knowledge": [
+        "run-checks-in-the-project-folder",
+        "checks-are-not-sign-off",
+        "checks-time-limit"
+      ]
+    },
+    {
+      "path": "schematic export",
+      "summary": "Export a schematic's netlist with KiCad.",
+      "effects": [
+        "artifact"
+      ],
+      "modes": [
+        "file"
+      ],
+      "target_kind": "netlist",
+      "flags": [
+        {
+          "name": "--doc",
+          "type": "string",
+          "summary": "The document: its ID or path; in file mode, the file path."
+        },
+        {
+          "name": "--file-type",
+          "type": "string",
+          "summary": "netlist.",
+          "required": true
+        },
+        {
+          "name": "--output",
+          "type": "path",
+          "summary": "The file to write, ending in .net.",
+          "required": true,
+          "output": true
+        }
+      ],
+      "untrusted_fields": [],
+      "irreversible": false,
+      "halt": false,
+      "tolerances": {},
+      "default_fields": [],
+      "related_knowledge": [
+        "design-flow"
+      ]
+    },
+    {
+      "path": "schematic render",
+      "summary": "Plot a schematic to PDF or SVG with KiCad.",
+      "effects": [
+        "artifact"
+      ],
+      "modes": [
+        "file"
+      ],
+      "target_kind": "plot",
+      "flags": [
+        {
+          "name": "--doc",
+          "type": "string",
+          "summary": "The document: its ID or path; in file mode, the file path."
+        },
+        {
+          "name": "--file-type",
+          "type": "string",
+          "summary": "pdf or svg.",
+          "required": true
+        },
+        {
+          "name": "--output",
+          "type": "path",
+          "summary": "pdf: the file to write, ending in .pdf; svg: the folder to write into.",
+          "required": true,
+          "output": true
+        }
+      ],
+      "untrusted_fields": [],
+      "irreversible": false,
+      "halt": false,
+      "tolerances": {},
+      "default_fields": [],
+      "related_knowledge": []
+    },
+    {
+      "path": "symbol list",
+      "summary": "List the symbols placed on a schematic and its sheets.",
+      "effects": [
+        "observe"
+      ],
+      "modes": [
+        "file"
+      ],
+      "target_kind": "symbol",
+      "flags": [
+        {
+          "name": "--doc",
+          "type": "string",
+          "summary": "The document: its ID or path; in file mode, the file path."
+        },
+        {
+          "name": "--query",
+          "type": "string",
+          "summary": "Part of a reference, value, library symbol or footprint."
+        },
+        {
+          "name": "--include-power",
+          "type": "boolean",
+          "summary": "Also list power symbols (#PWR, #FLG)."
+        },
+        {
+          "name": "--limit",
+          "type": "integer",
+          "summary": "Items per page; default 20, at most 100."
+        },
+        {
+          "name": "--offset",
+          "type": "integer",
+          "summary": "Items to skip, from next_offset of the previous page."
+        }
+      ],
+      "untrusted_fields": [
+        "reference",
+        "value",
+        "footprint",
+        "lib_id",
+        "sheet"
+      ],
+      "irreversible": false,
+      "halt": false,
+      "tolerances": {},
+      "default_fields": [
+        "reference",
+        "value",
+        "footprint",
+        "lib_id",
+        "sheet"
+      ],
+      "related_knowledge": [
+        "schematic-grid"
+      ]
+    },
+    {
+      "path": "symbol get",
+      "summary": "Read one symbol: fields, units, pins and their nets.",
+      "effects": [
+        "observe"
+      ],
+      "modes": [
+        "file"
+      ],
+      "target_kind": "symbol",
+      "flags": [
+        {
+          "name": "--doc",
+          "type": "string",
+          "summary": "The document: its ID or path; in file mode, the file path."
+        },
+        {
+          "name": "--id",
+          "type": "string",
+          "summary": "A reference such as R1, a symbol UUID, or a library symbol name.",
+          "required": true
+        }
+      ],
+      "untrusted_fields": [
+        "reference",
+        "lib_id",
+        "value",
+        "footprint",
+        "fields",
+        "units",
+        "name",
+        "extends",
+        "pins",
+        "library"
+      ],
+      "irreversible": false,
+      "halt": false,
+      "tolerances": {},
+      "default_fields": [],
+      "related_knowledge": [
+        "net-names-and-labels"
+      ]
+    },
+    {
+      "path": "net list",
+      "summary": "List the nets and their pins or pads.",
+      "effects": [
+        "observe"
+      ],
+      "modes": [
+        "file"
+      ],
+      "target_kind": "net",
+      "flags": [
+        {
+          "name": "--doc",
+          "type": "string",
+          "summary": "The document: its ID or path; in file mode, the file path."
+        },
+        {
+          "name": "--query",
+          "type": "string",
+          "summary": "Part of a net name."
+        },
+        {
+          "name": "--include-unconnected",
+          "type": "boolean",
+          "summary": "Also list unconnected-(...) nets."
+        },
+        {
+          "name": "--limit",
+          "type": "integer",
+          "summary": "Items per page; default 20, at most 100."
+        },
+        {
+          "name": "--offset",
+          "type": "integer",
+          "summary": "Items to skip, from next_offset of the previous page."
+        }
+      ],
+      "untrusted_fields": [
+        "name",
+        "pins"
+      ],
+      "irreversible": false,
+      "halt": false,
+      "tolerances": {},
+      "default_fields": [
+        "name",
+        "pin_count",
+        "pins"
+      ],
+      "related_knowledge": [
+        "net-names-and-labels"
+      ]
+    },
+    {
+      "path": "symbol create",
+      "summary": "Place a library symbol on a sheet, or define one in a project symbol library.",
+      "effects": [
+        "artifact",
+        "change"
+      ],
+      "modes": [
+        "file"
+      ],
+      "target_kind": "symbol",
+      "flags": [
+        {
+          "name": "--doc",
+          "type": "string",
+          "summary": "The document: its ID or path; in file mode, the file path."
+        },
+        {
+          "name": "--library-id",
+          "type": "string",
+          "summary": "The library symbol to place, LIBRARY:NAME, such as Device:R."
+        },
+        {
+          "name": "--reference",
+          "type": "string",
+          "summary": "The new reference, such as R5, or a prefix and ? for the next free number; default: the symbol's own prefix and ?."
+        },
+        {
+          "name": "--value",
+          "type": "string",
+          "summary": "The Value field; default: the library symbol's."
+        },
+        {
+          "name": "--footprint",
+          "type": "string",
+          "summary": "The Footprint field, LIBRARY:NAME; default: the library symbol's."
+        },
+        {
+          "name": "--x",
+          "type": "quantity",
+          "summary": "X of the symbol's anchor, with --y.",
+          "quantity": "length",
+          "coordinate_system": "schematic sheet: origin at the top-left corner of the page, x to the right, y down; 1.27 mm grid"
+        },
+        {
+          "name": "--y",
+          "type": "quantity",
+          "summary": "Y of the symbol's anchor, with --x.",
+          "quantity": "length",
+          "coordinate_system": "schematic sheet: origin at the top-left corner of the page, x to the right, y down; 1.27 mm grid"
+        },
+        {
+          "name": "--near",
+          "type": "string",
+          "summary": "Without --x/--y: place it beside this reference."
+        },
+        {
+          "name": "--sheet",
+          "type": "string",
+          "summary": "The sheet path to place it on, such as /power/; default: the root sheet."
+        },
+        {
+          "name": "--definition",
+          "type": "json",
+          "summary": "With a .kicad_sym --doc: the symbol as JSON, inline or a file (name, reference, body_mm, pins).",
+          "schema": {
+            "type": "object",
+            "required": [
+              "name",
+              "reference",
+              "body_mm",
+              "pins"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "reference": {
+                "type": "string",
+                "description": "The designator prefix, such as U."
+              },
+              "value": {
+                "type": "string"
+              },
+              "footprint": {
+                "type": "string",
+                "description": "LIBRARY:NAME."
+              },
+              "datasheet": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              },
+              "body_mm": {
+                "type": "array",
+                "items": {
+                  "type": "number"
+                },
+                "minItems": 2,
+                "maxItems": 2,
+                "description": "The body rectangle [width, height], centred on the origin."
+              },
+              "pins": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "number",
+                    "type",
+                    "at_mm"
+                  ],
+                  "additionalProperties": false,
+                  "properties": {
+                    "number": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "input",
+                        "output",
+                        "bidirectional",
+                        "tri_state",
+                        "passive",
+                        "free",
+                        "unspecified",
+                        "power_in",
+                        "power_out",
+                        "open_collector",
+                        "open_emitter",
+                        "no_connect"
+                      ]
+                    },
+                    "at_mm": {
+                      "type": "array",
+                      "items": {
+                        "type": "number"
+                      },
+                      "minItems": 2,
+                      "maxItems": 2,
+                      "description": "The connection point [x, y], y up, on the 1.27 mm grid."
+                    },
+                    "angle_deg": {
+                      "type": "number",
+                      "enum": [
+                        0,
+                        90,
+                        180,
+                        270
+                      ],
+                      "description": "The direction towards the body."
+                    },
+                    "length_mm": {
+                      "type": "number",
+                      "exclusiveMinimum": 0
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "--output",
+          "type": "path",
+          "summary": "Write the full preview, with every change, to this file."
+        }
+      ],
+      "untrusted_fields": [
+        "also_added",
+        "as_stored",
+        "effects",
+        "sheet"
+      ],
+      "irreversible": false,
+      "halt": false,
+      "tolerances": {
+        "x_mm": 0.0001,
+        "y_mm": 0.0001
+      },
+      "default_fields": [],
+      "related_knowledge": [
+        "schematic-grid",
+        "files-open-in-kicad",
+        "library-changes-do-not-refresh-instances",
+        "multi-file-writes-are-not-atomic"
+      ]
+    },
+    {
+      "path": "symbol update",
+      "summary": "Change symbols' fields and flags.",
+      "effects": [
+        "change"
+      ],
+      "modes": [
+        "file"
+      ],
+      "target_kind": "symbol",
+      "flags": [
+        {
+          "name": "--doc",
+          "type": "string",
+          "summary": "The document: its ID or path; in file mode, the file path."
+        },
+        {
+          "name": "--id",
+          "type": "string",
+          "summary": "The symbol's reference, such as R1.",
+          "required": true
+        },
+        {
+          "name": "--ids",
+          "type": "list",
+          "summary": "Several references, such as R1,R2: the same values for each."
+        },
+        {
+          "name": "--input",
+          "type": "input",
+          "summary": "A JSON file or - with {\"items\": [{\"id\": \"R1\", ...}, ...]}: values per symbol."
+        },
+        {
+          "name": "--value",
+          "type": "string",
+          "summary": "The Value field."
+        },
+        {
+          "name": "--footprint",
+          "type": "string",
+          "summary": "The Footprint field, LIBRARY:NAME."
+        },
+        {
+          "name": "--datasheet",
+          "type": "string",
+          "summary": "The Datasheet field."
+        },
+        {
+          "name": "--description",
+          "type": "string",
+          "summary": "The Description field."
+        },
+        {
+          "name": "--field-name",
+          "type": "string",
+          "summary": "Another field to set, with --field-value, such as MPN."
+        },
+        {
+          "name": "--field-value",
+          "type": "string",
+          "summary": "The value of --field-name; an empty value empties it."
+        },
+        {
+          "name": "--dnp",
+          "type": "boolean",
+          "summary": "Do not populate."
+        },
+        {
+          "name": "--in-bom",
+          "type": "boolean",
+          "summary": "Listed in the bill of materials."
+        },
+        {
+          "name": "--on-board",
+          "type": "boolean",
+          "summary": "Placed on the board."
+        },
+        {
+          "name": "--exclude-from-sim",
+          "type": "boolean",
+          "summary": "Left out of simulation."
+        },
+        {
+          "name": "--output",
+          "type": "path",
+          "summary": "Write the full preview, with every change, to this file."
+        }
+      ],
+      "untrusted_fields": [
+        "as_stored",
+        "effects"
+      ],
+      "irreversible": false,
+      "halt": false,
+      "tolerances": {},
+      "default_fields": [],
+      "related_knowledge": [
+        "files-open-in-kicad",
+        "library-changes-do-not-refresh-instances"
+      ]
+    },
+    {
+      "path": "symbol move",
+      "summary": "Move or rotate a symbol with its own wires and labels.",
+      "effects": [
+        "change"
+      ],
+      "modes": [
+        "file"
+      ],
+      "target_kind": "symbol",
+      "flags": [
+        {
+          "name": "--doc",
+          "type": "string",
+          "summary": "The document: its ID or path; in file mode, the file path."
+        },
+        {
+          "name": "--id",
+          "type": "string",
+          "summary": "The symbol's reference, such as R1.",
+          "required": true
+        },
+        {
+          "name": "--input",
+          "type": "input",
+          "summary": "A JSON file or - with {\"items\": [{\"id\": \"R1\", ...}, ...]}: values per symbol."
+        },
+        {
+          "name": "--x",
+          "type": "quantity",
+          "summary": "New X of the symbol's anchor, with --y.",
+          "quantity": "length",
+          "coordinate_system": "schematic sheet: origin at the top-left corner of the page, x to the right, y down; 1.27 mm grid"
+        },
+        {
+          "name": "--y",
+          "type": "quantity",
+          "summary": "New Y of the symbol's anchor, with --x.",
+          "quantity": "length",
+          "coordinate_system": "schematic sheet: origin at the top-left corner of the page, x to the right, y down; 1.27 mm grid"
+        },
+        {
+          "name": "--rotation",
+          "type": "quantity",
+          "summary": "New rotation: 0, 90, 180 or 270 degrees, counter-clockwise on screen.",
+          "quantity": "angle"
+        },
+        {
+          "name": "--output",
+          "type": "path",
+          "summary": "Write the full preview, with every change, to this file."
+        }
+      ],
+      "untrusted_fields": [
+        "as_stored",
+        "effects"
+      ],
+      "irreversible": false,
+      "halt": false,
+      "tolerances": {
+        "x_mm": 0.0001,
+        "y_mm": 0.0001,
+        "rotation_deg": 0
+      },
+      "default_fields": [],
+      "related_knowledge": [
+        "schematic-grid",
+        "files-open-in-kicad"
+      ]
+    },
+    {
+      "path": "symbol delete",
+      "summary": "Delete symbols with the wires and labels only they use.",
+      "effects": [
+        "change"
+      ],
+      "modes": [
+        "file"
+      ],
+      "target_kind": "symbol",
+      "flags": [
+        {
+          "name": "--doc",
+          "type": "string",
+          "summary": "The document: its ID or path; in file mode, the file path."
+        },
+        {
+          "name": "--id",
+          "type": "string",
+          "summary": "The symbol's reference, such as R1.",
+          "required": true
+        },
+        {
+          "name": "--ids",
+          "type": "list",
+          "summary": "Several references, such as R1,R2: the same values for each."
+        },
+        {
+          "name": "--output",
+          "type": "path",
+          "summary": "Write the full preview, with every change, to this file."
+        }
+      ],
+      "untrusted_fields": [
+        "as_stored",
+        "effects"
+      ],
+      "irreversible": true,
+      "halt": false,
+      "tolerances": {},
+      "default_fields": [],
+      "related_knowledge": [
+        "files-open-in-kicad"
+      ]
+    },
+    {
+      "path": "pin update",
+      "summary": "Connect a pin to a net, or mark it not connected.",
+      "effects": [
+        "change"
+      ],
+      "modes": [
+        "file"
+      ],
+      "target_kind": "pin",
+      "flags": [
+        {
+          "name": "--doc",
+          "type": "string",
+          "summary": "The document: its ID or path; in file mode, the file path."
+        },
+        {
+          "name": "--id",
+          "type": "string",
+          "summary": "The pin, REFERENCE.NUMBER, such as U1.3.",
+          "required": true
+        },
+        {
+          "name": "--ids",
+          "type": "list",
+          "summary": "Several pins, such as U1.6,U1.7: the same change for each."
+        },
+        {
+          "name": "--input",
+          "type": "input",
+          "summary": "A JSON file or - with {\"items\": [{\"id\": \"U1.3\", \"net\": \"SDA\"}, ...]}: a change per pin."
+        },
+        {
+          "name": "--net",
+          "type": "string",
+          "summary": "The net to join, such as GND or SDA; a new name makes a new net."
+        },
+        {
+          "name": "--no-connect",
+          "type": "boolean",
+          "summary": "Disconnect the pin and mark it as not connected."
+        },
+        {
+          "name": "--output",
+          "type": "path",
+          "summary": "Write the full preview, with every change, to this file."
+        }
+      ],
+      "untrusted_fields": [
+        "as_stored",
+        "effects",
+        "net"
+      ],
+      "irreversible": false,
+      "halt": false,
+      "tolerances": {},
+      "default_fields": [],
+      "related_knowledge": [
+        "net-names-and-labels",
+        "schematic-grid",
+        "files-open-in-kicad"
+      ]
+    },
+    {
+      "path": "net update",
+      "summary": "Rename a net and every label that names it.",
+      "effects": [
+        "change"
+      ],
+      "modes": [
+        "file"
+      ],
+      "target_kind": "net",
+      "flags": [
+        {
+          "name": "--doc",
+          "type": "string",
+          "summary": "The document: its ID or path; in file mode, the file path."
+        },
+        {
+          "name": "--id",
+          "type": "string",
+          "summary": "The net's name now, as net list shows it.",
+          "required": true
+        },
+        {
+          "name": "--name",
+          "type": "string",
+          "summary": "The new name."
+        },
+        {
+          "name": "--output",
+          "type": "path",
+          "summary": "Write the full preview, with every change, to this file."
+        }
+      ],
+      "untrusted_fields": [
+        "as_stored",
+        "effects",
+        "id"
+      ],
+      "irreversible": false,
+      "halt": false,
+      "tolerances": {},
+      "default_fields": [],
+      "related_knowledge": [
+        "net-names-and-labels",
+        "files-open-in-kicad"
+      ]
+    },
+    {
+      "path": "board create",
+      "summary": "Create a board from the schematic, with a fresh netlist from KiCad.",
+      "effects": [
+        "artifact"
+      ],
+      "modes": [
+        "file"
+      ],
+      "target_kind": "board",
+      "flags": [
+        {
+          "name": "--doc",
+          "type": "string",
+          "summary": "The document: its ID or path; in file mode, the file path."
+        },
+        {
+          "name": "--output",
+          "type": "path",
+          "summary": "The new .kicad_pcb; default: the schematic's name with .kicad_pcb.",
+          "output": true
+        },
+        {
+          "name": "--width",
+          "type": "quantity",
+          "summary": "Outline width; with --height. Default: the parts' extent plus 2 mm on each side.",
+          "quantity": "length"
+        },
+        {
+          "name": "--height",
+          "type": "quantity",
+          "summary": "Outline height; with --width.",
+          "quantity": "length"
+        },
+        {
+          "name": "--pitch",
+          "type": "quantity",
+          "summary": "Grid spacing between part origins; default 10mm.",
+          "quantity": "length"
+        }
+      ],
+      "untrusted_fields": [
+        "unmatched_pins",
+        "skipped"
+      ],
+      "irreversible": false,
+      "halt": false,
+      "tolerances": {},
+      "default_fields": [],
+      "related_knowledge": [
+        "design-flow",
+        "library-changes-do-not-refresh-instances"
+      ]
+    },
+    {
+      "path": "board check",
+      "summary": "Run KiCad's DRC on a board, with schematic parity.",
+      "effects": [
+        "observe"
+      ],
+      "modes": [
+        "file"
+      ],
+      "target_kind": "board",
+      "flags": [
+        {
+          "name": "--doc",
+          "type": "string",
+          "summary": "The document: its ID or path; in file mode, the file path."
+        },
+        {
+          "name": "--severity",
+          "type": "string",
+          "summary": "error, warning or all (default): which findings to list."
+        },
+        {
+          "name": "--limit",
+          "type": "integer",
+          "summary": "Items per page; default 20, at most 100."
+        },
+        {
+          "name": "--offset",
+          "type": "integer",
+          "summary": "Items to skip, from next_offset of the previous page."
+        }
+      ],
+      "untrusted_fields": [
+        "description",
+        "items"
+      ],
+      "irreversible": false,
+      "halt": false,
+      "tolerances": {},
+      "default_fields": [
+        "group",
+        "type",
+        "severity",
+        "description",
+        "items"
+      ],
+      "related_knowledge": [
+        "run-checks-in-the-project-folder",
+        "zone-fills",
+        "checks-are-not-sign-off",
+        "starved-thermal-in-10-0-6",
+        "design-rules-files",
+        "checks-time-limit"
+      ]
+    },
+    {
+      "path": "board export",
+      "summary": "Export Gerber or drill files with KiCad.",
+      "effects": [
+        "artifact"
+      ],
+      "modes": [
+        "file"
+      ],
+      "target_kind": "folder",
+      "flags": [
+        {
+          "name": "--doc",
+          "type": "string",
+          "summary": "The document: its ID or path; in file mode, the file path."
+        },
+        {
+          "name": "--file-type",
+          "type": "string",
+          "summary": "gerber or drill.",
+          "required": true
+        },
+        {
+          "name": "--output",
+          "type": "path",
+          "summary": "The folder for the files; made when missing.",
+          "required": true,
+          "output": true
+        }
+      ],
+      "untrusted_fields": [],
+      "irreversible": false,
+      "halt": false,
+      "tolerances": {},
+      "default_fields": [],
+      "related_knowledge": [
+        "zone-fills",
+        "checks-are-not-sign-off",
+        "plot-origin"
+      ]
+    },
+    {
+      "path": "board render",
+      "summary": "Plot board layers to PDF or SVG with KiCad.",
+      "effects": [
+        "artifact"
+      ],
+      "modes": [
+        "file"
+      ],
+      "target_kind": "file",
+      "flags": [
+        {
+          "name": "--doc",
+          "type": "string",
+          "summary": "The document: its ID or path; in file mode, the file path."
+        },
+        {
+          "name": "--file-type",
+          "type": "string",
+          "summary": "pdf or svg.",
+          "required": true
+        },
+        {
+          "name": "--output",
+          "type": "path",
+          "summary": "The file to write, ending in .pdf or .svg.",
+          "required": true,
+          "output": true
+        },
+        {
+          "name": "--layers",
+          "type": "string",
+          "summary": "Comma-separated layer names; default F.Cu,B.Cu,F.SilkS,B.SilkS,Edge.Cuts."
+        }
+      ],
+      "untrusted_fields": [],
+      "irreversible": false,
+      "halt": false,
+      "tolerances": {},
+      "default_fields": [],
+      "related_knowledge": [
+        "plot-origin",
+        "zone-fills"
+      ]
+    },
+    {
+      "path": "footprint list",
+      "summary": "List the footprints on a board: position, rotation, side, lock.",
+      "effects": [
+        "observe"
+      ],
+      "modes": [
+        "file"
+      ],
+      "target_kind": "footprint",
+      "flags": [
+        {
+          "name": "--doc",
+          "type": "string",
+          "summary": "The document: its ID or path; in file mode, the file path."
+        },
+        {
+          "name": "--query",
+          "type": "string",
+          "summary": "Part of a reference or value, such as U or 10k."
+        },
+        {
+          "name": "--side",
+          "type": "string",
+          "summary": "front or back."
+        },
+        {
+          "name": "--limit",
+          "type": "integer",
+          "summary": "Items per page; default 20, at most 100."
+        },
+        {
+          "name": "--offset",
+          "type": "integer",
+          "summary": "Items to skip, from next_offset of the previous page."
+        }
+      ],
+      "untrusted_fields": [
+        "id",
+        "value",
+        "lib_id",
+        "pads"
+      ],
+      "irreversible": false,
+      "halt": false,
+      "tolerances": {},
+      "default_fields": [
+        "id",
+        "value",
+        "x_mm",
+        "y_mm",
+        "rotation_deg",
+        "side"
+      ],
+      "related_knowledge": [
+        "design-flow"
+      ]
+    },
+    {
+      "path": "footprint create",
+      "summary": "Define an SMD footprint in a project footprint library.",
+      "effects": [
+        "artifact",
+        "change"
+      ],
+      "modes": [
+        "file"
+      ],
+      "target_kind": "footprint",
+      "flags": [
+        {
+          "name": "--doc",
+          "type": "string",
+          "summary": "The document: its ID or path; in file mode, the file path."
+        },
+        {
+          "name": "--definition",
+          "type": "json",
+          "summary": "JSON, inline or a file: name, body_mm [w,h], courtyard_mm, pads [{number, at_mm, size_mm}].",
+          "required": true,
+          "schema": {
+            "type": "object",
+            "required": [
+              "name",
+              "body_mm",
+              "courtyard_mm",
+              "pads"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "The footprint name, such as SOT-23-5_Demo."
+              },
+              "body_mm": {
+                "type": "array",
+                "items": {
+                  "type": "number"
+                },
+                "minItems": 2,
+                "maxItems": 2,
+                "description": "The body rectangle [width, height], centred on the origin."
+              },
+              "courtyard_mm": {
+                "type": "number",
+                "minimum": 0,
+                "description": "Free space from body and pads to the courtyard line."
+              },
+              "pads": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "number",
+                    "at_mm",
+                    "size_mm"
+                  ],
+                  "additionalProperties": false,
+                  "properties": {
+                    "number": {
+                      "type": "string"
+                    },
+                    "at_mm": {
+                      "type": "array",
+                      "items": {
+                        "type": "number"
+                      },
+                      "minItems": 2,
+                      "maxItems": 2,
+                      "description": "Pad centre [x, y], y down."
+                    },
+                    "size_mm": {
+                      "type": "array",
+                      "items": {
+                        "type": "number"
+                      },
+                      "minItems": 2,
+                      "maxItems": 2,
+                      "description": "Pad size [width, height]."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "--output",
+          "type": "path",
+          "summary": "Write the full preview, with every change, to this file."
+        }
+      ],
+      "untrusted_fields": [
+        "id"
+      ],
+      "irreversible": false,
+      "halt": false,
+      "tolerances": {},
+      "default_fields": [],
+      "related_knowledge": [
+        "library-changes-do-not-refresh-instances",
+        "multi-file-writes-are-not-atomic"
+      ]
+    },
+    {
+      "path": "track list",
+      "summary": "List the tracks and vias on a board.",
+      "effects": [
+        "observe"
+      ],
+      "modes": [
+        "file"
+      ],
+      "target_kind": "track",
+      "flags": [
+        {
+          "name": "--doc",
+          "type": "string",
+          "summary": "The document: its ID or path; in file mode, the file path."
+        },
+        {
+          "name": "--net",
+          "type": "string",
+          "summary": "Only this net, such as GND."
+        },
+        {
+          "name": "--layer",
+          "type": "string",
+          "summary": "Only this copper layer, such as F.Cu."
+        },
+        {
+          "name": "--limit",
+          "type": "integer",
+          "summary": "Items per page; default 20, at most 100."
+        },
+        {
+          "name": "--offset",
+          "type": "integer",
+          "summary": "Items to skip, from next_offset of the previous page."
+        }
+      ],
+      "untrusted_fields": [
+        "net",
+        "layer"
+      ],
+      "irreversible": false,
+      "halt": false,
+      "tolerances": {},
+      "default_fields": [
+        "id",
+        "type",
+        "net",
+        "layer",
+        "width_mm",
+        "length_mm"
+      ],
+      "related_knowledge": [
+        "design-flow"
+      ]
+    },
+    {
+      "path": "netlist import",
+      "summary": "Update the board from its schematic; never deletes footprints.",
+      "effects": [
+        "change"
+      ],
+      "modes": [
+        "file"
+      ],
+      "target_kind": "board",
+      "flags": [
+        {
+          "name": "--doc",
+          "type": "string",
+          "summary": "The document: its ID or path; in file mode, the file path."
+        },
+        {
+          "name": "--schematic",
+          "type": "path",
+          "summary": "The root schematic; default: the .kicad_sch beside the board with the same name."
+        },
+        {
+          "name": "--output",
+          "type": "path",
+          "summary": "Write the full preview, with every change, to this file."
+        }
+      ],
+      "untrusted_fields": [
+        "board",
+        "schematic",
+        "added",
+        "changed",
+        "renamed_nets",
+        "copper_left_on_old_nets",
+        "not_removed",
+        "problems"
+      ],
+      "irreversible": false,
+      "halt": false,
+      "tolerances": {},
+      "default_fields": [],
+      "related_knowledge": [
+        "files-open-in-kicad",
+        "library-changes-do-not-refresh-instances"
+      ]
+    },
+    {
+      "path": "footprint move",
+      "summary": "Move or turn footprints on a board after a KiCad DRC check.",
+      "effects": [
+        "change"
+      ],
+      "modes": [
+        "file"
+      ],
+      "target_kind": "footprint",
+      "flags": [
+        {
+          "name": "--doc",
+          "type": "string",
+          "summary": "The document: its ID or path; in file mode, the file path."
+        },
+        {
+          "name": "--id",
+          "type": "string",
+          "summary": "Reference of an unlocked footprint, such as R1; tracks do not follow.",
+          "required": true
+        },
+        {
+          "name": "--x",
+          "type": "quantity",
+          "summary": "The new X position of the footprint's origin.",
+          "quantity": "length",
+          "coordinate_system": "board: origin at the top-left corner of the page, x to the right, y down, in mm"
+        },
+        {
+          "name": "--y",
+          "type": "quantity",
+          "summary": "The new Y position of the footprint's origin.",
+          "quantity": "length",
+          "coordinate_system": "board: origin at the top-left corner of the page, x to the right, y down, in mm"
+        },
+        {
+          "name": "--rotation",
+          "type": "quantity",
+          "summary": "The new angle about the origin, counterclockwise as KiCad shows it with y down: a pad at (dx, dy) from the origin goes to (dx*cos a + dy*sin a, -dx*sin a + dy*cos a), so at 90deg a pad 1 mm right of the origin ends 1 mm above it. Such as 90deg.",
+          "quantity": "angle"
+        },
+        {
+          "name": "--input",
+          "type": "input",
+          "summary": "A JSON file, or - for stdin, with several moves and one DRC check: {\"items\": [{\"id\": \"R1\", \"x\": \"12.5mm\", \"y\": \"30mm\", \"rotation\": \"90deg\"}, ...]}. Every value goes in the items; give no other flag but --doc."
+        },
+        {
+          "name": "--output",
+          "type": "path",
+          "summary": "Write the full preview, with every change, to this file."
+        }
+      ],
+      "untrusted_fields": [
+        "moved"
+      ],
+      "irreversible": false,
+      "halt": false,
+      "tolerances": {
+        "x_mm": 1e-06,
+        "y_mm": 1e-06,
+        "rotation_deg": 1e-06
+      },
+      "default_fields": [],
+      "related_knowledge": [
+        "files-open-in-kicad",
+        "design-rules-files",
+        "run-checks-in-the-project-folder",
+        "checks-time-limit",
+        "placement-method"
+      ]
+    },
+    {
+      "path": "track create",
+      "summary": "Add a straight track or a path of straight segments after a KiCad DRC check.",
+      "effects": [
+        "change"
+      ],
+      "modes": [
+        "file"
+      ],
+      "target_kind": "track",
+      "flags": [
+        {
+          "name": "--doc",
+          "type": "string",
+          "summary": "The document: its ID or path; in file mode, the file path."
+        },
+        {
+          "name": "--net",
+          "type": "string",
+          "summary": "The net name, as the board has it.",
+          "required": true
+        },
+        {
+          "name": "--layer",
+          "type": "string",
+          "summary": "The copper layer, such as F.Cu; no vias or arcs.",
+          "required": true
+        },
+        {
+          "name": "--width",
+          "type": "quantity",
+          "summary": "The track width; default: the net class's track width.",
+          "quantity": "length"
+        },
+        {
+          "name": "--x1",
+          "type": "quantity",
+          "summary": "X of the start of one segment, with --y1, --x2 and --y2.",
+          "quantity": "length",
+          "coordinate_system": "board: origin at the top-left corner of the page, x to the right, y down, in mm"
+        },
+        {
+          "name": "--y1",
+          "type": "quantity",
+          "summary": "Y of the start.",
+          "quantity": "length",
+          "coordinate_system": "board: origin at the top-left corner of the page, x to the right, y down, in mm"
+        },
+        {
+          "name": "--x2",
+          "type": "quantity",
+          "summary": "X of the end.",
+          "quantity": "length",
+          "coordinate_system": "board: origin at the top-left corner of the page, x to the right, y down, in mm"
+        },
+        {
+          "name": "--y2",
+          "type": "quantity",
+          "summary": "Y of the end.",
+          "quantity": "length",
+          "coordinate_system": "board: origin at the top-left corner of the page, x to the right, y down, in mm"
+        },
+        {
+          "name": "--points",
+          "type": "json",
+          "summary": "Instead of --x1..--y2, a path through these corners: [{\"x_mm\": 10, \"y_mm\": 20}, ...].",
+          "coordinate_system": "board: origin at the top-left corner of the page, x to the right, y down, in mm",
+          "schema": {
+            "type": "array",
+            "minItems": 2,
+            "items": {
+              "type": "object",
+              "required": [
+                "x_mm",
+                "y_mm"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "x_mm": {
+                  "type": "number"
+                },
+                "y_mm": {
+                  "type": "number"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "--input",
+          "type": "input",
+          "summary": "A JSON file, or - for stdin, with several tracks and one DRC check: {\"items\": [{\"net\": \"GND\", \"layer\": \"F.Cu\", \"width\": \"0.5mm\", \"points\": [...]}, ...]}. Every value goes in the items; give no other flag but --doc."
+        },
+        {
+          "name": "--output",
+          "type": "path",
+          "summary": "Write the full preview, with every change, to this file."
+        }
+      ],
+      "untrusted_fields": [
+        "net",
+        "layer",
+        "start",
+        "end"
+      ],
+      "irreversible": false,
+      "halt": false,
+      "tolerances": {
+        "width_mm": 1e-06,
+        "x1_mm": 1e-06,
+        "y1_mm": 1e-06,
+        "x2_mm": 1e-06,
+        "y2_mm": 1e-06,
+        "points": 1e-06
+      },
+      "default_fields": [],
+      "related_knowledge": [
+        "files-open-in-kicad",
+        "design-rules-files",
+        "run-checks-in-the-project-folder",
+        "checks-time-limit",
+        "routing-method"
+      ]
+    },
+    {
+      "path": "track delete",
+      "summary": "Delete straight track segments and vias by UUID.",
+      "effects": [
+        "change"
+      ],
+      "modes": [
+        "file"
+      ],
+      "target_kind": "track",
+      "flags": [
+        {
+          "name": "--doc",
+          "type": "string",
+          "summary": "The document: its ID or path; in file mode, the file path."
+        },
+        {
+          "name": "--id",
+          "type": "string",
+          "summary": "The UUID of an unlocked straight segment or via, from track list.",
+          "required": true
+        },
+        {
+          "name": "--ids",
+          "type": "list",
+          "summary": "Several segment or via UUIDs, comma-separated."
+        },
+        {
+          "name": "--output",
+          "type": "path",
+          "summary": "Write the full preview, with every change, to this file."
+        }
+      ],
+      "untrusted_fields": [
+        "deleted"
+      ],
+      "irreversible": true,
+      "halt": false,
+      "tolerances": {},
+      "default_fields": [],
+      "related_knowledge": [
+        "files-open-in-kicad"
+      ]
+    },
+    {
+      "path": "via create",
+      "summary": "Add a through via after a KiCad DRC check.",
+      "effects": [
+        "change"
+      ],
+      "modes": [
+        "file"
+      ],
+      "target_kind": "via",
+      "flags": [
+        {
+          "name": "--doc",
+          "type": "string",
+          "summary": "The document: its ID or path; in file mode, the file path."
+        },
+        {
+          "name": "--net",
+          "type": "string",
+          "summary": "The net name, as the board has it.",
+          "required": true
+        },
+        {
+          "name": "--x",
+          "type": "quantity",
+          "summary": "X of the via's centre.",
+          "quantity": "length",
+          "coordinate_system": "board: origin at the top-left corner of the page, x to the right, y down, in mm"
+        },
+        {
+          "name": "--y",
+          "type": "quantity",
+          "summary": "Y of the via's centre.",
+          "quantity": "length",
+          "coordinate_system": "board: origin at the top-left corner of the page, x to the right, y down, in mm"
+        },
+        {
+          "name": "--diameter",
+          "type": "quantity",
+          "summary": "The copper diameter; default: the net class's via diameter.",
+          "quantity": "length"
+        },
+        {
+          "name": "--drill",
+          "type": "quantity",
+          "summary": "The hole diameter; default: the net class's via drill.",
+          "quantity": "length"
+        },
+        {
+          "name": "--input",
+          "type": "input",
+          "summary": "A JSON file, or - for stdin, with several vias and one DRC check: {\"items\": [{\"net\": \"GND\", \"x\": \"12mm\", \"y\": \"30mm\"}, ...]}. Every value goes in the items; give no other flag but --doc."
+        },
+        {
+          "name": "--output",
+          "type": "path",
+          "summary": "Write the full preview, with every change, to this file."
+        }
+      ],
+      "untrusted_fields": [
+        "net",
+        "connects_to"
+      ],
+      "irreversible": false,
+      "halt": false,
+      "tolerances": {
+        "x_mm": 1e-06,
+        "y_mm": 1e-06,
+        "diameter_mm": 1e-06,
+        "drill_mm": 1e-06
+      },
+      "default_fields": [],
+      "related_knowledge": [
+        "files-open-in-kicad",
+        "design-rules-files",
+        "run-checks-in-the-project-folder",
+        "checks-time-limit",
+        "routing-method"
+      ]
+    },
+    {
+      "path": "zone list",
+      "summary": "List the copper zones on a board, with their outlines.",
+      "effects": [
+        "observe"
+      ],
+      "modes": [
+        "file"
+      ],
+      "target_kind": "zone",
+      "flags": [
+        {
+          "name": "--doc",
+          "type": "string",
+          "summary": "The document: its ID or path; in file mode, the file path."
+        },
+        {
+          "name": "--net",
+          "type": "string",
+          "summary": "Only this net, such as GND."
+        },
+        {
+          "name": "--layer",
+          "type": "string",
+          "summary": "Only zones on this copper layer, such as B.Cu."
+        },
+        {
+          "name": "--limit",
+          "type": "integer",
+          "summary": "Items per page; default 20, at most 100."
+        },
+        {
+          "name": "--offset",
+          "type": "integer",
+          "summary": "Items to skip, from next_offset of the previous page."
+        }
+      ],
+      "untrusted_fields": [
+        "net",
+        "name"
+      ],
+      "irreversible": false,
+      "halt": false,
+      "tolerances": {},
+      "default_fields": [
+        "id",
+        "net",
+        "layers",
+        "priority",
+        "points"
+      ],
+      "related_knowledge": [
+        "zone-fills"
+      ]
+    },
+    {
+      "path": "zone create",
+      "summary": "Add a copper zone outline on one layer after a KiCad DRC check.",
+      "effects": [
+        "change"
+      ],
+      "modes": [
+        "file"
+      ],
+      "target_kind": "zone",
+      "flags": [
+        {
+          "name": "--doc",
+          "type": "string",
+          "summary": "The document: its ID or path; in file mode, the file path."
+        },
+        {
+          "name": "--net",
+          "type": "string",
+          "summary": "The net the zone fills with, such as GND.",
+          "required": true
+        },
+        {
+          "name": "--layer",
+          "type": "string",
+          "summary": "The copper layer, such as B.Cu.",
+          "required": true
+        },
+        {
+          "name": "--points",
+          "type": "json",
+          "summary": "The outline corners in order, at least 3: [{\"x_mm\": 10, \"y_mm\": 10}, ...]. KiCad clips the fill to the board outline and fills with its default settings: 0.5 mm from other copper, at least 0.25 mm wide, and thermal reliefs with a 0.5 mm gap and 0.5 mm spokes.",
+          "required": true,
+          "coordinate_system": "board: origin at the top-left corner of the page, x to the right, y down, in mm",
+          "schema": {
+            "type": "array",
+            "minItems": 3,
+            "items": {
+              "type": "object",
+              "required": [
+                "x_mm",
+                "y_mm"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "x_mm": {
+                  "type": "number"
+                },
+                "y_mm": {
+                  "type": "number"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "--priority",
+          "type": "integer",
+          "summary": "Fill priority; a higher one fills first. Default 0."
+        },
+        {
+          "name": "--output",
+          "type": "path",
+          "summary": "Write the full preview, with every change, to this file."
+        }
+      ],
+      "untrusted_fields": [
+        "net"
+      ],
+      "irreversible": false,
+      "halt": false,
+      "tolerances": {
+        "points": 1e-06
+      },
+      "default_fields": [],
+      "related_knowledge": [
+        "zone-fills",
+        "files-open-in-kicad",
+        "design-rules-files",
+        "starved-thermal-in-10-0-6",
+        "checks-time-limit",
+        "routing-method"
+      ]
+    },
+    {
+      "path": "zone delete",
+      "summary": "Delete copper zones by UUID.",
+      "effects": [
+        "change"
+      ],
+      "modes": [
+        "file"
+      ],
+      "target_kind": "zone",
+      "flags": [
+        {
+          "name": "--doc",
+          "type": "string",
+          "summary": "The document: its ID or path; in file mode, the file path."
+        },
+        {
+          "name": "--id",
+          "type": "string",
+          "summary": "The UUID of an unlocked copper zone, from zone list.",
+          "required": true
+        },
+        {
+          "name": "--ids",
+          "type": "list",
+          "summary": "Several zone UUIDs, comma-separated."
+        },
+        {
+          "name": "--output",
+          "type": "path",
+          "summary": "Write the full preview, with every change, to this file."
+        }
+      ],
+      "untrusted_fields": [
+        "deleted"
+      ],
+      "irreversible": true,
+      "halt": false,
+      "tolerances": {},
+      "default_fields": [],
+      "related_knowledge": [
+        "files-open-in-kicad"
+      ]
+    },
+    {
+      "path": "board get",
+      "summary": "Read a board: its outline, copper layers and where its footprints sit.",
+      "effects": [
+        "observe"
+      ],
+      "modes": [
+        "file"
+      ],
+      "target_kind": "board",
+      "flags": [
+        {
+          "name": "--doc",
+          "type": "string",
+          "summary": "The document: its ID or path; in file mode, the file path."
+        }
+      ],
+      "untrusted_fields": [],
+      "irreversible": false,
+      "halt": false,
+      "tolerances": {},
+      "default_fields": [],
+      "related_knowledge": [
+        "placement-method"
+      ]
+    },
+    {
+      "path": "board update",
+      "summary": "Set the board outline to a rectangle after a KiCad DRC check.",
+      "effects": [
+        "change"
+      ],
+      "modes": [
+        "file"
+      ],
+      "target_kind": "board",
+      "flags": [
+        {
+          "name": "--doc",
+          "type": "string",
+          "summary": "The document: its ID or path; in file mode, the file path."
+        },
+        {
+          "name": "--x",
+          "type": "quantity",
+          "summary": "X of the outline's left side; default: as it is.",
+          "quantity": "length",
+          "coordinate_system": "board: origin at the top-left corner of the page, x to the right, y down, in mm"
+        },
+        {
+          "name": "--y",
+          "type": "quantity",
+          "summary": "Y of the outline's top side; default: as it is.",
+          "quantity": "length",
+          "coordinate_system": "board: origin at the top-left corner of the page, x to the right, y down, in mm"
+        },
+        {
+          "name": "--width",
+          "type": "quantity",
+          "summary": "The outline's width; default: as it is.",
+          "quantity": "length"
+        },
+        {
+          "name": "--height",
+          "type": "quantity",
+          "summary": "The outline's height; default: as it is.",
+          "quantity": "length"
+        },
+        {
+          "name": "--output",
+          "type": "path",
+          "summary": "Write the full preview, with every change, to this file."
+        }
+      ],
+      "untrusted_fields": [],
+      "irreversible": false,
+      "halt": false,
+      "tolerances": {
+        "x_mm": 1e-06,
+        "y_mm": 1e-06,
+        "width_mm": 1e-06,
+        "height_mm": 1e-06
+      },
+      "default_fields": [],
+      "related_knowledge": [
+        "files-open-in-kicad",
+        "design-rules-files",
+        "checks-time-limit",
+        "placement-method"
+      ]
+    },
+    {
+      "path": "footprint update",
+      "summary": "Move or turn footprints' reference texts on the silkscreen.",
+      "effects": [
+        "change"
+      ],
+      "modes": [
+        "file"
+      ],
+      "target_kind": "footprint",
+      "flags": [
+        {
+          "name": "--doc",
+          "type": "string",
+          "summary": "The document: its ID or path; in file mode, the file path."
+        },
+        {
+          "name": "--id",
+          "type": "string",
+          "summary": "Reference of an unlocked footprint, such as R1.",
+          "required": true
+        },
+        {
+          "name": "--reference-x",
+          "type": "quantity",
+          "summary": "Where the reference text's anchor goes: X on the board.",
+          "quantity": "length",
+          "coordinate_system": "board: origin at the top-left corner of the page, x to the right, y down, in mm"
+        },
+        {
+          "name": "--reference-y",
+          "type": "quantity",
+          "summary": "Y of the reference text's anchor on the board.",
+          "quantity": "length",
+          "coordinate_system": "board: origin at the top-left corner of the page, x to the right, y down, in mm"
+        },
+        {
+          "name": "--reference-rotation",
+          "type": "quantity",
+          "summary": "The text's angle on the board, counterclockwise, such as 0deg or 90deg.",
+          "quantity": "angle"
+        },
+        {
+          "name": "--input",
+          "type": "input",
+          "summary": "A JSON file, or - for stdin, with several footprints: {\"items\": [{\"id\": \"R1\", \"reference_x\": \"12mm\", \"reference_y\": \"28mm\"}, ...]}. Every value goes in the items; give no other flag but --doc."
+        },
+        {
+          "name": "--output",
+          "type": "path",
+          "summary": "Write the full preview, with every change, to this file."
+        }
+      ],
+      "untrusted_fields": [
+        "id",
+        "nearest_courtyard"
+      ],
+      "irreversible": false,
+      "halt": false,
+      "tolerances": {
+        "reference_x_mm": 1e-06,
+        "reference_y_mm": 1e-06,
+        "reference_rotation_deg": 1e-06
+      },
+      "default_fields": [],
+      "related_knowledge": [
+        "files-open-in-kicad",
+        "placement-method"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "kind": "live",
+  "tool": "kicad-cli",
+  "tool_version": "1.1.0",
+  "commit": "ca8457790854",
+  "application": {
+    "name": "KiCad",
+    "version": "10.0.6"
+  },
+  "os": "Windows-11-10.0.26300-SP0",
+  "platform": "windows",
+  "recorded_at": "2026-11-09T18:30:38Z",
+  "targets": [
+    "file:///D:/driver-work/kicad-cli/targets/"
+  ],
+  "runs": [
+    {
+      "command": "board update",
+      "arguments": [
+        "--doc",
+        "D:\\driver-work\\kicad-cli\\targets\\layout-practice\\layout-practice.kicad_pcb"
+      ],
+      "exit": 2,
+      "result": "pass",
+      "matrix_row": "empty",
+      "mode": "file",
+      "fingerprint": "9830979d023a9709787a54956f60b4ae78e7734023d35668854af1e5865d9a09"
+    }
+  ]
+}

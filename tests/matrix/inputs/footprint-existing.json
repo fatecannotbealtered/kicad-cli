@@ -1,0 +1,6 @@
+{
+  "name": "TestPad",
+  "body_mm": [2.0, 2.0],
+  "courtyard_mm": 0.25,
+  "pads": [{"number": "1", "at_mm": [0, 0], "size_mm": [1.5, 1.5]}]
+}
