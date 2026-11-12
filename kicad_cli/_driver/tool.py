@@ -62,6 +62,11 @@ class Tool:
         if not modes or any(m not in modes_known for m in modes):
             raise RegistrationError(f"modes must be among {modes_known}")
         self.adapter_class = adapter
+        top = sys.modules.get(adapter.__module__.split(".")[0])
+        if top is not None and getattr(top, "__file__", None):
+            from . import trace
+
+            trace.locate(self.root, Path(top.__file__).parent)  # where a live run's trace looks (DVER-043)
         self.application = application
         self.versions = versions
         self.modes = list(modes)
@@ -322,5 +327,10 @@ def _fields(result: Result, call: Call) -> Result:
     if isinstance(data.get("items"), list):
         data = {**data, "items": [{k: v for k, v in i.items() if k in wanted} if isinstance(i, dict) else i for i in data["items"]]}
     elif call.fields is not None:
-        data = {k: v for k, v in data.items() if k in wanted}
+        data = _kept(data, wanted)
     return Result(data, result.untrusted, result.offset, result.raw)
+
+
+def _kept(data: dict[str, Any], wanted: Any) -> dict[str, Any]:
+    """The named fields, and always a long job's handle: without it the work cannot be followed (DCLI-065)."""
+    return {k: v for k, v in data.items() if k in wanted or k == "job"}

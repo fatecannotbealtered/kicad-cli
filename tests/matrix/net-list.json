@@ -14,7 +14,7 @@
       "actual": {
         "exit": 0
       },
-      "evidence": "live:docs/evidence/2026-11-09-181750-net-list.json#normal"
+      "evidence": "live:docs/evidence/2026-11-12-121538-net-list.json#normal"
     },
     {
       "row": "empty",
@@ -31,7 +31,7 @@
       "actual": {
         "exit": 0
       },
-      "evidence": "live:docs/evidence/2026-11-09-181750-net-list.json#empty"
+      "evidence": "live:docs/evidence/2026-11-12-121538-net-list.json#empty"
     },
     {
       "row": "invalid_input",
@@ -50,7 +50,7 @@
         "exit": 2,
         "code": "E_USAGE"
       },
-      "evidence": "live:docs/evidence/2026-11-09-181750-net-list.json#invalid_input"
+      "evidence": "live:docs/evidence/2026-11-12-121538-net-list.json#invalid_input"
     },
     {
       "row": "not_found",
@@ -67,7 +67,7 @@
         "exit": 3,
         "code": "E_NOT_FOUND"
       },
-      "evidence": "live:docs/evidence/2026-11-09-181750-net-list.json#not_found"
+      "evidence": "live:docs/evidence/2026-11-12-121538-net-list.json#not_found"
     },
     {
       "row": "ambiguous",

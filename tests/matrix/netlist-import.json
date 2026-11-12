@@ -14,7 +14,7 @@
       "actual": {
         "exit": 0
       },
-      "evidence": "live:docs/evidence/2026-11-09-182210-netlist-import.json#normal"
+      "evidence": "live:docs/evidence/2026-11-12-121933-netlist-import.json#normal"
     },
     {
       "row": "empty",
@@ -31,7 +31,7 @@
         "exit": 6,
         "code": "E_CONFLICT"
       },
-      "evidence": "live:docs/evidence/2026-11-09-182210-netlist-import.json#empty"
+      "evidence": "live:docs/evidence/2026-11-12-121933-netlist-import.json#empty"
     },
     {
       "row": "invalid_input",
@@ -50,7 +50,7 @@
         "exit": 2,
         "code": "E_VALIDATION"
       },
-      "evidence": "live:docs/evidence/2026-11-09-182210-netlist-import.json#invalid_input"
+      "evidence": "live:docs/evidence/2026-11-12-121933-netlist-import.json#invalid_input"
     },
     {
       "row": "not_found",
@@ -67,7 +67,7 @@
         "exit": 3,
         "code": "E_NOT_FOUND"
       },
-      "evidence": "live:docs/evidence/2026-11-09-182210-netlist-import.json#not_found"
+      "evidence": "live:docs/evidence/2026-11-12-121933-netlist-import.json#not_found"
     },
     {
       "row": "ambiguous",
@@ -89,7 +89,7 @@
         "exit": 6,
         "code": "E_CONFLICT"
       },
-      "evidence": "live:docs/evidence/2026-11-09-182220-netlist-import.json#conflict"
+      "evidence": "live:docs/evidence/2026-11-12-121943-netlist-import.json#conflict"
     },
     {
       "row": "no_scope",
@@ -106,7 +106,7 @@
         "exit": 4,
         "code": "E_FORBIDDEN"
       },
-      "evidence": "live:docs/evidence/2026-11-09-182223-netlist-import.json#no_scope"
+      "evidence": "live:docs/evidence/2026-11-12-121946-netlist-import.json#no_scope"
     },
     {
       "row": "busy",
@@ -143,7 +143,7 @@
         "exit": 1,
         "code": "E_VERIFY_FAILED"
       },
-      "evidence": "live:docs/evidence/2026-11-09-182228-netlist-import.json#read_back_mismatch"
+      "evidence": "live:docs/evidence/2026-11-12-121951-netlist-import.json#read_back_mismatch"
     }
   ]
 }

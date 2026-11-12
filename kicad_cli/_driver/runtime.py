@@ -404,7 +404,7 @@ class Run:
                                                         "this call used the file on disk."})
                 return Where("file", document=self._file_doc(doc_ref))
             raise DriverError("E_NOT_FOUND", f"No running instance has the document {doc_ref} open.",
-                              next_action=f"Run `{self.tool.name} doc list` to see the open documents.")
+                              next_action=lost_separators(doc_ref) or f"Run `{self.tool.name} doc list` to see the open documents.")
         if "session" in modes:
             session = self.session(None)
             return Where("session", session=session, document=self._session_doc(session, None, need_document))
@@ -428,7 +428,7 @@ class Run:
                     self.resolved["--doc"] = doc["id"]
                     return doc
             raise DriverError("E_NOT_FOUND", f"Session {session['id']} has no document {ref} open.",
-                              next_action=f"Run `{self.tool.name} doc list --session {session['id']}` to see its documents.")
+                              next_action=lost_separators(ref) or f"Run `{self.tool.name} doc list --session {session['id']}` to see its documents.")
         if len(docs) == 1:
             self.resolved["--doc"] = docs[0]["id"]
             return docs[0]
@@ -447,7 +447,7 @@ class Run:
             if self._matches(doc, path):
                 self.resolved["--doc"] = path
                 return doc
-        raise DriverError("E_NOT_FOUND", f"There is no document at {path}.")
+        raise DriverError("E_NOT_FOUND", f"There is no document at {path}.", **({"next_action": lost_separators(ref)} if lost_separators(ref) else {}))
 
     def gate_document(self, doc: dict[str, Any] | None, saving: bool = False) -> None:
         """React to the disk state and read-only flag of a document (DCLI-211)."""
@@ -641,6 +641,15 @@ class Run:
         from .args import Parser
 
         return Parser(self.contract, {}, self.tool.name).convert(flag, value)
+
+
+def lost_separators(ref: str | None) -> str | None:
+    """The next action for a Windows path whose backslashes a POSIX shell, such as Git Bash,
+    removed, as in `D:projectsboard.pcb`; None for any other path."""
+    if not ref or not re.match(r"^[A-Za-z]:[^\\/]", ref) or os.path.exists(ref):
+        return None
+    return (f"{ref} looks like a Windows path whose backslashes the shell removed. Write it with forward slashes, "
+            "such as D:/projects/board.pcb, or put it in quotes.")
 
 
 def json_value(flag: Any, value: Any, where: str) -> Any:

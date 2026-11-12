@@ -106,7 +106,7 @@ def grade(run):
     run.check(len([c for c in run.write_calls() if c.ok]) == 1, "not exactly one write")
 ```
 
-`python scripts/spec.py eval --workspace-root <folder>` 用 Claude Code 在真实的 KiCad 上运行这些题目并写出报告；这个文件夹必须列在 `docs/E2E.md` 的「Authorized Targets」一节里，或者位于列出的文件夹里面。运行器为每道题在这个文件夹里新建一个工作目录，放进 Skill 和授权范围文件，把文档放在旁边的文件夹里，并记下 kicad-cli 的每次运行；Agent 的 shell 只能运行 kicad-cli，文件工具只能用在工作目录里。`TURNS` 和授权范围目标里的 `{documents}` 代表文档所在的文件夹。默认的授权范围授予这个文件夹、`COMMANDS` 里命令的效果，只有其中某条命令需要时才授予 `dangerous`；`SCOPE` 可以替换其中任何字段，命令都只读取的题目不写授权范围文件。这个授权范围文件由运行器自己写，谁都不手改。在真实的 KiCad 上，kicad-cli 沿用你的环境，这样才找得到正在运行的实例；会话模式的题目在 `before` 里打开文档，在 `after` 里关闭，`after` 总会被调用。
+`python scripts/spec.py eval --workspace-root <folder>` 用 Claude Code 在真实的 KiCad 上运行这些题目并写出报告；这个文件夹必须列在 `docs/E2E.md` 的「Authorized Targets」一节里，或者位于列出的文件夹里面。运行器为每道题在这个文件夹里新建一个工作目录，放进 Skill 和授权范围文件，把文档放在旁边的文件夹里，并记下 kicad-cli 的每次运行；Agent 的 shell 只能运行 kicad-cli，文件工具只能用在工作目录里。`TURNS` 和授权范围目标里的 `{documents}` 代表文档所在的文件夹，授权范围目标里的 `{workspace}` 代表 Agent 的工作目录，比如 Agent 渲染出图片要自己查看时用；用它们写出的目标都落在工作根目录里面。默认的授权范围授予这个文件夹、`COMMANDS` 里命令的效果，只有其中某条命令需要时才授予 `dangerous`；`SCOPE` 可以替换其中任何字段，命令都只读取的题目不写授权范围文件。这个授权范围文件由运行器自己写，谁都不手改。在真实的 KiCad 上，kicad-cli 沿用你的环境，这样才找得到正在运行的实例；会话模式的题目在 `before` 里打开文档，在 `after` 里关闭，`after` 总会被调用。
 
 | 评分程序和钩子可用 | 作用 |
 |---|---|
@@ -128,7 +128,7 @@ def grade(run):
 | `verified` | 当前有效的真实软件记录，矩阵中适用的每一行都通过，标为 `unrunnable` 的行除外 |
 | `stable` | 另加当前有效的评测结果 |
 
-证据在它依赖的东西没变时一直算数，与版本号无关：真实运行在命令登记或适配层代码改动之前有效，评测结果在它的题目、它列出的命令或手写的 Skill 和知识改动之前有效。有了这样的改动，只重跑它涉及的矩阵和评测题：`python scripts/spec.py check` 会列出它们，`python scripts/spec.py eval --workspace-root <folder> --stale` 只跑需要重跑的题。证据引用的格式是 `live:docs/evidence/<file>.json#<row>` 或 `eval:docs/evidence/eval-<date>.json`。
+证据在它依赖的东西没变时一直算数，与版本号无关：真实运行在命令登记或这次运行用到的适配层代码改动之前有效，评测结果在它的题目、它列出的命令或它用到的 Skill 和知识改动之前有效。有了这样的改动，只重跑它涉及的矩阵和评测题：`python scripts/spec.py check` 会列出它们，`python scripts/spec.py eval --workspace-root <folder> --stale` 只跑需要重跑的题。证据引用的格式是 `live:docs/evidence/<file>.json#<row>` 或 `eval:docs/evidence/eval-<date>.json`。
 <!-- driver:spec-tests-and-evidence:end -->
 
 ## 新增或修改命令

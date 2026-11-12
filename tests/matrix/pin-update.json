@@ -18,7 +18,7 @@
       "actual": {
         "exit": 0
       },
-      "evidence": "live:docs/evidence/2026-11-09-181942-pin-update.json#normal"
+      "evidence": "live:docs/evidence/2026-11-12-121734-pin-update.json#normal"
     },
     {
       "row": "empty",
@@ -41,7 +41,7 @@
         "exit": 2,
         "code": "E_USAGE"
       },
-      "evidence": "live:docs/evidence/2026-11-09-181942-pin-update.json#empty"
+      "evidence": "live:docs/evidence/2026-11-12-121734-pin-update.json#empty"
     },
     {
       "row": "invalid_input",
@@ -62,7 +62,7 @@
         "exit": 2,
         "code": "E_VALIDATION"
       },
-      "evidence": "live:docs/evidence/2026-11-09-181942-pin-update.json#invalid_input"
+      "evidence": "live:docs/evidence/2026-11-12-121734-pin-update.json#invalid_input"
     },
     {
       "row": "not_found",
@@ -83,7 +83,7 @@
         "exit": 3,
         "code": "E_NOT_FOUND"
       },
-      "evidence": "live:docs/evidence/2026-11-09-181942-pin-update.json#not_found"
+      "evidence": "live:docs/evidence/2026-11-12-121734-pin-update.json#not_found"
     },
     {
       "row": "ambiguous",
@@ -104,7 +104,7 @@
         "exit": 2,
         "code": "E_AMBIGUOUS"
       },
-      "evidence": "live:docs/evidence/2026-11-09-181944-pin-update.json#ambiguous"
+      "evidence": "live:docs/evidence/2026-11-12-121736-pin-update.json#ambiguous"
     },
     {
       "row": "conflict",
@@ -125,7 +125,7 @@
         "exit": 6,
         "code": "E_CONFLICT"
       },
-      "evidence": "live:docs/evidence/2026-11-09-181949-pin-update.json#conflict"
+      "evidence": "live:docs/evidence/2026-11-12-121742-pin-update.json#conflict"
     },
     {
       "row": "no_scope",
@@ -146,7 +146,7 @@
         "exit": 4,
         "code": "E_FORBIDDEN"
       },
-      "evidence": "live:docs/evidence/2026-11-09-181942-pin-update.json#no_scope"
+      "evidence": "live:docs/evidence/2026-11-12-121745-pin-update.json#no_scope"
     },
     {
       "row": "busy",
@@ -187,7 +187,7 @@
         "exit": 1,
         "code": "E_VERIFY_FAILED"
       },
-      "evidence": "live:docs/evidence/2026-11-09-181954-pin-update.json#read_back_mismatch"
+      "evidence": "live:docs/evidence/2026-11-12-121749-pin-update.json#read_back_mismatch"
     }
   ]
 }

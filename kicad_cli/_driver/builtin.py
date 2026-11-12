@@ -178,7 +178,13 @@ def reference(run: Run) -> Result:
             raise usage(f"There is no command {path!r}.", "--command", f"Run `{tool.name} reference` to list the commands.")
         return Result(describe(tool, tool.commands[path]))
     index = [{"path": c.path, "summary": c.summary} for c in tool.commands.values()]
-    return Result({**head, "index": index})
+    data = {**head, "index": index}
+    # Room is left for the notices a call may carry. Past it the paths alone stay: one short call
+    # still lists everything the tool offers (DCLI-031).
+    if len(json.dumps(data, ensure_ascii=False)) > int(tool.contract["envelope"]["limits"]["reference_index_chars"]) - 1500:
+        data = {**head, "index": [{"path": c.path} for c in tool.commands.values()],
+                "summaries": f"Left out to keep the index short; `{tool.name} reference --command \"<path>\"` describes one command."}
+    return Result(data)
 
 
 # ------------------------------------------------------------------ context and doctor

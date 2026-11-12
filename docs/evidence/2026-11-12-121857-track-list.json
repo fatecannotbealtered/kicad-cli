@@ -1,0 +1,242 @@
+{
+  "kind": "live",
+  "tool": "kicad-cli",
+  "tool_version": "1.1.0",
+  "commit": "626bdb22ef60",
+  "application": {
+    "name": "KiCad",
+    "version": "10.0.6"
+  },
+  "os": "Windows-11-10.0.26300-SP0",
+  "platform": "windows",
+  "recorded_at": "2026-11-12T12:18:57Z",
+  "targets": [
+    "file:///D:/driver-work/kicad-cli/targets/"
+  ],
+  "runs": [
+    {
+      "command": "track list",
+      "arguments": [
+        "--doc",
+        "D:\\driver-work\\kicad-cli\\targets\\schmitt\\schmitt.kicad_pcb"
+      ],
+      "exit": 0,
+      "result": "pass",
+      "matrix_row": "normal",
+      "mode": "file",
+      "fingerprint": "dcf3f9fdf8d2fa0e7b428984be780d135f762da89ad21648988e1ff78204106a",
+      "sources": {
+        "ran": [
+          "kicad_cli/__init__.py",
+          "kicad_cli/adapter/__init__.py",
+          "kicad_cli/adapter/base.py",
+          "kicad_cli/adapter/fileformat/board.py",
+          "kicad_cli/adapter/fileformat/sexpr.py",
+          "kicad_cli/adapter/handlers/board_read.py"
+        ],
+        "imported": [
+          "kicad_cli/adapter/fileformat/__init__.py",
+          "kicad_cli/adapter/fileformat/circuit.py",
+          "kicad_cli/adapter/fileformat/connectivity.py",
+          "kicad_cli/adapter/fileformat/geometry.py",
+          "kicad_cli/adapter/fileformat/lib_tables.py",
+          "kicad_cli/adapter/fileformat/new_board.py",
+          "kicad_cli/adapter/fileformat/new_project.py",
+          "kicad_cli/adapter/fileformat/schematic.py",
+          "kicad_cli/adapter/fileformat/symbols.py",
+          "kicad_cli/adapter/handlers/__init__.py",
+          "kicad_cli/adapter/handlers/board_copper.py",
+          "kicad_cli/adapter/handlers/board_edit.py",
+          "kicad_cli/adapter/handlers/board_shape.py",
+          "kicad_cli/adapter/handlers/project.py",
+          "kicad_cli/adapter/handlers/schematic_edit.py",
+          "kicad_cli/adapter/handlers/schematic_read.py",
+          "kicad_cli/adapter/install.py",
+          "kicad_cli/adapter/kicad_tools.py",
+          "kicad_cli/adapter/lib_register.py",
+          "kicad_cli/adapter/pcb_edit_board.py",
+          "kicad_cli/adapter/pcb_edit_drc.py",
+          "kicad_cli/adapter/pcb_edit_links.py",
+          "kicad_cli/adapter/pcb_edit_sync.py",
+          "kicad_cli/adapter/pcb_read_build.py",
+          "kicad_cli/adapter/pcb_read_drc.py",
+          "kicad_cli/adapter/pcb_read_footprint_lib.py",
+          "kicad_cli/adapter/pcb_read_netlist.py",
+          "kicad_cli/adapter/sch_edit_draw.py",
+          "kicad_cli/adapter/sch_edit_engine.py",
+          "kicad_cli/adapter/sch_edit_errors.py",
+          "kicad_cli/adapter/sch_edit_library.py"
+        ]
+      }
+    },
+    {
+      "command": "track list",
+      "arguments": [
+        "--doc",
+        "D:\\driver-work\\kicad-cli\\targets\\schmitt\\schmitt.kicad_pcb",
+        "--net",
+        "NO_SUCH_NET"
+      ],
+      "exit": 0,
+      "result": "pass",
+      "matrix_row": "empty",
+      "mode": "file",
+      "fingerprint": "dcf3f9fdf8d2fa0e7b428984be780d135f762da89ad21648988e1ff78204106a",
+      "sources": {
+        "ran": [
+          "kicad_cli/__init__.py",
+          "kicad_cli/adapter/__init__.py",
+          "kicad_cli/adapter/base.py",
+          "kicad_cli/adapter/fileformat/board.py",
+          "kicad_cli/adapter/fileformat/sexpr.py",
+          "kicad_cli/adapter/handlers/board_read.py"
+        ],
+        "imported": [
+          "kicad_cli/adapter/fileformat/__init__.py",
+          "kicad_cli/adapter/fileformat/circuit.py",
+          "kicad_cli/adapter/fileformat/connectivity.py",
+          "kicad_cli/adapter/fileformat/geometry.py",
+          "kicad_cli/adapter/fileformat/lib_tables.py",
+          "kicad_cli/adapter/fileformat/new_board.py",
+          "kicad_cli/adapter/fileformat/new_project.py",
+          "kicad_cli/adapter/fileformat/schematic.py",
+          "kicad_cli/adapter/fileformat/symbols.py",
+          "kicad_cli/adapter/handlers/__init__.py",
+          "kicad_cli/adapter/handlers/board_copper.py",
+          "kicad_cli/adapter/handlers/board_edit.py",
+          "kicad_cli/adapter/handlers/board_shape.py",
+          "kicad_cli/adapter/handlers/project.py",
+          "kicad_cli/adapter/handlers/schematic_edit.py",
+          "kicad_cli/adapter/handlers/schematic_read.py",
+          "kicad_cli/adapter/install.py",
+          "kicad_cli/adapter/kicad_tools.py",
+          "kicad_cli/adapter/lib_register.py",
+          "kicad_cli/adapter/pcb_edit_board.py",
+          "kicad_cli/adapter/pcb_edit_drc.py",
+          "kicad_cli/adapter/pcb_edit_links.py",
+          "kicad_cli/adapter/pcb_edit_sync.py",
+          "kicad_cli/adapter/pcb_read_build.py",
+          "kicad_cli/adapter/pcb_read_drc.py",
+          "kicad_cli/adapter/pcb_read_footprint_lib.py",
+          "kicad_cli/adapter/pcb_read_netlist.py",
+          "kicad_cli/adapter/sch_edit_draw.py",
+          "kicad_cli/adapter/sch_edit_engine.py",
+          "kicad_cli/adapter/sch_edit_errors.py",
+          "kicad_cli/adapter/sch_edit_library.py"
+        ]
+      }
+    },
+    {
+      "command": "track list",
+      "arguments": [
+        "--doc",
+        "D:\\driver-work\\kicad-cli\\targets\\schmitt\\schmitt.kicad_pcb",
+        "--limit",
+        "many"
+      ],
+      "exit": 2,
+      "result": "pass",
+      "matrix_row": "invalid_input",
+      "mode": "file",
+      "fingerprint": "605b2b73cd32fc4d369a0c5d84eab5953c2a7f1278ca969e11db49e15f0f58a1",
+      "sources": {
+        "ran": [
+          "kicad_cli/__init__.py"
+        ],
+        "imported": [
+          "kicad_cli/adapter/__init__.py",
+          "kicad_cli/adapter/base.py",
+          "kicad_cli/adapter/fileformat/__init__.py",
+          "kicad_cli/adapter/fileformat/board.py",
+          "kicad_cli/adapter/fileformat/circuit.py",
+          "kicad_cli/adapter/fileformat/connectivity.py",
+          "kicad_cli/adapter/fileformat/geometry.py",
+          "kicad_cli/adapter/fileformat/lib_tables.py",
+          "kicad_cli/adapter/fileformat/new_board.py",
+          "kicad_cli/adapter/fileformat/new_project.py",
+          "kicad_cli/adapter/fileformat/schematic.py",
+          "kicad_cli/adapter/fileformat/sexpr.py",
+          "kicad_cli/adapter/fileformat/symbols.py",
+          "kicad_cli/adapter/handlers/__init__.py",
+          "kicad_cli/adapter/handlers/board_copper.py",
+          "kicad_cli/adapter/handlers/board_edit.py",
+          "kicad_cli/adapter/handlers/board_read.py",
+          "kicad_cli/adapter/handlers/board_shape.py",
+          "kicad_cli/adapter/handlers/project.py",
+          "kicad_cli/adapter/handlers/schematic_edit.py",
+          "kicad_cli/adapter/handlers/schematic_read.py",
+          "kicad_cli/adapter/install.py",
+          "kicad_cli/adapter/kicad_tools.py",
+          "kicad_cli/adapter/lib_register.py",
+          "kicad_cli/adapter/pcb_edit_board.py",
+          "kicad_cli/adapter/pcb_edit_drc.py",
+          "kicad_cli/adapter/pcb_edit_links.py",
+          "kicad_cli/adapter/pcb_edit_sync.py",
+          "kicad_cli/adapter/pcb_read_build.py",
+          "kicad_cli/adapter/pcb_read_drc.py",
+          "kicad_cli/adapter/pcb_read_footprint_lib.py",
+          "kicad_cli/adapter/pcb_read_netlist.py",
+          "kicad_cli/adapter/sch_edit_draw.py",
+          "kicad_cli/adapter/sch_edit_engine.py",
+          "kicad_cli/adapter/sch_edit_errors.py",
+          "kicad_cli/adapter/sch_edit_library.py"
+        ]
+      }
+    },
+    {
+      "command": "track list",
+      "arguments": [
+        "--doc",
+        "D:\\driver-work\\kicad-cli\\targets\\runs\\track-list-1794485933120812400/missing.kicad_pcb"
+      ],
+      "exit": 3,
+      "result": "pass",
+      "matrix_row": "not_found",
+      "mode": "file",
+      "fingerprint": "9935ad3cd6b4778053b17dec210590d69f70ca82b81752d161a049f08df91589",
+      "sources": {
+        "ran": [
+          "kicad_cli/__init__.py",
+          "kicad_cli/adapter/__init__.py",
+          "kicad_cli/adapter/base.py",
+          "kicad_cli/adapter/handlers/board_read.py"
+        ],
+        "imported": [
+          "kicad_cli/adapter/fileformat/__init__.py",
+          "kicad_cli/adapter/fileformat/board.py",
+          "kicad_cli/adapter/fileformat/circuit.py",
+          "kicad_cli/adapter/fileformat/connectivity.py",
+          "kicad_cli/adapter/fileformat/geometry.py",
+          "kicad_cli/adapter/fileformat/lib_tables.py",
+          "kicad_cli/adapter/fileformat/new_board.py",
+          "kicad_cli/adapter/fileformat/new_project.py",
+          "kicad_cli/adapter/fileformat/schematic.py",
+          "kicad_cli/adapter/fileformat/sexpr.py",
+          "kicad_cli/adapter/fileformat/symbols.py",
+          "kicad_cli/adapter/handlers/__init__.py",
+          "kicad_cli/adapter/handlers/board_copper.py",
+          "kicad_cli/adapter/handlers/board_edit.py",
+          "kicad_cli/adapter/handlers/board_shape.py",
+          "kicad_cli/adapter/handlers/project.py",
+          "kicad_cli/adapter/handlers/schematic_edit.py",
+          "kicad_cli/adapter/handlers/schematic_read.py",
+          "kicad_cli/adapter/install.py",
+          "kicad_cli/adapter/kicad_tools.py",
+          "kicad_cli/adapter/lib_register.py",
+          "kicad_cli/adapter/pcb_edit_board.py",
+          "kicad_cli/adapter/pcb_edit_drc.py",
+          "kicad_cli/adapter/pcb_edit_links.py",
+          "kicad_cli/adapter/pcb_edit_sync.py",
+          "kicad_cli/adapter/pcb_read_build.py",
+          "kicad_cli/adapter/pcb_read_drc.py",
+          "kicad_cli/adapter/pcb_read_footprint_lib.py",
+          "kicad_cli/adapter/pcb_read_netlist.py",
+          "kicad_cli/adapter/sch_edit_draw.py",
+          "kicad_cli/adapter/sch_edit_engine.py",
+          "kicad_cli/adapter/sch_edit_errors.py",
+          "kicad_cli/adapter/sch_edit_library.py"
+        ]
+      }
+    }
+  ]
+}

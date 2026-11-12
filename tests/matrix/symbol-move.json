@@ -20,7 +20,7 @@
       "actual": {
         "exit": 0
       },
-      "evidence": "live:docs/evidence/2026-11-09-181910-symbol-move.json#normal"
+      "evidence": "live:docs/evidence/2026-11-12-121656-symbol-move.json#normal"
     },
     {
       "row": "empty",
@@ -39,7 +39,7 @@
         "exit": 2,
         "code": "E_USAGE"
       },
-      "evidence": "live:docs/evidence/2026-11-09-181910-symbol-move.json#empty"
+      "evidence": "live:docs/evidence/2026-11-12-121656-symbol-move.json#empty"
     },
     {
       "row": "invalid_input",
@@ -62,7 +62,7 @@
         "exit": 2,
         "code": "E_USAGE"
       },
-      "evidence": "live:docs/evidence/2026-11-09-181910-symbol-move.json#invalid_input"
+      "evidence": "live:docs/evidence/2026-11-12-121656-symbol-move.json#invalid_input"
     },
     {
       "row": "not_found",
@@ -85,7 +85,7 @@
         "exit": 3,
         "code": "E_NOT_FOUND"
       },
-      "evidence": "live:docs/evidence/2026-11-09-181910-symbol-move.json#not_found"
+      "evidence": "live:docs/evidence/2026-11-12-121656-symbol-move.json#not_found"
     },
     {
       "row": "ambiguous",
@@ -108,7 +108,7 @@
         "exit": 2,
         "code": "E_AMBIGUOUS"
       },
-      "evidence": "live:docs/evidence/2026-11-09-181912-symbol-move.json#ambiguous"
+      "evidence": "live:docs/evidence/2026-11-12-121657-symbol-move.json#ambiguous"
     },
     {
       "row": "conflict",
@@ -131,7 +131,7 @@
         "exit": 6,
         "code": "E_CONFLICT"
       },
-      "evidence": "live:docs/evidence/2026-11-09-181918-symbol-move.json#conflict"
+      "evidence": "live:docs/evidence/2026-11-12-121703-symbol-move.json#conflict"
     },
     {
       "row": "no_scope",
@@ -154,7 +154,7 @@
         "exit": 4,
         "code": "E_FORBIDDEN"
       },
-      "evidence": "live:docs/evidence/2026-11-09-181910-symbol-move.json#no_scope"
+      "evidence": "live:docs/evidence/2026-11-12-121706-symbol-move.json#no_scope"
     },
     {
       "row": "busy",
@@ -197,7 +197,7 @@
         "exit": 1,
         "code": "E_VERIFY_FAILED"
       },
-      "evidence": "live:docs/evidence/2026-11-09-181923-symbol-move.json#read_back_mismatch"
+      "evidence": "live:docs/evidence/2026-11-12-121709-symbol-move.json#read_back_mismatch"
     }
   ]
 }

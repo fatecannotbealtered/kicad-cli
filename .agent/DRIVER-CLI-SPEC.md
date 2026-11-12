@@ -2,7 +2,7 @@
 
 English | [中文](DRIVER-CLI-SPEC_zh.md)
 
-> Version 1.2.0 · Clauses DCLI-001 to DCLI-281
+> Version 1.3.0 · Clauses DCLI-001 to DCLI-281
 
 ## How to Read
 
@@ -162,14 +162,14 @@ Check: 🤖 General conformance test R04 checks the list keys; the "empty" row o
 
 ### DCLI-007 Default fields
 
-Each list command MUST declare its default fields in its registration (DCLI-029), chosen for the questions Agents most often ask about that object. `--fields a,b` MUST return only the named fields. `--fields all` MUST return every field.
+Each list command MUST declare its default fields in its registration (DCLI-029), chosen for the questions Agents most often ask about that object. `--fields a,b` MUST return only the named fields, but MUST NOT leave out the `job` handle of a read that runs as a long job (DCLI-065). `--fields all` MUST return every field.
 
 Why: Short default answers save the Agent's context; `--fields` fetches more only when needed.
 Check: 👀 Review of the default fields in `reference`.
 
 ### DCLI-008 Response size
 
-Called with default arguments, a command MUST keep a success envelope within 8000 characters and an error envelope within 2000 characters, counting the whole envelope. An `E_CONFIRMATION_REQUIRED` envelope carries a preview and MUST keep within the success limit, 8000 characters (DCLI-054). Lists stay within the limits by paging (DCLI-006). A command whose result can be too large to fit, such as file content or a long log, MUST offer `--output <path>`: it writes the full result to that file, and the response holds only a summary and the file path. A dry run's preview is shortened first, as a confirmation's is (DCLI-054); when it still does not fit, the next action asks for fewer objects in one call. Any other success envelope that is still too long fails with `E_USAGE`, whose next action names only what the command offers: `--fields`, `--limit` for a list, `--output` for a read that has it, and `operation get --output`, which writes a long job's whole operation record, result included, to a file. After a write that ran, it says so and names the operation, so that the Agent does not send the write again.
+Called with default arguments, a command MUST keep a success envelope within 8000 characters and an error envelope within 2000 characters, counting the whole envelope. An `E_CONFIRMATION_REQUIRED` envelope carries a preview and MUST keep within the success limit, 8000 characters (DCLI-054). Lists stay within the limits by paging (DCLI-006). A command whose result can be too large to fit, such as file content or a long log, MUST offer `--output <path>`: it writes the full result to that file, and the response holds only a summary and the file path. A dry run's preview is shortened first, as a confirmation's is (DCLI-054); when it still does not fit, the next action asks for fewer objects in one call. Any other success envelope that is still too long fails with `E_USAGE`, whose next action names only what the command offers: `--fields`, `--limit` for a list, `--output` for a read that has it, `job get --output`, which writes a job, result included, to a file, and `operation get --output`, which writes a long job's whole operation record, result included, to a file. After a write that ran, it says so and names the operation, so that the Agent does not send the write again.
 
 Why: Every character the tool returns costs the Agent context; a fixed limit keeps each call cheap.
 Check: 🤖 General conformance test R04 checks the size limits.
@@ -193,7 +193,7 @@ Check: 🤖 General conformance test R04.
 - `dispatch_state`: whether the change request reached the application or the device. `not_started` means it was not sent, `dispatched` means it was sent, `unknown` means the tool cannot tell. A read command MUST always report `not_started`.
 - `next_action`: one sentence that tells the Agent what to do next. When an exact command exists, it MUST be in backticks.
 
-Every command the runtime writes for the Agent to run, in `next_action`, `resume`, `lookup` or `poll`, MUST be complete: it names the session, the document and every ID it needs (`--session`, `--doc`, `--id`, `--job`), so that it runs unchanged later. Every argument that contains a space or starts with `-` MUST be quoted. A generated command that embeds an untrusted value is listed in `meta.untrusted` (DCLI-004).
+Every command the runtime writes for the Agent to run, in `next_action`, `resume`, `lookup` or `poll`, MUST be complete: it names the session, the document and every ID it needs (`--session`, `--doc`, `--id`, `--job`), so that it runs unchanged later. Every argument that contains a space or starts with `-` MUST be quoted. A generated command that embeds an untrusted value is listed in `meta.untrusted` (DCLI-004). When a document is not found at a path such as `D:projectsboard.pcb`, a Windows path whose backslashes a POSIX shell removed, `next_action` MUST say so and ask for forward slashes.
 
 Why: After a failure the Agent's first question is whether anything was sent, and the second is what to run next; a command that relies on a default instance can run against another one later.
 Check: 🤖 General conformance tests G01, R03 and R04.
@@ -480,7 +480,7 @@ Check: 🤖 General conformance tests R01 and R05.
 - A command that registers `doc_kinds`, `long` or `verify_after_save` MUST show them, and a command registered `jobs` shows `long` too, because it also returns a job, so the Agent knows before the call which documents it takes, that it returns a long job, and that its verification waits for the save.
 - Every parameter and output field that holds a coordinate MUST name its `coordinate_system` (DCLI-084).
 - A required parameter that `--input` can give, or for `--id` also `--ids` (DCLI-064), MUST name those flags in `required_without` in place of `required`, so the Agent never adds it beside them.
-- `reference` without flags MUST return only the index, within 8000 characters: each command with its path and its one-sentence summary. Limits and conditions belong in the command's own description.
+- `reference` without flags MUST return only the index, within 8000 characters: each command with its path and its one-sentence summary. When the summaries do not fit, it MUST return the paths alone and say in `summaries` how to get one command's description. Limits and conditions belong in the command's own description.
 - `reference --command <path>` MUST return one command, within 6000 characters.
 - `reference --all --output <path>` MUST write the description of every command to that file and return only a summary (DCLI-008).
 
@@ -1121,7 +1121,7 @@ The runtime implements these commands from the adapter capabilities (DCLI-260). 
 | `doc close` | `lifecycle` | session | direct; dangerous with `--discard` (DCLI-051) | Optional: closes; refused with unsaved changes unless `--discard` discards them |
 | `doc undo` | `change` | session | direct | Optional, only when the application supports undo: undoes the tool's most recent change |
 | `job list` | `observe` | all | — | Long jobs in every session |
-| `job get` | `observe` | all | — | The state of one long job and `poll_after_ms`; `--wait <duration>` waits until it ends or the time runs out (DCLI-220) |
+| `job get` | `observe` | all | — | The state of one long job and `poll_after_ms`; `--wait <duration>` waits until it ends or the time runs out; `--output <path>` writes the job, its result included, to a new file (DCLI-220) |
 | `job cancel` | `lifecycle` | all | direct; a halt command (DSEC-018) | Asks to cancel a long job the tool started; the result tells "cancel requested" from "confirmed stopped" |
 | `device list` | `observe` | device | — | Devices: model, firmware, state, whether simulated |
 | `device get` | `observe` | device | — | The state of one device |

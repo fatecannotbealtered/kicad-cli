@@ -11,7 +11,7 @@ Lets an AI Agent read and change KiCad schematics, libraries and boards safely, 
 ![platform](https://img.shields.io/badge/platform-Windows_%C2%B7_macOS_%C2%B7_Linux-555555)
 ![risk](https://img.shields.io/badge/risk-T1-d29922)
 ![maturity](https://img.shields.io/badge/maturity-verified-8957e5)
-![spec](https://img.shields.io/badge/spec-tool--driver--cli--spec_1.2.0-0969da)
+![spec](https://img.shields.io/badge/spec-tool--driver--cli--spec_1.3.0-0969da)
 ![license](https://img.shields.io/badge/license-Apache--2.0-blue)
 <!-- driver:badges:end -->
 
@@ -25,7 +25,7 @@ English | [中文](README_zh.md)
 | Systems and CPUs | Windows (x64, arm64), macOS (x64, arm64), Linux (x64, arm64) |
 | Risk tier | T1 |
 | Maturity | verified: 0 draft, 2 verified, 32 stable |
-| Specification | tool-driver-cli-spec 1.2.0 |
+| Specification | tool-driver-cli-spec 1.3.0 |
 | Host component | no |
 <!-- driver:info-card:end -->
 
@@ -235,7 +235,7 @@ The tests and the conformance suites use the fake host and never need KiCad. `CO
 ## Links
 
 <!-- driver:spec-links:start -->
-- Specification: [tool-driver-cli-spec 1.2.0](.agent/), pinned in `.agent/`
+- Specification: [tool-driver-cli-spec 1.3.0](.agent/), pinned in `.agent/`
 - [CHANGELOG.md](CHANGELOG.md): the changes in each version
 - [SECURITY.md](SECURITY.md): the security model and how to report a vulnerability
 - [CONTRIBUTING.md](CONTRIBUTING.md): how to contribute

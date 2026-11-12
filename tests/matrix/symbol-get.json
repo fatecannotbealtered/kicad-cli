@@ -16,7 +16,7 @@
       "actual": {
         "exit": 0
       },
-      "evidence": "live:docs/evidence/2026-11-09-181753-symbol-get.json#normal"
+      "evidence": "live:docs/evidence/2026-11-12-121542-symbol-get.json#normal"
     },
     {
       "row": "empty",
@@ -38,7 +38,7 @@
         "exit": 2,
         "code": "E_USAGE"
       },
-      "evidence": "live:docs/evidence/2026-11-09-181753-symbol-get.json#invalid_input"
+      "evidence": "live:docs/evidence/2026-11-12-121542-symbol-get.json#invalid_input"
     },
     {
       "row": "not_found",
@@ -57,7 +57,7 @@
         "exit": 3,
         "code": "E_NOT_FOUND"
       },
-      "evidence": "live:docs/evidence/2026-11-09-181753-symbol-get.json#not_found"
+      "evidence": "live:docs/evidence/2026-11-12-121542-symbol-get.json#not_found"
     },
     {
       "row": "ambiguous",
@@ -76,7 +76,7 @@
         "exit": 2,
         "code": "E_AMBIGUOUS"
       },
-      "evidence": "live:docs/evidence/2026-11-09-181755-symbol-get.json#ambiguous"
+      "evidence": "live:docs/evidence/2026-11-12-121544-symbol-get.json#ambiguous"
     },
     {
       "row": "conflict",

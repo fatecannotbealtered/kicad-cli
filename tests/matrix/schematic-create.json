@@ -16,7 +16,7 @@
       "actual": {
         "exit": 0
       },
-      "evidence": "live:docs/evidence/2026-11-09-181827-schematic-create.json#normal"
+      "evidence": "live:docs/evidence/2026-11-12-121608-schematic-create.json#normal"
     },
     {
       "row": "empty",
@@ -42,7 +42,7 @@
         "exit": 2,
         "code": "E_VALIDATION"
       },
-      "evidence": "live:docs/evidence/2026-11-09-181827-schematic-create.json#invalid_input"
+      "evidence": "live:docs/evidence/2026-11-12-121608-schematic-create.json#invalid_input"
     },
     {
       "row": "not_found",
@@ -59,7 +59,7 @@
         "exit": 3,
         "code": "E_NOT_FOUND"
       },
-      "evidence": "live:docs/evidence/2026-11-09-181827-schematic-create.json#not_found"
+      "evidence": "live:docs/evidence/2026-11-12-121608-schematic-create.json#not_found"
     },
     {
       "row": "ambiguous",
@@ -81,7 +81,7 @@
         "exit": 2,
         "code": "E_VALIDATION"
       },
-      "evidence": "live:docs/evidence/2026-11-09-181827-schematic-create.json#conflict"
+      "evidence": "live:docs/evidence/2026-11-12-121608-schematic-create.json#conflict"
     },
     {
       "row": "no_scope",
@@ -100,7 +100,7 @@
         "exit": 4,
         "code": "E_FORBIDDEN"
       },
-      "evidence": "live:docs/evidence/2026-11-09-182052-schematic-create.json#no_scope"
+      "evidence": "live:docs/evidence/2026-11-12-121610-schematic-create.json#no_scope"
     },
     {
       "row": "busy",
@@ -139,7 +139,7 @@
         "exit": 1,
         "code": "E_VERIFY_FAILED"
       },
-      "evidence": "live:docs/evidence/2026-11-09-181830-schematic-create.json#read_back_mismatch"
+      "evidence": "live:docs/evidence/2026-11-12-121613-schematic-create.json#read_back_mismatch"
     }
   ]
 }

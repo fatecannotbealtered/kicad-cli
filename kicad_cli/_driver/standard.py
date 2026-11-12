@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import threading
 import time
 from typing import TYPE_CHECKING, Any
@@ -124,7 +125,8 @@ def commands(tool: Tool) -> list[Command]:
          choices=tuple(tool.contract["jobs"]["states"]) + ("all",)), _limit(), _offset()], job_list, obj + "page", ["job_status"],
          ["job list"], "job", ["title"], None),
         ("job get", "The state of one long job; --wait waits until it ends or the time runs out.",
-         [Flag("--job", "string", "The job ID.", required=True), Flag("--wait", "duration", "Wait up to this long, at most 600s, for the job to end.")],
+         [Flag("--job", "string", "The job ID.", required=True), Flag("--wait", "duration", "Wait up to this long, at most 600s, for the job to end."),
+          Flag("--output", "path", "Write the whole job, its result included, to this new file.")],
          job_get, obj + "job", ["job_status"], ["job get --job 7 --wait 60s"], "job", ["title"], None),
         ("job cancel", "Ask to cancel a long job this tool started; a halt command.", [Flag("--job", "string", "The job ID.", required=True)],
          job_cancel, "receipt.schema.json", ["cancel", "job_status"],
@@ -850,7 +852,7 @@ def job_get(run: Run) -> Result:
         run.notices.extend(read_job.get("notices") or [])
         if view["state"] not in FINAL:
             view["poll_after_ms"] = POLL_AFTER_MS
-        return Result(view, ERROR_UNTRUSTED + [".result" + p for p in read_job.get("_untrusted", [])])
+        return Result(_job_to_file(run, view), ERROR_UNTRUSTED + [".result" + p for p in read_job.get("_untrusted", [])])
     record = _job_record(run, job_id)
     if run.worker and worker_of(run, job_id, (record["_job"].get("worker") or {}).get("nonce")):
         with run.mutex.hold():
@@ -887,7 +889,23 @@ def job_get(run: Run) -> Result:
     run.notices.extend(record["_job"].get("notices") or [])
     if view["state"] not in FINAL_JOB_STATES:
         view["poll_after_ms"] = POLL_AFTER_MS
-    return Result(view, JOB_UNTRUSTED + ERROR_UNTRUSTED)
+    return Result(_job_to_file(run, view), JOB_UNTRUSTED + ERROR_UNTRUSTED)
+
+
+def _job_to_file(run: Run, view: dict[str, Any]) -> dict[str, Any]:
+    """With --output, the whole job, however long its result, goes to a new file and the response
+    holds the rest with the file's path (DCLI-008)."""
+    if not run.call.has("--output"):
+        return view
+    path = run.call.values["--output"]
+    if os.path.exists(path):
+        raise usage(f"{path} exists; --output writes a new file and never replaces one.", "--output")
+    try:
+        with open(path, "x", encoding="utf-8", newline="\n") as handle:
+            handle.write(json.dumps(view, ensure_ascii=False, indent=1))
+    except OSError as exc:
+        raise DriverError("E_IO", f"Cannot write {path}: {exc.strerror}.") from None
+    return {**{k: v for k, v in view.items() if k != "result"}, "output": path}
 
 
 # ------------------------------------------------------------------ standard writes

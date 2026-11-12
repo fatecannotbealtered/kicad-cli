@@ -2,7 +2,7 @@
 
 [English](DRIVER-SKILL-SPEC.md) | 中文
 
-> 版本 1.2.0 · 条款 DSKL-001 至 DSKL-127
+> 版本 1.3.0 · 条款 DSKL-001 至 DSKL-127
 
 ## 怎么读
 
@@ -401,9 +401,9 @@ tool-driver-cli-spec 仓库必须维护一套评测，按 DSKL-044 的格式为 
 - `tests/eval/` 里每道题都有算数的结果，而且每道题最新的那个算数结果是通过的；
 - 命令的 `eval:` 证据指向一份报告，报告里有一个算数且通过的结果，来自一道在 `COMMANDS` 里列出这条命令、并实际运行了它的题。
 
-结果算数的条件是：由运行器在真实软件上写出（DSKL-044），并且它的 `fingerprint` 仍然等于以下内容的 SHA-256：题目文件、`reference` 向 Agent 描述的 `COMMANDS` 里的各条命令，以及工具手写的 Skill 和内置知识，即 `skills/` 和 `knowledge/` 去掉 `check_project` 生成或按发布写入的内容（DREPO-036）和 Skill 开头的 `version`。适配层代码不算在内：那里修了问题，结果仍然有效，适配层由行为矩阵检查（DVER-043）。几份报告里的结果合在一起算，所以只有结果缺失、过时或没通过的题需要重跑；`run_eval --stale` 只跑这些题。没有指纹的结果，在题目文件没变、而且所在报告的工具版本与工具的主版本和次版本都相同时才算。
+结果算数的条件是：由运行器在真实软件上写出（DSKL-044），并且它的 `fingerprint` 仍然等于以下内容的 SHA-256：题目文件、`reference` 向 Agent 描述的 `COMMANDS` 里的各条命令，以及这个结果依赖的手写说明，运行器把它们存进结果的 `guidance`：整个 `skills/`（Agent 可能加载其中任何一个 Skill，包括以后新增的）；这次运行列出或搜索过知识库时，整个 `knowledge/`；否则是这些命令在 `related_knowledge` 里点名的、或者 ID 在这次运行的调用或工具输出里出现过的知识条目；都去掉 `check_project` 生成或按发布写入的内容（DREPO-036）和 Skill 开头的 `version`。没有 `guidance` 的结果，改为整个 `skills/` 和 `knowledge/` 都算。适配层代码不算在内：那里修了问题，结果仍然有效，适配层由行为矩阵检查（DVER-043）。几份报告里的结果合在一起算，所以只有结果缺失、过时或没通过的题需要重跑；`run_eval --stale` 只跑这些题。没有指纹的结果，在题目文件没变、而且所在报告的工具版本与工具的主版本和次版本都相同时才算。
 
-其他成熟度不要求评测。评测报告是 `docs/evidence/eval-*.json` 文件，由 `contract/schemas/eval-report.schema.json` 校验。它记录工具版本、日期、所用的 Agent 和模型、平台、是否用模拟宿主代替了软件、工作目录的根和其他授权范围目标，以及每道题的结果、题目文件的 SHA-256、指纹、它的 `COMMANDS` 和 Agent 实际运行过的命令。`simulated: true` 的报告从不支撑任何成熟度（DVER-021）。其他报告的目标都必须列在 `docs/E2E.md` 的 Authorized Targets 一节里，或者位于列出的文件夹里面（DVER-050）。`eval:` 证据引用指向报告（DVER-041）。
+其他成熟度不要求评测。评测报告是 `docs/evidence/eval-*.json` 文件，由 `contract/schemas/eval-report.schema.json` 校验。它记录工具版本、日期、所用的 Agent 和模型、平台、是否用模拟宿主代替了软件、工作目录的根和其他授权范围目标，以及每道题的结果、题目文件的 SHA-256、指纹、它的 `guidance`、它的 `COMMANDS` 和 Agent 实际运行过的命令。`simulated: true` 的报告从不支撑任何成熟度（DVER-021）。其他报告的目标都必须列在 `docs/E2E.md` 的 Authorized Targets 一节里，或者位于列出的文件夹里面（DVER-050）。`eval:` 证据引用指向报告（DVER-041）。
 
 为什么：stable 承诺 Agent 能正确使用这条命令。只有按现在的题目、命令和说明在真实软件上通过的结果能说明这一点。结果在它依赖的东西改变之前一直有效，所以一处改动只需重跑它涉及的题。
 检查：🤖 `check_project` 按这些条件检查每条 stable 命令背后的结果，并检查每份报告的目标。
@@ -430,7 +430,7 @@ tool-driver-cli-spec 仓库必须维护一套评测，按 DSKL-044 的格式为 
 评测运行器 `run_eval` 随本规范提供，负责让 Agent 运行这些题目。对每道题，它必须：
 
 - 新建一个工作目录作为 Agent 的工作文件夹，放进工具的 Skill 和授权范围文件；
-- 把题目的文档放在工作目录旁边的文件夹里，让 Agent 只能通过工具接触它们；`TURNS` 和授权范围目标里的 `{documents}` 代表这个文件夹；
+- 把题目的文档放在工作目录旁边的文件夹里，让 Agent 只能通过工具接触它们；`TURNS` 和授权范围目标里的 `{documents}` 代表这个文件夹，授权范围目标里的 `{workspace}` 代表 Agent 的工作目录，比如 Agent 生成了文件要自己查看时用。用它们写出的授权范围目标必须落在工作根目录里面；
 - 写出授权范围文件。默认授予文档所在的文件夹、`COMMANDS` 里命令的效果，只有其中某条命令需要时才授予 `dangerous`；`SCOPE` 可以替换其中任何字段。命令都只读取的题目不写授权范围文件；
 - 把工具放到 `PATH` 上，前面加一个记下每次运行的中间层，一轮一轮把用户的话交给 Agent，每轮之前调用 `before`，最后一轮之后调用 `grade`，结束时总要调用 `after`；
 - 只让 Agent 在 shell 里运行这个工具，文件工具也只能在工作目录里使用。

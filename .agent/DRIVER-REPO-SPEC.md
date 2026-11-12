@@ -2,7 +2,7 @@
 
 English | [中文](DRIVER-REPO-SPEC_zh.md)
 
-> Version 1.2.0 · Clauses DREPO-001 to DREPO-062
+> Version 1.3.0 · Clauses DREPO-001 to DREPO-062
 
 ## How to Read
 
@@ -421,7 +421,7 @@ The README MUST show these badges, in this order, in one row under the pitch:
 | `platform` | The shipped platforms: Windows, macOS, Linux | The platform packages in `package.json` (DREPO-043) |
 | `risk` | The tool's risk tier, T0 to T2 (DSEC-002) | `reference` |
 | `maturity` | The lowest maturity among the tool's domain commands (DVER-040) | `reference` |
-| `spec` | The pinned specification version, such as tool-driver-cli-spec 1.2.0 | `.agent/SPEC_VERSION` |
+| `spec` | The pinned specification version, such as tool-driver-cli-spec 1.3.0 | `.agent/SPEC_VERSION` |
 | `license` | The tool's license | `package.json` |
 
 A badge row for a tool that drives KiCad 10.0 in file and session mode looks like this; the template defines the exact style:
@@ -435,7 +435,7 @@ A badge row for a tool that drives KiCad 10.0 in file and session mode looks lik
 ![platform](https://img.shields.io/badge/platform-Windows_·_macOS_·_Linux-555555)
 ![risk](https://img.shields.io/badge/risk-T1-d29922)
 ![maturity](https://img.shields.io/badge/maturity-verified-8957e5)
-![spec](https://img.shields.io/badge/spec-tool--driver--cli--spec_1.2.0-0969da)
+![spec](https://img.shields.io/badge/spec-tool--driver--cli--spec_1.3.0-0969da)
 ![license](https://img.shields.io/badge/license-Apache--2.0-blue)
 ```
 

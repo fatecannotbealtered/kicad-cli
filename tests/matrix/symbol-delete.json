@@ -16,7 +16,7 @@
       "actual": {
         "exit": 0
       },
-      "evidence": "live:docs/evidence/2026-11-09-181928-symbol-delete.json#normal"
+      "evidence": "live:docs/evidence/2026-11-12-121715-symbol-delete.json#normal"
     },
     {
       "row": "empty",
@@ -35,7 +35,7 @@
         "exit": 2,
         "code": "E_USAGE"
       },
-      "evidence": "live:docs/evidence/2026-11-09-181928-symbol-delete.json#empty"
+      "evidence": "live:docs/evidence/2026-11-12-121715-symbol-delete.json#empty"
     },
     {
       "row": "invalid_input",
@@ -56,7 +56,7 @@
         "exit": 2,
         "code": "E_USAGE"
       },
-      "evidence": "live:docs/evidence/2026-11-09-181928-symbol-delete.json#invalid_input"
+      "evidence": "live:docs/evidence/2026-11-12-121715-symbol-delete.json#invalid_input"
     },
     {
       "row": "not_found",
@@ -75,7 +75,7 @@
         "exit": 3,
         "code": "E_NOT_FOUND"
       },
-      "evidence": "live:docs/evidence/2026-11-09-181928-symbol-delete.json#not_found"
+      "evidence": "live:docs/evidence/2026-11-12-121715-symbol-delete.json#not_found"
     },
     {
       "row": "ambiguous",
@@ -94,7 +94,7 @@
         "exit": 2,
         "code": "E_AMBIGUOUS"
       },
-      "evidence": "live:docs/evidence/2026-11-09-181930-symbol-delete.json#ambiguous"
+      "evidence": "live:docs/evidence/2026-11-12-121716-symbol-delete.json#ambiguous"
     },
     {
       "row": "conflict",
@@ -113,7 +113,7 @@
         "exit": 6,
         "code": "E_CONFLICT"
       },
-      "evidence": "live:docs/evidence/2026-11-09-181935-symbol-delete.json#conflict"
+      "evidence": "live:docs/evidence/2026-11-12-121722-symbol-delete.json#conflict"
     },
     {
       "row": "no_scope",
@@ -132,7 +132,7 @@
         "exit": 4,
         "code": "E_FORBIDDEN"
       },
-      "evidence": "live:docs/evidence/2026-11-09-182056-symbol-delete.json#no_scope"
+      "evidence": "live:docs/evidence/2026-11-12-121725-symbol-delete.json#no_scope"
     },
     {
       "row": "busy",
@@ -171,7 +171,7 @@
         "exit": 1,
         "code": "E_VERIFY_FAILED"
       },
-      "evidence": "live:docs/evidence/2026-11-09-181939-symbol-delete.json#read_back_mismatch"
+      "evidence": "live:docs/evidence/2026-11-12-121729-symbol-delete.json#read_back_mismatch"
     }
   ]
 }

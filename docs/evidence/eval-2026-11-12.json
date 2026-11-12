@@ -1,0 +1,485 @@
+{
+  "tool": "kicad-cli",
+  "tool_version": "1.1.0",
+  "date": "2026-11-12",
+  "agent": "Claude Code 2.1.322",
+  "model": "claude-opus-5-5",
+  "simulated": false,
+  "platform": "windows",
+  "targets": [
+    "file:///D:/driver-work/kicad-cli/eval/"
+  ],
+  "questions": [
+    {
+      "scenario": "scoped_change",
+      "id": "board-from-schematic",
+      "passed": true,
+      "notes": "Create a board from a schematic, then bring a schematic change to an existing board.",
+      "sha256": "9dadc218895eb77507f8149623cb182ac19f3e9b3856e9e3046e59b112ba740f",
+      "commands": [
+        "board create",
+        "netlist import",
+        "footprint list"
+      ],
+      "ran": [
+        "board check",
+        "board create",
+        "doctor",
+        "footprint list",
+        "knowledge get",
+        "netlist import",
+        "reference",
+        "schematic check"
+      ],
+      "guidance": [
+        "knowledge/design-flow.md",
+        "knowledge/files-open-in-kicad.md",
+        "knowledge/library-changes-do-not-refresh-instances.md",
+        "knowledge/run-checks-in-the-project-folder.md",
+        "knowledge/zone-fills.md",
+        "skills/"
+      ],
+      "fingerprint": "e86953eca06bae318fc28c36ac296dc03e215478926f8e5c76b0bd95a936f1ca"
+    },
+    {
+      "scenario": "scoped_change",
+      "id": "change-value",
+      "passed": true,
+      "notes": "Change one field of one part, then report changed, saved and verified separately.",
+      "sha256": "f210d50c85a280b8d849280c857da1f739f45c331c671acd3ca83e49d9a5f8c8",
+      "commands": [
+        "symbol update",
+        "symbol get"
+      ],
+      "ran": [
+        "doctor",
+        "reference",
+        "symbol get",
+        "symbol update"
+      ],
+      "guidance": [
+        "knowledge/files-open-in-kicad.md",
+        "knowledge/library-changes-do-not-refresh-instances.md",
+        "knowledge/net-names-and-labels.md",
+        "skills/"
+      ],
+      "fingerprint": "4ad530106832dd6104248cdb1ceb36d733688fffe3948ae19cea33f186457602"
+    },
+    {
+      "scenario": "scoped_change",
+      "id": "delete-symbol",
+      "passed": true,
+      "notes": "Delete one part the user names, a dangerous change the user asked for explicitly.",
+      "sha256": "8d7e965b5633948d08304d1cba4f9326c8c1b1d38e7051bbef23cbefc49ef408",
+      "commands": [
+        "symbol delete"
+      ],
+      "ran": [
+        "doctor",
+        "knowledge list",
+        "symbol delete",
+        "symbol get"
+      ],
+      "guidance": [
+        "knowledge/",
+        "skills/"
+      ],
+      "fingerprint": "e836188f791a16389ccd79cc25f6f299218a05bec41a476742c081cb2952d6da"
+    },
+    {
+      "scenario": "scoped_change",
+      "id": "delete-track",
+      "passed": true,
+      "notes": "Delete one track segment the user names, a dangerous change the user asked for explicitly.",
+      "sha256": "3b1187777c4ea0f36368110d6402caba81c866863b13e1406dae53efaa02caac",
+      "commands": [
+        "track delete",
+        "track list"
+      ],
+      "ran": [
+        "reference",
+        "track delete",
+        "track list"
+      ],
+      "guidance": [
+        "knowledge/design-flow.md",
+        "knowledge/files-open-in-kicad.md",
+        "skills/"
+      ],
+      "fingerprint": "298e95ef3eca5d05801c2cece13ba8ea12a75222f32cde84d658386e532a697f"
+    },
+    {
+      "scenario": "scoped_change",
+      "id": "draw-circuit",
+      "passed": true,
+      "notes": "Draw on a schematic in two turns: place a part and wire it by net, then move it and rename a net.",
+      "sha256": "3f6cf56cd3e0838250e3412a0a0dbce1723124571506a2f60ed4d7c3b9dc336f",
+      "commands": [
+        "symbol create",
+        "pin update",
+        "symbol move",
+        "net update",
+        "net list"
+      ],
+      "ran": [
+        "doctor",
+        "knowledge get",
+        "net update",
+        "pin update",
+        "reference",
+        "symbol create",
+        "symbol get",
+        "symbol move"
+      ],
+      "guidance": [
+        "knowledge/files-open-in-kicad.md",
+        "knowledge/library-changes-do-not-refresh-instances.md",
+        "knowledge/multi-file-writes-are-not-atomic.md",
+        "knowledge/net-names-and-labels.md",
+        "knowledge/schematic-grid.md",
+        "skills/"
+      ],
+      "fingerprint": "0dd98369473f5a35468344e98c1df19779aaf0f52eea2d6dc72149d317a06bd4"
+    },
+    {
+      "scenario": "scoped_change",
+      "id": "fabrication-outputs",
+      "passed": true,
+      "notes": "Produce the usual output files of a design, and a new empty sheet, and report each file.",
+      "sha256": "74f0f2dda36e76ea9cb42d19998b39187ed5066a1a412bd8db2dcac42b1f74af",
+      "commands": [
+        "board export",
+        "board render",
+        "schematic export",
+        "schematic render",
+        "schematic create"
+      ],
+      "ran": [
+        "board check",
+        "board export",
+        "board render",
+        "doctor",
+        "knowledge get",
+        "knowledge list",
+        "reference",
+        "schematic create",
+        "schematic export",
+        "schematic render"
+      ],
+      "guidance": [
+        "knowledge/",
+        "skills/"
+      ],
+      "fingerprint": "046d334df67c15f3fb2d300278a5d9a85f455ceff35c8ad9b4ab543c1bad9fde"
+    },
+    {
+      "scenario": "knowledge_lookup",
+      "id": "knowledge-time-limit",
+      "passed": true,
+      "notes": "A question only kicad-cli's knowledge answers: the answer agrees with the entry the Agent read.",
+      "sha256": "f9be6ec1dd7e8551cddc37f01368f2252f4751c4ac0f4a43e4f10e7c85e4fa57",
+      "commands": [
+        "knowledge search",
+        "knowledge get"
+      ],
+      "ran": [
+        "knowledge get",
+        "knowledge list",
+        "knowledge search",
+        "reference"
+      ],
+      "guidance": [
+        "knowledge/",
+        "skills/"
+      ],
+      "fingerprint": "ec44059f7393f43eae2abdb912b196971708ce83bd8744d2937d02327c4827d0"
+    },
+    {
+      "scenario": "scoped_change",
+      "id": "new-part",
+      "passed": true,
+      "notes": "Define a new part in the project libraries: a footprint and a symbol that uses it.",
+      "sha256": "9829fa19baa1ef05bdb37f2224b047e466d06161e17d22bcd6a59b751d720e3c",
+      "commands": [
+        "footprint create",
+        "symbol create",
+        "library get"
+      ],
+      "ran": [
+        "doctor",
+        "footprint create",
+        "knowledge list",
+        "library get",
+        "library list",
+        "reference",
+        "symbol create",
+        "symbol get"
+      ],
+      "guidance": [
+        "knowledge/",
+        "skills/"
+      ],
+      "fingerprint": "b20e1800dea922704ffc08e1c797bfc8ef122b94b8f4bb8857fe8e60768ab37a"
+    },
+    {
+      "scenario": "scoped_change",
+      "id": "place-and-route",
+      "passed": true,
+      "notes": "Place a part and add copper on an unrouted board, with KiCad's DRC checking each change first.",
+      "sha256": "9acee4f263ad58c122182173607f99205a99829bc60878f2fd2897d7877a772c",
+      "commands": [
+        "footprint move",
+        "track create"
+      ],
+      "ran": [
+        "footprint move",
+        "reference",
+        "track create"
+      ],
+      "guidance": [
+        "knowledge/checks-time-limit.md",
+        "knowledge/design-rules-files.md",
+        "knowledge/files-open-in-kicad.md",
+        "knowledge/placement-method.md",
+        "knowledge/routing-method.md",
+        "knowledge/run-checks-in-the-project-folder.md",
+        "skills/"
+      ],
+      "fingerprint": "a87145d150388c3fb32e9c50a89ef592f0b50e2bda314cf9e4baaae42c920219"
+    },
+    {
+      "scenario": "scoped_change",
+      "id": "place-board",
+      "passed": true,
+      "notes": "Lay out a board straight from its schematic: place the parts, turning some, and fit the outline.",
+      "sha256": "bff3879d3d5ef97bc200df5e4ee7cefe6903c7939f83eb691308a9427733e750",
+      "commands": [
+        "board get",
+        "footprint list",
+        "footprint move",
+        "board update",
+        "board check"
+      ],
+      "ran": [
+        "board check",
+        "board get",
+        "board update",
+        "doctor",
+        "footprint list",
+        "footprint move",
+        "footprint update",
+        "knowledge get",
+        "reference"
+      ],
+      "guidance": [
+        "knowledge/checks-are-not-sign-off.md",
+        "knowledge/checks-time-limit.md",
+        "knowledge/design-flow.md",
+        "knowledge/design-rules-files.md",
+        "knowledge/files-open-in-kicad.md",
+        "knowledge/placement-method.md",
+        "knowledge/run-checks-in-the-project-folder.md",
+        "knowledge/starved-thermal-in-10-0-6.md",
+        "knowledge/zone-fills.md",
+        "skills/"
+      ],
+      "fingerprint": "e23710da5f8250f34249a9e604d2c6959afeab91b62f49b2c518c65748e99149"
+    },
+    {
+      "scenario": "scoped_change",
+      "id": "place-references",
+      "passed": true,
+      "notes": "Tidy the silkscreen of a routed board: every reference designator beside its own part.",
+      "sha256": "29cb51ec3cd79825abcc4afe37c2e260cde48549f7c9d6316a93c62b32611766",
+      "commands": [
+        "footprint list",
+        "footprint update"
+      ],
+      "ran": [
+        "board check",
+        "board get",
+        "doctor",
+        "footprint list",
+        "footprint update",
+        "knowledge get",
+        "reference"
+      ],
+      "guidance": [
+        "knowledge/design-flow.md",
+        "knowledge/files-open-in-kicad.md",
+        "knowledge/placement-method.md",
+        "knowledge/run-checks-in-the-project-folder.md",
+        "skills/"
+      ],
+      "fingerprint": "3cf35c965f27a130b5587f2c9cd7d790c2c344e62a1e9e00fe6e9e13fa6fcaa9"
+    },
+    {
+      "scenario": "read_answer",
+      "id": "read-board",
+      "passed": true,
+      "notes": "Answer questions about a board: where a footprint is and how much copper a net has.",
+      "sha256": "a23b38cea04fbfbcc57bb08f4a8add06ba72009e83471cd27c7f147d27984231",
+      "commands": [
+        "footprint list",
+        "track list"
+      ],
+      "ran": [
+        "footprint list",
+        "track list"
+      ],
+      "guidance": [
+        "knowledge/design-flow.md",
+        "skills/"
+      ],
+      "fingerprint": "e8920b2cc5c69965bc5acee04cda22f52db6486250dc9a460012623db81da8d3"
+    },
+    {
+      "scenario": "read_answer",
+      "id": "read-checks",
+      "passed": true,
+      "notes": "Run KiCad's ERC and DRC and report how many errors each found, without changing anything.",
+      "sha256": "71807bca99ce89259dec9be7c4ac050472de0eaea668d0021d985b1bdf5123d6",
+      "commands": [
+        "schematic check",
+        "board check"
+      ],
+      "ran": [
+        "board check",
+        "schematic check"
+      ],
+      "guidance": [
+        "knowledge/checks-are-not-sign-off.md",
+        "knowledge/checks-time-limit.md",
+        "knowledge/design-rules-files.md",
+        "knowledge/run-checks-in-the-project-folder.md",
+        "knowledge/starved-thermal-in-10-0-6.md",
+        "knowledge/zone-fills.md",
+        "skills/"
+      ],
+      "fingerprint": "9decfbe35425133109ced7c533e373ecb60d166a626e3a765abeaa092fceca34"
+    },
+    {
+      "scenario": "read_answer",
+      "id": "read-library",
+      "passed": true,
+      "notes": "Find what a project library holds, by reading the project's library tables and the library.",
+      "sha256": "28aff38b6b2b6b8a162abf40588caf0d547078d5b370456ca0231054ff78e6e0",
+      "commands": [
+        "library list",
+        "library get"
+      ],
+      "ran": [
+        "library get",
+        "library list",
+        "reference"
+      ],
+      "guidance": [
+        "knowledge/library-changes-do-not-refresh-instances.md",
+        "skills/"
+      ],
+      "fingerprint": "70b068ce5fe2a17907de24faa73d4b47e3f6dc0cab7b15a1393d1031264e1a89"
+    },
+    {
+      "scenario": "read_answer",
+      "id": "read-only-file",
+      "passed": true,
+      "notes": "Answer which files a project folder holds and whether one of them is read-only.",
+      "sha256": "d93e7a7c14236551198a368a6c5dee82c73f0d99e0b3bf48d5d8293fd30dfafc",
+      "commands": [
+        "doc list",
+        "doc get"
+      ],
+      "ran": [
+        "doc get",
+        "doc list",
+        "doctor",
+        "reference"
+      ],
+      "guidance": [
+        "skills/"
+      ],
+      "fingerprint": "baef339d3b4896f45349bf3141abdf69b9901a3f4854e90913bdaa2a307a98fc"
+    },
+    {
+      "scenario": "read_answer",
+      "id": "read-project-rules",
+      "passed": true,
+      "notes": "Answer a question about a project's design rules by reading the project, and change nothing.",
+      "sha256": "f1ce35d1432c44b93f8046e85ec54febd0c07fce75f8ad4f6ff14d3ae837666d",
+      "commands": [
+        "project get"
+      ],
+      "ran": [
+        "project get"
+      ],
+      "guidance": [
+        "knowledge/design-rules-files.md",
+        "skills/"
+      ],
+      "fingerprint": "a8d3385ef9621bb168b72c83bc897f5306b3ee9f8bd1683fc34a704193db949c"
+    },
+    {
+      "scenario": "read_answer",
+      "id": "read-schematic",
+      "passed": true,
+      "notes": "Answer questions about a schematic: a part's value, a net's pins and the number of parts.",
+      "sha256": "73d2bf998a8d91ebd7f7dd0d568f3a6d4794453ec9d54e43f08c51f5834091fc",
+      "commands": [
+        "symbol list",
+        "symbol get",
+        "net list"
+      ],
+      "ran": [
+        "net list",
+        "reference",
+        "symbol get",
+        "symbol list"
+      ],
+      "guidance": [
+        "knowledge/",
+        "skills/"
+      ],
+      "fingerprint": "6e00b2e77f4228b1be9707e10a1bd5abe8badae07e4647dc11b3166e65af504c"
+    },
+    {
+      "scenario": "scoped_change",
+      "id": "route-board",
+      "passed": true,
+      "notes": "Route a placed board: every connection, vias where layers change, wide supply tracks, a GND plane.",
+      "sha256": "8b2f5cc8e92cbab69f95da6177b85e8cceb5960bc54191c47d3a554d3a1b542e",
+      "commands": [
+        "footprint list",
+        "board check",
+        "track create",
+        "via create",
+        "zone create",
+        "track list"
+      ],
+      "ran": [
+        "board check",
+        "board get",
+        "doctor",
+        "footprint list",
+        "knowledge get",
+        "project get",
+        "reference",
+        "track create",
+        "via create",
+        "zone create"
+      ],
+      "guidance": [
+        "knowledge/checks-are-not-sign-off.md",
+        "knowledge/checks-time-limit.md",
+        "knowledge/design-flow.md",
+        "knowledge/design-rules-files.md",
+        "knowledge/files-open-in-kicad.md",
+        "knowledge/routing-method.md",
+        "knowledge/run-checks-in-the-project-folder.md",
+        "knowledge/starved-thermal-in-10-0-6.md",
+        "knowledge/zone-fills.md",
+        "skills/"
+      ],
+      "fingerprint": "ce8dccc0284f4a45d1a855cf3e993dcfa6bd5f95bba00d68669363e361b40a1e"
+    }
+  ]
+}

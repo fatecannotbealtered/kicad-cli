@@ -2,7 +2,7 @@
 
 English | [中文](DRIVER-SKILL-SPEC_zh.md)
 
-> Version 1.2.0 · Clauses DSKL-001 to DSKL-127
+> Version 1.3.0 · Clauses DSKL-001 to DSKL-127
 
 ## How to Read
 
@@ -401,9 +401,9 @@ A command MUST NOT be marked stable unless the evaluation on the real applicatio
 - every question in `tests/eval/` has a result that counts, and the newest such result of each question passed;
 - the command's `eval:` evidence names a report holding a result that counts and passed, of a question that lists the command in `COMMANDS` and ran it.
 
-A result counts when the runner wrote it on the real application (DSKL-044) and its `fingerprint` still equals the SHA-256 of the question file, the commands in its `COMMANDS` as `reference` describes them to an Agent, and the tool's handwritten Skills and builtin knowledge: `skills/` and `knowledge/` without the content `check_project` generates or writes from the release (DREPO-036) and without the `version` of the Skills' front matter. The adapter's code is not part of it: a fix there leaves the results standing, and the behavior matrices check it (DVER-043). The results of several reports count together, so only a question whose result is missing, stale or failed runs again; `run_eval --stale` runs just those. A result without a fingerprint counts while its question file is unchanged and the tool version of its report has the tool's major and minor version.
+A result counts when the runner wrote it on the real application (DSKL-044) and its `fingerprint` still equals the SHA-256 of the question file, the commands in its `COMMANDS` as `reference` describes them to an Agent, and the handwritten guidance the result depended on, which the runner keeps in its `guidance`: all of `skills/`, since the Agent may load any Skill, also one added later; all of `knowledge/` when the run listed or searched it; else the knowledge entries those commands name in `related_knowledge` or whose ID showed in the run's calls or the tool's output; without the content `check_project` generates or writes from the release (DREPO-036) and without the `version` of the Skills' front matter. A result without `guidance` counts all of `skills/` and `knowledge/` instead. The adapter's code is not part of it: a fix there leaves the results standing, and the behavior matrices check it (DVER-043). The results of several reports count together, so only a question whose result is missing, stale or failed runs again; `run_eval --stale` runs just those. A result without a fingerprint counts while its question file is unchanged and the tool version of its report has the tool's major and minor version.
 
-Other maturity levels do not need evaluation. An evaluation report is a JSON file `docs/evidence/eval-*.json` that `contract/schemas/eval-report.schema.json` validates. It records the tool version, the date, the Agent and model, the platform, whether the fake host stood in for the application, the workspace root and the other scope targets, and for each question its result, the SHA-256 of its file, its fingerprint, its `COMMANDS` and the commands the Agent ran. A report with `simulated: true` never supports a maturity level (DVER-021). The targets of every other report MUST be listed under Authorized Targets or lie inside a listed folder (DVER-050). An `eval:` evidence reference points to the report (DVER-041).
+Other maturity levels do not need evaluation. An evaluation report is a JSON file `docs/evidence/eval-*.json` that `contract/schemas/eval-report.schema.json` validates. It records the tool version, the date, the Agent and model, the platform, whether the fake host stood in for the application, the workspace root and the other scope targets, and for each question its result, the SHA-256 of its file, its fingerprint, its `guidance`, its `COMMANDS` and the commands the Agent ran. A report with `simulated: true` never supports a maturity level (DVER-021). The targets of every other report MUST be listed under Authorized Targets or lie inside a listed folder (DVER-050). An `eval:` evidence reference points to the report (DVER-041).
 
 Why: Stable promises that Agents use the command correctly. Only passing results on the real application, from the questions, commands and guidance as they are now, show that. A result stays good until something it depends on changes, so a change runs again only the questions it touches.
 Check: 🤖 `check_project` checks the results behind every stable command against these conditions, and the targets of every report.
@@ -430,7 +430,7 @@ Each evaluation question MUST be one Python file named after the question's ID: 
 The evaluation runner `run_eval`, which comes with this specification, runs the questions with an Agent. For each question it MUST:
 
 - make a fresh workspace, the Agent's working folder, with the tool's Skills and the scope file;
-- keep the question's documents in a folder beside the workspace, so that the Agent reaches them only through the tool; `{documents}` in `TURNS` and in scope targets stands for that folder;
+- keep the question's documents in a folder beside the workspace, so that the Agent reaches them only through the tool; `{documents}` in `TURNS` and in scope targets stands for that folder, and `{workspace}` in scope targets for the Agent's workspace, such as for a file the Agent makes to look at. A scope target written from them MUST stay inside the workspace root;
 - write the scope file. By default it grants the documents folder, the effects of the commands in `COMMANDS`, and `dangerous` only when one of them needs it; `SCOPE` replaces any of these fields. A question whose commands only read gets no scope file;
 - put the tool on `PATH` behind a shim that records every run, hand the turns to the Agent one by one, call `before` before each turn and `grade` after the last, and always call `after`;
 - let the Agent run nothing but the tool in its shell, and use its file tools only inside the workspace.

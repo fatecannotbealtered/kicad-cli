@@ -21,7 +21,7 @@ All notable changes to kicad-cli are recorded here, in the Keep a Changelog form
 
 ### Changed
 
-- Pinned to tool-driver-cli-spec 1.2.0. Each item of a batch write (`--input`, `--ids`) carries its own result, as a single call returns it. When the person's own message grants what a write lacks, the Agent writes a scope file holding only that grant and says what it wrote; a request to do a task is not a grant. `docs/E2E.md` has the specification's fixed Authorization Rules section, and Authorized Targets holds only the list of targets.
+- Pinned to tool-driver-cli-spec 1.3.0. Each item of a batch write (`--input`, `--ids`) carries its own result, as a single call returns it. When the person's own message grants what a write lacks, the Agent writes a scope file holding only that grant and says what it wrote; a request to do a task is not a grant. `docs/E2E.md` has the specification's fixed Authorization Rules section, and Authorized Targets holds only the list of targets.
 - The practice targets in `docs/E2E.md` include layout-practice, a board of about 15 parts with through-hole connectors.
 - `footprint move` moves any unlocked footprint with pads: through-hole, turned and back-side ones too. It refuses a footprint that holds a zone, a text box or a dimension, which KiCad writes where they lie on the board and which would stay behind.
 - `track delete` deletes vias as well as straight segments; a via is named `/vias/<uuid>` in targets, as `via create` names it.

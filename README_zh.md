@@ -11,7 +11,7 @@
 ![platform](https://img.shields.io/badge/platform-Windows_%C2%B7_macOS_%C2%B7_Linux-555555)
 ![risk](https://img.shields.io/badge/risk-T1-d29922)
 ![maturity](https://img.shields.io/badge/maturity-verified-8957e5)
-![spec](https://img.shields.io/badge/spec-tool--driver--cli--spec_1.2.0-0969da)
+![spec](https://img.shields.io/badge/spec-tool--driver--cli--spec_1.3.0-0969da)
 ![license](https://img.shields.io/badge/license-Apache--2.0-blue)
 <!-- driver:badges:end -->
 
@@ -25,7 +25,7 @@
 | 系统与 CPU | Windows (x64, arm64), macOS (x64, arm64), Linux (x64, arm64) |
 | 风险等级 | T1 |
 | 成熟度 | verified：draft 0 个，verified 2 个，stable 32 个 |
-| 规范 | tool-driver-cli-spec 1.2.0 |
+| 规范 | tool-driver-cli-spec 1.3.0 |
 | 宿主组件 | 不需要 |
 <!-- driver:info-card:end -->
 
@@ -235,7 +235,7 @@ python scripts/spec.py suites
 ## 链接
 
 <!-- driver:spec-links:start -->
-- 规范：[tool-driver-cli-spec 1.2.0](.agent/)，固定副本在 `.agent/`
+- 规范：[tool-driver-cli-spec 1.3.0](.agent/)，固定副本在 `.agent/`
 - [CHANGELOG.md](CHANGELOG.md)：每个版本的改动（英文）
 - [SECURITY_zh.md](SECURITY_zh.md)：安全模型，以及怎样报告漏洞
 - [CONTRIBUTING_zh.md](CONTRIBUTING_zh.md)：怎样参与贡献

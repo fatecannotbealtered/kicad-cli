@@ -22,7 +22,7 @@
       "actual": {
         "exit": 0
       },
-      "evidence": "live:docs/evidence/2026-11-09-181835-symbol-create.json#normal"
+      "evidence": "live:docs/evidence/2026-11-12-121618-symbol-create.json#normal"
     },
     {
       "row": "empty",
@@ -50,7 +50,7 @@
         "exit": 2,
         "code": "E_USAGE"
       },
-      "evidence": "live:docs/evidence/2026-11-09-181835-symbol-create.json#invalid_input"
+      "evidence": "live:docs/evidence/2026-11-12-121618-symbol-create.json#invalid_input"
     },
     {
       "row": "not_found",
@@ -73,7 +73,7 @@
         "exit": 3,
         "code": "E_NOT_FOUND"
       },
-      "evidence": "live:docs/evidence/2026-11-09-181835-symbol-create.json#not_found"
+      "evidence": "live:docs/evidence/2026-11-12-121618-symbol-create.json#not_found"
     },
     {
       "row": "ambiguous",
@@ -103,7 +103,7 @@
         "exit": 6,
         "code": "E_CONFLICT"
       },
-      "evidence": "live:docs/evidence/2026-11-09-181843-symbol-create.json#conflict"
+      "evidence": "live:docs/evidence/2026-11-12-121625-symbol-create.json#conflict"
     },
     {
       "row": "no_scope",
@@ -128,7 +128,7 @@
         "exit": 4,
         "code": "E_FORBIDDEN"
       },
-      "evidence": "live:docs/evidence/2026-11-09-182054-symbol-create.json#no_scope"
+      "evidence": "live:docs/evidence/2026-11-12-121628-symbol-create.json#no_scope"
     },
     {
       "row": "busy",
@@ -173,7 +173,7 @@
         "exit": 1,
         "code": "E_VERIFY_FAILED"
       },
-      "evidence": "live:docs/evidence/2026-11-09-181848-symbol-create.json#read_back_mismatch"
+      "evidence": "live:docs/evidence/2026-11-12-121631-symbol-create.json#read_back_mismatch"
     }
   ]
 }
