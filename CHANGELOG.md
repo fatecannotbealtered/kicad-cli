@@ -4,6 +4,10 @@ All notable changes to kicad-cli are recorded here, in the Keep a Changelog form
 
 ## [Unreleased]
 
+### Changed
+
+- Pinned to tool-driver-cli-spec 1.3.2: a write's reply that is too long is shortened rather than refused, `--fields` takes dotted names such as `receipt.outcome`, and an adapter value outside the contract is named in an `adapter_defect` notice. `doc undo` is not offered, since KiCad's files keep no undo history, so its new `undoes` needs no check.
+
 ## [1.1.0] - 2026-11-09
 
 ### Added

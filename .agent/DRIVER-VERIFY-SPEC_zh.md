@@ -2,7 +2,7 @@
 
 [English](DRIVER-VERIFY-SPEC.md) | 中文
 
-> 版本 1.3.0 · 条款 DVER-001 至 DVER-051
+> 版本 1.3.2 · 条款 DVER-001 至 DVER-051
 
 ## 怎么读
 

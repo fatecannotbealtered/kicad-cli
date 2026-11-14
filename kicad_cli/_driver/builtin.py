@@ -19,7 +19,7 @@ from .records import parse_utc, public, utc_now
 from .registry import Command, Flag
 from .runtime import Run
 from .update import SEMVER, newer
-from .writes import read_back, same
+from .writes import read_back, same, shorten_record, slim_receipt
 
 if TYPE_CHECKING:
     from .tool import Tool
@@ -128,6 +128,11 @@ def describe(tool: Tool, command: Command, full: bool = False) -> dict[str, Any]
         if flag.schema is not None:
             entry["schema"] = flag.schema
         flags.append(entry)
+    if not command.writes and not full:
+        # A shared flag every read takes; the file of --all, which the project scripts read, lists
+        # only what the command registers (DCLI-007).
+        flags.append({"name": "--fields", "summary": "Only these fields, comma-separated; a.b is b inside a; all is every field.",
+                      "type": "string"})
     out: dict[str, Any] = {"path": command.path, "summary": command.summary, "flags": flags,
                            "output_schema": command.output_schema, "examples": command.examples,
                            "effects": command.effects, "tier": tier_of(tool, command)}
@@ -178,13 +183,11 @@ def reference(run: Run) -> Result:
             raise usage(f"There is no command {path!r}.", "--command", f"Run `{tool.name} reference` to list the commands.")
         return Result(describe(tool, tool.commands[path]))
     index = [{"path": c.path, "summary": c.summary} for c in tool.commands.values()]
-    data = {**head, "index": index}
-    # Room is left for the notices a call may carry. Past it the paths alone stay: one short call
+    # When the index and the notices of the call do not fit, the paths alone stay: one short call
     # still lists everything the tool offers (DCLI-031).
-    if len(json.dumps(data, ensure_ascii=False)) > int(tool.contract["envelope"]["limits"]["reference_index_chars"]) - 1500:
-        data = {**head, "index": [{"path": c.path} for c in tool.commands.values()],
-                "summaries": f"Left out to keep the index short; `{tool.name} reference --command \"<path>\"` describes one command."}
-    return Result(data)
+    shorter = {**head, "index": [{"path": c.path} for c in tool.commands.values()],
+               "summaries": f"Left out to keep the index short; `{tool.name} reference --command \"<path>\"` describes one command."}
+    return Result({**head, "index": index}, shorter=shorter)
 
 
 # ------------------------------------------------------------------ context and doctor
@@ -487,14 +490,12 @@ def _record(run: Run, operation_id: str) -> dict[str, Any]:
 
 
 def operation_get(run: Run) -> Result:
-    from .writes import slim_receipt
-
     record = _record(run, run.call.values["--id"])
     data = public(record)
-    if run.call.has("--output"):
+    path = run.call.values.get("--output")
+    if path:
         # The whole record, however many files the write produced, and a long job's result go
         # to a new file (DCLI-008).
-        path = run.call.values["--output"]
         if os.path.exists(path):
             raise usage(f"{path} exists; --output writes a new file and never replaces one.", "--output")
         full = {**data, "result": record["_job"]["result"]} if "result" in (record.get("_job") or {}) else data
@@ -505,7 +506,20 @@ def operation_get(run: Run) -> Result:
             raise DriverError("E_IO", f"Cannot write {path}: {exc.strerror}.") from None
     if isinstance(data.get("receipt"), dict):
         data["receipt"] = slim_receipt(run, data["receipt"])
+    # A record too long to show is shortened rather than refused: the call that wrote a file
+    # succeeds, and one without --output still shows the state and the outcome (DCLI-035).
+    if shorten_record(run, data, _room(run)) and not path:
+        command = run.cmd("operation get", [("--id", record["operation_id"])]) + " --output <file>"
+        run.notices.append({"type": "shortened", "severity": "info",
+                            "message": f"Shortened to fit the response. `{command}` writes the whole record."})
+    if path:
+        data["output"] = path
     return Result(data, _record_untrusted())
+
+
+def _room(run: Run) -> int:
+    """The characters one record or job may take, leaving room for the notices of the call."""
+    return int(run.contract["envelope"]["limits"]["success_chars"]) * 3 // 4
 
 
 def _record_untrusted() -> list[str]:
@@ -519,6 +533,12 @@ def operation_list(run: Run) -> Result:
     batch = call.values.get("--batch")
     records = [r for r in run.records.all() if (state == "all" or r.get("state") == state) and (not batch or r.get("batch") == batch)]
     data, offset = page([public(r) for r in records], call.values.get("--offset", 0), call.values.get("--limit", 20))
+    # A record too long for a page on its own is shortened, so that paging goes on past it (DCLI-035).
+    shortened = [item["operation_id"] for item in data["items"] if shorten_record(run, item, _room(run))]
+    if shortened:
+        command = f"{run.tool.name} operation get --id <id> --output <file>"
+        run.notices.append({"type": "shortened", "severity": "info",
+                            "message": f"Shortened to fit the page: {', '.join(shortened)}. `{command}` writes one whole."})
     return Result(data, [".items[*]" + p for p in _record_untrusted()], offset=offset)
 
 
@@ -563,7 +583,16 @@ def operation_resolve(run: Run) -> Result:
     with run.mutex.hold():  # the outcome is recorded and the target unlocked in one step
         run.records.save(record)
         run.locks._remove(operation_id)
-    return Result(public(record), _record_untrusted())
+    # The outcome is recorded: a record too long to show is shortened, never refused, since a
+    # refusal reads as a failure (DCLI-035).
+    data = public(record)
+    if isinstance(data.get("receipt"), dict):
+        data["receipt"] = slim_receipt(run, data["receipt"])
+    if shorten_record(run, data, _room(run)):
+        command = run.cmd("operation get", [("--id", operation_id)]) + " --output <file>"
+        run.notices.append({"type": "shortened", "severity": "info",
+                            "message": f"Settled; shortened to fit the response. `{command}` writes the whole record."})
+    return Result(data, _record_untrusted())
 
 
 def _read_outcome(run: Run, record: dict[str, Any]) -> tuple[str | None, dict[str, Any], str]:

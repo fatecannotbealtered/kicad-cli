@@ -24,6 +24,7 @@ class Result:
     untrusted: list[str] = field(default_factory=list)
     offset: int | None = None  # the offset of a list page, so the page can be shortened
     raw: bytes | None = None  # the bytes of a --format raw result
+    shorter: Any = None  # the data to give instead when this one and the call's notices do not fit
 
 
 def page(items: list[Any], offset: int, limit: int, total: int | None = None) -> tuple[dict[str, Any], int]:
@@ -83,6 +84,10 @@ class Envelopes:
     def _shrink_success(self, env: dict[str, Any], result: Result, too_long: str | None) -> dict[str, Any]:
         if _drop_application_notices(env) and len(dumps(env)) <= self.limits["success_chars"]:
             return env
+        if result.shorter is not None:
+            env["data"] = result.shorter
+            if len(dumps(env)) <= self.limits["success_chars"]:
+                return env
         data = env["data"]
         preview = data.get("preview") if isinstance(data, dict) else None
         if isinstance(preview, dict) and isinstance(preview.get("changes"), list):

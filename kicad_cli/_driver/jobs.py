@@ -50,7 +50,8 @@ def ended_with(err: DriverError, again: str | None, kind: str) -> dict[str, Any]
     elif again and err.code not in NO_RERUN:
         how = f"run the write again from its first call, `{again}`" if kind == "write" else f"run the read again, `{again}`"
         text = details["next_action"]
-        details["next_action"] = RUN_AGAIN.sub(lambda _: how, text, count=1) if RUN_AGAIN.search(text) else             f"{text} If it is still wanted, {how}."
+        details["next_action"] = (RUN_AGAIN.sub(lambda _: how, text, count=1) if RUN_AGAIN.search(text)
+                                  else f"{text} If it is still wanted, {how}.")
     return {"message": err.message, "details": details}
 
 

@@ -18,8 +18,9 @@ from .output import Result, page
 from .records import utc_now
 from .registry import Command, Flag
 from .runtime import READ_DEADLINE_MS, SESSION_DEADLINE_MS, Run, Where, parallel
-from .targets import file_key
-from .writes import Engine, Verification, WriteSpec, combine, dispatch, read_back, record_state, slim_receipt, slim_result, verify_files
+from .targets import file_key, normalize
+from .writes import (Engine, Verification, WriteSpec, combine, defect_notices, dispatch, read_back, record_state, reported,
+                     shorten_record, slim_receipt, slim_result, verify_files)
 
 if TYPE_CHECKING:
     from .tool import Tool
@@ -281,6 +282,8 @@ def doc_get(run: Run) -> Result:
     command = run.call.command
     where = run.where(command)
     if where.document is None:
+        if where.session is not None:
+            run.gate_session(where.session)  # a session that is not ready may not list its documents yet (DCLI-204)
         raise DriverError("E_NOT_FOUND", "No document matches --doc.")
     return Result(where.document, [".path"])
 
@@ -398,9 +401,12 @@ def _settle_job(run: Run, record: dict[str, Any], status: dict[str, Any], made: 
     job, state = record["_job"], status["state"]
     execution = {"completed": "completed", "partial": "completed", "failed": "failed", "cancelled": "interrupted",
                  "unknown": "unknown"}[state]
-    dims = run.contract["receipt"]["dimensions"]
-    change, delivery, persistence = (status.get(d) if status.get(d) in dims[d] else "unknown"
-                                     for d in ("change", "delivery", "persistence"))
+    # A job's status may leave a dimension out, but apply in a worker may not; a value the
+    # contract does not have is the adapter's defect, which job get shows every time it is asked.
+    (change, delivery, persistence), wrong = reported(run.contract, status, "unknown", bool(status.get("_required")))
+    if wrong:
+        others = [n for n in job.get("notices") or [] if n.get("type") != "adapter_defect"]
+        job["notices"] = defect_notices(wrong) + others
     if state == "cancelled" and "change" not in status:
         change = "not_applied"
     if state in ("cancelled", "failed"):
@@ -419,7 +425,7 @@ def _settle_job(run: Run, record: dict[str, Any], status: dict[str, Any], made: 
     receipt["outcome"] = {"execution": execution, "change": change, "delivery": delivery, "persistence": persistence,
                           "verification": verification.status}
     receipt["observed"], receipt["mismatched"] = verification.observed, verification.mismatched
-    receipt["notes"] = [f"Long job {job['id']} ended {state}."] + verification.notes
+    receipt["notes"] = [f"Long job {job['id']} ended {state}."] + wrong + verification.notes
     if isinstance(status.get("native_message"), str):
         receipt["notes"].append(f"The application said: {status['native_message']}")
     record["receipt"] = receipt
@@ -664,10 +670,12 @@ def run_standard_job(run: Run, record: dict[str, Any]) -> None:
 
 
 def _keep_notices(record: dict[str, Any], run: Run) -> None:
-    """Notices the adapter gave in the worker stay with the job; job get shows them (DCLI-260)."""
+    """Notices the adapter gave in the worker stay with the job, beside its defects; job get shows
+    them (DCLI-260)."""
     kept = [n for n in run.notices if n.get("type") == "application"]
-    if kept:
-        record["_job"]["notices"] = kept
+    defects = [n for n in record["_job"].get("notices") or [] if n.get("type") == "adapter_defect"]
+    if kept or defects:
+        record["_job"]["notices"] = defects + kept
 
 
 def _job_dispatch(run: Run, apply: Any, strict: bool) -> tuple[dict[str, Any], dict[str, Any]]:
@@ -737,6 +745,8 @@ def _job_dispatch_once(run: Run, apply: Any, strict: bool) -> tuple[dict[str, An
             if not strict:
                 for dim in ("change", "delivery", "persistence"):
                     status.setdefault(dim, "not_applicable")
+            else:
+                status["_required"] = True  # apply reports all three (DCLI-062)
     if not isinstance(wait_ms, int) or isinstance(wait_ms, bool):
         wait_ms = 500
     return status, facts if isinstance(facts, dict) else {}, wait_ms
@@ -768,8 +778,16 @@ def job_list(run: Run) -> Result:
         view = read_view(job)
         _show_blocked(run, view, blocked.get((job.get("_request") or {}).get("session")))
         views.append(view)
-    return _page(run, [v for v in views if state == "all" or v["state"] == state],
-                 [f".items[*]{p}" for p in JOB_UNTRUSTED + ERROR_UNTRUSTED])
+    out = _page(run, [v for v in views if state == "all" or v["state"] == state],
+                [f".items[*]{p}" for p in JOB_UNTRUSTED + ERROR_UNTRUSTED])
+    # A job too long for a page on its own is shortened, so that paging goes on past it (DCLI-220).
+    room = int(run.contract["envelope"]["limits"]["success_chars"]) * 3 // 4
+    shortened = [v["id"] for v in out.data["items"] if shorten_record(run, v, room)]
+    if shortened:
+        command = f"{run.tool.name} job get --job <id> --output <file>"
+        run.notices.append({"type": "shortened", "severity": "info",
+                            "message": f"Shortened to fit the page: {', '.join(shortened)}. `{command}` writes one whole."})
+    return out
 
 
 def _blocked_sessions(run: Run) -> dict[str, dict[str, Any]]:
@@ -894,10 +912,17 @@ def job_get(run: Run) -> Result:
 
 def _job_to_file(run: Run, view: dict[str, Any]) -> dict[str, Any]:
     """With --output, the whole job, however long its result, goes to a new file and the response
-    holds the rest with the file's path (DCLI-008)."""
-    if not run.call.has("--output"):
+    holds the rest with the file's path (DCLI-008). A job too long to show is shortened rather than
+    refused, so the call that wrote the file succeeds and one without --output still shows the
+    state and the outcome (DCLI-220)."""
+    room = int(run.contract["envelope"]["limits"]["success_chars"]) * 3 // 4
+    path = run.call.values.get("--output")
+    if not path:
+        if shorten_record(run, view, room):
+            command = run.cmd("job get", [("--job", view["id"])]) + " --output <file>"
+            run.notices.append({"type": "shortened", "severity": "info",
+                                "message": f"Shortened to fit the response. `{command}` writes the whole job, its result included."})
         return view
-    path = run.call.values["--output"]
     if os.path.exists(path):
         raise usage(f"{path} exists; --output writes a new file and never replaces one.", "--output")
     try:
@@ -905,7 +930,9 @@ def _job_to_file(run: Run, view: dict[str, Any]) -> dict[str, Any]:
             handle.write(json.dumps(view, ensure_ascii=False, indent=1))
     except OSError as exc:
         raise DriverError("E_IO", f"Cannot write {path}: {exc.strerror}.") from None
-    return {**{k: v for k, v in view.items() if k != "result"}, "output": path}
+    out = {k: v for k, v in view.items() if k != "result"}
+    shorten_record(run, out, room)
+    return {**out, "output": path}
 
 
 # ------------------------------------------------------------------ standard writes
@@ -933,6 +960,8 @@ class _Lifecycle(WriteSpec):
 
 
 class SessionOpen(_Lifecycle):
+    capability = "open_session"
+
     def prepare(self) -> None:
         self.where = Where("session")
         path, kind = self.call.values.get("--doc"), self.call.values.get("--kind")
@@ -974,6 +1003,8 @@ class SessionOpen(_Lifecycle):
 
 
 class SessionClose(_Lifecycle):
+    capability = "close_session"
+
     def prepare(self) -> None:
         run = self.run
         session = run.session(self.call.values.get("--session"))
@@ -1049,6 +1080,8 @@ class _OnDocument(_Lifecycle):
 
 class DocCreate(_Lifecycle):
     """A new document: untitled in an instance, or at --path, from --template when given (DCLI-212)."""
+
+    capability = "create_doc"
 
     def prepare(self) -> None:
         import os
@@ -1137,6 +1170,8 @@ class DocCreate(_Lifecycle):
 
 
 class DocOpen(_Lifecycle):
+    capability = "open_doc"
+
     def prepare(self) -> None:
         run = self.run
         session = run.session(self.call.values.get("--session"))
@@ -1168,6 +1203,8 @@ class DocOpen(_Lifecycle):
 
 class DocSave(_OnDocument):
     """``doc save``: the preview lists every change since the last save (DCLI-058, DCLI-277)."""
+
+    capability = "save_doc"
 
     saving = True
 
@@ -1332,6 +1369,8 @@ def drop_deferred(run: Run, session: str, doc_id: str | None, why: str) -> None:
 
 
 class DocSaveAs(_OnDocument):
+    capability = "save_doc_as"
+
     def prepare(self) -> None:
         super().prepare()
         self.out = self.call.values["--output"]
@@ -1366,6 +1405,8 @@ class DocSaveAs(_OnDocument):
 
 
 class DocClose(_OnDocument):
+    capability = "close_doc"
+
     def prepare(self) -> None:
         super().prepare()
         doc = self.where.document
@@ -1407,20 +1448,62 @@ class DocClose(_OnDocument):
 class DocUndo(_OnDocument):
     """Undo this tool's most recent change; read-back checks the fields are back (DCLI-067)."""
 
+    capability = "undo"
+
     def prepare(self) -> None:
         super().prepare()
-        doc = self.where.document
+        doc, sid = self.where.document, self.where.session["id"]
+        key = normalize(self.run.doc_key(doc))
         records = self.run.records.all()
         states = {r["operation_id"]: r.get("state") for r in records}
-        self.pending = [r["operation_id"] for r in records if r["command"] == "doc undo" and r.get("state") in ("dispatched", "unknown")
+        self.pending = [r for r in records if r["command"] == "doc undo" and r.get("state") in ("dispatched", "unknown")
                         and (r.get("_call") or {}).get("document") == doc["id"]]
-        candidates = [r for r in records
-                      if (r.get("receipt") or {}).get("document", {}).get("id") == doc["id"] and r.get("state") == "completed"
-                      and (r.get("_call") or {}).get("session") == self.where.session["id"]
-                      and r.get("_request") and r["command"] not in ("doc undo", "doc save")
-                      and (not r.get("_undone_by") or states.get(r["_undone_by"]) == "failed")]
-        self.last = max(candidates, key=lambda r: r.get("_finished", 0), default=None)
+
+        def reopened(r: dict[str, Any]) -> bool:
+            """A call that opened, created or closed the document in this instance, or closed the
+            instance, after which the application's history of the document starts again. A
+            session ID is never reused, so a new instance never restarts this one's history."""
+            if r.get("state") not in ("dispatched", "completed", "unknown") or (r.get("_call") or {}).get("session") != sid:
+                return False
+            if r["command"] == "session close":
+                return True
+            target = r.get("target")
+            targets = target if isinstance(target, list) else [target]
+            return r["command"] in ("doc open", "doc create", "doc close") and any(
+                isinstance(t, dict) and normalize(t.get("key", "")) == key for t in targets)
+
+        def change(r: dict[str, Any]) -> str | None:
+            """Whether the change took effect, as its receipt says or `operation resolve` settled it."""
+            if isinstance(r.get("resolution"), dict):
+                return r["resolution"].get("outcome")
+            return ((r.get("receipt") or {}).get("outcome") or {}).get("change")
+
+        def when(r: dict[str, Any]) -> int:
+            return r.get("_finished") or r.get("_seq", 0)
+
+        since = max((when(r) for r in records if reopened(r)), default=0)
+        writes = [r for r in records
+                  if ((r.get("receipt") or {}).get("document") or {}).get("id", (r.get("_call") or {}).get("document")) == doc["id"]
+                  and (r.get("_call") or {}).get("session") == sid
+                  and r.get("_request") and r["command"] not in ("doc undo", "doc save")]
+        # A change whose outcome is unknown, or a long job still making one, may be the
+        # application's last step.
+        self.pending += [r for r in writes if when(r) > since and (r.get("state") == "unknown" or (
+            r.get("state") == "dispatched" and (r.get("_job") or {}).get("state", "done") not in FINAL_JOB_STATES))]
+        # Only a change that took effect is in the application's history: one that changed
+        # nothing would pair the undo with an earlier change (DCLI-067).
+        changed = [r for r in writes if r.get("state") in ("completed", "failed") and change(r) in ("applied", "partial")
+                   and (not r.get("_undone_by") or states.get(r["_undone_by"]) == "failed")]
+        self.before_reopen = any(when(r) <= since for r in changed)
+        self.last = max((r for r in changed if when(r) > since), key=when, default=None)
         self.action = f"Undo {self.last['command']} ({self.last['operation_id']}) on document {doc['id']}." if self.last else "Undo."
+
+    def unsettled(self, r: dict[str, Any]) -> str:
+        op, job = r["operation_id"], r.get("_job") or {}
+        if r.get("state") == "dispatched" and job.get("id"):
+            poll = self.run.cmd("job get", [("--job", job["id"]), ("--wait", "60s")])
+            return f"{r['command']} {op} still runs as job {job['id']}; run `{poll}` until it ends, then preview the undo again."
+        return f"{r['command']} {op} has an unknown outcome; settle it first with `{self.run.tool.name} operation resolve --id {op}`."
 
     def targets(self) -> list[dict[str, Any]]:
         return [self.doc_target()]
@@ -1434,8 +1517,10 @@ class DocUndo(_OnDocument):
     def preview(self) -> dict[str, Any]:
         pv = super().preview()
         if self.pending:
-            pv.update(can_apply=False, blocked_by=[f"Undo {op} has an unknown outcome; settle it first with "
-                                                   f"`{self.run.tool.name} operation resolve --id {op}`." for op in self.pending])
+            pv.update(can_apply=False, blocked_by=[self.unsettled(r) for r in self.pending])
+        elif not self.last and self.before_reopen:
+            pv.update(can_apply=False, blocked_by=["This tool's changes to this document came before it was last opened or closed; "
+                                                   "the application can no longer undo them."])
         elif not self.last:
             pv.update(can_apply=False, blocked_by=["This tool has no change on this document to undo."])
         return pv
@@ -1452,7 +1537,10 @@ class DocUndo(_OnDocument):
         # picks it again, whatever this one's outcome (DCLI-067).
         self.last["_undone_by"] = operation_id
         self.run.records.save(self.last)
-        return dispatch(self.run, "undo", self.request(operation_id))
+        # The adapter learns which change it takes back, so it can check that it is the
+        # application's last one (DCLI-067).
+        undoes = {"operation_id": self.last["operation_id"], "command": self.last["command"]}
+        return dispatch(self.run, "undo", {**self.request(operation_id), "undoes": undoes})
 
     def verify(self, operation_id: str, facts: dict[str, Any], changes: list[dict[str, Any]], child: int | None = None) -> Verification:
         if not self.last or not changes:
@@ -1477,6 +1565,8 @@ def job_cancel(run: Run) -> Result:
 
 class JobCancel(_Lifecycle):
     """``job cancel``: a halt command; its target is the job's target (DCLI-221, DSEC-018)."""
+
+    capability = "cancel"
 
     def prepare(self) -> None:
         run = self.run
@@ -1537,6 +1627,8 @@ class JobCancel(_Lifecycle):
 class PluginInstall(_Lifecycle):
     """``plugin install``: checks the manifest, then installs (DSEC-050, DSEC-051)."""
 
+    capability = "plugin_install"
+
     def prepare(self) -> None:
         run = self.run
         self.where = Where(run.tool.modes[0])
@@ -1594,6 +1686,8 @@ class PluginInstall(_Lifecycle):
 
 
 class PluginRemove(PluginInstall):
+    capability = "plugin_remove"
+
     def prepare(self) -> None:
         self.where = Where(self.run.tool.modes[0])
         self.bound = {"inputs": {}}

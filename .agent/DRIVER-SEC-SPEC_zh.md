@@ -2,7 +2,7 @@
 
 [English](DRIVER-SEC-SPEC.md) | 中文
 
-> 版本 1.3.0 · 条款 DSEC-001 至 DSEC-073
+> 版本 1.3.2 · 条款 DSEC-001 至 DSEC-073
 
 ## 怎么读
 

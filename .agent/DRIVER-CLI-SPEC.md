@@ -2,7 +2,7 @@
 
 English | [中文](DRIVER-CLI-SPEC_zh.md)
 
-> Version 1.3.0 · Clauses DCLI-001 to DCLI-281
+> Version 1.3.2 · Clauses DCLI-001 to DCLI-281
 
 ## How to Read
 
@@ -162,17 +162,17 @@ Check: 🤖 General conformance test R04 checks the list keys; the "empty" row o
 
 ### DCLI-007 Default fields
 
-Each list command MUST declare its default fields in its registration (DCLI-029), chosen for the questions Agents most often ask about that object. `--fields a,b` MUST return only the named fields, but MUST NOT leave out the `job` handle of a read that runs as a long job (DCLI-065). `--fields all` MUST return every field.
+Each list command MUST declare its default fields in its registration (DCLI-029), chosen for the questions Agents most often ask about that object. `--fields a,b` MUST return only the named fields, but MUST NOT leave out the `job` handle of a read that runs as a long job (DCLI-065). A dotted name such as `receipt.outcome` names a field inside another. `--fields all` MUST return every field. A name the result does not hold MUST be reported in a notice, never dropped silently, and so MUST `--fields` on a write, which always returns its whole receipt. `reference --command` lists `--fields` among the flags of every read.
 
-Why: Short default answers save the Agent's context; `--fields` fetches more only when needed.
-Check: 👀 Review of the default fields in `reference`.
+Why: Short default answers save the Agent's context; `--fields` fetches more only when needed. A field left out without a word looks like a field the object does not have.
+Check: 🤖 Runtime unit tests for dotted names and the notices; 👀 review of the default fields in `reference`.
 
 ### DCLI-008 Response size
 
-Called with default arguments, a command MUST keep a success envelope within 8000 characters and an error envelope within 2000 characters, counting the whole envelope. An `E_CONFIRMATION_REQUIRED` envelope carries a preview and MUST keep within the success limit, 8000 characters (DCLI-054). Lists stay within the limits by paging (DCLI-006). A command whose result can be too large to fit, such as file content or a long log, MUST offer `--output <path>`: it writes the full result to that file, and the response holds only a summary and the file path. A dry run's preview is shortened first, as a confirmation's is (DCLI-054); when it still does not fit, the next action asks for fewer objects in one call. Any other success envelope that is still too long fails with `E_USAGE`, whose next action names only what the command offers: `--fields`, `--limit` for a list, `--output` for a read that has it, `job get --output`, which writes a job, result included, to a file, and `operation get --output`, which writes a long job's whole operation record, result included, to a file. After a write that ran, it says so and names the operation, so that the Agent does not send the write again.
+Called with default arguments, a command MUST keep a success envelope within 8000 characters and an error envelope within 2000 characters, counting the whole envelope. An `E_CONFIRMATION_REQUIRED` envelope carries a preview and MUST keep within the success limit, 8000 characters (DCLI-054). Lists stay within the limits by paging (DCLI-006). A command whose result can be too large to fit, such as file content or a long log, MUST offer `--output <path>`: it writes the full result to that file, and the response holds only a summary and the file path. A dry run's preview is shortened first, as a confirmation's is (DCLI-054); when it still does not fit, the next action asks for fewer objects in one call. A job or an operation record too long to show is shortened, as DCLI-035 sets, with a notice that names `job get --output` or `operation get --output`, which write it whole; with `--output` the call succeeds once the file is written, and the response holds what fits and the file's path. The reply of a call that changed something, a write or `operation resolve`, MUST NOT be refused for its length, since a refusal reads as a failure and the Agent may send the change again: it is shortened the same way, keeping a long job's handle; the operation record of a write that has ended keeps the whole result, and a notice names `operation get --output`, or `job get --output` for a long job. Any other success envelope that is still too long fails with `E_USAGE`, whose next action names only what the command offers: `--fields`, `--limit` for a list, and `--output` for a read that has it.
 
 Why: Every character the tool returns costs the Agent context; a fixed limit keeps each call cheap.
-Check: 🤖 General conformance test R04 checks the size limits.
+Check: 🤖 General conformance test R04 checks the size limits; runtime unit tests for a job, a record and the reply of a write or a resolve too long to show.
 
 ## Errors
 
@@ -481,7 +481,7 @@ Check: 🤖 General conformance tests R01 and R05.
 - Every parameter and output field that holds a coordinate MUST name its `coordinate_system` (DCLI-084).
 - A required parameter that `--input` can give, or for `--id` also `--ids` (DCLI-064), MUST name those flags in `required_without` in place of `required`, so the Agent never adds it beside them.
 - `reference` without flags MUST return only the index, within 8000 characters: each command with its path and its one-sentence summary. When the summaries do not fit, it MUST return the paths alone and say in `summaries` how to get one command's description. Limits and conditions belong in the command's own description.
-- `reference --command <path>` MUST return one command, within 6000 characters.
+- `reference --command <path>` MUST return one command, within 6000 characters. The flags of a read include `--fields` (DCLI-007).
 - `reference --all --output <path>` MUST write the description of every command to that file and return only a summary (DCLI-008).
 
 Why: The Agent learns what the tool offers from one short call, and the full use of a command, including its tier in each mode, from one more; it never guesses.
@@ -536,8 +536,8 @@ Check: 🤖 Runtime unit tests.
 
 ### DCLI-035 Operation commands
 
-- `operation get --id <id> [--output <path>]` MUST return one operation record. With `--output` it writes the whole record, with every file the write produced, to that file (DCLI-061).
-- `operation list [--state <state>] [--batch <id>] [--limit <n>] [--offset <n>]` MUST list operation records, newest first. `--batch` takes the operation ID of a batch and lists only its items (DCLI-064).
+- `operation get --id <id> [--output <path>]` MUST return one operation record. With `--output` it writes the whole record, with every file the write produced, to that file (DCLI-061), and the response holds the record and `output`, the file's path. A record too long to show MUST be shortened rather than refused: first its preview, as a confirmation's (DCLI-054), then its receipt, its result and the targets of a batch. A notice says so and names `operation get --output`, unless the call already wrote the file.
+- `operation list [--state <state>] [--batch <id>] [--limit <n>] [--offset <n>]` MUST list operation records, newest first. `--batch` takes the operation ID of a batch and lists only its items (DCLI-064). A record too long for a page on its own MUST be shortened the same way, so that paging goes on past it; the notice names it.
 - `operation resolve --id <id>` settles an outcome-unknown write (DCLI-063). Without `--outcome`, the runtime MUST read the target back through the adapter, compare it with the preview, record the outcome it finds with `resolved_by: read_back` and the observed values, and return them. A standard write that changes no field is read back by what it changes: `session open` and `doc create` in an instance by comparing the instances and documents with those there before it was sent, `session close`, `doc open` and `doc close` by the instances and documents now, `doc save` by whether the document is clean and its revision, `doc save-as` and `doc create` in file mode by the files written under the name or one that starts with it (DCLI-057), `job cancel` by the job's state, and `plugin install` and `plugin remove` by the version on disk. An instance that is starting, busy or blocked says so first, with this command as the one to run again (DCLI-204). When what it changes cannot be read or does not tell the outcome, such as no new instance listed yet, or unsaved changes in a document that changed after the save was sent, the runtime MUST NOT guess the outcome; it says so, and `--outcome` is allowed.
 - `operation resolve --id <id> --outcome applied|not_applied|partial --evidence <text>` records an outcome the Agent found by other means, with `resolved_by: agent`. It is allowed only when the target cannot be read back; otherwise it MUST be refused with `E_VALIDATION`.
 - Resolving MUST be refused with `E_FORBIDDEN` unless the scope in force covers the targets and effects of that operation; `details.scope` says what is missing (DSEC-017).
@@ -825,8 +825,10 @@ A tool MUST NOT choose `ok` or the error code of a write itself. The runtime MUS
 
 Rule 8 keeps "changed but not verified" from counting as a success. For the same reason, `verification` MUST NOT be `not_applicable` when anything was applied, saved or delivered (DCLI-057).
 
-Why: When the runtime derives `ok` from facts, no tool can report success that it has not seen.
-Check: 🤖 Driver conformance tests D07 and D08; runtime unit tests cover every rule.
+A change, delivery or persistence the adapter reports with a value the contract does not have, or that `apply` leaves out, counts as `unknown`, since the change may have been made. The runtime MUST then name the field, the value and the values allowed, in the receipt's notes and in a notice of type `adapter_defect`, so that the defect shows as the adapter's and not as the application's.
+
+Why: When the runtime derives `ok` from facts, no tool can report success that it has not seen. An outcome made unknown without a word sends the developer looking in the application for a fault that is in the adapter.
+Check: 🤖 Driver conformance tests D07 and D08; runtime unit tests cover every rule and the values the contract does not have.
 
 ### DCLI-063 Outcome unknown
 
@@ -911,8 +913,10 @@ Check: 🤖 Driver conformance test D05; runtime unit tests for a dialog after d
 
 A tool MAY offer `doc undo`, which undoes the tool's most recent change. It MUST NOT offer it when the application has no undo. A tool MUST NOT claim transactions, undo, cancellation or idempotency that the application does not provide.
 
-Why: A promise the application cannot keep is worse than no promise.
-Check: 👀 Review against the capability survey (DREPO-060).
+`doc undo` takes back the tool's most recent change to the document that took effect (`change` `applied` or `partial`, in its receipt or as `operation resolve` settled it) since the tool last opened, created or closed that document in that instance, or closed the instance: a change that changed nothing has no step in the application's history, and one from before the document was opened again is gone from it. While a change of the tool to the document has an unknown outcome or still runs as a long job, the preview MUST block the undo and name what settles it, since that change may be the application's last step. The `undo` request MUST name that change in `undoes`, its operation ID and command, so that an adapter that can check the application's last change against it refuses an undo that would take back another one. An instance without the `undo` capability is refused before the preview (DCLI-260).
+
+Why: A promise the application cannot keep is worse than no promise. An undo paired with the wrong change takes back work nobody asked to lose, and its read-back can still pass.
+Check: 👀 Review against the capability survey (DREPO-060); 🤖 runtime unit tests for the change an undo picks and the request it sends.
 
 ### DCLI-068 The result shows what the change made
 
@@ -1211,8 +1215,10 @@ The adapter MUST look for a dialog each time it reports a session, also when the
 
 The standard observe commands `session list`, `session get`, `doc list`, `doc get`, `device list`, `device get`, `job list` and `job get` MUST return the state as data and MUST NOT fail because of it. Halt commands run in every state but `lost`, `unreachable` and `closed` (DSEC-018).
 
-Why: Each state has one fixed reaction, so a busy or blocked application never leaves a call hanging, and the Agent can always see the state. A dialog taken wrongly for the tool's own would leave the Agent waiting for an answer that never comes.
-Check: 🤖 Driver conformance tests D04, D05, D21 and D22, and the live `dialog` row of the behavior matrix (DVER-030); 👀 review of how the adapter recognizes the dialogs of its own work.
+An instance that is not ready may not list every document yet, such as one it is still opening. A call that names a document such an instance does not list, also one of these observe commands, MUST get the reaction of the instance's state rather than `E_NOT_FOUND`; so MUST a call without `--session` that names a document a long job of the tool is still opening or closing. When a long job of the tool runs in the busy instance, on the busy device (DCLI-230) or on that document, the `next_action` of `E_BUSY` MUST be `job get` on that job, so that the Agent waits for it instead of starting the work again.
+
+Why: Each state has one fixed reaction, so a busy or blocked application never leaves a call hanging, and the Agent can always see the state. A dialog taken wrongly for the tool's own would leave the Agent waiting for an answer that never comes. A document still opening is not missing: told it is not open, the Agent would open it a second time.
+Check: 🤖 Driver conformance tests D04, D05, D21 and D22, runtime unit tests, and the live `dialog` row of the behavior matrix (DVER-030); 👀 review of how the adapter recognizes the dialogs of its own work.
 
 ### DCLI-205 Session read deadline
 
@@ -1293,7 +1299,7 @@ A job MUST have at least these fields: `id`, `operation_id` (`null` for a read j
 
 `state` is one of `planned`, `running`, `blocked`, `completed`, `failed`, `partial`, `unknown` and `cancelled`. A `blocked` job also carries `action`: what a person must do before it can go on (DCLI-066). A job the runtime runs (DCLI-065) MUST show as `blocked` while a dialog holds its session, with `action`, and `knowledge` when the adapter names entries, taken from the session's `blocker` (DCLI-202); once the person has dealt with the dialog it shows as `running` again. When the job is in a final state (`completed`, `failed`, `partial`, `unknown` or `cancelled`), `job get` MUST also return its `receipt`, its `result`, and `ok`, derived from the receipt as DCLI-062 sets (DCLI-065). When `ok` is `false`, the job MUST also carry the error the call would have returned: its `code`, its `message`, and its `details`, such as `conflict`, `native_message`, `knowledge` and `next_action`, without a receipt, because the job carries its own. A command in the details that sends the work again, in `resume` or in `next_action`, MUST be the job's own first call, never the worker's; a write job that changed nothing has spent its token, so it starts again from that first call. A write job that a dialog, or anything else that needs a person, stops after dispatch ends `unknown`, as the call would (DCLI-066): its `code` is `E_HUMAN_REQUIRED`, and its details carry `action`, the dialog's `title` when known, `knowledge` when the adapter names entries, and `resume`, the `operation resolve` command. A read job has no receipt: it returns `ok`, and the read's `result` when `ok` is `true`. These are fields of `data`: `job get` itself succeeds, and the `error.details.receipt` of DCLI-062 belongs to the write, not to `job get`.
 
-`job list` lists the long jobs of every session, a blocked one as `blocked`. `job get --job <id> --wait <duration>` MUST return when the job ends, becomes blocked, or the time runs out, whichever comes first. `--wait` MAY be up to 600 seconds, because waiting is not work (DCLI-065); a longer value returns `E_USAGE`. `job get` MUST return `poll_after_ms`, the time after which asking again is useful.
+`job list` lists the long jobs of every session, a blocked one as `blocked`. `job get --job <id> --wait <duration>` MUST return when the job ends, becomes blocked, or the time runs out, whichever comes first. `--wait` MAY be up to 600 seconds, because waiting is not work (DCLI-065); a longer value returns `E_USAGE`. `job get` MUST return `poll_after_ms`, the time after which asking again is useful. A job too long to show MUST be shortened as an operation record is (DCLI-035), with a notice that names `job get --output`; `job list` shortens a job too long for a page the same way, so that paging goes on past it. `job get --output` writes the whole job and returns the rest, shortened when needed, with `output`, the file's path.
 
 Why: The Agent waits for long work in bounded calls instead of one call that hangs, and reads the job's real outcome in the same shape as that of any write. A job stuck behind a dialog says so, so the Agent asks the person instead of waiting. A failed job says why and what to do next, as the call would have, instead of only that it failed.
 Check: 🤖 Driver conformance tests D11 and D26; runtime unit tests for a blocked job, for a job a dialog stops after dispatch, and for the error of a failed job.
@@ -1342,7 +1348,7 @@ Check: 🤖 Driver conformance test D12; `check_project` regenerates the manifes
 
 ### DCLI-260 Adapter capabilities
 
-Besides the domain commands, the tool author writes only the adapter capabilities in this table; the runtime does everything else (DREPO-032). When a capability is missing, the runtime MUST return `E_UNSUPPORTED` for the commands that need it, with no tool code.
+Besides the domain commands, the tool author writes only the adapter capabilities in this table; the runtime does everything else (DREPO-032). When a capability is missing, the runtime MUST return `E_UNSUPPORTED` for the commands that need it, with no tool code. For a write it MUST do so before the preview, for the instance the write targets, so that neither a preview nor a token promises a write that cannot be sent.
 
 <!-- contract:adapter_capabilities -->
 | Capability | Side | File | Session | Device | Description |

@@ -45,6 +45,8 @@ class Verification:
 class WriteSpec:
     """One write call. Subclasses say how to target, preview, apply and verify it."""
 
+    capability: str | None = None  # the adapter capability that sends the write, checked before the preview
+
     def __init__(self, run: Run, command: Command) -> None:
         self.run = run
         self.command = command
@@ -152,6 +154,8 @@ class WriteSpec:
 
 class DomainWrite(WriteSpec):
     """A domain write, done through the adapter's preview, apply and read_back."""
+
+    capability = "apply"
 
     def __init__(self, run: Run, command: Command) -> None:
         super().__init__(run, command)
@@ -416,6 +420,153 @@ def slim_result(run: Run, result: Any) -> Any:
     return result
 
 
+def shorten_record(run: Run, item: dict[str, Any], room: int, keep: frozenset[str] = frozenset()) -> bool:
+    """Shorten an operation record or a job too long to show within ``room`` characters, so that
+    it still shows: its preview as a confirmation's, then its receipt, its result, what a
+    resolution observed, then the longest lists in it, such as the targets of a batch, and last
+    everything but what says what happened and the keys in ``keep`` (DCLI-008, DCLI-035,
+    DCLI-220). True when it was shortened."""
+
+    def fits() -> bool:
+        return len(_compact(item)) <= room
+
+    if fits():
+        return False
+    preview = item.get("preview")
+    changes = preview.get("changes") if isinstance(preview, dict) else None
+    while isinstance(changes, list) and changes and not fits():
+        changes.pop()
+        preview["changes_truncated"] = True
+    details = item.get("details")
+    if not fits() and isinstance(details, dict) and isinstance(item.get("receipt"), dict):
+        details.pop("receipt", None)  # an ended job's error repeats the job's receipt
+    if not fits() and isinstance(item.get("receipt"), dict):
+        receipt = item["receipt"] = slim_receipt(run, item["receipt"])
+        receipt.pop("notes", None)
+        mismatched = set(receipt.get("mismatched", []))
+        observed = receipt.get("observed")
+        if not fits() and isinstance(observed, dict):
+            receipt["observed"] = {k: v for k, v in observed.items() if k in mismatched or any(m.startswith(k) for m in mismatched)}
+    if not fits() and "result" in item:
+        item["result"] = slim_result(run, item["result"])
+        if not fits():
+            if "result" in keep:
+                item["result"] = {}
+            else:
+                del item["result"]
+    resolution = item.get("resolution")
+    if not fits() and isinstance(resolution, dict):
+        # How the outcome was settled stays; what the read-back saw is in the record.
+        if "observed" in resolution:
+            resolution["observed"] = {}
+        if isinstance(resolution.get("evidence"), str) and len(resolution["evidence"]) > 300:
+            resolution["evidence"] = resolution["evidence"][:300] + "…"
+    while not fits():
+        # A batch names its targets in the record, the preview and the receipt.
+        longest = max(_lists(item), key=lambda v: len(_compact(v)), default=None)
+        if longest is None:
+            break
+        del longest[max(1, len(longest) // 2):]
+    while not fits():
+        rest = [k for k in item if k not in _RECORD_CORE and k not in keep]
+        if not rest:
+            break
+        del item[max(rest, key=lambda k: len(_compact(item[k])))]
+    return True
+
+
+# What an operation record or a job keeps however short it gets: what ran and how it ended.
+_RECORD_CORE = {"operation_id", "command", "effects", "tier", "scope_id", "state", "planned_at", "dispatched_at",
+                "finished_at", "batch", "output", "id", "cancel_requested", "started_at", "ok", "code", "message", "action",
+                "resolution"}
+# What the reply of a write must hold (receipt.schema.json, batch.schema.json).
+_REPLY_KEYS = frozenset({"receipt", "result", "items", "summary"})
+
+
+def _compact(value: Any) -> str:
+    return json.dumps(value, ensure_ascii=False, separators=(",", ":"))
+
+
+def fit_reply(run: Run, data: dict[str, Any], record: dict[str, Any]) -> None:
+    """A call that changed something answers with what it did, however long: a reply too long is
+    shortened, never refused, since a refusal reads as a failure and invites the Agent to send the
+    change again (DCLI-008). The record keeps the whole result, and a notice names
+    `operation get --output`, which writes it."""
+    room = int(run.contract["envelope"]["limits"]["success_chars"]) * 3 // 4
+    if len(_compact(data)) <= room:
+        return
+    result = data.get("result")
+    job = result.get("job") if isinstance(result, dict) else None
+    if "result" in data and "_job" not in record:
+        record["result"] = json.loads(_compact(result))
+        run.records.save(record)
+    shorten_record(run, data, room, _REPLY_KEYS)
+    if job is not None and not (isinstance(data.get("result"), dict) and "job" in data["result"]):
+        # A long job's handle stays: without it the work cannot be followed (DCLI-065).
+        data["result"] = {**(data["result"] if isinstance(data.get("result"), dict) else {}), "job": job}
+    op = record["operation_id"]
+    if "_job" in record:
+        command = run.cmd("job get", [("--job", record["_job"]["id"])]) + " --output <file>"
+        message = f"Shortened to fit the response; the job's handle stays. `{command}` writes the job, its result included."
+    else:
+        command = run.cmd("operation get", [("--id", op)]) + " --output <file>"
+        items = f" `{run.cmd('operation list', [('--batch', op)])}` lists its items." if "items" in data else ""
+        message = f"Shortened to fit the response. `{command}` writes the whole record.{items}"
+    run.notices.append({"type": "shortened", "severity": "info", "message": message})
+
+
+def reported(contract: Any, facts: dict[str, Any], missing: str, required: bool) -> tuple[list[str], list[str]]:
+    """The change, delivery and persistence an adapter reported, and a note for each it got wrong.
+    A value the contract does not have, or one that ``required`` facts leave out, counts as unknown,
+    since the change may have been made; the note names the field, the value and the values allowed,
+    so that the defect shows as the adapter's and not as the application's (DCLI-062)."""
+    dims = contract["receipt"]["dimensions"]
+    values, notes = [], []
+    for d in ("change", "delivery", "persistence"):
+        if d not in facts:
+            values.append(missing)
+            if required:
+                notes.append(f"The adapter's reply has no {d}, which it must report; it counts as unknown. "
+                             "This is a defect of the adapter (DCLI-062).")
+        elif facts[d] in dims[d]:
+            values.append(facts[d])
+        else:
+            values.append("unknown")
+            notes.append(f"The adapter reported {d} {json.dumps(facts[d], ensure_ascii=False, default=repr)[:80]}, which is not one of "
+                         f"{', '.join(dims[d])}; it counts as unknown. This is a defect of the adapter (DCLI-062).")
+    return values, notes
+
+
+def defect_notices(notes: list[str]) -> list[dict[str, Any]]:
+    """The adapter's defects as notices, which stay when a long error drops the receipt's notes.
+    A note quotes the adapter's value, so it is untrusted (DCLI-004)."""
+    return [{"type": "adapter_defect", "severity": "warning", "message": note, "_untrusted": True} for note in notes]
+
+
+def adapter_notices(run: Run, notes: list[str]) -> None:
+    """Each defect once, and at most three, so that the items of a batch do not fill the response."""
+    have = [n for n in run.notices if n.get("type") == "adapter_defect"]
+    for notice in defect_notices(notes):
+        if len(have) < 3 and all(h["message"] != notice["message"] for h in have):
+            run.notices.append(notice)
+            have.append(notice)
+
+
+def _lists(value: Any) -> list[list[Any]]:
+    """Every list inside the value that holds more than one item."""
+    out: list[list[Any]] = []
+    stack = [value]
+    while stack:
+        v = stack.pop()
+        if isinstance(v, list):
+            if len(v) > 1:
+                out.append(v)
+            stack.extend(v)
+        elif isinstance(v, dict):
+            stack.extend(v.values())
+    return out
+
+
 def worker_argv(run: Run) -> list[str]:
     """The current call as arguments, with the targets the runtime chose, for a worker to run again."""
     call = run.call
@@ -496,6 +647,12 @@ class Engine:
         # A confirming call looks its token up first (DCLI-056, step 1).
         token_record = self.lookup_token() if call.confirm else None
         spec.prepare()
+        session = spec.where.session["id"] if spec.where.session else None
+        if spec.capability and not run.backend.has(spec.capability, session):
+            # Neither a preview nor a token promises a write that cannot be sent (DCLI-260).
+            where = f"the instance of session {session}" if session else "this tool's adapter"
+            raise DriverError("E_UNSUPPORTED", f"{where[0].upper()}{where[1:]} has no {spec.capability} capability, "
+                                               f"so {command.path} cannot run there; nothing was sent.")
         pv = spec.preview()
         self.take_raises(spec, pv)
         targets = self._targets(spec, pv)
@@ -951,18 +1108,19 @@ class Engine:
         if facts.get("job"):
             job = facts["job"]
             out["job"] = job
-            receipt["outcome"] = _outcome("completed", "not_applicable", facts.get("delivery", "not_applicable"),
-                                          facts.get("persistence", "not_applicable"), "not_applicable")
-            receipt.update(observed={}, mismatched=[], notes=[f"The work continues as long job {job['id']}."])
+            (_, delivery, persistence), wrong = reported(self.contract, {k: v for k, v in facts.items() if k != "change"},
+                                                         "not_applicable", False)
+            adapter_notices(self.run, wrong)
+            receipt["outcome"] = _outcome("completed", "not_applicable", delivery, persistence, "not_applicable")
+            receipt.update(observed={}, mismatched=[], notes=[f"The work continues as long job {job['id']}."] + wrong)
             return out
         ds = facts["dispatch_state"]
         execution = {"unknown": "unknown", "not_started": "not_started"}.get(ds, "completed")
-        dims = self.contract["receipt"]["dimensions"]
         # A dimension named wrongly is not known (DCLI-062). Only apply must report all three;
         # the other write capabilities report what applies to them (adapter.schema.json).
         missing = "unknown" if spec.strict_facts else "not_applicable"
-        change, delivery, persistence = (missing if d not in facts else facts[d] if facts[d] in dims[d] else "unknown"
-                                         for d in ("change", "delivery", "persistence"))
+        (change, delivery, persistence), wrong = reported(self.contract, facts, missing, spec.strict_facts)
+        adapter_notices(self.run, wrong)
         verification = Verification("not_applicable")
         paused = None
         if execution == "completed" and to_read_back(change, delivery, persistence, changes + file_checks(record, changes)):
@@ -985,8 +1143,8 @@ class Engine:
                 verification.notes.insert(0, paused)
         receipt["outcome"] = _outcome(execution, change, delivery, persistence, verification.status)
         receipt.update(observed=self.mask_observed(spec, verification.observed), mismatched=verification.mismatched)
-        if verification.notes:
-            receipt["notes"] = verification.notes
+        if verification.notes or wrong:
+            receipt["notes"] = wrong + verification.notes
         if isinstance(facts.get("native_message"), str):
             receipt.setdefault("notes", []).append(f"The application said: {facts['native_message']}")
         return out
@@ -1108,8 +1266,9 @@ class Engine:
             result = dict(result) if isinstance(result, dict) else {"value": result}
             result["job"] = {"id": job["id"], "state": job.get("state", "running"),
                              "poll": run.cmd("job get", [("--job", job["id"]), ("--wait", "60s")])}
-            return Result({"operation_id": operation_id, "receipt": slim_receipt(run, receipt), "result": result},
-                          self._receipt_untrusted(".receipt") + spec.untrusted_result())
+            data = {"operation_id": operation_id, "receipt": slim_receipt(run, receipt), "result": result}
+            fit_reply(run, data, record)
+            return Result(data, self._receipt_untrusted(".receipt") + spec.untrusted_result())
         cause = error.code if error is not None else None
         ok, code = self.derive(receipt, cause)
         record["state"] = record_state(receipt, code)
@@ -1125,8 +1284,9 @@ class Engine:
         if ok:
             if isinstance(result, dict) and (spec.where.device or {}).get("simulated"):
                 result = {**result, "simulated": True}  # results from a simulated device say so (DSEC-062)
-            return Result({"operation_id": operation_id, "receipt": slim_receipt(run, receipt), "result": slim_result(run, result)},
-                          self._receipt_untrusted(".receipt") + spec.untrusted_result())
+            data = {"operation_id": operation_id, "receipt": slim_receipt(run, receipt), "result": slim_result(run, result)}
+            fit_reply(run, data, record)
+            return Result(data, self._receipt_untrusted(".receipt") + spec.untrusted_result())
         raise self.write_error(spec, record, receipt, code or "E_NATIVE_FAILURE", error, out.get("human"))
 
     @staticmethod
@@ -1360,6 +1520,7 @@ class Engine:
         untrusted = [".items[*]" + p for p in spec.untrusted_result()] + (
             [".more_results"] if "more_results" in batch else [])
         if summary["succeeded"] == summary["total"]:
+            fit_reply(run, batch, record)
             return Result(batch, untrusted)
         lookup = run.cmd("operation list", [("--state", "unknown"), ("--batch", batch_id)])
         if summary["unknown"]:

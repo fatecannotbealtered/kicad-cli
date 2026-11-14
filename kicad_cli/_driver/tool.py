@@ -18,6 +18,7 @@ import os
 import re
 import sys
 import time
+from dataclasses import replace
 from pathlib import Path
 from typing import Any, Mapping, TextIO
 
@@ -195,7 +196,10 @@ class Tool:
                 _required(call)
                 result = call.command.handler(run)
                 if not call.command.writes:
-                    result = _fields(result, call)
+                    result = _fields(result, call, run.notices)
+                elif call.fields is not None:
+                    run.notices.append({"type": "fields", "severity": "warning",
+                                        "message": "--fields applies to reads; a write returns its whole receipt."})
         except DriverError as exc:
             error = _after_dispatch(run, exc) if run and run.dispatching else exc
         except KeyboardInterrupt:
@@ -316,21 +320,58 @@ def _early_format(argv: list[str]) -> tuple[str, bool]:
     return fmt, "--pretty" in argv
 
 
-def _fields(result: Result, call: Call) -> Result:
-    """``--fields`` and the default fields of a list (DCLI-007)."""
+def _fields(result: Result, call: Call, notices: list[dict[str, Any]]) -> Result:
+    """``--fields`` and the default fields of a list (DCLI-007). A name such as ``receipt.outcome``
+    names a field inside another; a name the result does not hold is reported, never dropped
+    silently."""
     wanted = call.fields
     if wanted is None and call.command.default_fields:
         wanted = call.command.default_fields
     if wanted is None or wanted == "all" or not isinstance(result.data, dict):
         return result
+    paths = [name.split(".") for name in wanted]
+
+    def pick(data: Any) -> Any:
+        if not isinstance(data, dict):
+            return data
+        if isinstance(data.get("items"), list):
+            return {**data, "items": [_pick(i, paths) if isinstance(i, dict) else i for i in data["items"]]}
+        if call.fields is not None:
+            return _pick(data, paths + [["job"]])  # a long job's handle stays: without it the work cannot be followed (DCLI-065)
+        return data
+
     data = result.data
-    if isinstance(data.get("items"), list):
-        data = {**data, "items": [{k: v for k, v in i.items() if k in wanted} if isinstance(i, dict) else i for i in data["items"]]}
-    elif call.fields is not None:
-        data = _kept(data, wanted)
-    return Result(data, result.untrusted, result.offset, result.raw)
+    held = [i for i in data["items"] if isinstance(i, dict)] if isinstance(data.get("items"), list) else [data]
+    if call.fields is not None:
+        missing = [".".join(p) for p in paths if not any(_holds(i, p) for i in held)]
+        if missing and held:
+            keys = list(held[0])
+            more = f" and {len(keys) - 20} more" if len(keys) > 20 else ""
+            notices.append({"type": "fields", "severity": "warning",
+                            "message": f"--fields named {', '.join(missing)[:200]}, which the result does not hold; "
+                                       f"it holds {', '.join(k[:40] for k in keys[:20])}{more}."})
+    return replace(result, data=pick(data), shorter=pick(result.shorter))
 
 
-def _kept(data: dict[str, Any], wanted: Any) -> dict[str, Any]:
-    """The named fields, and always a long job's handle: without it the work cannot be followed (DCLI-065)."""
-    return {k: v for k, v in data.items() if k in wanted or k == "job"}
+def _pick(value: Any, paths: list[list[str]]) -> Any:
+    """The fields the paths name, in the order the value holds them; a list keeps them in each item."""
+    if any(not p for p in paths):
+        return value
+    if isinstance(value, list):
+        return [_pick(v, paths) for v in value]
+    if not isinstance(value, dict):
+        return value
+    out = {}
+    for key, item in value.items():
+        tails = [p[1:] for p in paths if p[0] == key]
+        if tails:
+            out[key] = _pick(item, tails)
+    return out
+
+
+def _holds(value: Any, path: list[str]) -> bool:
+    if not path:
+        return True
+    if isinstance(value, list):
+        return any(_holds(v, path) for v in value)
+    return isinstance(value, dict) and path[0] in value and _holds(value[path[0]], path[1:])

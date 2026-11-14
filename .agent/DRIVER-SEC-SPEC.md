@@ -2,7 +2,7 @@
 
 English | [中文](DRIVER-SEC-SPEC_zh.md)
 
-> Version 1.3.0 · Clauses DSEC-001 to DSEC-073
+> Version 1.3.2 · Clauses DSEC-001 to DSEC-073
 
 ## How to Read
 

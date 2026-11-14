@@ -307,7 +307,7 @@ class Run:
             return
         if state in ("starting", "busy", "unresponsive"):
             reason = {"starting": "is starting", "busy": "is busy", "unresponsive": "does not respond"}[state]
-            raise DriverError("E_BUSY", f"Session {sid} {reason}; nothing was sent.", retry_after_ms=SESSION_DEADLINE_MS)
+            raise self.busy(f"Session {sid} {reason}; nothing was sent.", self.running_jobs(session=sid))
         if state == "blocked":
             blocker = session.get("blocker") or {"action": "other", "title": ""}
             ids = self.knowledge_ids(blocker)
@@ -319,6 +319,36 @@ class Run:
                                   dangerous=bool(self.call and self.call.dangerous)),
                 untrusted=["details.title", "details.resume"], **extra,
             )
+
+    def running_jobs(self, session: str | None = None, key: str | None = None, device: str | None = None) -> list[dict[str, Any]]:
+        """The long jobs of this tool that still run in a session or on a device, or that open or
+        close the document of a target key, newest first."""
+        from .jobs import FINAL, ReadJobs
+
+        out = []
+        for record in self.records.all():
+            job, call = record.get("_job"), record.get("_call") or {}
+            if not isinstance(job, dict) or job.get("state") in FINAL:
+                continue
+            targets = record.get("target")
+            keys = [t.get("key") for t in (targets if isinstance(targets, list) else [targets]) if isinstance(t, dict)]
+            if ((session and call.get("session") == session) or (device and call.get("device") == device)
+                    or (key and "lifecycle" in record.get("effects", []) and any(isinstance(k, str) and normalize(k) == normalize(key) for k in keys))):
+                out.append(job)
+        for job in ReadJobs(self).all() if session or device else []:
+            request = job.get("_request") or {}
+            if job.get("state") not in FINAL and ((session and request.get("session") == session) or (device and request.get("device") == device)):
+                out.append(job)
+        return out
+
+    def busy(self, message: str, jobs: list[dict[str, Any]], retry_after_ms: int = SESSION_DEADLINE_MS) -> DriverError:
+        """E_BUSY; when a long job of this tool is what keeps the target busy, the next action
+        waits for that job instead of trying again blindly (DCLI-204)."""
+        if not jobs:
+            return DriverError("E_BUSY", message, retry_after_ms=retry_after_ms)
+        poll = self.cmd("job get", [("--job", jobs[0]["id"]), ("--wait", "60s")])
+        return DriverError("E_BUSY", message, retry_after_ms=retry_after_ms,
+                           next_action=f"Job {jobs[0]['id']} of this tool is still running there. Run `{poll}` until it ends, then run the same command again.")
 
     # ------------------------------------------------------------------ documents
 
@@ -387,6 +417,12 @@ class Run:
             if holders and "session" in modes:
                 self.resolved["--session"] = holders[0]["id"]
                 return Where("session", session=holders[0], document=self._session_doc(holders[0], doc_ref, True))
+            if not holders and self.has_sessions():
+                opening = self.running_jobs(key=file_key(doc_ref))
+                if opening:
+                    # A document an instance is still opening, or an instance still starting, is not
+                    # listed yet (DCLI-204).
+                    raise self.busy(f"A job of this tool is still opening or closing {doc_ref}; nothing was sent.", opening)
             if "file" in modes:
                 if holders and any(e in ("change", "persist") for e in command.effects):
                     raise DriverError(
@@ -427,6 +463,9 @@ class Run:
                 if self._matches(doc, ref):
                     self.resolved["--doc"] = doc["id"]
                     return doc
+            # A session that is not ready may not list a document it is still opening: its state
+            # answers, also for an observe command (DCLI-204).
+            self.gate_session(session)
             raise DriverError("E_NOT_FOUND", f"Session {session['id']} has no document {ref} open.",
                               next_action=lost_separators(ref) or f"Run `{self.tool.name} doc list --session {session['id']}` to see its documents.")
         if len(docs) == 1:
@@ -498,7 +537,7 @@ class Run:
         if halt:
             return
         if state == "busy":
-            raise DriverError("E_BUSY", f"Device {did} is busy; nothing was sent.", retry_after_ms=1000)
+            raise self.busy(f"Device {did} is busy; nothing was sent.", self.running_jobs(device=did), 1000)
         if state in ("fault", "emergency_stop"):
             what = "reports a fault" if state == "fault" else "is in emergency stop"
             raise DriverError(

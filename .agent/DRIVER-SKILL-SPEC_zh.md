@@ -2,7 +2,7 @@
 
 [English](DRIVER-SKILL-SPEC.md) | 中文
 
-> 版本 1.3.0 · 条款 DSKL-001 至 DSKL-127
+> 版本 1.3.2 · 条款 DSKL-001 至 DSKL-127
 
 ## 怎么读
 
@@ -401,7 +401,7 @@ tool-driver-cli-spec 仓库必须维护一套评测，按 DSKL-044 的格式为 
 - `tests/eval/` 里每道题都有算数的结果，而且每道题最新的那个算数结果是通过的；
 - 命令的 `eval:` 证据指向一份报告，报告里有一个算数且通过的结果，来自一道在 `COMMANDS` 里列出这条命令、并实际运行了它的题。
 
-结果算数的条件是：由运行器在真实软件上写出（DSKL-044），并且它的 `fingerprint` 仍然等于以下内容的 SHA-256：题目文件、`reference` 向 Agent 描述的 `COMMANDS` 里的各条命令，以及这个结果依赖的手写说明，运行器把它们存进结果的 `guidance`：整个 `skills/`（Agent 可能加载其中任何一个 Skill，包括以后新增的）；这次运行列出或搜索过知识库时，整个 `knowledge/`；否则是这些命令在 `related_knowledge` 里点名的、或者 ID 在这次运行的调用或工具输出里出现过的知识条目；都去掉 `check_project` 生成或按发布写入的内容（DREPO-036）和 Skill 开头的 `version`。没有 `guidance` 的结果，改为整个 `skills/` 和 `knowledge/` 都算。适配层代码不算在内：那里修了问题，结果仍然有效，适配层由行为矩阵检查（DVER-043）。几份报告里的结果合在一起算，所以只有结果缺失、过时或没通过的题需要重跑；`run_eval --stale` 只跑这些题。没有指纹的结果，在题目文件没变、而且所在报告的工具版本与工具的主版本和次版本都相同时才算。
+结果算数的条件是：由运行器在真实软件上写出（DSKL-044），并且它的 `fingerprint` 仍然等于以下内容的 SHA-256：题目文件、`reference` 向 Agent 描述的 `COMMANDS` 里的各条命令，以及这个结果依赖的手写说明，运行器把它们存进结果的 `guidance`：整个 `skills/`（Agent 可能加载其中任何一个 Skill，包括以后新增的）；这次运行列出或搜索过知识库时，知识库的目录，也就是每个条目的 ID、标题、类型、`applies_to` 和 `tags`，这正是列表显示的内容，所以新增或改名的条目也算；以及这些命令在 `related_knowledge` 里点名的、或者 ID 在这次运行的调用或工具输出里出现过的知识条目，列表的输出除外，比如 Agent 读过的条目、搜索找到的条目；都去掉 `check_project` 生成或按发布写入的内容（DREPO-036）和 Skill 开头的 `version`。没有 `guidance` 的结果，改为整个 `skills/` 和 `knowledge/` 都算。适配层代码不算在内：那里修了问题，结果仍然有效，适配层由行为矩阵检查（DVER-043）。几份报告里的结果合在一起算，所以只有结果缺失、过时或没通过的题需要重跑；`run_eval --stale` 只跑这些题。没有指纹的结果，在题目文件没变、而且所在报告的工具版本与工具的主版本和次版本都相同时才算。
 
 其他成熟度不要求评测。评测报告是 `docs/evidence/eval-*.json` 文件，由 `contract/schemas/eval-report.schema.json` 校验。它记录工具版本、日期、所用的 Agent 和模型、平台、是否用模拟宿主代替了软件、工作目录的根和其他授权范围目标，以及每道题的结果、题目文件的 SHA-256、指纹、它的 `guidance`、它的 `COMMANDS` 和 Agent 实际运行过的命令。`simulated: true` 的报告从不支撑任何成熟度（DVER-021）。其他报告的目标都必须列在 `docs/E2E.md` 的 Authorized Targets 一节里，或者位于列出的文件夹里面（DVER-050）。`eval:` 证据引用指向报告（DVER-041）。
 
